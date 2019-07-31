@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_base_height="430"
+            app:scale_base_width="400">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/cancel_img"
+                app:scale_top="-10"
+                app:scale_width="400"
+                app:scale_height="200"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="CANCEL ORDER"
+                android:textStyle="bold"
+                android:textColor="@color/colorFirst"
+                app:customFont="TitilliumSemiBold.ttf"
+                app:scale_top="200"
+                app:scale_width="400"
+                app:scale_height="42"
+                app:scale_textsize="33"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:scale_top="248"
+                app:scale_left="85"
+                app:scale_width="230"
+                app:scale_height="5"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Are you sure want to cancel this order ?"
+                android:textColor="@color/colorContent"
+                app:customFont="TitilliumSemiBold.ttf"
+                app:scale_top="275"
+                app:scale_width="400"
+                app:scale_height="70"
+                app:scale_textsize="24"/>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_dialogcancelorder_btnNo"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="250"
+                app:scale_top="365"
+                app:scale_left="10"
+                app:scale_width="185"
+                app:scale_height="50">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/colorFirst"
+                    android:text="Not Sure"
+                    android:textColor="@color/neutral"
+                    android:textSize="16sp" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_dialogcancelorder_btnYes"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="250"
+                app:scale_top="365"
+                app:scale_left="205"
+                app:scale_width="180"
+                app:scale_height="50">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@color/colorToolbar"
+                    android:text="Yes, I'm sure"
+                    android:textColor="@color/neutral"
+                    android:textSize="16sp" />
+            </com.andexert.library.RippleView>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

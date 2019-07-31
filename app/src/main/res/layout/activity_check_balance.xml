@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.CheckBalanceActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_orderdetail_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:scale_base_width="400"
+                app:scale_base_height="40">
+
+                <ImageView
+                    android:id="@+id/activity_checkbalance_btnback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_back_white"
+                    app:scale_top="5"
+                    app:scale_width="30"
+                    app:scale_height="30"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Balance"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    app:customFont="DroidBold.ttf"
+                    app:scale_top="2"
+                    app:scale_left="35"
+                    app:scale_textsize="24"
+                    app:scale_width="320"
+                    app:scale_height="30"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/activity_checkbalance_cardbprks"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="7dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@+id/activity_orderdetail_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg1">
+
+            <!--<com.ssomai.android.scalablelayout.ScalableLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/bg1"-->
+                <!--app:scale_base_width="700dp"-->
+                <!--app:scale_base_height="500dp">-->
+                <!---->
+            <!--</com.ssomai.android.scalablelayout.ScalableLayout>-->
+
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="55dp"
+                android:src="@drawable/bprks"
+                android:layout_marginLeft="15dp"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/activity_checkbalance_txtbprksname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MUHAMAD FARID N."
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="right"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="15dp"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorContent"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/activity_checkbalance_txtbprksnominal"
+                    app:customFont="UbuntuMedium.ttf"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/activity_checkbalance_txtbprksnominal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.500.000.000"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    app:customFont="UbuntuMedium.ttf"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

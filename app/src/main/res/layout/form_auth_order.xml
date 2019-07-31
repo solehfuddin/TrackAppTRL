@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="50dp"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time Remaining"
+            android:textColor="#000"
+            android:textSize="22sp"
+            android:layout_margin="5dp"
+            android:textAlignment="center"
+            app:customFont="UbuntuMedium.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/form_authorder_lbltimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="01:30"
+            android:textColor="@color/colorTeks"
+            android:textSize="37sp"
+            android:textAlignment="center"
+            app:customFont="RobotoMedium.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please insert pin number"
+            android:textColor="@color/colorContent"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            app:customFont="RobotoMedium.ttf" />
+
+        <com.jkb.vcedittext.VerificationCodeEditText
+            android:id="@+id/form_authorder_txtpin"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:inputType="number"
+            android:hint="123456"
+            android:textColor="@color/colorHint"
+            android:textSize="16sp"
+            app:bottomLineHeight="2dp"
+            app:bottomLineNormalColor="@color/bootstrap_gray_light"
+            app:bottomLineSelectedColor="@color/colorToolbar"
+            app:figures="6"
+            app:verCodeMargin="10dp" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/form_authorder_lblerror"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="Sorry your input pin not correct"
+            android:textColor="@color/colorTeks"
+            android:layout_marginTop="15dp"
+            android:textSize="10sp"
+            android:textAlignment="center"
+            app:customFont="RobotoMedium.ttf" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/form_authorder_btnresend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.57"
+                app:bootstrapText="{fa-refresh} Recode"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.09"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/form_authorder_btnconfirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.34"
+                app:bootstrapText="{fa-send} Send"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="success"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

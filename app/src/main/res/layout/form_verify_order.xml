@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="450dp"
+    android:minHeight="500dp">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white">
+
+            <!-- Area header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Create Order Success"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="DroidBold.ttf" />
+                </RelativeLayout>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="Your order summary shown like below"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="UbuntuRegular.ttf" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="please check summary before sent"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="UbuntuRegular.ttf" />
+            </LinearLayout>
+
+            <!-- Area order details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:background="@color/colorToolbar">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Order Details"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/neutral"
+                        android:textSize="14sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1.0">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:padding="5dp"
+                        android:text="Reference Number"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:padding="5dp"
+                        android:text="Patient Name"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblrefnumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:padding="5dp"
+                        android:text="Reference Number data"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblpatientname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:padding="5dp"
+                        android:text="Patient Name data"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Remark / Note"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblremark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Remark / Note data data"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Area lens details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:background="@color/colorFirst">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Lens Details"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/neutral"
+                        android:textSize="14sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:weightSum="1.0">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".16"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="Lenses"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lbllenses"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".84"
+                        android:padding="5dp"
+                        android:text="Lenstype and lens decription data"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="SPH R"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="CYL R"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="AXS R"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="ADD R"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="PRIS R"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblsphr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblcylr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblaxsr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lbladdr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblprisr"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="SPH L"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="CYL L"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="AXS L"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="ADD L"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="PRIS L"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblsphl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblcyll"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblaxsl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lbladdl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblprisl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0.0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="PD long"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="4dp"
+                            android:padding="5dp"
+                            android:text="PD short"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:layout_marginLeft="2dp"
+                            android:padding="5dp"
+                            android:text="Color / Tint"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblpdl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:text="0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblpds"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+                            android:layout_marginLeft="4dp"
+                            android:padding="5dp"
+                            android:text="0"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_verifyorder_lblcolortint"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:layout_marginLeft="2dp"
+                            android:padding="5dp"
+                            android:text="Color / Tint data"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            app:customFont="UbuntuRegular.ttf" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Area Facet details-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:background="@android:color/holo_red_light">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Facet Details"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/neutral"
+                        android:textSize="14sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:weightSum="1.0">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="MPD Right"
+                    android:textColor="@color/colorContent"
+                    android:textSize="12sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="UbuntuRegular.ttf" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="MPD Left"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    android:textSize="12sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="UbuntuRegular.ttf" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:paddingLeft="23dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="SEG Height"
+                    android:textColor="@color/colorContent"
+                    android:textSize="12sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="UbuntuRegular.ttf" />
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1.0">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblmpdr"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:layout_marginLeft="10dp"
+                        android:paddingLeft="27dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="0"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblmpdl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblsegh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:layout_marginLeft="10dp"
+                        android:textAlignment="center"
+                        android:paddingLeft="23dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="0"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Information Facet"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblinfofacet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Area Frame details-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:background="@color/colorEnd">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Frame Details"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/neutral"
+                        android:textSize="14sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:weightSum="1.0">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="Frame Model"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".2"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="DBL"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".24"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="HOR (A)"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".26"
+                        android:layout_marginLeft="10dp"
+                        android:textAlignment="center"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="VER (B)"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1.0">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblframemodel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="Model"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lbldbl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".2"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblhora"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".24"
+                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblverb"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".26"
+                        android:layout_marginLeft="10dp"
+                        android:textAlignment="center"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="0"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Frame Code"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuRegular.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_verifyorder_lblframecode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textAlignment="center"
+                        android:text=""
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="12sp"
+                        app:customFont="UbuntuRegular.ttf" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Area button sent -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:weightSum="1.0">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/form_verifyorder_btneditorder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:layout_margin="10dp"
+                    app:bootstrapBrand="warning"
+                    app:bootstrapSize="md"
+                    app:bootstrapText="{fa-edit}  Edit"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"/>
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/form_verifyorder_btnsentorder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:layout_margin="10dp"
+                    app:bootstrapBrand="success"
+                    app:bootstrapSize="md"
+                    app:bootstrapText="{fa-send}  Sent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

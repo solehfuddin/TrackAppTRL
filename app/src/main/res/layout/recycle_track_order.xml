@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/recy_trackorder_rl_header"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/list_item_selected">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recy_trackorder_txt_custname"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="6dp"
+                android:drawableLeft="@drawable/ic_event_note"
+                android:text="Customer Name"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxLength="15"
+                app:customFont="UbuntuRegular.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recy_trackorder_txt_entrydate"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="40dp"
+                android:text="Entry date"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="#fff"
+                app:customFont="UbuntuRegular.ttf" />
+
+            <!--<ImageView
+                android:id="@+id/recy_trackorder_img_header"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/collapse_white"
+                android:layout_centerVertical="true"/>-->
+        </RelativeLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/recy_trackorder_expandable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="1500"
+            app:el_expanded="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/recy_trackorder_rl_jobnumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp">
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/recy_trackorder_txt_jobnumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Job Number"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorContent"
+                        app:customFont="TitilliumSemiBold.ttf"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/recy_trackorder_rl_lenscode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/recy_trackorder_lbl_lenscode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="31dp"
+                        android:text="Lens Name"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="TitilliumSemiBold.ttf"/>
+
+                    <ayar.oktay.advancedtextview.AdvancedTextView
+                        android:id="@+id/recy_trackorder_txt_lenscode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:text="Content lensname"
+                        android:textColor="@color/colorContent"
+                        android:textSize="14sp"
+                        app:justifyText="true"
+                        app:customFont="TitilliumSemiBold.ttf"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp">
+
+                    <LinearLayout
+                        android:id="@+id/recy_trackorder_layout_table"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="SIDE"
+                            android:padding="5dp"
+                            android:textSize="13sp"
+                            android:background="@drawable/custom_border"
+                            android:textColor="@color/colorBlack"
+                            app:customFont="TitilliumSemiBold.ttf"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="SPH"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="CYL"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".34"
+                                android:text="ADD"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="RIGHT"
+                            android:padding="5dp"
+                            android:textSize="13sp"
+                            android:background="@drawable/custom_border"
+                            android:textColor="@color/colorBlack"
+                            app:customFont="TitilliumSemiBold.ttf"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_sphr"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_cylr"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_addr"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".34"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="LEFT"
+                            android:padding="5dp"
+                            android:textSize="13sp"
+                            android:background="@drawable/custom_border"
+                            android:textColor="@color/colorBlack"
+                            app:customFont="TitilliumSemiBold.ttf"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_sphl"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_cyll"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".33"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/recy_trackorder_txt_addl"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".34"
+                                android:text="0.00"
+                                android:padding="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/custom_border"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorContent"
+                                app:customFont="TitilliumSemiBold.ttf"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recy_trackorder_rl_reference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/recy_trackorder_lbl_reference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="21.5dp"
+                        android:text="Reference Id"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="TitilliumSemiBold.ttf"/>
+                    <ayar.oktay.advancedtextview.AdvancedTextView
+                        android:id="@+id/recy_trackorder_txt_reference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:text="Content reference"
+                        android:textColor="@color/colorContent"
+                        android:textSize="14sp"
+                        app:justifyText="true"
+                        app:customFont="TitilliumSemiBold.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recy_trackorder_rl_optname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/recy_trackorder_lbl_optname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="27dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="Tinting Info"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+                    <ayar.oktay.advancedtextview.AdvancedTextView
+                        android:id="@+id/recy_trackorder_txt_tinting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:text="Content optic name"
+                        android:textColor="@color/colorContent"
+                        android:textSize="14sp"
+                        app:justifyText="true"
+                        app:customFont="TitilliumSemiBold.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recy_trackorder_rl_facettrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/recy_trackorder_lbl_facettrl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="27dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="Facet TRL"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
+                        android:id="@+id/recy_trackorder_txt_facet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:bootstrapBrand="success"
+                        app:bootstrapHeading="h6"
+                        app:roundedCorners="true"
+                        android:text="Content Facet TRL" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/recy_trackorder_rl_laststatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:id="@+id/recy_trackoder_rl_orderstatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/recy_trackorder_lbl_laststatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="31dp"
+                            android:text="Last status"
+                            android:textSize="14sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            app:customFont="TitilliumSemiBold.ttf"/>
+
+                        <ayar.oktay.advancedtextview.AdvancedTextView
+                            android:id="@+id/recy_trackorder_txt_orderstatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="Status"
+                            android:textColor="@color/colorContent"
+                            android:textSize="14sp"
+                            app:justifyText="true"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <ayar.oktay.advancedtextview.AdvancedTextView
+                            android:id="@+id/recy_trackorder_txt_datestatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Date status"
+                            android:textColor="@color/colorContent"
+                            android:textSize="14sp"
+                            android:maxLength="10"
+                            app:justifyText="false"
+                            app:customFont="TitilliumSemiBold.ttf" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

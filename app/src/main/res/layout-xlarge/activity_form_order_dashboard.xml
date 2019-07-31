@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormOrderDashboardActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|snap">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_orderdashboard_ripplebtnback"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+
+                    <ImageButton
+                        android:id="@+id/form_orderdashboard_btnback"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow_back"
+                        android:background="@color/colorPrimary"
+                        android:layout_centerVertical="true"/>
+                </com.andexert.library.RippleView>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Order Panel Information"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="35sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="DroidBold.ttf" />
+            </RelativeLayout>
+        </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1.0"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="45dp"
+                    android:orientation="vertical"
+                    android:background="@color/colorRed">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/universalFontTextView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="45dp"
+                        android:text="Draft"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="43sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.github.premnirmal.textcounter.CounterView
+                        android:id="@+id/form_orderdashboard_lbldraft"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="55dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="60sp"
+                        app:customFont="LatoBold.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="45dp"
+                    android:layout_marginBottom="45dp"
+                    android:orientation="vertical"
+                    android:background="@color/colorFirst">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:text="Sent"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="43sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.github.premnirmal.textcounter.CounterView
+                        android:id="@+id/form_orderdashboard_lblsent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginBottom="55dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="60sp"
+                        app:customFont="LatoBold.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1.0"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="45dp"
+                    android:orientation="vertical"
+                    android:background="@color/colorIg">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="45dp"
+                        android:text="Process"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="43sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.github.premnirmal.textcounter.CounterView
+                        android:id="@+id/form_orderdashboard_lblprocess"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="55dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="60sp"
+                        app:customFont="LatoBold.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:layout_marginBottom="45dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="45dp"
+                    android:orientation="vertical"
+                    android:background="@color/colorEnd">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:text="Finish"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="43sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.github.premnirmal.textcounter.CounterView
+                        android:id="@+id/form_orderdashboard_lblfinish"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="55dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="60sp"
+                        app:customFont="LatoBold.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

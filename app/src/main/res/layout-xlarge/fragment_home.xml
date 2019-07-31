@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="56dp"
+    tools:context="com.sofudev.trackapptrl.Fragment.HomeFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ss.com.bannerslider.views.BannerSlider
+                android:id="@+id/fragment_home_headerslider"
+                android:layout_width="match_parent"
+                android:layout_height="265dp"
+                app:interval="5000"
+                app:loopSlides="true"
+                app:defaultIndicators="circle"
+                app:defaultBanner="1"
+                app:animateIndicators="true"
+                app:selected_slideIndicator="@color/colorToolbar"
+                app:unselected_slideIndicator="@color/neutral"
+                app:emptyView="@drawable/notfound"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/neutral"
+                android:layout_marginTop="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:text="Hot Sale"
+                        android:background="@color/colorRed"
+                        android:textColor="@color/neutral"
+                        android:textSize="39sp"
+                        app:customFont="TradeGothicCondensed.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/colorRed"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/fragment_home_recyclercategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="25dp"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:clipToPadding="false"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/neutral">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:text="Available Brand"
+                        android:textColor="@color/neutral"
+                        android:background="@color/colorPrimary"
+                        android:textSize="39sp"
+                        app:customFont="TradeGothicCondensed.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical"
+                        android:background="@color/colorPrimary"
+                        android:layout_gravity="center_vertical"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/fragment_home_recyclerproducts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:clipToPadding="false"
+                        android:scrollbars="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

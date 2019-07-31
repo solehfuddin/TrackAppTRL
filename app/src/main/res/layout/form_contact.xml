@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral"
+    android:padding="5dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:background="@drawable/office"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#0084ff">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/contact_txt_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+            android:text="@string/office_address"
+            android:textAlignment="center"
+            android:textColor="@color/neutral"
+            android:textSize="16dp"
+            app:customFont="DroidRegular.ttf"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/ic_telp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:paddingLeft="5dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/contact_txt_telp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="88dp"
+                    android:elegantTextHeight="true"
+                    android:text="(+62)  21 4610 154"
+                    android:textSize="14dp"
+                    android:textColor="#000"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center_vertical"
+                    app:customFont="LatoRegular.ttf"/>
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/contact_btn_call"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_centerVertical="true"
+                    app:bootstrapBrand="primary"
+                    app:bootstrapSize="sm"
+                    app:bootstrapText="Call Us"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/ic_wa" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:paddingLeft="5dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/contact_txt_fax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:layout_marginRight="88dp"
+                    android:elegantTextHeight="true"
+                    android:text="(+62) 812 114 5555"
+                    android:textSize="14dp"
+                    android:textColor="#000"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    app:customFont="LatoRegular.ttf"/>
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/contact_btn_chat"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_centerVertical="true"
+                    app:bootstrapBrand="primary"
+                    app:bootstrapSize="sm"
+                    app:bootstrapText="Chat Us"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/ic_email" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:paddingLeft="5dp">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/contact_txt_mail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="88dp"
+                            android:elegantTextHeight="true"
+                            android:text="cslab@trl.co.id"
+                            android:textSize="14dp"
+                            android:textColor="#000"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:gravity="center_vertical"
+                            app:customFont="LatoRegular.ttf"/>
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/contact_btn_mail"
+                            android:layout_width="70dp"
+                            android:layout_height="25dp"
+                            android:layout_marginRight="3dp"
+                            android:layout_centerVertical="true"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapSize="sm"
+                            app:bootstrapText="Mail Us"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
+
+                    </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/ic_browser" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:paddingLeft="5dp">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/contact_txt_web"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="88dp"
+                            android:elegantTextHeight="true"
+                            android:text="www.timurrayalestari.com"
+                            android:textSize="14dp"
+                            android:textColor="#000"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:gravity="center_vertical"
+                            app:customFont="LatoRegular.ttf"/>
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/contact_btn_web"
+                            android:layout_width="70dp"
+                            android:layout_height="25dp"
+                            android:layout_marginRight="3dp"
+                            android:layout_centerVertical="true"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapSize="sm"
+                            app:bootstrapText="Visit Us"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
+
+                    </RelativeLayout>
+        </LinearLayout>
+
+</LinearLayout>

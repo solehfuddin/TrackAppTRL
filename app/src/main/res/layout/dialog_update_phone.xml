@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="3dp"
+    android:id="@+id/cardView2"
+    android:focusableInTouchMode="false"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_height="50"
+            app:scale_base_width="400">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Personal Account"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_top="10"
+                app:scale_width="400"
+                app:scale_height="24"
+                app:scale_textsize="18"/>
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Nomor hp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/dialog_updatephone_edtPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="081302501290"
+                android:inputType="phone"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/dialog_updatephone_txtInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Pastikan nomor hp yang anda masukkan telah terdaftar pada sistem loan (Bank BPRKS)"
+                android:textColor="@color/colorRed"
+                android:textSize="12sp"
+                app:customFont="UbuntuMedium.ttf"/>
+        </LinearLayout>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/dialog_updatephone_btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="3"
+            android:background="@color/colorFirst">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                android:text="Update Information"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </com.andexert.library.RippleView>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

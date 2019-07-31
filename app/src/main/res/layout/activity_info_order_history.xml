@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.sofudev.trackapptrl.Info.InfoOrderHistoryActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+            <com.andexert.library.RippleView
+                android:id="@+id/info_order_history_ripplebtnback"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <ImageButton
+                    android:id="@+id/info_order_history_btnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"/>
+            </com.andexert.library.RippleView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/info_order_history_txtordernumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Order Number"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:layout_centerInParent="true"
+                app:customFont="DroidBold.ttf" />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/info_order_history_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/neutral"/>
+
+</LinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:minWidth="370dp"
+    android:minHeight="225dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1.0">
+                    <com.weiwangcn.betterspinner.library.BetterSpinner
+                        android:id="@+id/choose_lenstype_spinlenstype"
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_centerHorizontal="true"
+                        android:text="Leinz"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:background="@color/colorToolbar" />
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/choose_lenstype_txtsearch"
+                        android:layout_weight="0.59"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:hint="Search lens"
+                        app:met_hideUnderline="true"
+                        app:met_textColor="@color/colorHint"/>
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/choose_lenstype_btnsearch"
+                        android:layout_weight="0.08"
+                        android:layout_width="10dp"
+                        android:layout_height="33dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        app:rv_type="rectangle"
+                        app:rv_rippleDuration="100">
+                        <ImageButton
+                            android:id="@+id/choose_lenstype_imgsearch"
+                            android:layout_width="35dp"
+                            android:layout_height="33dp"
+                            android:src="@drawable/ic_search"
+                            android:background="@color/colorToolbar"/>
+                    </com.andexert.library.RippleView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <RelativeLayout
+                android:id="@+id/choose_lenstype_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ListView
+                    android:id="@+id/choose_lenstype_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="35dp"
+                    android:background="@android:color/white"
+                    android:listSelector="@drawable/list_row_selector"
+                    android:choiceMode="singleChoice"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/choose_lenstype_btnsave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="lg"
+            app:bootstrapText="SAVE"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

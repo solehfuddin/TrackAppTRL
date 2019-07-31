@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="@android:integer/config_longAnimTime">
+    <item android:state_pressed="true" android:drawable="@drawable/side_navbar" />
+    <item android:state_selected="true" android:drawable="@android:color/holo_green_dark" />
+    <item android:state_hovered="true" android:drawable="@color/colorTeks"/>
+</selector>

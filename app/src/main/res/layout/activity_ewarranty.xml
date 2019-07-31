@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.EwarrantyActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_lenssummary_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/activity_ewarranty_btnBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back_white"
+                />
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:scale_base_width="400"
+                app:scale_base_height="50">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Support"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    app:customFont="DroidBold.ttf"
+                    app:scale_left="-15"
+                    app:scale_textsize="30"
+                    app:scale_width="385"
+                    app:scale_height="40"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_height="150"
+        app:scale_base_width="400"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_lenssummary_toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        android:id="@+id/scalableLayout"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="145dp"
+            android:scaleType="centerCrop"
+            app:scale_width="400"
+            app:scale_height="150"
+            app:srcCompat="@drawable/bg_payment_warr" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="e-Warranty Check"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:customFont="DroidBold.ttf"
+            app:scale_top="15"
+            app:scale_left="17"
+            app:scale_height="30"
+            app:scale_textsize="25"
+            app:scale_width="200" />
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.413"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scalableLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="3dp"
+                    android:text="Name :"
+                    android:textColor="#333b3e"
+                    android:textSize="17sp"
+                    app:customFont="TitilliumSemiBold.ttf" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/activity_ewarranty_txtname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:inputType="textPersonName"
+                    app:bootstrapSize="md"
+                    app:bootstrapBrand="info"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Phone :"
+                    android:textColor="#333b3e"
+                    android:textSize="17sp"
+                    app:customFont="TitilliumSemiBold.ttf" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/activity_ewarranty_txtnohp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:inputType="number"
+                    app:bootstrapSize="md"
+                    app:bootstrapBrand="info"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/activity_ewarranty_btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:text="Search"
+                android:textSize="14sp"
+                android:layout_margin="15dp"
+                android:layout_gravity="right"
+                android:textColor="@android:color/white"
+                android:background="@android:color/holo_orange_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/gray"/>
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:scale_base_height="350"
+                app:scale_base_width="400">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Dear Customer"
+                    android:textAlignment="center"
+                    android:textColor="#333b3e"
+                    app:customFont="TitilliumSemiBold.ttf"
+                    app:scale_width="400"
+                    app:scale_height="30"
+                    app:scale_textsize="23"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Thank you for choosing Leinz, Nikon, and Oriental branded lens for your eyewear. We appreciate your confidence in our profesional service.Your lenses will provide you the optimum vision of the highest quality."
+                    android:textSize="14sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    app:scale_width="400"
+                    app:scale_height="130"
+                    app:scale_textsize="18"
+                    android:visibility="visible"
+                    app:scale_top="30"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="This e-Warranty will give you 12 months or 24 months warranty of anti Reflection Coating caused by factory defect, but no accidental damage or deep scratches."
+                    android:textSize="14sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    app:scale_width="400"
+                    app:scale_height="100"
+                    app:scale_textsize="18"
+                    app:scale_top="160"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="For your next lens purchase, please show this e-Warranty to your optician, in order to obtain the same high vision quality."
+                    android:textSize="14sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    app:scale_width="400"
+                    app:scale_height="100"
+                    app:scale_textsize="18"
+                    app:scale_top="250"/>
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</android.support.constraint.ConstraintLayout>

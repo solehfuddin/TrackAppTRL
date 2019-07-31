@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.sofudev.trackapptrl.Form.FormUACActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/form_uac_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/colorToolbar">
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/form_uac_txtsearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#fff"
+                android:hint="Search optic"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textColorHint="@color/bootstrap_gray_light"
+                app:bootstrapBrand="info"
+                app:bootstrapSize="lg"
+                app:roundedCorners="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/form_uac_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <ListView
+                android:id="@+id/form_uac_listviewuser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:listSelector="@drawable/list_row_selector"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/form_uac_btnprev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="20sp"
+                    app:bootstrapBrand="success"
+                    app:bootstrapSize="md"
+                    app:bootstrapText="&lt;" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/form_uac_btnnext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="50dp"
+                    android:textSize="20sp"
+                    app:bootstrapBrand="success"
+                    app:bootstrapSize="md"
+                    app:bootstrapText="&gt;" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_uac_txtCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Data count"
+                    android:textColor="#333b3e"
+                    android:textSize="17sp"
+                    app:customFont="TitilliumSemiBold.ttf"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/form_uac_fabadd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_add"
+                    app:fabSize="mini"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

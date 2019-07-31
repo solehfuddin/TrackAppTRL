@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormLensSummaryActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_lenssummary_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:scale_base_width="400"
+                app:scale_base_height="50">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Order Summary"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    app:customFont="DroidBold.ttf"
+                    app:scale_left="-15"
+                    app:scale_textsize="30"
+                    app:scale_width="400"
+                    app:scale_height="40"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_lenssummary_btn_checkout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_lenssummary_toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.ssomai.android.scalablelayout.ScalableLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            app:scale_base_width="400"
+                            app:scale_base_height="70">
+
+                            <ImageView
+                                android:id="@+id/activity_lenssummary_img_logo"
+                                android:layout_width="85dp"
+                                android:layout_height="85dp"
+                                android:src="@drawable/leinz"
+                                app:scale_width="70"
+                                app:scale_height="70"/>
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/activity_lenssummary_txt_lensmodel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="RX / STOCK LENS"
+                                android:textColor="@color/colorContent"
+                                android:textSize="12sp"
+                                app:customFont="UbuntuMedium.ttf"
+                                app:scale_left="80"
+                                app:scale_textsize="26"
+                                app:scale_width="320"
+                                app:scale_height="25"/>
+
+                        </com.ssomai.android.scalablelayout.ScalableLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="45dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_lensdesc"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Lensa Description"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    android:ellipsize="end"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_side"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="RL"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="200"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="240"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_pricelens"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="45.000.000"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120"
+                                    app:scale_height="25"/>
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Discount"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp"
+                                    android:textColor="@color/colorRed"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="240"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_pricedisc"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="450.000"
+                                    android:textColor="@color/colorRed"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120"
+                                    app:scale_height="25"/>
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Service Tinting"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="240"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_pricetinting"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="50.000"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="25"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120" />
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Service Facet"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="240"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_pricefacet"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="30.000"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="25"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120" />
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@android:color/black" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="40">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_shippingmethod"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Courrier"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="35"
+                                    app:scale_textsize="20"
+                                    app:scale_top="5"
+                                    app:scale_width="160" />
+
+                                <Spinner
+                                    android:id="@+id/activity_lenssummary_spin_shipment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="end"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="25sp"
+                                    android:minWidth="220dp"
+                                    android:layout_marginTop="8dp"
+                                    app:scale_left="220"
+                                    app:scale_width="240"
+                                    app:scale_height="38" />
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Freight Cost"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="240"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_priceshipment"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="12.000"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="25"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120" />
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.ssomai.android.scalablelayout.ScalableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:scale_base_width="400"
+                                app:scale_base_height="25">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Item Weight"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_textsize="20"
+                                    app:scale_width="180"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_left="270"
+                                    app:scale_textsize="20"
+                                    app:scale_width="30"
+                                    app:scale_height="25"/>
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_itemweight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="62 gram"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="25"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120" />
+
+                            </com.ssomai.android.scalablelayout.ScalableLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="#33cc00"
+                    android:orientation="horizontal">
+
+                    <com.ssomai.android.scalablelayout.ScalableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        app:scale_base_width="415"
+                        app:scale_base_height="50">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Transaction"
+                            android:textColor="@android:color/white"
+                            android:textSize="15sp"
+                            android:gravity="center_vertical"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="15"
+                            app:scale_textsize="23"
+                            app:scale_width="200"
+                            app:scale_height="50"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_lenssummary_txt_pricetotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rp 230.000.000"
+                            android:gravity="right|center_vertical"
+                            android:textColor="@android:color/white"
+                            android:textSize="15sp"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="228"
+                            app:scale_textsize="23"
+                            app:scale_width="170"
+                            app:scale_height="50"/>
+                    </com.ssomai.android.scalablelayout.ScalableLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:id="@+id/cardView2"
+                android:focusable="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.ssomai.android.scalablelayout.ScalableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:scale_base_height="50"
+                        app:scale_base_width="400">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_margin="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CHOOSE PAYMENT METHOD"
+                            android:textSize="19sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_top="10"
+                            app:scale_width="400"
+                            app:scale_height="24"
+                            app:scale_textsize="18"/>
+
+                    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+                    <com.ssomai.android.scalablelayout.ScalableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:scale_base_width="400"
+                        app:scale_base_height="255">
+
+                        <ListView
+                            android:id="@+id/activity_lenssummary_listview_paymentMethod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:listSelector="@drawable/list_row_selector"
+                            android:choiceMode="singleChoice"
+                            app:scale_width="400"
+                            app:scale_height="255"/>
+                    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/activity_lenssummary_btn_checkout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_dark"
+        android:text="Checkout Order"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+</android.support.constraint.ConstraintLayout>

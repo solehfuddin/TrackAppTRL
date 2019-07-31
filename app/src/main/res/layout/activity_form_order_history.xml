@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormOrderHistoryActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/order_history_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:scale_base_width="400"
+                app:scale_base_height="40">
+
+                <ImageView
+                    android:id="@+id/activity_orderhistory_btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_back_white"
+                    app:scale_top="5"
+                    app:scale_width="30"
+                    app:scale_height="30"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order History Lens"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    app:customFont="DroidBold.ttf"
+                    app:scale_top="2"
+                    app:scale_left="35"
+                    app:scale_textsize="24"
+                    app:scale_width="300"
+                    app:scale_height="30"/>
+
+                <ImageView
+                    android:id="@+id/activity_orderhistory_btn_daterange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_apps_white"
+                    app:scale_top="5"
+                    app:scale_width="30"
+                    app:scale_height="30"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_history_toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/linearLayout">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            app:scale_base_width="400"
+            app:scale_base_height="60">
+
+            <EditText
+                android:id="@+id/activity_orderhistory_txt_search"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/edit_round_white"
+                android:drawableLeft="@drawable/ic_search_black"
+                android:drawablePadding="10dp"
+                android:hint="Search"
+                android:paddingLeft="10dp"
+                android:maxLines="1"
+                android:inputType="text"
+                app:scale_height="40"
+                app:scale_left="5"
+                app:scale_textsize="22"
+                app:scale_top="2"
+                app:scale_width="290" />
+
+            <Button
+                android:id="@+id/activity_orderhistory_btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/holo_blue_light"
+                android:gravity="center"
+                android:text="Search"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                app:scale_height="40"
+                app:scale_left="300"
+                app:scale_textsize="17.5"
+                app:scale_top="2"
+                app:scale_width="95" />
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_orderhistory_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/activity_orderhistory_imgError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/notfound"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_orderhistory_recyclerview"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_orderhistory_progressBar"
+        android:layout_marginBottom="8dp" />
+
+    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+        android:id="@+id/activity_orderhistory_progressBar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:mlpb_show_arrow="true"
+        app:mlpb_arrow_height="5dp"
+        app:mlpb_arrow_width="10dp"
+        app:mlpb_enable_circle_background="true"
+        app:mlpb_progress_color="@color/colorToolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</android.support.constraint.ConstraintLayout>

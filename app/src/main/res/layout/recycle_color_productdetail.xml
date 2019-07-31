@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <net.igenius.customcheckbox.CustomCheckBox
+        android:id="@+id/recycle_colorfilter_checkbox"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:color_checked="@color/colorEnd"
+        app:color_unchecked="@color/colorEnd"
+        android:layout_margin="10dp"
+        app:small_tick="true"
+        app:duration="50"
+        app:color_unchecked_stroke="@android:color/white"/>
+</LinearLayout>

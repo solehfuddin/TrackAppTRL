@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/login_txt_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@drawable/ic_user"
+            android:hint="Username"
+            android:textColor="@color/colorHint"
+            android:inputType="textPersonName"
+            app:bootstrapSize="md"
+            app:bootstrapBrand="danger"
+            app:roundedCorners="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/login_txt_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@drawable/ic_password"
+            android:hint="Password"
+            android:textColor="@color/colorHint"
+            android:inputType="textPassword"
+            app:bootstrapSize="md"
+            app:bootstrapBrand="danger"
+            app:roundedCorners="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox
+            android:id="@+id/login_cb_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Show Password"
+            android:textSize="12dp"
+            android:textColor="#000"
+            android:buttonTint="#ff9800"
+            app:buttonTint="#ff9800"
+            app:customFont="DroidBold.ttf"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/login_btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_margin="11dp"
+            android:padding="10dp"
+            android:textColor="@color/neutral"
+            android:text="Login"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bootstrap_gray_light"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Follow Our Fanpage"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/login_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+            app:bootstrapText="{fa_facebook}"
+            app:bootstrapBrand="primary"
+            app:buttonMode="regular"
+            app:bootstrapSize="lg"
+            android:layout_toStartOf="@+id/login_tw"
+            android:layout_toLeftOf="@+id/login_tw"
+            />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/login_tw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+            app:bootstrapText="{fa_twitter}"
+            app:bootstrapBrand="info"
+            app:buttonMode="regular"
+            app:bootstrapSize="lg"
+            android:layout_centerHorizontal="true"
+            />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/login_ig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+            app:bootstrapText="{fa_instagram}"
+            app:bootstrapBrand="danger"
+            app:buttonMode="regular"
+            app:bootstrapSize="lg"
+            android:layout_toEndOf="@+id/login_tw"
+            android:layout_toRightOf="@+id/login_tw"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

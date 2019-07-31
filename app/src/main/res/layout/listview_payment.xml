@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_height="45"
+            app:scale_base_width="400">
+
+            <ImageView
+                android:id="@+id/listview_payment_image"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:scale_top="5"
+                app:scale_width="35"
+                app:scale_height="35"
+                android:src="@drawable/qrcode" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listview_payment_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                app:scale_left="48"
+                app:scale_top="6"
+                app:scale_width="330"
+                app:scale_height="40"
+                app:scale_textsize="18"
+                android:padding="5dp"
+                android:textColor="@android:color/black"
+                android:text="LENSTYPE"
+                android:textSize="18sp"
+                app:customFont="UbuntuMedium.ttf" />
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+</LinearLayout>

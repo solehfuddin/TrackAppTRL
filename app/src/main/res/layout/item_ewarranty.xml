@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:scale_base_width="400"
+                app:scale_base_height="150">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_ewarranty_txtordernumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:textAlignment="center"
+                    android:maxLines="1"
+                    android:text="1292234123123"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorEnd"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="13"
+                    app:scale_left="10"
+                    app:scale_width="380"
+                    app:scale_textsize="20"
+                    app:scale_height="24"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="Patient Name "
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="50"
+                    app:scale_left="10"
+                    app:scale_width="120"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text=":"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="50"
+                    app:scale_left="130"
+                    app:scale_width="10"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_ewarranty_txtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="Nama Pasien"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="50"
+                    app:scale_left="140"
+                    app:scale_width="250"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="Phone Number "
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="85"
+                    app:scale_left="10"
+                    app:scale_width="125"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text=":"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="85"
+                    app:scale_left="130"
+                    app:scale_width="10"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_ewarranty_txtphonenumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="1292234123123"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="85"
+                    app:scale_left="140"
+                    app:scale_width="250"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="Optic Name "
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="120"
+                    app:scale_left="10"
+                    app:scale_width="120"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text=":"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="120"
+                    app:scale_left="130"
+                    app:scale_width="10"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_ewarranty_txtopticname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="Optik bla blah"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="120"
+                    app:scale_left="140"
+                    app:scale_width="250"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/item_ewarranty_btnDownload"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:padding="5dp"
+                android:text="Download"
+                android:textSize="15sp"
+                android:background="@color/colorFirst"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

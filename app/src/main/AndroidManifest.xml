@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.sofudev.trackapptrl">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--
+      <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    -->
+    <application
+        android:name=".App.AppController"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".FanpageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DashboardActivity"
+            android:label="@string/title_activity_dashboard"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name=".Form.FormUACActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Form.FormProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Form.FormTrackOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Form.FormFilterOpticnameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Info.InfoOrderHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Form.FormOrderLensActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Form.FormOrderDashboardActivity" />
+
+        <receiver android:name=".Custom.SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".Form.FormPDFViewerActivity" />
+        <activity android:name=".Form.FormLensSummaryActivity" />
+        <activity android:name=".Form.FormOrderHistoryActivity" />
+        <activity android:name=".Form.FormOrderDetailActivity" />
+        <activity android:name=".Form.FormPaymentVA" />
+        <activity android:name=".Form.FormPaymentQR" />
+        <activity android:name=".Form.FormPaymentCC" />
+        <activity android:name=".Form.FormPaymentKreditpro" />
+        <activity android:name=".Form.AddCartProductActivity" />
+        <activity android:name=".Form.WishlistProductActivity" />
+        <activity android:name=".Form.FormOrderHistoryFrameActivity" />
+        <activity android:name=".Form.FormOrderDetailFrameActivity" />
+        <activity android:name=".Form.FormPaymentLoanActivity" />
+        <activity android:name=".Form.FormPaymentLoanSaldo" />
+        <activity android:name=".Form.FormPaymentLoanOtp" />
+        <activity android:name=".Form.FormPaymentLoanSuccess" />
+        <activity android:name=".Form.EwarrantyActivity" />
+        <activity android:name=".Form.CheckBalanceActivity" />
+        <activity android:name=".Form.DetailBalanceActivity" />
+
+        <service android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.GenerateIdFire">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".Form.FormBatchOrderActivity" />
+        <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
+        <activity android:name=".Form.FormOrderDetailPartaiActivity"></activity>
+    </application>
+
+</manifest>

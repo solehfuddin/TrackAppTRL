@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Main Navigation">
+            <menu>
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_home"
+                    android:title="Home" />
+                <item
+                    android:id="@+id/nav_order"
+                    android:icon="@drawable/ic_order"
+                    android:title="Order Portal" />
+                <item
+                    android:id="@+id/nav_ordertrack"
+                    android:title="Order Tracking"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_orderlens"
+                    android:title="Lens Order"
+                    android:visible="false"/>
+                    <!--app:actionViewClass="com.raizlabs.universalfontcomponents.widget.UniversalFontTextView"-->
+                <item
+                    android:id="@+id/nav_orderbulk"
+                    android:title="Stock Order"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_orderdashboard"
+                    android:title="Order Panel"
+                    android:visible="false"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    />
+
+                <item
+                    android:id="@+id/nav_orderhistory"
+                    android:title="Order History Lens"
+                    android:visible="false"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    />
+
+                <item
+                    android:id="@+id/nav_orderhistoryFrame"
+                    android:title="Order History Frame"
+                    android:visible="false"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    />
+
+                <item
+                    android:id="@+id/nav_orderhistorybulk"
+                    android:title="Order History Stock"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    android:visible="false"/>
+
+                <item
+                    android:id="@+id/nav_orderCheckBalance"
+                    android:title="Check Balance"
+                    android:visible="false"
+                    app:actionLayout="@layout/badge_new"
+                    app:showAsAction="always"
+                    />
+                <!--
+                 <item
+                    android:id="@+id/nav_orderhistory"
+                    android:title="Order History"
+                    android:visible="false"/>
+                    -->
+                <item
+                    android:id="@+id/nav_options"
+                    android:icon="@drawable/ic_order"
+                    android:title="Options"
+                    />
+                <item
+                    android:id="@+id/nav_optionsuser"
+                    android:title="User Management"
+                    android:visible="false"
+                    />
+                <item
+                    android:id="@+id/nav_optionsreport"
+                    android:title="Report Sales"
+                    android:visible="false"
+                    />
+                <item
+                    android:id="@+id/nav_optionscheck"
+                    android:title="Order Checking"
+                    android:visible="false"
+                    />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Logout" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="Our Product">
+            <menu>
+                <item
+                    android:id="@+id/nav_pricelist"
+                    android:icon="@drawable/ic_pricelist"
+                    android:title="Pricelist"
+                    />
+                    <item
+                        android:id="@+id/nav_price1"
+                        android:title="Leinz"
+                        android:visible="false"
+                        />
+                    <item
+                        android:id="@+id/nav_price2"
+                        android:title="Oriental"
+                        android:visible="false"
+                        />
+                    <item
+                        android:id="@+id/nav_price3"
+                        android:title="Nikon"
+                        android:visible="false"
+                        />
+
+                <item
+                    android:id="@+id/nav_lenses"
+                    android:icon="@drawable/ic_lensa"
+                    android:title="Lenses"
+                    android:visible="false"/>
+                <!--
+                <item
+                    android:id="@+id/nav_lens1"
+                    android:title="Leinz"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_lens2"
+                    android:title="Nikon"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_lens3"
+                    android:title="Oriental"
+                    android:visible="false"/>
+                    -->
+                <item
+                    android:id="@+id/nav_frames"
+                    android:icon="@drawable/ic_frame"
+                    android:title="Frames"/>
+                <!--
+                <item
+                    android:id="@+id/nav_frame1"
+                    android:title="Bolon"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_frame2"
+                    android:title="Borelli"
+                    android:visible="false"/>
+                    -->
+                <item
+                    android:id="@+id/nav_instruments"
+                    android:icon="@drawable/ic_instrument"
+                    android:title="Instruments"
+                    android:visible="false"/>
+                <!--
+                <item
+                    android:id="@+id/nav_instrument1"
+                    android:title="Keeler"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_instrument2"
+                    android:title="ACP"
+                    android:visible="false"/>
+                    -->
+                <item
+                    android:id="@+id/nav_opthalmic"
+                    android:icon="@drawable/ic_ophtalmic"
+                    android:title="Ophthalmic"
+                    android:visible="false"/>
+                <!--
+                <item
+                    android:id="@+id/nav_opthalmic1"
+                    android:title="Inami"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_opthalmic2"
+                    android:title="Optical 2"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_opthalmic3"
+                    android:title="Optical 3"
+                    android:visible="false"/>
+                    -->
+                <item
+                    android:id="@+id/nav_contactlense"
+                    android:icon="@drawable/ic_contactlens"
+                    app:actionLayout="@layout/badge_soon"
+                    android:title="Contact Lens"/>
+                <!--
+                <item
+                    android:id="@+id/nav_contactlens1"
+                    android:title="Gelflex"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/nav_contactlens2"
+                    android:title="Gelf"
+                    android:visible="false"/>
+                    -->
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="Support">
+            <menu>
+                <item
+                    android:id="@+id/nav_ewarranty"
+                    android:icon="@drawable/ic_warranty"
+                    android:title="E-Warranty" />
+                <item
+                    android:id="@+id/nav_custcare"
+                    android:icon="@drawable/ic_custcare"
+                    android:title="Customer Care" />
+            </menu>
+        </item>
+    </group>
+
+    <item android:title="Information">
+        <menu>
+            <item
+                android:id="@+id/nav_guide"
+                android:icon="@drawable/ic_help"
+                android:title="Help"
+                />
+                <item
+                    android:id="@+id/nav_guide1"
+                    android:title="User Guide"
+                    android:visible="false"
+                    />
+
+            <item
+                android:id="@+id/nav_contactus"
+                android:icon="@drawable/ic_contact"
+                android:title="Contact Us" />
+
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_about"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>

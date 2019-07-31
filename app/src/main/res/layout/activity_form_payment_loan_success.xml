@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormPaymentLoanSuccess">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="45dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_new1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/info_status_imageview"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/success_outline"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/info_status_txtMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:padding="8dp"
+                        android:text="Payment Successful"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorToolbar"
+                        android:textSize="16sp"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                </LinearLayout>
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_base_height="150"
+                    app:scale_base_width="400"
+                    android:layout_below="@+id/form_paymentloan_saldo_linearHeader">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kode Bill : "
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="20"
+                        app:scale_top="25"
+                        app:scale_width="100"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_paymentloan_success_txtBillingId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1234567890"
+                        android:textSize="20sp"
+                        app:scale_height="25"
+                        app:scale_left="120"
+                        app:scale_textsize="20"
+                        app:scale_top="25"
+                        app:scale_width="280"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Bill : "
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="20"
+                        app:scale_top="82"
+                        app:scale_width="100"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="192dp"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="5dp"
+                        android:backgroundTint="#549ae1"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true"
+                        app:scale_left="110"
+                        app:scale_top="67"
+                        app:scale_width="275"
+                        app:scale_height="50"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="11dp"
+                        tools:layout_editor_absoluteY="7dp">
+
+                        <com.ssomai.android.scalablelayout.ScalableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:scale_base_height="80"
+                            app:scale_base_width="400">
+
+                            <TextView
+                                android:id="@+id/form_paymentloan_success_txtTotalBill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="27dp"
+                                android:text="Rp. 1234567890"
+                                android:textColor="@color/white"
+                                app:scale_left="10"
+                                app:scale_top="11"
+                                app:scale_height="50"
+                                app:scale_textsize="30"
+                                app:scale_width="400"
+                                tools:ignore="MissingPrefix" />
+                        </com.ssomai.android.scalablelayout.ScalableLayout>
+                    </android.support.v7.widget.CardView>
+
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/form_paymentloan_btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorToolbar"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:text="OK" />
+</RelativeLayout>

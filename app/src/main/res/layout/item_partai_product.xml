@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:scale_base_width="400"
+                app:scale_base_height="150">
+
+                <ImageView
+                    android:id="@+id/item_partaiproduct_imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:scale_top="40"
+                    app:scale_left="15"
+                    app:scale_width="100"
+                    app:scale_height="100"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtDisc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_red_dark"
+                    android:padding="2dp"
+                    android:text="70 %"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="8sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    app:scale_top="40"
+                    app:scale_left="15"
+                    app:scale_width="31"
+                    app:scale_textsize="12"
+                    app:scale_height="18"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="NP0001 0102-BLKSLV"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="10"
+                    app:scale_left="10"
+                    app:scale_width="200"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="NP0001 0102-BLKSLV"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="10"
+                    app:scale_left="15"
+                    app:scale_width="375"
+                    app:scale_textsize="16"
+                    app:scale_height="22"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Sph :"
+                    android:textSize="13sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="-20"
+                    app:scale_left="130"
+                    app:scale_width="40"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtSph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="+1.25"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="-20"
+                    app:scale_left="170"
+                    app:scale_width="40"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:text="Cyl :"
+                android:textSize="13sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_top="-20"
+                app:scale_left="225"
+                app:scale_width="40"
+                app:scale_textsize="15.5"
+                app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtCyl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="-1.00"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="-20"
+                    app:scale_left="260"
+                    app:scale_width="40"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Add :"
+                    android:textSize="13sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="-20"
+                    app:scale_left="315"
+                    app:scale_width="40"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="1.50"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="-20"
+                    app:scale_left="353"
+                    app:scale_width="40"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Quantity :"
+                    android:textSize="13sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="15"
+                    app:scale_left="130"
+                    app:scale_width="80"
+                    app:scale_textsize="15.5"
+                    app:scale_height="22" />
+
+                <ImageView
+                    android:id="@+id/item_partaiproduct_btnMinus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_remove_circle_outline"
+                    app:scale_top="74"
+                    app:scale_left="220"
+                    app:scale_width="28"
+                    app:scale_height="28"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtQty"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:layout_marginLeft="5dp"
+                    android:maxLines="1"
+                    android:text="10"
+                    android:textSize="13sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="12"
+                    app:scale_left="75"
+                    app:scale_width="40"
+                    app:scale_height="20"
+                    app:scale_textsize="20"/>
+
+                <ImageView
+                    android:id="@+id/item_partaiproduct_btnPlus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_add_circle_outline"
+                    app:scale_top="75"
+                    app:scale_left="305"
+                    app:scale_width="28"
+                    app:scale_height="28"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtSide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:background="@color/colorFirst"
+                    android:text="R"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textAlignment="center"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="14"
+                    app:scale_left="353"
+                    app:scale_width="30"
+                    app:scale_textsize="18"
+                    app:scale_height="24" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textSize="13dp"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Rp. 10.104.000"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/colorRed"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="110"
+                    app:scale_left="130"
+                    app:scale_width="120"
+                    app:scale_height="30"
+                    app:scale_textsize="16"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtPriceDisc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:textSize="11dp"
+                    android:text="Rp. 310.519.900"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="110"
+                    app:scale_left="250"
+                    app:scale_width="110"
+                    app:scale_height="30"
+                    app:scale_textsize="14"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorContent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/item_partaiproduct_btnRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:maxLines="1"
+                android:text="REMOVE"
+                android:textSize="14sp"
+                android:textColor="@color/colorRed"
+                android:textStyle="bold"
+                app:customFont="UbuntuMedium.ttf" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

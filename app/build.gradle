@@ -1,0 +1,155 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.fabiomsr.drawableoptimizer'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+    defaultConfig {
+        applicationId "com.sofudev.trackapptrl"
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 25
+        versionName "1.24"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //multiDexKeepFile file('multidex-config.txt')
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //Design custom
+    //compile 'com.android.support:appcompat-v7:25.4.0'
+
+    //Dialog custom
+
+    //Button custom
+
+    //Circular Button
+
+    //Toolbar custom
+
+    //Font custom
+
+    //Actionbar custom
+
+    //Volley Net
+
+    //loading progress
+
+    //Toast Custom
+
+    //Switch Button Custom
+
+    //Load Image
+
+    //Image Picker
+
+    //Edittext Custom
+
+    //Ripple effect
+
+    //compile 'com.github.traex.rippleeffect:library:1.3'
+    //Expandable Recyclerview
+
+    //Custom radio button
+
+    //Timeline View
+
+    //Custom spinner
+
+    // Banner slider
+
+    // Device Information
+
+    // Pin edittext
+
+    // Phone number edittext
+    compile('com.lamudi.phonefield:phone-field:0.1.3@aar') {
+        transitive = true
+    }
+
+    // Check Update
+    //compile 'androidmads.updatehandler:updatehandler:1.0.5'
+
+    // Top Navigation bar
+
+    // PDF Viewer
+
+    // Scalable Layout
+    //    compile 'com.wajahatkarim3.clapfab:clapfab:1.0.6'
+//    compile 'com.orhanobut:dialogplus:1.11@aar'
+//    compile 'com.github.warkiz.tickseekbar:tickseekbar:0.1.4'
+    //    compile 'io.apptik.widget:multislider:1.3'
+//    compile 'com.crystal:crystalrangeseekbar:1.1.3'
+    //    compile 'io.supercharge:shimmerlayout:2.1.0'
+
+    //    compile 'com.midtrans:corekit:1.18.0-SANDBOX'
+    compile 'com.android.support:appcompat-v7:26.0.1'
+    compile 'com.android.support:animated-vector-drawable:26.0.1'
+    compile 'com.android.support:support-v13:26.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:26.0.1'
+    compile 'com.android.support:cardview-v7:26.0.1'
+    compile 'com.android.support:palette-v7:26.0.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+    compile 'com.android.support:support-v4:26.0.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.3'
+    compile 'com.yarolegovich:lovely-dialog:1.0.7'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+    compile 'com.beardedhen:androidbootstrap:2.3.2'
+    compile 'com.github.medyo:fancybuttons:1.8.4'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'com.github.premnirmal:TextCounter:1.1.0'
+    compile 'com.raizlabs:UniversalFontComponents:1.0.1.1'
+    compile 'ayar.oktay.library:advancedtextview:0.5.0'
+    compile 'io.github.yavski:fab-speed-dial:1.0.6'
+    compile 'dev.dworks.libs:volleyplus:+'
+    compile 'cc.cloudist.acplibrary:library:1.2.1'
+    compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
+    compile 'com.github.GrenderG:Toasty:1.2.5'
+    compile 'com.kyleduo.switchbutton:library:1.4.6'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.2'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.patrickpissurno:ripple-effect:1.3.1'
+    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    compile 'me.omidh:liquidradiobutton:1.0.01'
+    compile 'com.github.vipulasri:timelineview:1.0.5'
+    compile 'com.weiwangcn.betterspinner:library:1.1.0'
+    compile 'com.ss.bannerslider:bannerslider:1.8.0'
+    compile 'com.jaredrummler:android-device-names:1.1.6'
+    compile 'com.zfdang.devicemodeltomarketingname:device-model-to-marketing-name:1.0.1'
+    compile 'com.github.GoodieBag:Pinview:v1.3'
+    compile 'com.justkiddingbaby:vercodeedittext:1.0.5'
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile 'com.nshmura:recyclertablayout:1.0.0'
+    compile 'es.voghdev.pdfviewpager:library:1.0.2'
+    compile 'com.ssomai:android.scalablelayout:2.1.6'
+    compile 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+    compile 'com.midtrans:corekit:1.18.0'
+    compile 'com.liferay.portal:portal-kernel:5.2.3'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.github.varunest:sparkbutton:1.0.6'
+    compile 'com.pnikosis:materialish-progress:1.7'
+    compile 'com.github.viethoa:snackbar:1.0.0'
+    compile 'net.igenius:customcheckbox:1.3'
+    compile 'com.google.firebase:firebase-core:9.2.0'
+    compile 'com.google.firebase:firebase-messaging:9.2.0'
+    compile 'com.google.firebase:firebase-crash:9.2.0'
+    compile 'com.google.firebase:firebase-auth:9.2.0'
+    testCompile 'junit:junit:4.12'
+}
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/about_ig"
+        android:title="Instagram"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_ig_black"
+        />
+    <item
+        android:id="@+id/about_tw"
+        android:title="Twitter"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_tw_black"
+        />
+    <item
+        android:id="@+id/about_fb"
+        android:title="Facebook"
+        android:orderInCategory="0"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_fb_black"
+        />
+</menu>

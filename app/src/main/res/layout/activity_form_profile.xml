@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormProfileActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|snap">
+
+            <LinearLayout
+                android:id="@+id/form_profile_linearHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp"
+                android:background="@color/colorPrimary"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
+                    android:id="@+id/form_profile_imgprofile"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/profile"
+                    app:hasBorder="false" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_profile_txtusername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Your username"
+                    android:textAlignment="center"
+                    android:textColor="@color/neutral"
+                    android:textSize="18sp"
+                    app:customFont="DroidBold.ttf" />
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/form_profile_btnChangeimg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    app:bootstrapBrand="danger"
+                    app:bootstrapSize="md"
+                    app:bootstrapText="{fa_camera} Change profile picture" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorPrimary">
+
+                    <ImageButton
+                        android:id="@+id/form_profile_btnback"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:background="@color/colorPrimary"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/ic_arrow_back" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Update your profile"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        app:customFont="DroidBold.ttf" />
+
+                    <ImageButton
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/colorPrimary"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/ic_done" />
+
+                </RelativeLayout>
+            </FrameLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/neutral"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/form_profile_cardBasic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="25dp"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="3dp"
+                app:cardUseCompatPadding="false"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textAlignment="center"
+                        android:text="Basic Information"
+                        android:background="@color/bootstrap_brand_info"
+                        android:textColor="@color/neutral"
+                        android:textSize="20sp"
+                        app:customFont="UbuntuBold.ttf" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleCustomer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Customer name"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_txtCustomer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Customer Name"
+                            android:inputType="textMultiLine"
+                            android:textColor="#8f9395"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_alignBaseline="@+id/form_profile_titleCustomer"
+                            android:layout_alignBottom="@+id/form_profile_titleCustomer"
+                            android:layout_toRightOf="@+id/form_profile_titleCustomer"
+                            android:layout_toEndOf="@+id/form_profile_titleCustomer" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Account  Status"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_below="@id/form_profile_titleCustomer"/>
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/form_profile_btnStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:bootstrapBrand="regular"
+                            app:bootstrapSize="sm"
+                            app:bootstrapText="Inactive"
+                            app:roundedCorners="true"
+                            android:layout_alignBaseline="@+id/form_profile_titleStatus"
+                            android:layout_alignBottom="@+id/form_profile_titleStatus"
+                            android:layout_toRightOf="@+id/form_profile_titleCustomer"
+                            android:layout_toEndOf="@+id/form_profile_titleCustomer" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleSales"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="7dp"
+                            android:text="Sales Name"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_below="@id/form_profile_titleStatus"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_txtSales"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Info Sales Name"
+                            android:textColor="#8f9395"
+                            android:textSize="16sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_alignBaseline="@+id/form_profile_titleSales"
+                            android:layout_alignBottom="@+id/form_profile_titleSales"
+                            android:layout_alignLeft="@+id/form_profile_btnStatus"
+                            android:layout_alignStart="@+id/form_profile_btnStatus" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleSalesContact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="7dp"
+                            android:text="Sales Contact"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_below="@id/form_profile_titleSales"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_txtSalesContact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Info Sales phone"
+                            android:textColor="#8f9395"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_alignBaseline="@+id/form_profile_titleSalesContact"
+                            android:layout_alignBottom="@+id/form_profile_titleSalesContact"
+                            android:layout_alignLeft="@+id/form_profile_txtSales"
+                            android:layout_alignStart="@+id/form_profile_txtSales" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="60dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Address"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_below="@id/form_profile_titleSalesContact"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_txtAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Address"
+                            android:textColor="#8f9395"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf"
+                            android:layout_alignBaseline="@+id/form_profile_titleAddress"
+                            android:layout_alignBottom="@+id/form_profile_titleAddress"
+                            android:layout_alignLeft="@+id/form_profile_btnStatus"
+                            android:layout_alignStart="@+id/form_profile_btnStatus" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+            android:id="@+id/form_profile_cardContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="3dp"
+            app:cardUseCompatPadding="false"
+            android:layout_below="@id/form_profile_cardBasic"
+                android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bootstrap_brand_warning"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="Contact Information"
+                    android:textAlignment="center"
+                    android:textColor="@color/neutral"
+                    android:textSize="20sp"
+                    app:customFont="UbuntuBold.ttf" />
+
+                <ImageButton
+                    android:id="@+id/form_profile_imgbtnEditContact"
+                    android:layout_width="45dp"
+                    android:layout_height="31dp"
+                    android:background="@drawable/edit_profile_clicked"
+                    android:src="@drawable/ic_edit"
+                    android:layout_alignParentRight="true"
+                    />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_titleContactPerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Contact Person"
+                        android:textColor="#333b3e"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_txtContactPerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/form_profile_titleContactPerson"
+                        android:layout_alignBottom="@+id/form_profile_titleContactPerson"
+                        android:layout_toEndOf="@+id/form_profile_titleContactPerson"
+                        android:layout_toRightOf="@+id/form_profile_titleContactPerson"
+                        android:text="Your Contact Person"
+                        android:textColor="#8f9395"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_titlePhonePerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/form_profile_titleContactPerson"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Phone  Number"
+                        android:textColor="#333b3e"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_txtPhonePerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/form_profile_titlePhonePerson"
+                        android:layout_alignBottom="@+id/form_profile_titlePhonePerson"
+                        android:layout_alignLeft="@+id/form_profile_txtContactPerson"
+                        android:layout_alignStart="@+id/form_profile_txtContactPerson"
+                        android:text="Your Phone Number"
+                        android:textColor="#8f9395"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_titleEmailPerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/form_profile_titlePhonePerson"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Email   Address"
+                        android:textColor="#333b3e"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_profile_txtEmailPerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/form_profile_titleEmailPerson"
+                        android:layout_alignBottom="@+id/form_profile_titleEmailPerson"
+                        android:layout_alignLeft="@+id/form_profile_txtPhonePerson"
+                        android:layout_alignStart="@+id/form_profile_txtPhonePerson"
+                        android:text="Info Email Address"
+                        android:textColor="#8f9395"
+                        android:textSize="17sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/form_profile_cardReset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="25dp"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="3dp"
+                app:cardUseCompatPadding="false"
+                android:layout_below="@id/form_profile_cardContact">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bootstrap_brand_danger"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:text="Change Password"
+                        android:textAlignment="center"
+                        android:textColor="@color/neutral"
+                        android:textSize="20sp"
+                        app:customFont="UbuntuBold.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="30dp">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleOldPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Old Password"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/form_profile_txtOldPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="3dp"
+                            android:inputType="textPassword"
+                            app:bootstrapSize="md"
+                            app:bootstrapBrand="info"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_lblOldPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="5dp"
+                            android:text="* Please input old password"
+                            android:textColor="@color/bootstrap_brand_danger"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleNewPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="10dp"
+                            android:text="New Password"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/form_profile_txtNewPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="3dp"
+                            android:inputType="textPassword"
+                            app:bootstrapSize="md"
+                            app:bootstrapBrand="info"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_lblNewPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="5dp"
+                            android:text="* Please input new password"
+                            android:textColor="@color/bootstrap_brand_danger"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_titleConfirmPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Confirm Password"
+                            android:textColor="#333b3e"
+                            android:textSize="17sp"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/form_profile_txtConfirmPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="3dp"
+                            android:inputType="textPassword"
+                            app:bootstrapSize="md"
+                            app:bootstrapBrand="info"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_profile_lblConfirmPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginTop="5dp"
+                            android:text="* Please input new password"
+                            android:textColor="@color/bootstrap_brand_danger"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:customFont="TitilliumSemiBold.ttf" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/form_profile_btnUpdatePassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_gravity="right"
+                            android:focusable="false"
+                            app:bootstrapText="Reset Password"
+                            app:bootstrapBrand="success"
+                            app:bootstrapSize="md"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

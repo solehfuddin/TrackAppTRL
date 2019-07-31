@@ -1,0 +1,1830 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.sofudev.trackapptrl.Form.FormOrderLensActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Area header toolbar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorPrimary">
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_lensorder_ripplebtnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+                    <ImageButton
+                        android:id="@+id/form_lensorder_btnback"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:src="@drawable/ic_arrow_back"
+                        android:background="@color/colorPrimary"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="Image back"/>
+                </com.andexert.library.RippleView>
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Lens Order"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="DroidBold.ttf" />
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_lensorder_ripplebtndone"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+                    <ImageButton
+                        android:id="@+id/form_lensorder_btndone"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:src="@drawable/ic_cloud_upload"
+                        android:background="@color/colorPrimary"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:contentDescription="Upload Order"/>
+                </com.andexert.library.RippleView>
+            </RelativeLayout>
+        </FrameLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="60dp">
+
+                <!-- Area Order Detail -->
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensorder_rippleorderdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration="150"
+                            app:rv_type="rectangle">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorToolbar"
+                                android:orientation="horizontal">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:padding="8dp"
+                                    android:text="Order Detail"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_lensorder_expandlayoutorderdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_weight=".5"
+                                        android:padding="5dp"
+                                        android:text="Reference Number"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".5"
+                                        android:padding="5dp"
+                                        android:text="Patient Name"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0">
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtOrderNumber"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".5"
+                                        android:hint="ex : 17238897"
+                                        android:inputType="textCapCharacters"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textColorHint="@color/colorContent"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md"
+                                        app:roundedCorners="true" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtPatientName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_weight=".5"
+                                        android:hint="ex : Ny Ida"
+                                        android:inputType="textPersonName"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textColorHint="@color/colorContent"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md"
+                                        app:roundedCorners="true" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:padding="5dp"
+                                        android:text="Phone Number"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtPatientContact"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:hint="082310029100"
+                                        android:textAlignment="center"
+                                        android:inputType="phone"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textColorHint="@color/colorContent"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md"
+                                        app:roundedCorners="true" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:orientation="vertical">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:padding="5dp"
+                                        android:text="Remark / Note"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtOrderInformation"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_marginTop="5dp"
+                                        android:inputType="textMultiLine"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <!-- Area Lens Detail -->
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensorder_ripplerefraksidetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_type="rectangle"
+                            app:rv_rippleDuration="150">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@color/colorFirst">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="8dp"
+                                    android:text="Lens Detail"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    android:layout_centerInParent="true"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_lensorder_expandlayoutrefraksidetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="15dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".21"
+                                        android:paddingTop="6dp"
+                                        android:paddingBottom="6dp"
+                                        android:paddingLeft="6dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="LENSES"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <RelativeLayout
+                                        android:layout_weight=".79"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:weightSum="1.0">
+
+                                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                                android:id="@+id/form_lensorder_txtlenstype"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="0.3"
+                                                android:layout_marginRight="5dp"
+                                                android:inputType="text"
+                                                android:padding="5dp"
+                                                android:enabled="false"
+                                                android:hint="A5B410"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/colorHint"
+                                                android:textColorHint="@color/colorContent"
+                                                app:bootstrapBrand="info"
+                                                app:bootstrapSize="md" />
+
+                                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                                android:id="@+id/form_lensorder_txtlensdesc"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="0.68"
+                                                android:layout_marginRight="5dp"
+                                                android:inputType="text"
+                                                android:padding="5dp"
+                                                android:enabled="false"
+                                                android:hint="Presio Advance 1.5 10 B4"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/colorHint"
+                                                android:textColorHint="@color/colorContent"
+                                                app:bootstrapBrand="info"
+                                                app:bootstrapSize="md" />
+
+                                            <com.andexert.library.RippleView
+                                                android:id="@+id/form_lensorder_btnlenstype"
+                                                android:layout_width="27dp"
+                                                android:layout_height="27dp"
+                                                android:layout_marginTop="2dp"
+                                                app:rv_type="simpleRipple"
+                                                app:rv_rippleDuration="100">
+
+                                                <ImageView
+                                                    android:id="@+id/form_lensorder_imglenstype"
+                                                    android:layout_width="27dp"
+                                                    android:layout_height="27dp"
+                                                    android:src="@drawable/ic_arrow_drop_down"
+                                                    android:background="@color/bootstrap_brand_info"/>
+                                            </com.andexert.library.RippleView>
+                                        </LinearLayout>
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".115"
+                                        android:layout_marginLeft="5dp"
+                                        android:padding="5dp"
+                                        android:text=""
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".172"
+                                        android:layout_marginLeft="10dp"
+                                        android:padding="5dp"
+                                        android:text="SPH"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".172"
+                                        android:layout_marginLeft="10dp"
+                                        android:padding="5dp"
+                                        android:text="CYL"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".172"
+                                        android:layout_marginLeft="10dp"
+                                        android:padding="5dp"
+                                        android:text="AXS"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".172"
+                                        android:layout_marginLeft="10dp"
+                                        android:padding="5dp"
+                                        android:text="ADD"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".172"
+                                        android:layout_marginLeft="10dp"
+                                        android:padding="5dp"
+                                        android:text="PRIS"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginBottom="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_weight=".115"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingTop="6dp"
+                                            android:paddingBottom="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:text="R"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <CheckBox
+                                            android:id="@+id/form_lensorder_cbsider"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="-2dp"
+                                            android:layout_marginLeft="13dp"
+                                            android:textSize="12sp"
+                                            android:buttonTint="@android:color/holo_blue_light"
+                                            android:checked="true"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtsphr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtcylr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtaxsr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number"
+                                            android:maxLength="3"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtaddr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtprismr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number|numberSigned"
+                                            android:maxLength="3"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true"
+                                            android:enabled="false"/>
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginBottom="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_weight=".115"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:paddingTop="6dp"
+                                            android:paddingBottom="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:text="L"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <CheckBox
+                                            android:id="@+id/form_lensorder_cbsidel"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="-2dp"
+                                            android:layout_marginLeft="13dp"
+                                            android:textSize="12sp"
+                                            android:buttonTint="@android:color/holo_blue_light"
+                                            android:checked="true"/>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtsphl"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtcyll"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtaxsl"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="number"
+                                            android:maxLength="3"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtaddl"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0.0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".172"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtprisml"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="numberDecimal|numberSigned"
+                                            android:maxLength="5"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true"
+                                            android:enabled="false"/>
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".25"
+                                            android:paddingTop="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="* R = Right side"
+                                            android:textColor="@color/colorHint"
+                                            android:textSize="10sp"
+                                            app:customFont="RobotoMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".7"
+                                            android:paddingTop="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="* For positive decimal number, please insert without (+)"
+                                            android:textColor="@color/colorHint"
+                                            android:textSize="10sp"
+                                            app:customFont="RobotoMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".25"
+                                            android:paddingTop="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="* L = Left side"
+                                            android:textColor="@color/colorHint"
+                                            android:textSize="10sp"
+                                            app:customFont="RobotoMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".7"
+                                            android:paddingTop="6dp"
+                                            android:paddingLeft="6dp"
+                                            android:layout_marginLeft="5dp"
+                                            android:text="* For negative decimal number, please insert with (-)"
+                                            android:textColor="@color/colorHint"
+                                            android:textSize="10sp"
+                                            app:customFont="RobotoMedium.ttf" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginBottom="5dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:padding="5dp"
+                                            android:text="COATING"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <Spinner
+                                                android:id="@+id/form_lensorder_spincoatgroup"
+                                                android:layout_width="110dp"
+                                                android:layout_height="30dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:textAlignment="center"
+                                                android:textColor="@android:color/white"
+                                                android:textSize="14sp"
+                                                android:paddingLeft="15dp"
+                                                android:paddingRight="15dp" />
+
+                                            <TextView
+                                                android:id="@+id/form_lensorder_txtcoatdescr"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="30dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:textAlignment="center"
+                                                android:gravity="center_vertical"
+                                                android:textColor="@android:color/white"
+                                                android:text="Coating description"
+                                                android:background="@color/bootstrap_brand_info"
+                                                android:textSize="14sp"
+                                                android:layout_marginTop="3dp"
+                                                android:layout_marginBottom="-6dp"
+                                                android:layout_marginLeft="15dp"
+                                                android:layout_marginRight="15dp"/>
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:id="@+id/form_lensorder_txttinttitle"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:padding="5dp"
+                                            android:text="COLOR / TINTING"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <Spinner
+                                                android:id="@+id/form_lensorder_spincolorgrup"
+                                                android:layout_width="110dp"
+                                                android:layout_height="30dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:textAlignment="center"
+                                                android:textColor="@android:color/white"
+                                                android:textSize="14sp"
+                                                android:paddingLeft="15dp"
+                                                android:paddingRight="15dp" />
+
+                                            <Spinner
+                                                android:id="@+id/form_lensorder_spincolordescr"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="30dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:textAlignment="center"
+                                                android:textColor="@android:color/white"
+                                                android:textSize="14sp"
+                                                android:paddingLeft="15dp"
+                                                android:paddingRight="15dp" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <!--<LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".54"
+                                            android:layout_marginLeft="5dp"
+                                            android:padding="5dp"
+                                            android:text=""
+                                            android:layout_gravity="end"
+                                            android:textColor="@color/colorRed"
+                                            android:textSize="10sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".46"
+                                            android:layout_marginLeft="5dp"
+                                            android:padding="5dp"
+                                            android:text="Please check corridor !!!"
+                                            android:layout_gravity="end"
+                                            android:textColor="@color/colorRed"
+                                            android:textSize="10sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>-->
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".1"
+                                            android:layout_marginLeft="5dp"
+                                            android:padding="5dp"
+                                            android:text=""
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".2"
+                                            android:paddingTop="6dp"
+                                            android:paddingBottom="6dp"
+                                            android:text="FAR"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/neutral"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".2"
+                                            android:paddingTop="6dp"
+                                            android:paddingBottom="6dp"
+                                            android:text="NEAR"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/neutral"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".5"
+                                            android:paddingTop="6dp"
+                                            android:paddingBottom="6dp"
+                                            android:text="CORRIDOR"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <RelativeLayout
+                                            android:layout_weight=".52"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content">
+
+                                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingTop="6dp"
+                                                android:paddingBottom="6dp"
+                                                android:paddingLeft="8dp"
+                                                android:text="Please check corridor !!!"
+                                                android:textColor="@color/colorRed"
+                                                android:textSize="14sp"
+                                                app:customFont="UbuntuMedium.ttf" />
+                                        </RelativeLayout>
+
+                                        <!--<RelativeLayout
+                                            android:layout_weight=".175"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp">
+
+                                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                                android:id="@+id/form_lensorder_txtpdl"
+                                                android:layout_width="50dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_centerHorizontal="true"
+                                                android:inputType="numberSigned"
+                                                android:maxLength="3"
+                                                android:padding="5dp"
+                                                android:enabled="false"
+                                                android:hint="0"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/colorHint"
+                                                android:textColorHint="@color/colorContent"
+                                                app:bootstrapBrand="info"
+                                                app:bootstrapSize="md"
+                                                app:roundedCorners="true" />
+                                        </RelativeLayout>
+
+                                        <RelativeLayout
+                                            android:layout_weight=".175"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp">
+
+                                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                                android:id="@+id/form_lensorder_txtpds"
+                                                android:layout_width="50dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_centerHorizontal="true"
+                                                android:inputType="numberSigned"
+                                                android:maxLength="3"
+                                                android:enabled="false"
+                                                android:padding="5dp"
+                                                android:hint="0"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/colorHint"
+                                                android:textColorHint="@color/colorContent"
+                                                app:bootstrapBrand="info"
+                                                app:bootstrapSize="md"
+                                                app:roundedCorners="true" />
+                                        </RelativeLayout>-->
+
+                                        <RelativeLayout
+                                            android:layout_weight=".48"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp">
+
+                                            <Spinner
+                                                android:id="@+id/form_lensorder_spincorridor"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="30dp"
+                                                android:layout_centerHorizontal="true"
+                                                android:textAlignment="center"
+                                                android:textColor="@android:color/white"
+                                                android:textSize="14sp"
+                                                android:paddingLeft="15dp"
+                                                android:paddingRight="15dp" />
+                                        </RelativeLayout>
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <!-- Area Facet Detail -->
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensorder_ripplefacetdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_type="rectangle"
+                            app:rv_rippleDuration="150">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@android:color/holo_red_light">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="8dp"
+                                    android:text="Individual Detail"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    android:layout_centerInParent="true"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_lensorder_expandlayoutfacetdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".37"
+                                        android:padding="5dp"
+                                        android:text="FACET TRL"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.kyleduo.switchbutton.SwitchButton
+                                        android:id="@+id/form_lensorder_swfacet"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="22dp"
+                                        android:layout_weight=".25"
+                                        app:kswTintColor="@android:color/holo_red_light"
+                                        app:kswTextOff="no"
+                                        app:kswTextOn="yes"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:padding="5dp"
+                                        android:text="MPD LEFT"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:padding="5dp"
+                                        android:text="MPD RIGHT"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:padding="5dp"
+                                        android:text="PV"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginBottom="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_weight=".33"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtmpdl"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number|numberDecimal"
+                                            android:maxLength="4"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_weight=".33">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtmpdr"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number|numberDecimal"
+                                            android:maxLength="4"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="4.5dp"
+                                        android:layout_weight=".33">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtsegh"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number"
+                                            android:maxLength="6"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:text="WRAP"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:text="PANTO"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:text="VD"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginBottom="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtwrap"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="numberSigned"
+                                            android:maxLength="3"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".33"
+                                        android:layout_marginRight="4dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtphantose"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberSigned"
+                                            android:maxLength="3"
+                                            android:padding="6dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".33">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtvertex"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:inputType="numberSigned"
+                                            android:maxLength="3"
+                                            android:paddingLeft="10dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:padding="5dp"
+                                        android:text="Information Facet"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtinfofacet"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_marginLeft="13dp"
+                                        android:layout_marginRight="13dp"
+                                        android:layout_marginTop="5dp"
+                                        android:inputType="textMultiLine"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textSize="14sp"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <!-- Area Frame Detail -->
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensorder_rippleframedetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_type="rectangle"
+                            app:rv_rippleDuration="150">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@color/colorEnd">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="8dp"
+                                    android:text="Frame Detail"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    android:layout_centerInParent="true"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_lensorder_expandlayoutframedetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".4"
+                                        android:padding="5dp"
+                                        android:text="Frame Model"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".2"
+                                        android:padding="5dp"
+                                        android:text="DBL"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".2"
+                                        android:padding="5dp"
+                                        android:text="Hor (A)"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".2"
+                                        android:padding="5dp"
+                                        android:text="Ver (B)"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        android:layout_centerInParent="true"
+                                        app:customFont="UbuntuMedium.ttf" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0"
+                                    android:layout_marginBottom="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_weight=".4"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="13dp"
+                                        android:layout_marginRight="10dp">
+
+                                        <com.weiwangcn.betterspinner.library.BetterSpinner
+                                            android:id="@+id/form_lensorder_spinframemodel"
+                                            android:layout_width="150dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerHorizontal="true"
+                                            android:text="-- Model --"
+                                            android:textAlignment="center"
+                                            android:textColor="@android:color/white"
+                                            android:textSize="14sp"
+                                            android:paddingLeft="15dp"
+                                            android:paddingRight="10dp"
+                                            android:paddingTop="5dp"
+                                            android:paddingBottom="5dp"
+                                            android:background="@color/bootstrap_brand_info" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_weight=".2"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="10dp">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtdbl"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            android:maxLength="3"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_weight=".2">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txthor"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            android:maxLength="3"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="4.5dp"
+                                        android:layout_weight=".2">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_lensorder_txtver"
+                                            android:layout_width="60dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:inputType="number"
+                                            android:padding="5dp"
+                                            android:hint="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            android:maxLength="3"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:padding="5dp"
+                                        android:text="Frame Code"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="14sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_lensorder_txtframebrand"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_marginLeft="13dp"
+                                        android:layout_marginRight="13dp"
+                                        android:layout_marginTop="5dp"
+                                        android:inputType="textMultiLine"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textSize="14sp"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <!-- Area Footer -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bootstrap_brand_success"
+        android:visibility="visible">
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_lensorder_ripplebtnsave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:rv_type="simpleRipple"
+            app:rv_rippleDuration="150"
+            app:rv_color="@color/colorToolbar">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Order"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                app:customFont="RobotoMedium.ttf" />
+        </com.andexert.library.RippleView>
+    </LinearLayout>
+
+</RelativeLayout>

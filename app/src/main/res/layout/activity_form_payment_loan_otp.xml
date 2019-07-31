@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormPaymentLoanOtp">
+
+    <LinearLayout
+        android:id="@+id/form_paymentloan_saldo_linearHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_base_height="170"
+            app:scale_base_width="400"
+            android:background="@drawable/bg_payment">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kode Billing : "
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="25"
+                app:scale_left="15"
+                app:scale_textsize="16"
+                app:scale_top="25"
+                app:scale_width="100" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_paymentloan_otp_txtBillingId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="123456789"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="25"
+                app:scale_left="120"
+                app:scale_textsize="16"
+                app:scale_top="25"
+                app:scale_width="200" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Bill"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="25"
+                app:scale_left="15"
+                app:scale_textsize="17"
+                app:scale_top="105"
+                app:scale_width="100" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_paymentloan_otp_txtTotalBilling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Rp. 1234567890"
+                android:textColor="@color/white"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="30"
+                app:scale_left="15"
+                app:scale_textsize="22"
+                app:scale_top="130"
+                app:scale_width="250"/>
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/form_paymentloan_saldo_linearHeader"
+        android:background="@drawable/white_new1">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                android:text="Verification Code"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:weightSum="3">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:text="Masukkan otp : "
+                    android:textSize="16sp"
+                    android:textColor="@color/colorContent"
+                    app:customFont="UbuntuMedium.ttf"/>
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/form_paymentloan_otp_edOtp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1.8"
+                    android:textSize="16sp"
+                    android:inputType="numberPassword"/>
+            </LinearLayout>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pastikan kode yang anda masukkan telah sesuai untuk melanjutkan transaksi"
+                android:textSize="14sp"
+                android:layout_marginTop="25dp"
+                android:textAlignment="center"
+                app:customFont="UbuntuMedium.ttf"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/form_paymentloan_otp_btnPrev"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/colorFirst"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/form_paymentloan_otp_btnNext"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/colorToolbar"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Next" />
+    </LinearLayout>
+
+
+</RelativeLayout>

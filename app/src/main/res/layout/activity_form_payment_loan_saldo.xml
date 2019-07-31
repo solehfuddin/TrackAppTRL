@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormPaymentLoanSaldo">
+
+    <LinearLayout
+        android:id="@+id/form_paymentloan_saldo_linearHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_base_height="170"
+            app:scale_base_width="400"
+            android:background="@drawable/bg_payment">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Informasi Pembayaran Loan"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="25"
+                app:scale_left="15"
+                app:scale_textsize="20"
+                app:scale_top="25"
+                app:scale_width="260" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_wallet"
+                app:scale_height="50"
+                app:scale_left="15"
+                app:scale_top="104"
+                app:scale_width="50"
+                tools:ignore="MissingPrefix" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sisa Saldo"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="25"
+                app:scale_left="80"
+                app:scale_textsize="18"
+                app:scale_top="105"
+                app:scale_width="100" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_paymentloan_saldo_txtSisaSaldo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Rp. 1234567890"
+                android:textColor="@color/white"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="30"
+                app:scale_left="80"
+                app:scale_textsize="22"
+                app:scale_top="130"
+                app:scale_width="250"/>
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/form_paymentloan_saldo_linearHeader"
+        android:background="@drawable/white_new1">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:scale_base_height="250"
+            app:scale_base_width="400"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/form_paymentloan_saldo_linearHeader">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_paymentloan_saldo_txtTitleBilling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:visibility="invisible"
+                app:customFont="UbuntuMedium.ttf"
+                app:scale_height="40"
+                app:scale_textsize="30"
+                app:scale_top="5"
+                app:scale_width="400"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kode Bill : "
+                android:textSize="20sp"
+                android:textAlignment="center"
+                app:scale_height="30"
+                app:scale_left="10"
+                app:scale_textsize="20"
+                app:scale_top="65"
+                app:scale_width="100"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_paymentloan_saldo_txtKodeBilling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1234567890"
+                android:textSize="20sp"
+                app:scale_height="25"
+                app:scale_left="120"
+                app:scale_textsize="20"
+                app:scale_top="65"
+                app:scale_width="260"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Bill : "
+                android:textSize="20sp"
+                android:textAlignment="center"
+                app:scale_height="30"
+                app:scale_left="10"
+                app:scale_textsize="20"
+                app:scale_top="120"
+                app:scale_width="100"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="192dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="5dp"
+                android:backgroundTint="#549ae1"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:scale_left="110"
+                app:scale_top="107"
+                app:scale_width="275"
+                app:scale_height="50"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="7dp">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_base_height="80"
+                    app:scale_base_width="400">
+
+                    <TextView
+                        android:id="@+id/form_paymentloan_saldo_txtTotalBill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="27dp"
+                        android:text="Rp. 1234567890"
+                        android:textColor="@color/white"
+                        app:scale_left="10"
+                        app:scale_top="11"
+                        app:scale_height="50"
+                        app:scale_textsize="30"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+            </android.support.v7.widget.CardView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pastikan sisa saldo anda mencukupi untuk transaksi selanjutnya"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                app:scale_height="60"
+                app:scale_textsize="15"
+                app:scale_top="180"
+                app:scale_width="400"
+                app:customFont="UbuntuMedium.ttf"/>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/form_paymentloan_saldo_btnBack"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/colorFirst"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/form_paymentloan_saldo_btnNext"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/colorToolbar"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Next" />
+    </LinearLayout>
+
+</RelativeLayout>

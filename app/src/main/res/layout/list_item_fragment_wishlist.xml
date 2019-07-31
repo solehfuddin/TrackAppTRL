@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="1dp"
+    app:cardUseCompatPadding="true"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/listitem_wishlist_imgProduct"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/bumperbanner" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_wishlist_txtDiscpercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_red_dark"
+                android:padding="2dp"
+                android:text="50% off"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <ImageView
+                android:id="@+id/listitem_wishlist_btnRemove"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_close"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/listitem_wishlist_txtProductid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Id"
+            android:visibility="gone"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/listitem_wishlist_txtProductname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="Product Name"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            app:customFont="UbuntuMedium.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/listitem_wishlist_txtProductcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Code"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="3dp"
+            android:weightSum="10">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_wishlist_txtRealprice"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:customFont="MavenPro-Regular.ttf"
+                android:text="Real Price"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/listitem_wishlist_btnMoveCart"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            app:rv_rippleDuration="300"
+            app:rv_type="rectangle">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                app:scale_base_width="400">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="MOVE TO CART"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    app:scale_textsize="38"
+                    app:scale_width="400"
+                    app:customFont="UbuntuMedium.ttf"/>
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </com.andexert.library.RippleView>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
