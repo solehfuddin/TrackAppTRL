@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONException;
@@ -81,6 +83,15 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        listTransfer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), FanpageActivity.class);
+                intent.putExtra("data", "https://drive.google.com/open?id=1kLhwebwgFQHyZT4Zowr4e0bBxklI3eA7");
+                startActivity(intent);
             }
         });
 
@@ -193,7 +204,7 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
     {
         adapter_panduantransfer = new Adapter_panduantransfer(getApplicationContext(), list_panduantransfer);
 
-        List<String> allAtm = Arrays.asList("Panduan Pembayaran");
+        List<String> allAtm = Arrays.asList("Panduan Pembayaran Loan");
         list_panduantransfer.addAll(allAtm);
 
         adapter_panduantransfer.notifyDataSetChanged();

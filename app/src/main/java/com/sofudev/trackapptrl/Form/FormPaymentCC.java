@@ -122,7 +122,7 @@ public class FormPaymentCC extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), FanpageActivity.class);
-                intent.putExtra("data", "https://drive.google.com/open?id=1ot32BlP_Cqpka2P20qaoTxu5qgVTWmsw");
+                intent.putExtra("data", "https://drive.google.com/open?id=1SPOypCIQuIHq8byfA895QYMWx-fOL1b-");
                 startActivity(intent);
             }
         });
@@ -303,7 +303,7 @@ public class FormPaymentCC extends AppCompatActivity {
     private void showPanduan() {
         adapter_panduantransfer = new Adapter_panduantransfer(getApplicationContext(), list_panduantransfer);
 
-        List<String> allPanduan = Arrays.asList("Panduan Pembayaran dengan CC");
+        List<String> allPanduan = Arrays.asList("Panduan Pembayaran CC");
         list_panduantransfer.addAll(allPanduan);
         adapter_panduantransfer.notifyDataSetChanged();
         lvPanduan.setAdapter(adapter_panduantransfer);
@@ -318,6 +318,14 @@ public class FormPaymentCC extends AppCompatActivity {
                 .speed(60)
                 .build();
         loading.show();
+    }
+
+    private void ViewPdfByFilter(final String title, final String header)
+    {
+        Intent intent = new Intent(FormPaymentCC.this, FormPDFViewerActivity.class);
+        intent.putExtra("data", title);
+        intent.putExtra("title", header);
+        startActivity(intent);
     }
 
     private void payWithCC(final String amount, final String orderNumber, final String token)
