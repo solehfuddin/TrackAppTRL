@@ -28,6 +28,8 @@ public class Config {
     public String dashboard_verify_mail    = "index.php/android_dashboard/verifyEmailAddress";
     public String dashboard_verify_phone   = "index.php/android_dashboard/verifyPhoneNumber";
     public String dashboard_upload_txtphone= "index.php/android_dashboard/uploadVerifyphoneTxt";
+    public String dashboard_search_product = "index.php/android_dashboard/searchProduct";
+    public String dashboard_search_producttitle = "index.php/android_dashboard/searchProductTitle";
 
     /* Area Profile */
     public String profile_user_detail       = "index.php/android_profile/userProfileDetail";

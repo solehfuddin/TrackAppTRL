@@ -115,7 +115,9 @@
 
         <activity android:name=".Form.FormBatchOrderActivity" />
         <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
-        <activity android:name=".Form.FormOrderDetailPartaiActivity"></activity>
+        <activity android:name=".Form.FormOrderDetailPartaiActivity" />
+        <activity android:name=".Form.SearchProductActivity" />
+        <activity android:name=".DetailProductActivity"></activity>
     </application>
 
 </manifest>

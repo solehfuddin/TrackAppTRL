@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -157,6 +158,24 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        searchView.setEllipsize(true);
+        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toasty.info(getApplicationContext(), "Input : " + query, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                Snackbar.make(findViewById(R.id.container), "Query: " + newText, Snackbar.LENGTH_LONG)
+//                        .show();
+                searchView.showSuggestions();
+                return false;
+            }
+        });
+
         Menu m = navigationView.getMenu();
         for (int i=0;i<m.size();i++) {
             MenuItem mi = m.getItem(i);
@@ -199,18 +218,22 @@ public class MainActivity extends AppCompatActivity
         imgWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, WishlistProductActivity.class);
-                //intent.putExtra("activity", "main");
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(MainActivity.this, WishlistProductActivity.class);
+//                //intent.putExtra("activity", "main");
+//                startActivityForResult(intent, 1);
+
+                Toasty.warning(getApplicationContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
             }
         });
 
         imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddCartProductActivity.class);
-                //intent.putExtra("activity", "main");
-                startActivityForResult(intent, 2);
+//                Intent intent = new Intent(MainActivity.this, AddCartProductActivity.class);
+//                //intent.putExtra("activity", "main");
+//                startActivityForResult(intent, 2);
+
+                Toasty.warning(getApplicationContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -266,7 +289,16 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
+        //searchView.setMenuItem(item);
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toasty.warning(getApplicationContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
         return true;
     }

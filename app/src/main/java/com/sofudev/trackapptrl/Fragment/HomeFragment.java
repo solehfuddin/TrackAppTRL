@@ -38,6 +38,7 @@ import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
 import com.sofudev.trackapptrl.Data.Data_home_category;
 import com.sofudev.trackapptrl.Data.Data_home_product;
+import com.sofudev.trackapptrl.DetailProductActivity;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONArray;
@@ -132,15 +133,20 @@ public class HomeFragment extends Fragment {
                         }
                         else
                         {
-                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
-                            detailFrameFragment.setArguments(bundle);
+//                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("from", "0");
+//                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+//                            detailFrameFragment.setArguments(bundle);
+//
+//                            getActivity().getSupportFragmentManager().beginTransaction()
+//                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+//                                    .addToBackStack(null)
+//                                    .commit();
 
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
-                                    .addToBackStack(null)
-                                    .commit();
+                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+                            intent.putExtra("id", Integer.valueOf(list_hotsale.get(pos).getProduct_id()));
+                            startActivity(intent);
                         }
                     }
                 }, ACTIVITY_TAG);

@@ -33,8 +33,10 @@ import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_color_filter;
 import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
+import com.sofudev.trackapptrl.Data.Data_recent_view;
 import com.sofudev.trackapptrl.Form.AddCartProductActivity;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
+import com.sofudev.trackapptrl.LocalDb.Db.RecentViewHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelWishlist;
@@ -89,6 +91,7 @@ public class DetailFrameFragment extends Fragment {
     //Lokal db
     WishlistHelper wishlistHelper;
     AddCartHelper addCartHelper;
+    RecentViewHelper recentViewHelper;
     int click = 0;
 
     public DetailFrameFragment() {
@@ -113,6 +116,7 @@ public class DetailFrameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail_frame, container, false);
 
+        final String from     = getArguments().getString("from");
         String value = getArguments().getString("product_id");
         //Toasty.info(getContext(), value, Toast.LENGTH_SHORT).show();
 
@@ -148,6 +152,8 @@ public class DetailFrameFragment extends Fragment {
 
         wishlistHelper = WishlistHelper.getInstance(getContext());
         addCartHelper = AddCartHelper.getINSTANCE(getContext());
+        recentViewHelper = RecentViewHelper.getINSTANCE(getContext());
+        recentViewHelper.open();
 
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
@@ -175,16 +181,34 @@ public class DetailFrameFragment extends Fragment {
 //                        intent.putExtra("id_lensa", list_hotsale.get(pos).getProduct_id());
 //                        startActivity(intent);
 
-                        DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
-                        detailFrameFragment.setArguments(bundle);
+                        if (from.contentEquals("0"))
+                        {
+                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("from", "0");
+                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+                            detailFrameFragment.setArguments(bundle);
 
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .remove(detailFrameFragment)
-                                .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
-                                .addToBackStack(null)
-                                .commit();
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .remove(detailFrameFragment)
+                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                        else
+                        {
+                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("from", "1");
+                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+                            detailFrameFragment.setArguments(bundle);
+
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .remove(detailFrameFragment)
+                                    .replace(R.id.detailproduct_fragment_container, detailFrameFragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
                     }
                 });
 
@@ -193,7 +217,16 @@ public class DetailFrameFragment extends Fragment {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().popBackStack();
+//                if (from.contentEquals("0"))
+//                {
+//                    getActivity().getSupportFragmentManager().popBackStack();
+//                }
+//                else
+//                {
+//                    getActivity().finish();
+//                }
+
+                getActivity().finish();
             }
         });
 
@@ -293,6 +326,11 @@ public class DetailFrameFragment extends Fragment {
         return view;
     }
 
+    private void insertRecentSearch(Data_recent_view item)
+    {
+        recentViewHelper.insertRecentView(item);
+    }
+
     private void showProductDetail(final String id)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLDETAILPRODUCT, new Response.Listener<String>() {
@@ -332,6 +370,12 @@ public class DetailFrameFragment extends Fragment {
                     txtBrand.setText(frameBrand);
                     txtAvailability.setText(stock);
                     txtDescription.setText(frameSku);
+
+                    Data_recent_view dataRecentView = new Data_recent_view();
+                    dataRecentView.setId(frameId);
+                    dataRecentView.setImage(frameImage);
+
+                    insertRecentSearch(dataRecentView);
 
 //                    if (frameColor.contains("[") && frameColor.contains("]"))
 //                    {

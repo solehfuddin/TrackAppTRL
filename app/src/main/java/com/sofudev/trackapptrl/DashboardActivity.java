@@ -77,6 +77,7 @@ import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Form.FormProfileActivity;
 import com.sofudev.trackapptrl.Form.FormTrackOrderActivity;
 import com.sofudev.trackapptrl.Form.FormUACActivity;
+import com.sofudev.trackapptrl.Form.SearchProductActivity;
 import com.sofudev.trackapptrl.Form.WishlistProductActivity;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
@@ -373,7 +374,17 @@ public class DashboardActivity extends AppCompatActivity
 
         MenuItem item = menu.findItem(R.id.action_searchs);
 
-        searchViews.setMenuItem(item);
+        //searchViews.setMenuItem(item);
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(DashboardActivity.this, SearchProductActivity.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
 
         return true;
     }

@@ -10,6 +10,12 @@ import com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract;
 
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.TABLE_ADDCART;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.TABLE_LENSPARTAI;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.SEARCH_ID;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.SEARCH_TITLE;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.TABLE_RECENT_SEARCH;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentViewContract.TABLE_RECENT_VIEW;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentViewContract.VIEW_ID;
+import static com.sofudev.trackapptrl.LocalDb.Contract.RecentViewContract.VIEW_TITLE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract.TABLE_WISHLIST;
 
 
@@ -90,6 +96,22 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             AddCartContract.PRODUCT_IMG
     );
 
+    private static final String CREATE_TBL_RECENTSEARCH = String.format("CREATE TABLE %s"
+                    + " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " %s TEXT)",
+            TABLE_RECENT_SEARCH,
+            SEARCH_ID,
+            SEARCH_TITLE
+    );
+
+    private static final String CREATE_TBL_RECENTVIEW = String.format("CREATE TABLE %s"
+                    + " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " %s TEXT)",
+            TABLE_RECENT_VIEW,
+            VIEW_ID,
+            VIEW_TITLE
+    );
+
     public DbTrlHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -99,6 +121,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TBL_WISHLIST);
         sqLiteDatabase.execSQL(CREATE_TBL_ADDCART);
         sqLiteDatabase.execSQL(CREATE_TBL_LENSPARTAI);
+        sqLiteDatabase.execSQL(CREATE_TBL_RECENTSEARCH);
+        sqLiteDatabase.execSQL(CREATE_TBL_RECENTVIEW);
     }
 
     @Override
@@ -106,6 +130,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_WISHLIST);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_ADDCART);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_LENSPARTAI);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_SEARCH);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_VIEW);
         onCreate(sqLiteDatabase);
     }
 }

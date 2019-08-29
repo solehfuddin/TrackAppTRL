@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context="com.sofudev.trackapptrl.Form.SearchProductActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+            <com.andexert.library.RippleView
+                android:id="@+id/search_product_ripplebtnback"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <ImageButton
+                    android:id="@+id/search_product_btnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="Image back"/>
+            </com.andexert.library.RippleView>
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/search_product_txtsearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ketikkan kata kunci"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="90dp"
+                android:inputType="textCapWords"
+                android:maxLines="1"/>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/search_product_ripplebtndelete"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100"
+                android:visibility="gone">
+                <ImageButton
+                    android:id="@+id/search_product_btndelete"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:src="@drawable/ic_close_white"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="Upload Order"/>
+            </com.andexert.library.RippleView>
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/search_product_containerBefore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/search_product_layout_recentSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="Recent Search"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorSecondary"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="22sp"
+                    app:customFont="RobotoRegular.ttf" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/search_product_deleteSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Delete All"
+                    android:textColor="@color/colorRed"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="13sp"
+                    app:customFont="RobotoMedium.ttf" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_product_recyRecentSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/search_product_layout_recentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="Recent View"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorSecondary"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="22sp"
+                    app:customFont="RobotoRegular.ttf" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/search_product_deleteView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Delete All"
+                    android:textColor="@color/colorRed"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="13sp"
+                    app:customFont="RobotoMedium.ttf" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_product_recyRecentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_product_containerAfter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:text="Search Result"
+            android:textColor="@color/colorSecondary"
+            android:textSize="22sp"
+            app:customFont="RobotoRegular.ttf" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_product_recyOutputSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>
