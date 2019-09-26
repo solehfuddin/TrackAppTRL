@@ -169,7 +169,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         totalDisc  = totalPrice - priceDisc;
 
         txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-        txtDisc.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+        txtDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
         showCart();
 
@@ -178,18 +178,18 @@ public class AddCartProductActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (!shipmentList.isEmpty())
                 {
-//                    shipmentPrice = shipmentList.get(i).getPrice();
-//                    shippingId    = shipmentList.get(i).getId();
-//                    shippingName  = shipmentList.get(i).getKurir();
-//                    txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                    shipmentPrice = shipmentList.get(i).getPrice();
+                    shippingId    = shipmentList.get(i).getId();
+                    shippingName  = shipmentList.get(i).getKurir();
+                    txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
 
-                    shipmentPrice = "0";
-                    shippingId    = 0;
-                    shippingName  = "";
-                    if (shipmentPrice.equals("0"))
-                    {
-                        txtShipping.setText("Free");
-                    }
+//                    shipmentPrice = "0";
+//                    shippingId    = 0;
+//                    shippingName  = "";
+//                    if (shipmentPrice.equals("0"))
+//                    {
+//                        txtShipping.setText("Free");
+//                    }
                 }
                 else
                 {
@@ -269,70 +269,32 @@ public class AddCartProductActivity extends AppCompatActivity {
                     {
 //                        Toasty.success(getApplicationContext(), "Pembayaran Tunai", Toast.LENGTH_SHORT).show();
 
-                        dataFrameHeader = new Data_frame_header();
-                        dataFrameHeader.setOrderId(orderId);
-                        dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                        dataFrameHeader.setShippingId(shippingId);
-                        dataFrameHeader.setShippingName(shippingName);
-                        dataFrameHeader.setOpticCity(opticCity);
-                        dataFrameHeader.setOpticProvince(opticProvince);
-                        dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
-                        dataFrameHeader.setTotalPrice(totalAllPrice);
-                        dataFrameHeader.setOpticName(opticName.replace(",", ""));
-                        dataFrameHeader.setOpticAddress(opticAddress);
-                        dataFrameHeader.setPaymentCashCarry("Pending");
+                        final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
-                        insertHeader(dataFrameHeader);
+                        dialog.setContentView(R.layout.dialog_choose_payment);
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        lwindow.copyFrom(dialog.getWindow().getAttributes());
+                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                        for (int i = 0; i < itemCart.size(); i++)
-                        {
-                            dataFrameItem = new Data_frame_item();
-                            dataFrameItem.setOrderId(orderId);
-                            dataFrameItem.setLineNumber(i);
-                            dataFrameItem.setFrameId(itemCart.get(i).getProductId());
-                            dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
-                            dataFrameItem.setFrameName(itemCart.get(i).getProductName());
-                            dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
-                            dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
-                            dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
-                            dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+                        listPayment = dialog.findViewById(R.id.dialog_choosepayment_listview);
+                        btnChoosePayment = dialog.findViewById(R.id.dialog_choosepayment_btnChoose);
 
-                            insertLineItem(dataFrameItem);
-                        }
+                        getAllPayment();
 
-//                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
-                        int trunc = addCartHelper.truncCart();
+                        listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                selectedItem  = paymentmethodList.get(i).getPaymentMethod();
 
-                        if (trunc > 0)
-                        {
-//                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
-
-                            final Dialog dialog = new Dialog(AddCartProductActivity.this);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
-
-                            dialog.setContentView(R.layout.dialog_choose_payment);
-                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                            lwindow.copyFrom(dialog.getWindow().getAttributes());
-                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
-
-                            listPayment = dialog.findViewById(R.id.dialog_choosepayment_listview);
-                            btnChoosePayment = dialog.findViewById(R.id.dialog_choosepayment_btnChoose);
-
-                            getAllPayment();
-
-                            listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    selectedItem  = paymentmethodList.get(i).getPaymentMethod();
-
-                                    if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro")
-                                            || selectedItem.contains("Kreditpro"))
-                                    {
-                                        btnChoosePayment.setBackgroundColor(Color.LTGRAY);
-                                        btnChoosePayment.setEnabled(false);
-                                    }
+                                if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro")
+                                        || selectedItem.contains("Kreditpro"))
+                                {
+                                    btnChoosePayment.setBackgroundColor(Color.LTGRAY);
+                                    btnChoosePayment.setEnabled(false);
+                                }
 //                                    else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account")
 //                                            || selectedItem.contains("Virtual Account"))
 //                                    {
@@ -345,54 +307,54 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                        btnChoosePayment.setBackgroundColor(Color.LTGRAY);
 //                                        btnChoosePayment.setEnabled(false);
 //                                    }
-                                    else
-                                    {
-                                        btnChoosePayment.setBackgroundColor(getResources().getColor(R.color.colorFirst));
-                                        btnChoosePayment.setEnabled(true);
-                                    }
+                                else
+                                {
+                                    btnChoosePayment.setBackgroundColor(getResources().getColor(R.color.colorFirst));
+                                    btnChoosePayment.setEnabled(true);
                                 }
-                            });
+                            }
+                        });
 
-                            btnChoosePayment.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //showLoading();
+                        btnChoosePayment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //showLoading();
 
-                                    if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
-                                    {
-                                        String paymentType = "internetBanking";
-                                        String grossAmount = String.valueOf(totalAllPrice);
-                                        String orderNumber = orderId;
+                                if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
+                                {
+                                    String paymentType = "internetBanking";
+                                    String grossAmount = String.valueOf(totalAllPrice);
+                                    String orderNumber = orderId;
 
-                                        postBillingQR(paymentType, grossAmount, orderNumber);
+                                    postBillingQR(paymentType, grossAmount, orderNumber);
 
-                                    }
-                                    else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
-                                            selectedItem.contains("Virtual Account"))
-                                    {
-                                        String paymentType = "bankTransfer";
-                                        String grossAmount = String.valueOf(totalAllPrice);
-                                        String orderNumber = orderId;
+                                }
+                                else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
+                                        selectedItem.contains("Virtual Account"))
+                                {
+                                    String paymentType = "bankTransfer";
+                                    String grossAmount = String.valueOf(totalAllPrice);
+                                    String orderNumber = orderId;
 
-                                        postBillingVA(paymentType, grossAmount, orderNumber);
-                                    }
-                                    else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
-                                            selectedItem.contains("Credit Card"))
-                                    {
-                                        createBillingCC(orderId, "creditCard");
-                                    }
-                                    else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
-                                            selectedItem.contains("Loan"))
-                                    {
+                                    postBillingVA(paymentType, grossAmount, orderNumber);
+                                }
+                                else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
+                                        selectedItem.contains("Credit Card"))
+                                {
+                                    createBillingCC(orderId, "creditCard");
+                                }
+                                else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
+                                        selectedItem.contains("Loan"))
+                                {
 
-                                        String paymentType = "loanKS";
-                                        String grossAmount = String.valueOf(totalAllPrice);
-                                        String orderNumber = orderId;
+                                    String paymentType = "loanKS";
+                                    String grossAmount = String.valueOf(totalAllPrice);
+                                    String orderNumber = orderId;
 
-                                        //Toasty.info(getApplicationContext(), "Order Number : " + orderNumber, Toast.LENGTH_SHORT).show();
+                                    //Toasty.info(getApplicationContext(), "Order Number : " + orderNumber, Toast.LENGTH_SHORT).show();
 
-                                        postBillingLoan(paymentType, grossAmount, orderNumber);
-                                    }
+                                    postBillingLoan(paymentType, grossAmount, orderNumber);
+                                }
 //                                else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
 //                                        selectedItem.contains("Kreditpro"))
 //                                {
@@ -402,19 +364,61 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                    createBillingKP(orderNumber, "kreditPro");
 //                                }
 
-                                    //loading.dismiss();
-                                    dialog.dismiss();
+                                //loading.dismiss();
+                                dialog.dismiss();
 
-                                    linearLayout.setVisibility(View.VISIBLE);
-                                    linearPayment.setVisibility(View.GONE);
-                                    nestedDetail.setVisibility(View.GONE);
-                                    cardView.setVisibility(View.GONE);
+                                dataFrameHeader = new Data_frame_header();
+                                dataFrameHeader.setOrderId(orderId);
+                                dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                                dataFrameHeader.setShippingId(shippingId);
+                                dataFrameHeader.setShippingName(shippingName);
+                                dataFrameHeader.setOpticCity(opticCity);
+                                dataFrameHeader.setOpticProvince(opticProvince);
+                                dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
+                                dataFrameHeader.setTotalPrice(totalAllPrice);
+                                dataFrameHeader.setOpticName(opticName.replace(",", ""));
+                                dataFrameHeader.setOpticAddress(opticAddress);
+                                dataFrameHeader.setPaymentCashCarry("Pending");
+
+                                insertHeader(dataFrameHeader);
+
+                                for (int i = 0; i < itemCart.size(); i++)
+                                {
+                                    dataFrameItem = new Data_frame_item();
+                                    dataFrameItem.setOrderId(orderId);
+                                    dataFrameItem.setLineNumber(i);
+                                    dataFrameItem.setFrameId(itemCart.get(i).getProductId());
+                                    dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
+                                    dataFrameItem.setFrameName(itemCart.get(i).getProductName());
+                                    dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
+                                    dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
+                                    dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+                                    dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+
+                                    insertLineItem(dataFrameItem);
                                 }
-                            });
 
-                            dialog.show();
-                            dialog.getWindow().setAttributes(lwindow);
-                        }
+                                linearLayout.setVisibility(View.VISIBLE);
+                                linearPayment.setVisibility(View.GONE);
+                                nestedDetail.setVisibility(View.GONE);
+                                cardView.setVisibility(View.GONE);
+
+                                int trunc = addCartHelper.truncCart();
+
+                                if (trunc > 0)
+                                {
+//                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
+
+                                    Log.d("INFO FRAME", "Order telah dihapus");
+                                }
+                            }
+                        });
+
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lwindow);
+
+//                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
+
                     }
                 }
                 else
@@ -457,6 +461,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void getAllPayment()
     {
+        paymentmethodList.clear();
         adapter_paymentmethod = new Adapter_paymentmethod(AddCartProductActivity.this, paymentmethodList);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ALLPAYMENT, new Response.Listener<String>() {
             @Override
@@ -790,7 +795,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override

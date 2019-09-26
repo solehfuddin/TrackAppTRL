@@ -70,6 +70,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_GETUSERINFO  = config.Ip_address + config.profile_user_detail;
     String URL_POSTBILLING= config.payment_method_postBilling;
 
+
     ACProgressCustom loading;
     Button btnCheckout;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceFacet, txtPriceTinting, txtPriceShipping,
@@ -130,7 +131,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
         txtLensDescr.setText(deskripsiLensa);
         txtPriceLens.setText(hargaLensa);
-        txtPriceDisc.setText(diskonLensa);
+        txtPriceDisc.setText(" - " + diskonLensa);
         txtPriceFacet.setText(facetLensa);
         txtPriceTinting.setText(tintingLensa);
         txtItemWeight.setText(itemWeight + " gram");
@@ -264,6 +265,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         });
 
         loading.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
     }
 
     private void disableButton() {
@@ -1031,7 +1037,14 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
         hargaLensa = CurencyFormat(a.toString());
         deskripsiLensa = b;
-        diskonLensa = CurencyFormat(c.toString());
+        if (c > 0)
+        {
+            diskonLensa = CurencyFormat(c.toString());
+        }
+        else
+        {
+            diskonLensa = c.toString();
+        }
         facetLensa  = CurencyFormat(d.toString());
         tintingLensa = CurencyFormat(e.toString());
         tempTotal  = g.toString();

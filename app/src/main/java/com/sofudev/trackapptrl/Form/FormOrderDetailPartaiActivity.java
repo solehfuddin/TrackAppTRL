@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -47,6 +48,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
     UniversalFontTextView txtOrderNumber, txtShipName, txtShipCity, txtShipProvince, txtShipAmount;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    CardView cardShip;
     RippleView btnDownload;
 
     String orderNumber;
@@ -65,6 +67,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         txtShipCity = findViewById(R.id.activity_orderdetail_partai_txtshipcity);
         txtShipProvince = findViewById(R.id.activity_orderdetail_partai_txtshipprovince);
         txtShipAmount = findViewById(R.id.activity_orderdetail_partai_txtshipprice);
+        cardShip = findViewById(R.id.activity_orderdetail_partai_cardShip);
 
         recyclerView = findViewById(R.id.activity_orderdetail_partai_recyclerview);
         btnDownload = findViewById(R.id.activity_orderdetail_partai_btnDownloadPdf);
@@ -179,17 +182,30 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
                 try {
                     JSONObject object = new JSONObject(response);
 
-                    String shipName = object.getString("shippingName");
-                    String shipPrice= object.getString("shippingPrice");
-                    String shipCity = object.getString("shippingCity");
-                    String shipProvince = object.getString("shippingProvince");
+                    if (object.names().get(0).equals("Error"))
+                    {
+                        cardShip.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        String shipName = object.getString("shippingName");
+                        String shipPrice= object.getString("shippingPrice");
+                        String shipCity = object.getString("shippingCity");
+                        String shipProvince = object.getString("shippingProvince");
 
-                    shipPrice = "Rp. " + CurencyFormat(shipPrice);
+                        if (shipPrice.isEmpty())
+                        {
+                            cardShip.setVisibility(View.GONE);
+                        }
 
-                    txtShipName.setText(shipName);
-                    txtShipAmount.setText(shipPrice);
-                    txtShipProvince.setText(shipProvince);
-                    txtShipCity.setText(shipCity);
+                        cardShip.setVisibility(View.VISIBLE);
+                        shipPrice = "Rp. " + CurencyFormat(shipPrice);
+
+                        txtShipName.setText(shipName);
+                        txtShipAmount.setText(shipPrice);
+                        txtShipProvince.setText(shipProvince);
+                        txtShipCity.setText(shipCity);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

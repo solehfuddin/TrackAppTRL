@@ -117,7 +117,8 @@
         <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
         <activity android:name=".Form.FormOrderDetailPartaiActivity" />
         <activity android:name=".Form.SearchProductActivity" />
-        <activity android:name=".DetailProductActivity"></activity>
+        <activity android:name=".DetailProductActivity" />
+        <activity android:name=".ReportSalesActivity"></activity>
     </application>
 
 </manifest>

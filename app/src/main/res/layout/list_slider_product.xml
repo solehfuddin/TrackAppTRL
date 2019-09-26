@@ -2,7 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <ImageView
+    <!--<com.github.chrisbanes.photoview.PhotoView-->
+        <!--android:id="@+id/list_sliderproduct_image"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:scaleType="centerCrop"/>-->
+    <ozaydin.serkan.com.image_zoom_view.ImageViewZoom
         android:id="@+id/list_sliderproduct_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

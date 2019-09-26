@@ -20,6 +20,13 @@ android {
             //multiDexKeepFile file('multidex-config.txt')
         }
     }
+//    configurations {
+//        all*.exclude group: 'com.android.support', module: 'support-v13'
+//        all*.exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v13'
+    }
 }
 
 dependencies {
@@ -149,6 +156,10 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:9.2.0'
     compile 'com.google.firebase:firebase-crash:9.2.0'
     compile 'com.google.firebase:firebase-auth:9.2.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    compile 'com.github.hsmnzaydn:imagezoom:1.2.1'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.github.sadra:AwesomeSpinner:1.5.1'
     testCompile 'junit:junit:4.12'
 }
 

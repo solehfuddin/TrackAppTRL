@@ -59,6 +59,7 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             holder.txt_productid.setText(item.get(position).getProduct_id());
             holder.txt_productname.setText(item.get(position).getProduct_name());
             holder.txt_realprice.setText(item.get(position).getProduct_realprice());
+            holder.txt_brandName.setText(item.get(position).getProduct_brand());
             holder.txt_realprice.setVisibility(View.GONE);
             holder.txt_productid.setVisibility(View.GONE);
             String discount = item.get(position).getProduct_discpercent();
@@ -125,6 +126,7 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             holder.txt_productid.setText(item.get(position).getProduct_id());
             holder.txt_productname.setText(item.get(position).getProduct_name());
             holder.txt_realprice.setText(item.get(position).getProduct_realprice());
+            holder.txt_brandName.setText(item.get(position).getProduct_brand());
             holder.txt_productid.setVisibility(View.GONE);
             String discount = item.get(position).getProduct_discpercent();
 
@@ -210,7 +212,8 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_product;
-        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice;
+        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice,
+                                txt_brandName;
         SparkButton btn_wish;
 
         public ViewHolder(@NonNull View itemView) {
@@ -221,6 +224,7 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             txt_discpercent = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtDiscpercent);
             txt_productname = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductname);
             txt_realprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtRealprice);
+            txt_brandName   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtBrand);
 
             btn_wish        = itemView.findViewById(R.id.listitem_fragment_dashboard_btnWish);
 

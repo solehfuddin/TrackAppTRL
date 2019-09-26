@@ -58,7 +58,8 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
 
         if (discount > 0)
         {
-            holder.txtDisc.setText(String.valueOf(discount + " % "));
+            String disc = String.valueOf(data.getProductDisc()) + " %";
+            holder.txtDisc.setText(disc);
         }
         else
         {

@@ -142,6 +142,10 @@ public class Config {
 
     /* Area Spinner Shipment */
     public String spinner_shipment_getAllData     = "index.php/Android_shipment/paymentShipment";
+    public String spinner_shipment_getProvinceOptic = "index.php/Android_shipment/getProvinceOptic";
+    public String spinner_shipment_getAllProvince = "index.php/Android_shipment/getProvince";
+    public String spinner_shipment_getCity        = "index.php/Android_shipment/getCity";
+    public String spinner_shipment_updateCity     = "index.php/Android_shipment/updateAddress";
 
     /* Area Lens Summary */
     public String lens_summary_getLensInfo        = "index.php/Android_lenssummary/getLensInformation";

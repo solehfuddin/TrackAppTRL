@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -48,6 +49,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recycleManager;
     RippleView btnDownloadPdf;
+    CardView cardShip;
 
     Adapter_detailhistory_frame adapter_detailhistory_frame;
     List<Data_detailhistory_frame> itemLine = new ArrayList<>();
@@ -66,6 +68,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         txtShipCity = findViewById(R.id.activity_orderdetail_frame_txtshipcity);
         txtShipProvince = findViewById(R.id.activity_orderdetail_frame_txtshipprovince);
         txtShipPrice    = findViewById(R.id.activity_orderdetail_frame_txtshipprice);
+        cardShip        = findViewById(R.id.activity_orderdetail_frame_cardShip);
 
         recycleManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recycleManager);
@@ -174,18 +177,26 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    String itemShipName     = jsonObject.getString("shippingName");
-                    String itemShipPrice    = jsonObject.getString("shippingPrice");
-                    String itemShipCity     = jsonObject.getString("shippingCity");
-                    String itemShipProvince = jsonObject.getString("shippingProvince");
+                    if (jsonObject.names().get(0).equals("Error"))
+                    {
+                        cardShip.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        String itemShipName     = jsonObject.getString("shippingName");
+                        String itemShipPrice    = jsonObject.getString("shippingPrice");
+                        String itemShipCity     = jsonObject.getString("shippingCity");
+                        String itemShipProvince = jsonObject.getString("shippingProvince");
 //                    String itemShipIcon     = jsonObject.getString("shippingIcon");
 
-                    itemShipPrice = "Rp. " + CurencyFormat(itemShipPrice);
+                        cardShip.setVisibility(View.VISIBLE);
+                        itemShipPrice = "Rp. " + CurencyFormat(itemShipPrice);
 
-                    txtShipName.setText(itemShipName);
-                    txtShipPrice.setText(itemShipPrice);
-                    txtShipCity.setText(itemShipCity);
-                    txtShipProvince.setText(itemShipProvince);
+                        txtShipName.setText(itemShipName);
+                        txtShipPrice.setText(itemShipPrice);
+                        txtShipCity.setText(itemShipCity);
+                        txtShipProvince.setText(itemShipProvince);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

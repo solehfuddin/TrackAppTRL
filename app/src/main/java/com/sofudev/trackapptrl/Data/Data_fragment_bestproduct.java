@@ -5,7 +5,16 @@ package com.sofudev.trackapptrl.Data;
  */
 
 public class Data_fragment_bestproduct {
-    private String product_image, product_id, product_name, product_code, product_realprice, product_discprice, product_discpercent;
+    private String product_image, product_id, product_name, product_code, product_realprice, product_discprice,
+            product_discpercent, product_brand;
+
+    public String getProduct_brand() {
+        return product_brand;
+    }
+
+    public void setProduct_brand(String product_brand) {
+        this.product_brand = product_brand;
+    }
 
     public String getProduct_image() {
         return product_image;

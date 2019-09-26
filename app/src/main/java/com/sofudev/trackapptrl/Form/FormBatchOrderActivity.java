@@ -227,39 +227,6 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Data_partai_header data_header = new Data_partai_header();
-                    data_header.setOrderNumber(orderId);
-                    data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                    data_header.setOpticName(opticName.replace(",", ""));
-                    data_header.setOpticAddress(opticAddress);
-                    data_header.setOpticCity(opticCity);
-                    data_header.setPhoneNumber(phone);
-                    data_header.setShippingId(shippingId);
-                    data_header.setShippingName(shippingName);
-                    data_header.setOpticProvince(opticProvince);
-                    data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
-                    data_header.setTotalPrice(totalAllPrice);
-                    data_header.setPayment_cashcarry("Pending");
-
-                    insertHeader(data_header);
-
-                    for (int i = 0; i < item_partai.size(); i++)
-                    {
-                        Data_partai_item data_item = new Data_partai_item();
-                        data_item.setOrderNumber(orderId);
-                        data_item.setItemId(item_partai.get(i).getProductId());
-                        data_item.setItemCode(item_partai.get(i).getProductCode());
-                        data_item.setDescription(item_partai.get(i).getProductDesc());
-                        data_item.setSide(item_partai.get(i).getProductSide());
-                        data_item.setQty(item_partai.get(i).getProductQty());
-                        data_item.setPrice(item_partai.get(i).getProductPrice());
-                        data_item.setDiscount_name("");
-                        data_item.setDiscount(item_partai.get(i).getProductDisc());
-                        data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
-
-                        insertItem(data_item);
-                    }
-
                     final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
@@ -357,6 +324,39 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             //loading.dismiss();
                             dialog.dismiss();
 
+                            Data_partai_header data_header = new Data_partai_header();
+                            data_header.setOrderNumber(orderId);
+                            data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                            data_header.setOpticName(opticName.replace(",", ""));
+                            data_header.setOpticAddress(opticAddress);
+                            data_header.setOpticCity(opticCity);
+                            data_header.setPhoneNumber(phone);
+                            data_header.setShippingId(shippingId);
+                            data_header.setShippingName(shippingName);
+                            data_header.setOpticProvince(opticProvince);
+                            data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
+                            data_header.setTotalPrice(totalAllPrice);
+                            data_header.setPayment_cashcarry("Pending");
+
+                            insertHeader(data_header);
+
+                            for (int i = 0; i < item_partai.size(); i++)
+                            {
+                                Data_partai_item data_item = new Data_partai_item();
+                                data_item.setOrderNumber(orderId);
+                                data_item.setItemId(item_partai.get(i).getProductId());
+                                data_item.setItemCode(item_partai.get(i).getProductCode());
+                                data_item.setDescription(item_partai.get(i).getProductDesc());
+                                data_item.setSide(item_partai.get(i).getProductSide());
+                                data_item.setQty(item_partai.get(i).getProductQty());
+                                data_item.setPrice(item_partai.get(i).getProductPrice());
+                                data_item.setDiscount_name("");
+                                data_item.setDiscount(item_partai.get(i).getProductDisc());
+                                data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
+
+                                insertItem(data_item);
+                            }
+
                             linearLayout.setVisibility(View.VISIBLE);
                             linearPayment.setVisibility(View.GONE);
                             cardContinue.setVisibility(View.GONE);
@@ -383,7 +383,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         totalDisc  = totalPrice - priceDisc;
 
         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-        txtSubtotalDisc.setText("-Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+        txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
         spinShipping.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -644,6 +644,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void getAllPayment()
     {
+        paymentmethodList.clear();
         adapter_paymentmethod = new Adapter_paymentmethod(FormBatchOrderActivity.this, paymentmethodList);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ALLPAYMENT, new Response.Listener<String>() {
             @Override
@@ -704,7 +705,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
         lensPartaiHelper.open();
         item_partai = lensPartaiHelper.getAllPartai();
-        adapter_add_partai = new Adapter_add_partai(getApplicationContext(), item_partai, new RecyclerViewOnClickListener() {
+        adapter_add_partai = new Adapter_add_partai(this, item_partai, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
                 int btn = view.getId();
@@ -739,7 +740,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-                        txtSubtotalDisc.setText("-Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
@@ -785,7 +786,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-                        txtSubtotalDisc.setText("-Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
@@ -834,7 +835,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-                        txtSubtotalDisc.setText("-Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
@@ -1292,7 +1293,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
-                        txtSubtotalDisc.setText("-Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

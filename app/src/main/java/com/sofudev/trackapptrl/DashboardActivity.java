@@ -20,8 +20,10 @@ import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -34,6 +36,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,14 +91,18 @@ import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.CustomTypefaceSpan;
 import com.sofudev.trackapptrl.Util.PermissionSettings;
 import com.squareup.picasso.Picasso;
+import com.weiwangcn.betterspinner.library.BetterSpinner;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -122,6 +130,10 @@ public class DashboardActivity extends AppCompatActivity
     private String upload_txtfile = config.Ip_address + config.dashboard_upload_txtphone;
     private String view_pdf_filter= config.Ip_address + config.view_pdf_showAllDataByFilter;
     private String URLTOKEN       = config.Ip_address + config.payment_update_token;
+    String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
+    String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
+    String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
+    String URL_UPDATECITY    = config.Ip_address + config.spinner_shipment_updateCity;
 
     ImageView imgWishlist, imgCart;
     TextView txt_title, txt_countwishlist, txt_countCart;
@@ -136,6 +148,9 @@ public class DashboardActivity extends AppCompatActivity
     private NavigationView navigationView;
     ActionBarDrawerToggle toggle;
     private Menu menu;
+
+    ArrayList<String> data_province = new ArrayList<>();
+    ArrayList<String> data_city     = new ArrayList<>();
 
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
     Button btn_profile;
@@ -246,15 +261,7 @@ public class DashboardActivity extends AppCompatActivity
         imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
-                intent.putExtra("idparty", navdash_id.getText().toString());
-                intent.putExtra("opticname", data);
-                intent.putExtra("province", province_user);
-                intent.putExtra("province_address", province_address);
-                intent.putExtra("usernameInfo", username);
-                intent.putExtra("city", city);
-                intent.putExtra("flag", member_flag);
-                startActivityForResult(intent, 2);
+                checkCityCart(username);
             }
         });
 
@@ -491,15 +498,7 @@ public class DashboardActivity extends AppCompatActivity
 
             else if (id == R.id.nav_orderbulk)
             {
-                Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
-                intent.putExtra("idparty", navdash_id.getText().toString());
-                intent.putExtra("opticname", data);
-                intent.putExtra("province", province_user);
-                intent.putExtra("usernameInfo", username);
-                intent.putExtra("province_address", province_address);
-                intent.putExtra("city", city);
-                intent.putExtra("flag", member_flag);
-                startActivity(intent);
+                checkCityBatch(username);
             }
 
             else if (id == R.id.nav_orderhistorybulk)
@@ -526,6 +525,13 @@ public class DashboardActivity extends AppCompatActivity
             //Submenu Options click
             else if (id == R.id.nav_optionsuser) {
                 Intent intent = new Intent(getApplicationContext(), FormUACActivity.class);
+                startActivity(intent);
+
+                drawer.closeDrawers();
+                return true;
+            }
+            else if (id == R.id.nav_optionsreport) {
+                Intent intent = new Intent(getApplicationContext(), ReportSalesActivity.class);
                 startActivity(intent);
 
                 drawer.closeDrawers();
@@ -1758,6 +1764,478 @@ public class DashboardActivity extends AppCompatActivity
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getProvince()
+    {
+        data_province.clear();
+
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETALLPROVINCE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String prov = object.getString("province");
+
+                        data_province.add(prov);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("PROVINCE GET", error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getCity(final String prov)
+    {
+        data_city.clear();
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETCITYBYPROV, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String city = object.getString("city");
+
+                        data_city.add(city);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR CITY", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("province", prov);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void updateCityCart(final String namaOptik, final String alamat, final String provinsi, final String kota)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_UPDATECITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Toasty.success(getApplicationContext(), "Information address has been update", Toast.LENGTH_SHORT).show();
+
+                        city = kota;
+
+                        Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("opticname", data);
+                        intent.putExtra("province", province_user);
+                        intent.putExtra("province_address", province_address);
+                        intent.putExtra("usernameInfo", username);
+                        intent.putExtra("city", city);
+                        intent.putExtra("flag", member_flag);
+                        startActivityForResult(intent, 2);
+                    }
+                    else if (object.names().get(0).equals("error"))
+                    {
+                        Toasty.error(getApplicationContext(), "Failed to update address", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR UPDATE CITY", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("province", provinsi);
+                hashMap.put("address", alamat);
+                hashMap.put("city", kota);
+                hashMap.put("username", namaOptik);
+
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void updateCityBatch(final String namaOptik, final String alamat, final String provinsi, final String kota)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_UPDATECITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Toasty.success(getApplicationContext(), "Information address has been update", Toast.LENGTH_SHORT).show();
+
+                        city = kota;
+
+                        Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("opticname", data);
+                        intent.putExtra("province", province_user);
+                        intent.putExtra("usernameInfo", username);
+                        intent.putExtra("province_address", province_address);
+                        intent.putExtra("city", city);
+                        intent.putExtra("flag", member_flag);
+                        startActivity(intent);
+                    }
+                    else if (object.names().get(0).equals("error"))
+                    {
+                        Toasty.error(getApplicationContext(), "Failed to update address", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR UPDATE CITY", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("province", provinsi);
+                hashMap.put("address", alamat);
+                hashMap.put("city", kota);
+                hashMap.put("username", namaOptik);
+
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkCityCart(final String namaOptik)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKCITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String city = object.getString("city");
+
+                    if (city.equals("-") || city.isEmpty())
+                    {
+                        final UniversalFontTextView lblAddress, lblProvince, lblCity;
+                        final BootstrapEditText txtAddress;
+                        final BetterSpinner spinCity, spinProvince;
+                        BootstrapButton btnUpdate, btnCancel;
+
+                        getProvince();
+
+                        final LovelyCustomDialog lovelyCustomDialog = new LovelyCustomDialog(DashboardActivity.this);
+                        LayoutInflater layoutInflater = getLayoutInflater();
+                        View view = layoutInflater.inflate(R.layout.form_profile_address, null);
+                        lovelyCustomDialog.setView(view);
+                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopTitleColor(Color.WHITE);
+                        lovelyCustomDialog.setTopTitle("Update information address");
+
+                        lblAddress = view.findViewById(R.id.form_profile_address_lblAddress);
+                        lblProvince= view.findViewById(R.id.form_profile_address_lblProvince);
+                        lblCity    = view.findViewById(R.id.form_profile_address_lblCity);
+                        txtAddress = view.findViewById(R.id.form_profile_address_txtAddress);
+                        spinProvince= view.findViewById(R.id.form_profile_address_spinProvince);
+                        spinCity    = view.findViewById(R.id.form_profile_address_spinCity);
+                        btnUpdate  = view.findViewById(R.id.form_profile_address_btnUpdate);
+                        btnCancel  = view.findViewById(R.id.form_profile_address_btnCancel);
+
+//                        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(FormOrderLensActivity.this,
+//                                R.layout.spin_framemodel_item, spin_province);
+//                        spinProvince.setAdapter(spin_adapter);
+
+                        spinProvince.setAdapter(new ArrayAdapter<>(DashboardActivity.this,
+                                android.R.layout.simple_spinner_item, data_province));
+
+                        spinCity.setVisibility(View.GONE);
+
+                        spinProvince.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                String prov = data_province.get(position);
+
+//                                Toasty.warning(FormOrderLensActivity.this, prov, Toast.LENGTH_SHORT).show();
+
+                                getCity(prov);
+
+                                spinCity.setVisibility(View.VISIBLE);
+                                spinCity.setText("");
+
+                                spinCity.setAdapter(new ArrayAdapter<>(DashboardActivity.this,
+                                        android.R.layout.simple_spinner_item, data_city));
+                            }
+                        });
+
+                        btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                lovelyCustomDialog.dismiss();
+                            }
+                        });
+
+                        btnUpdate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String alamat   = txtAddress.getText().toString();
+                                String provinsi = spinProvince.getText().toString();
+                                String kota     = spinCity.getText().toString();
+
+                                if (alamat.isEmpty())
+                                {
+                                    lblAddress.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblAddress.setVisibility(View.GONE);
+                                }
+
+                                if (provinsi.isEmpty())
+                                {
+                                    lblProvince.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblProvince.setVisibility(View.GONE);
+                                }
+
+                                if (kota.isEmpty())
+                                {
+                                    lblCity.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblCity.setVisibility(View.GONE);
+                                }
+
+                                if (!alamat.isEmpty() && !provinsi.isEmpty() && !kota.isEmpty())
+                                {
+                                    updateCityCart(namaOptik, alamat, provinsi, kota);
+
+                                    lovelyCustomDialog.dismiss();
+                                }
+                            }
+                        });
+
+                        lovelyCustomDialog.show();
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("opticname", data);
+                        intent.putExtra("province", province_user);
+                        intent.putExtra("province_address", province_address);
+                        intent.putExtra("usernameInfo", username);
+                        intent.putExtra("city", city);
+                        intent.putExtra("flag", member_flag);
+                        startActivityForResult(intent, 2);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("CITY LOG", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("username", namaOptik);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkCityBatch(final String namaOptik)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKCITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String city = object.getString("city");
+
+                    if (city.equals("-") || city.isEmpty())
+                    {
+                        final UniversalFontTextView lblAddress, lblProvince, lblCity;
+                        final BootstrapEditText txtAddress;
+                        final BetterSpinner spinCity, spinProvince;
+                        BootstrapButton btnUpdate, btnCancel;
+
+                        getProvince();
+
+                        final LovelyCustomDialog lovelyCustomDialog = new LovelyCustomDialog(DashboardActivity.this);
+                        LayoutInflater layoutInflater = getLayoutInflater();
+                        View view = layoutInflater.inflate(R.layout.form_profile_address, null);
+                        lovelyCustomDialog.setView(view);
+                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopTitleColor(Color.WHITE);
+                        lovelyCustomDialog.setTopTitle("Update information address");
+
+                        lblAddress = view.findViewById(R.id.form_profile_address_lblAddress);
+                        lblProvince= view.findViewById(R.id.form_profile_address_lblProvince);
+                        lblCity    = view.findViewById(R.id.form_profile_address_lblCity);
+                        txtAddress = view.findViewById(R.id.form_profile_address_txtAddress);
+                        spinProvince= view.findViewById(R.id.form_profile_address_spinProvince);
+                        spinCity    = view.findViewById(R.id.form_profile_address_spinCity);
+                        btnUpdate  = view.findViewById(R.id.form_profile_address_btnUpdate);
+                        btnCancel  = view.findViewById(R.id.form_profile_address_btnCancel);
+
+//                        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(FormOrderLensActivity.this,
+//                                R.layout.spin_framemodel_item, spin_province);
+//                        spinProvince.setAdapter(spin_adapter);
+
+                        spinProvince.setAdapter(new ArrayAdapter<>(DashboardActivity.this,
+                                android.R.layout.simple_spinner_item, data_province));
+
+                        spinCity.setVisibility(View.GONE);
+
+                        spinProvince.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                String prov = data_province.get(position);
+
+//                                Toasty.warning(FormOrderLensActivity.this, prov, Toast.LENGTH_SHORT).show();
+
+                                getCity(prov);
+
+                                spinCity.setVisibility(View.VISIBLE);
+                                spinCity.setText("");
+
+                                spinCity.setAdapter(new ArrayAdapter<>(DashboardActivity.this,
+                                        android.R.layout.simple_spinner_item, data_city));
+                            }
+                        });
+
+                        btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                lovelyCustomDialog.dismiss();
+                            }
+                        });
+
+                        btnUpdate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String alamat   = txtAddress.getText().toString();
+                                String provinsi = spinProvince.getText().toString();
+                                String kota     = spinCity.getText().toString();
+
+                                if (alamat.isEmpty())
+                                {
+                                    lblAddress.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblAddress.setVisibility(View.GONE);
+                                }
+
+                                if (provinsi.isEmpty())
+                                {
+                                    lblProvince.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblProvince.setVisibility(View.GONE);
+                                }
+
+                                if (kota.isEmpty())
+                                {
+                                    lblCity.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblCity.setVisibility(View.GONE);
+                                }
+
+                                if (!alamat.isEmpty() && !provinsi.isEmpty() && !kota.isEmpty())
+                                {
+                                    updateCityBatch(namaOptik, alamat, provinsi, kota);
+                                    lovelyCustomDialog.dismiss();
+                                }
+                            }
+                        });
+
+                        lovelyCustomDialog.show();
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("opticname", data);
+                        intent.putExtra("province", province_user);
+                        intent.putExtra("usernameInfo", username);
+                        intent.putExtra("province_address", province_address);
+                        intent.putExtra("city", city);
+                        intent.putExtra("flag", member_flag);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("CITY LOG", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("username", namaOptik);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     @Override

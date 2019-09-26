@@ -47,7 +47,7 @@
                     app:customFont="MavenPro-Regular.ttf"
                     app:scale_top="40"
                     app:scale_left="15"
-                    app:scale_width="31"
+                    app:scale_width="38"
                     app:scale_textsize="12"
                     app:scale_height="18"/>
 

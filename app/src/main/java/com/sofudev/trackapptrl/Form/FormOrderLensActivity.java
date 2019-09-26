@@ -45,6 +45,7 @@ import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.isapanah.awesomespinner.AwesomeSpinner;
 import com.jkb.vcedittext.VerificationAction;
 import com.jkb.vcedittext.VerificationCodeEditText;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -55,16 +56,15 @@ import com.sofudev.trackapptrl.Adapter.Adapter_lenstype;
 import com.sofudev.trackapptrl.Adapter.Adapter_tinting;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
-import com.sofudev.trackapptrl.Custom.SmsListener;
 import com.sofudev.trackapptrl.Custom.SmsReceiver;
 import com.sofudev.trackapptrl.Custom.VolleyOneCallBack;
 import com.sofudev.trackapptrl.Data.Data_coating;
-import com.sofudev.trackapptrl.Data.Data_lensprice;
 import com.sofudev.trackapptrl.Data.Data_lenstype;
 import com.sofudev.trackapptrl.Data.Data_tinting;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -99,7 +99,14 @@ public class FormOrderLensActivity extends AppCompatActivity {
     List<Data_coating> data_coatings = new ArrayList<>();
     ArrayList<String> data_corridor = new ArrayList<>();
     ArrayList<String> data_tintinggroup = new ArrayList<>();
+    ArrayList<String> data_province = new ArrayList<>();
+    ArrayList<String> data_city     = new ArrayList<>();
     //ArrayList<String> data_coating = new ArrayList<>();
+    Config config = new Config();
+    String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
+    String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
+    String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
+    String URL_UPDATECITY    = config.Ip_address + config.spinner_shipment_updateCity;
 
     MCrypt mCrypt;
 
@@ -109,6 +116,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
     private static final String[] coat_group = new String[] {"Coating"};
     private static final String[] coat_descr = new String[] {"Coating Description"};
     private static final String[] tint_descr = new String[] {"None"};
+    private static final String[] spin_province = new String[] {"Choose Province"};
 
     ACProgressFlower loading;
     LovelyStandardDialog dialog;
@@ -2076,140 +2084,144 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                     uploadTxt(file);*/
 
-                    if (opticFlag.contentEquals("1"))
-                    {
-                        Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
-                        Float lensdiscount = 0f;
-                        Float totalPrice = 0f;
-                        String lensdesc   = txt_lensdesc.getText().toString();
+                    checkCity(opticUsername);
 
-                        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
-                        {
-                            lensprice = itemPriceR + itemPriceL;
-                            float discR = oprDiscount * itemPriceR / 100;
-                            float discL = oprDiscount * itemPriceL / 100;
-
-                            discountR = discR;
-                            discountL = discL;
-
-                            lensdiscount = discR + discL;
-                        }
-                        else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
-                        {
-                            lensprice = itemPriceStR + itemPriceStL;
-                            float discR = oprDiscount * itemPriceStR / 100;
-                            float discL = oprDiscount * itemPriceStL / 100;
-                            //Integer disc = oprDiscount * itemPriceSt / 100;
-
-                            discountR = discR;
-                            discountL = discL;
-                            lensdiscount = discR + discL;
-                        }
-
-                        if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
-                        {
-                            lensfacet   = itemFacetPrice + itemFacetPrice;
-                            lenstinting = itemTintPrice + itemTintPrice;
-
-                            qtyFacet = "2";
-                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
-
-                            qtyTinting = "2";
-                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
-                        }
-                        else
-                        {
-                            //lensprice   = (lensprice / 2);
-                            //lensdiscount= (lensdiscount / 2);
-                            lensfacet   = itemFacetPrice;
-                            lenstinting = itemTintPrice;
-
-                            qtyFacet   = "1";
-                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
-
-                            qtyTinting = "1";
-                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
-
-                            itemWeight  = itemWeight / 2;
-                        }
-
-                        totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
-
-                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
-                        file = sample.toString();
-
-                        uploadTempTxt(file);
-
-                        Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
-                        intent.putExtra("id_party", opticId.replace(",", ""));
-                        intent.putExtra("city_info", opticCity);
-                        intent.putExtra("price_lens", lensprice);
-                        intent.putExtra("description_lens", lensdesc);
-                        intent.putExtra("discount_lens", lensdiscount);
-                        intent.putExtra("facet_lens", lensfacet);
-                        intent.putExtra("tinting_lens", lenstinting);
-                        intent.putExtra("item_weight", itemWeight);
-                        intent.putExtra("flag_pasang", flagPasang);
-                        intent.putExtra("username_info", opticUsername);
-                        intent.putExtra("flag_shipping", flagShipping);
-                        intent.putExtra("order_number", txt_orderNumber.getText().toString());
-                        intent.putExtra("patient_name", txt_patientName.getText().toString());
-                        intent.putExtra("margin_lens", "35");
-                        intent.putExtra("extramargin_lens", "15");
-
-                        //Area Lens R
-                        intent.putExtra("itemcode_R", itemCodeR);
-                        intent.putExtra("description_R", descR);
-                        intent.putExtra("power_R", powerR);
-                        intent.putExtra("qty_R", itemQtyR);
-                        intent.putExtra("itemprice_R", itemPriceR);
-                        intent.putExtra("itemtotal_R", itemTotalPriceR);
-
-                        //Area Lens L
-                        intent.putExtra("itemcode_L", itemCodeL);
-                        intent.putExtra("description_L", descL);
-                        intent.putExtra("power_L", powerL);
-                        intent.putExtra("qty_L", itemQtyL);
-                        intent.putExtra("itemprice_L", itemPriceL);
-                        intent.putExtra("itemtotal_L", itemTotalPriceL);
-
-                        //Area Diskon
-                        intent.putExtra("description_diskon", listLineNo);
-                        intent.putExtra("discount_r", discountR);
-                        intent.putExtra("discount_l", discountL);
-                        intent.putExtra("extra_margin_discount", "10");
-
-                        //Area Facet
-                        intent.putExtra("itemcode_facet", itemFacetCode);
-                        intent.putExtra("description_facet", facetDescription);
-                        intent.putExtra("qty_facet", qtyFacet);
-                        intent.putExtra("price_facet", itemFacetPrice);
-                        intent.putExtra("total_facet", totalFacet);
-                        intent.putExtra("margin_facet", "8");
-                        intent.putExtra("extra_margin_facet", "8");
-
-                        //Area Tinting
-                        intent.putExtra("itemcode_tinting", itemTintingCode);
-                        intent.putExtra("description_tinting", tintingDescription);
-                        intent.putExtra("qty_tinting", qtyTinting);
-                        intent.putExtra("price_tinting", itemTintPrice);
-                        intent.putExtra("total_tinting", totalTinting);
-                        intent.putExtra("margin_tinting", "8");
-                        intent.putExtra("extra_margin_tinting", "8");
-
-                        intent.putExtra("total_price", totalPrice);
-
-                        startActivity(intent);
-
-                        finish();
-                    }
-                    else
-                    {
-                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
-                        file = sample.toString();
-
-                        uploadTxt(file);
-                    }
+//                    if (opticFlag.contentEquals("1"))
+//                    {
+//                        Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+//                        Float lensdiscount = 0f;
+//                        Float totalPrice = 0f;
+//                        String lensdesc   = txt_lensdesc.getText().toString();
+//
+//                        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+//                        {
+//                            lensprice = itemPriceR + itemPriceL;
+//                            float discR = oprDiscount * itemPriceR / 100;
+//                            float discL = oprDiscount * itemPriceL / 100;
+//
+//                            discountR = discR;
+//                            discountL = discL;
+//
+//                            lensdiscount = discR + discL;
+//                        }
+//                        else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+//                        {
+//                            lensprice = itemPriceStR + itemPriceStL;
+//                            float discR = oprDiscount * itemPriceStR / 100;
+//                            float discL = oprDiscount * itemPriceStL / 100;
+//                            //Integer disc = oprDiscount * itemPriceSt / 100;
+//
+//                            discountR = discR;
+//                            discountL = discL;
+//                            lensdiscount = discR + discL;
+//                        }
+//
+//                        if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+//                        {
+//                            lensfacet   = itemFacetPrice + itemFacetPrice;
+//                            lenstinting = itemTintPrice + itemTintPrice;
+//
+//                            qtyFacet = "2";
+//                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+//
+//                            qtyTinting = "2";
+//                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+//                        }
+//                        else
+//                        {
+//                            //lensprice   = (lensprice / 2);
+//                            //lensdiscount= (lensdiscount / 2);
+//                            lensfacet   = itemFacetPrice;
+//                            lenstinting = itemTintPrice;
+//
+//                            qtyFacet   = "1";
+//                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+//
+//                            qtyTinting = "1";
+//                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+//
+//                            itemWeight  = itemWeight / 2;
+//                        }
+//
+//                        totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+//
+//                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+//                        file = sample.toString();
+//
+//                        uploadTempTxt(file);
+//
+//
+//
+//                        Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+//                        intent.putExtra("id_party", opticId.replace(",", ""));
+//                        intent.putExtra("city_info", opticCity);
+//                        intent.putExtra("price_lens", lensprice);
+//                        intent.putExtra("description_lens", lensdesc);
+//                        intent.putExtra("discount_lens", lensdiscount);
+//                        intent.putExtra("facet_lens", lensfacet);
+//                        intent.putExtra("tinting_lens", lenstinting);
+//                        intent.putExtra("item_weight", itemWeight);
+//                        intent.putExtra("flag_pasang", flagPasang);
+//                        intent.putExtra("username_info", opticUsername);
+//                        intent.putExtra("flag_shipping", flagShipping);
+//                        intent.putExtra("order_number", txt_orderNumber.getText().toString());
+//                        intent.putExtra("patient_name", txt_patientName.getText().toString());
+//                        intent.putExtra("margin_lens", "35");
+//                        intent.putExtra("extramargin_lens", "15");
+//
+//                        //Area Lens R
+//                        intent.putExtra("itemcode_R", itemCodeR);
+//                        intent.putExtra("description_R", descR);
+//                        intent.putExtra("power_R", powerR);
+//                        intent.putExtra("qty_R", itemQtyR);
+//                        intent.putExtra("itemprice_R", itemPriceR);
+//                        intent.putExtra("itemtotal_R", itemTotalPriceR);
+//
+//                        //Area Lens L
+//                        intent.putExtra("itemcode_L", itemCodeL);
+//                        intent.putExtra("description_L", descL);
+//                        intent.putExtra("power_L", powerL);
+//                        intent.putExtra("qty_L", itemQtyL);
+//                        intent.putExtra("itemprice_L", itemPriceL);
+//                        intent.putExtra("itemtotal_L", itemTotalPriceL);
+//
+//                        //Area Diskon
+//                        intent.putExtra("description_diskon", listLineNo);
+//                        intent.putExtra("discount_r", discountR);
+//                        intent.putExtra("discount_l", discountL);
+//                        intent.putExtra("extra_margin_discount", "10");
+//
+//                        //Area Facet
+//                        intent.putExtra("itemcode_facet", itemFacetCode);
+//                        intent.putExtra("description_facet", facetDescription);
+//                        intent.putExtra("qty_facet", qtyFacet);
+//                        intent.putExtra("price_facet", itemFacetPrice);
+//                        intent.putExtra("total_facet", totalFacet);
+//                        intent.putExtra("margin_facet", "8");
+//                        intent.putExtra("extra_margin_facet", "8");
+//
+//                        //Area Tinting
+//                        intent.putExtra("itemcode_tinting", itemTintingCode);
+//                        intent.putExtra("description_tinting", tintingDescription);
+//                        intent.putExtra("qty_tinting", qtyTinting);
+//                        intent.putExtra("price_tinting", itemTintPrice);
+//                        intent.putExtra("total_tinting", totalTinting);
+//                        intent.putExtra("margin_tinting", "8");
+//                        intent.putExtra("extra_margin_tinting", "8");
+//
+//                        intent.putExtra("total_price", totalPrice);
+//
+//                        startActivity(intent);
+//
+//                        finish();
+//                    }
+//                    else
+//                    {
+//                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+//                        file = sample.toString();
+//
+//                        uploadTxt(file);
+//                    }
 
                     smsFlag = 0;
                     disableBroadcastReceiver(FormOrderLensActivity.this);
@@ -2257,140 +2269,142 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                     uploadTxt(file);*/
 
-                    if (opticProvince.equals("JAWA BARAT"))
-                    {
-                        Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
-                        Float lensdiscount = 0f;
-                        Float totalPrice = 0f;
-                        String lensdesc   = txt_lensdesc.getText().toString();
+                    checkCity(opticUsername);
 
-                        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
-                        {
-                            lensprice = itemPriceR + itemPriceL;
-                            float discR = oprDiscount * itemPriceR / 100;
-                            float discL = oprDiscount * itemPriceL / 100;
-
-                            discountR = discR;
-                            discountL = discL;
-
-                            lensdiscount = discR + discL;
-                        }
-                        else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
-                        {
-                            lensprice = itemPriceStR + itemPriceStL;
-                            float discR = oprDiscount * itemPriceStR / 100;
-                            float discL = oprDiscount * itemPriceStL / 100;
-                            //Integer disc = oprDiscount * itemPriceSt / 100;
-
-                            discountR = discR;
-                            discountL = discL;
-                            lensdiscount = discR + discL;
-                        }
-
-                        if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
-                        {
-                            lensfacet   = itemFacetPrice + itemFacetPrice;
-                            lenstinting = itemTintPrice + itemTintPrice;
-
-                            qtyFacet = "2";
-                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
-
-                            qtyTinting = "2";
-                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
-                        }
-                        else
-                        {
-                            //lensprice   = (lensprice / 2);
-                            //lensdiscount= (lensdiscount / 2);
-                            lensfacet   = itemFacetPrice;
-                            lenstinting = itemTintPrice;
-
-                            qtyFacet   = "1";
-                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
-
-                            qtyTinting = "1";
-                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
-
-                            itemWeight  = itemWeight / 2;
-                        }
-
-                        totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
-
-                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
-                        file = sample.toString();
-
-                        uploadTempTxt(file);
-
-                        Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
-                        intent.putExtra("id_party", opticId.replace(",", ""));
-                        intent.putExtra("city_info", opticCity);
-                        intent.putExtra("price_lens", lensprice);
-                        intent.putExtra("description_lens", lensdesc);
-                        intent.putExtra("discount_lens", lensdiscount);
-                        intent.putExtra("facet_lens", lensfacet);
-                        intent.putExtra("tinting_lens", lenstinting);
-                        intent.putExtra("item_weight", itemWeight);
-                        intent.putExtra("flag_pasang", flagPasang);
-                        intent.putExtra("username_info", opticUsername);
-                        intent.putExtra("flag_shipping", flagShipping);
-                        intent.putExtra("order_number", txt_orderNumber.getText().toString());
-                        intent.putExtra("patient_name", txt_patientName.getText().toString());
-                        intent.putExtra("margin_lens", "35");
-                        intent.putExtra("extramargin_lens", "15");
-
-                        //Area Lens R
-                        intent.putExtra("itemcode_R", itemCodeR);
-                        intent.putExtra("description_R", descR);
-                        intent.putExtra("power_R", powerR);
-                        intent.putExtra("qty_R", itemQtyR);
-                        intent.putExtra("itemprice_R", itemPriceR);
-                        intent.putExtra("itemtotal_R", itemTotalPriceR);
-
-                        //Area Lens L
-                        intent.putExtra("itemcode_L", itemCodeL);
-                        intent.putExtra("description_L", descL);
-                        intent.putExtra("power_L", powerL);
-                        intent.putExtra("qty_L", itemQtyL);
-                        intent.putExtra("itemprice_L", itemPriceL);
-                        intent.putExtra("itemtotal_L", itemTotalPriceL);
-
-                        //Area Diskon
-                        intent.putExtra("description_diskon", listLineNo);
-                        intent.putExtra("discount_r", discountR);
-                        intent.putExtra("discount_l", discountL);
-                        intent.putExtra("extra_margin_discount", "10");
-
-                        //Area Facet
-                        intent.putExtra("itemcode_facet", itemFacetCode);
-                        intent.putExtra("description_facet", facetDescription);
-                        intent.putExtra("qty_facet", qtyFacet);
-                        intent.putExtra("price_facet", itemFacetPrice);
-                        intent.putExtra("total_facet", totalFacet);
-                        intent.putExtra("margin_facet", "8");
-                        intent.putExtra("extra_margin_facet", "8");
-
-                        //Area Tinting
-                        intent.putExtra("itemcode_tinting", itemTintingCode);
-                        intent.putExtra("description_tinting", tintingDescription);
-                        intent.putExtra("qty_tinting", qtyTinting);
-                        intent.putExtra("price_tinting", itemTintPrice);
-                        intent.putExtra("total_tinting", totalTinting);
-                        intent.putExtra("margin_tinting", "8");
-                        intent.putExtra("extra_margin_tinting", "8");
-
-                        intent.putExtra("total_price", totalPrice);
-
-                        startActivity(intent);
-
-                        finish();
-                    }
-                    else
-                    {
-                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
-                        file = sample.toString();
-
-                        uploadTxt(file);
-                    }
+//                    if (opticProvince.equals("JAWA BARAT"))
+//                    {
+//                        Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+//                        Float lensdiscount = 0f;
+//                        Float totalPrice = 0f;
+//                        String lensdesc   = txt_lensdesc.getText().toString();
+//
+//                        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+//                        {
+//                            lensprice = itemPriceR + itemPriceL;
+//                            float discR = oprDiscount * itemPriceR / 100;
+//                            float discL = oprDiscount * itemPriceL / 100;
+//
+//                            discountR = discR;
+//                            discountL = discL;
+//
+//                            lensdiscount = discR + discL;
+//                        }
+//                        else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+//                        {
+//                            lensprice = itemPriceStR + itemPriceStL;
+//                            float discR = oprDiscount * itemPriceStR / 100;
+//                            float discL = oprDiscount * itemPriceStL / 100;
+//                            //Integer disc = oprDiscount * itemPriceSt / 100;
+//
+//                            discountR = discR;
+//                            discountL = discL;
+//                            lensdiscount = discR + discL;
+//                        }
+//
+//                        if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+//                        {
+//                            lensfacet   = itemFacetPrice + itemFacetPrice;
+//                            lenstinting = itemTintPrice + itemTintPrice;
+//
+//                            qtyFacet = "2";
+//                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+//
+//                            qtyTinting = "2";
+//                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+//                        }
+//                        else
+//                        {
+//                            //lensprice   = (lensprice / 2);
+//                            //lensdiscount= (lensdiscount / 2);
+//                            lensfacet   = itemFacetPrice;
+//                            lenstinting = itemTintPrice;
+//
+//                            qtyFacet   = "1";
+//                            totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+//
+//                            qtyTinting = "1";
+//                            totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+//
+//                            itemWeight  = itemWeight / 2;
+//                        }
+//
+//                        totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+//
+//                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+//                        file = sample.toString();
+//
+//                        uploadTempTxt(file);
+//
+////                        Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+////                        intent.putExtra("id_party", opticId.replace(",", ""));
+////                        intent.putExtra("city_info", opticCity);
+////                        intent.putExtra("price_lens", lensprice);
+////                        intent.putExtra("description_lens", lensdesc);
+////                        intent.putExtra("discount_lens", lensdiscount);
+////                        intent.putExtra("facet_lens", lensfacet);
+////                        intent.putExtra("tinting_lens", lenstinting);
+////                        intent.putExtra("item_weight", itemWeight);
+////                        intent.putExtra("flag_pasang", flagPasang);
+////                        intent.putExtra("username_info", opticUsername);
+////                        intent.putExtra("flag_shipping", flagShipping);
+////                        intent.putExtra("order_number", txt_orderNumber.getText().toString());
+////                        intent.putExtra("patient_name", txt_patientName.getText().toString());
+////                        intent.putExtra("margin_lens", "35");
+////                        intent.putExtra("extramargin_lens", "15");
+////
+////                        //Area Lens R
+////                        intent.putExtra("itemcode_R", itemCodeR);
+////                        intent.putExtra("description_R", descR);
+////                        intent.putExtra("power_R", powerR);
+////                        intent.putExtra("qty_R", itemQtyR);
+////                        intent.putExtra("itemprice_R", itemPriceR);
+////                        intent.putExtra("itemtotal_R", itemTotalPriceR);
+////
+////                        //Area Lens L
+////                        intent.putExtra("itemcode_L", itemCodeL);
+////                        intent.putExtra("description_L", descL);
+////                        intent.putExtra("power_L", powerL);
+////                        intent.putExtra("qty_L", itemQtyL);
+////                        intent.putExtra("itemprice_L", itemPriceL);
+////                        intent.putExtra("itemtotal_L", itemTotalPriceL);
+////
+////                        //Area Diskon
+////                        intent.putExtra("description_diskon", listLineNo);
+////                        intent.putExtra("discount_r", discountR);
+////                        intent.putExtra("discount_l", discountL);
+////                        intent.putExtra("extra_margin_discount", "10");
+////
+////                        //Area Facet
+////                        intent.putExtra("itemcode_facet", itemFacetCode);
+////                        intent.putExtra("description_facet", facetDescription);
+////                        intent.putExtra("qty_facet", qtyFacet);
+////                        intent.putExtra("price_facet", itemFacetPrice);
+////                        intent.putExtra("total_facet", totalFacet);
+////                        intent.putExtra("margin_facet", "8");
+////                        intent.putExtra("extra_margin_facet", "8");
+////
+////                        //Area Tinting
+////                        intent.putExtra("itemcode_tinting", itemTintingCode);
+////                        intent.putExtra("description_tinting", tintingDescription);
+////                        intent.putExtra("qty_tinting", qtyTinting);
+////                        intent.putExtra("price_tinting", itemTintPrice);
+////                        intent.putExtra("total_tinting", totalTinting);
+////                        intent.putExtra("margin_tinting", "8");
+////                        intent.putExtra("extra_margin_tinting", "8");
+////
+////                        intent.putExtra("total_price", totalPrice);
+////
+////                        startActivity(intent);
+//
+//                        finish();
+//                    }
+//                    else
+//                    {
+//                        File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+//                        file = sample.toString();
+//
+//                        uploadTxt(file);
+//                    }
 
                     dialogUpload.dismiss();
                     dialogVerify.dismiss();
@@ -2823,7 +2837,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
             }
         }){
             @Override
@@ -2870,7 +2884,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
             }
         }){
             @Override
@@ -2922,7 +2936,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
             }
         }){
             @Override
@@ -3217,7 +3231,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT, true).show();
+//                Toasty.error(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT, true).show();
             }
         }){
             @Override
@@ -3310,7 +3324,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT, true).show();
+//                Toasty.error(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT, true).show();
             }
         }){
             @Override
@@ -5331,7 +5345,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                     oprDiscount = 0;
 
-                    Toasty.error(getApplicationContext(), oprDiscount.toString(), Toast.LENGTH_SHORT).show();
+//                    Toasty.error(getApplicationContext(), oprDiscount.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -5416,7 +5430,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -5455,7 +5469,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -5616,5 +5630,530 @@ public class FormOrderLensActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getProvince()
+    {
+        data_province.clear();
+
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETALLPROVINCE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String prov = object.getString("province");
+
+                        data_province.add(prov);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("PROVINCE GET", error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getCity(final String prov)
+    {
+        data_city.clear();
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETCITYBYPROV, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String city = object.getString("city");
+
+                        data_city.add(city);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR CITY", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("province", prov);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void updateCity(final String namaOptik, final String alamat, final String provinsi, final String kota)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_UPDATECITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Toasty.success(getApplicationContext(), "Information address has been update", Toast.LENGTH_SHORT).show();
+
+                        if (opticFlag.contentEquals("1"))
+                        {
+                            Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+                            Float lensdiscount = 0f;
+                            Float totalPrice = 0f;
+                            String lensdesc   = txt_lensdesc.getText().toString();
+
+                            if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+                            {
+                                lensprice = itemPriceR + itemPriceL;
+                                float discR = oprDiscount * itemPriceR / 100;
+                                float discL = oprDiscount * itemPriceL / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+
+                                lensdiscount = discR + discL;
+                            }
+                            else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+                            {
+                                lensprice = itemPriceStR + itemPriceStL;
+                                float discR = oprDiscount * itemPriceStR / 100;
+                                float discL = oprDiscount * itemPriceStL / 100;
+                                //Integer disc = oprDiscount * itemPriceSt / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+                                lensdiscount = discR + discL;
+                            }
+
+                            if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+                            {
+                                lensfacet   = itemFacetPrice + itemFacetPrice;
+                                lenstinting = itemTintPrice + itemTintPrice;
+
+                                qtyFacet = "2";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "2";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+                            }
+                            else
+                            {
+                                //lensprice   = (lensprice / 2);
+                                //lensdiscount= (lensdiscount / 2);
+                                lensfacet   = itemFacetPrice;
+                                lenstinting = itemTintPrice;
+
+                                qtyFacet   = "1";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "1";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+
+                                itemWeight  = itemWeight / 2;
+                            }
+
+                            totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+
+                            File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+                            file = sample.toString();
+
+                            uploadTempTxt(file);
+
+                            opticCity = kota;
+
+                            Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+                            intent.putExtra("id_party", opticId.replace(",", ""));
+                            intent.putExtra("city_info", opticCity);
+                            intent.putExtra("price_lens", lensprice);
+                            intent.putExtra("description_lens", lensdesc);
+                            intent.putExtra("discount_lens", lensdiscount);
+                            intent.putExtra("facet_lens", lensfacet);
+                            intent.putExtra("tinting_lens", lenstinting);
+                            intent.putExtra("item_weight", itemWeight);
+                            intent.putExtra("flag_pasang", flagPasang);
+                            intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("flag_shipping", flagShipping);
+                            intent.putExtra("order_number", txt_orderNumber.getText().toString());
+                            intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("margin_lens", "35");
+                            intent.putExtra("extramargin_lens", "15");
+
+                            //Area Lens R
+                            intent.putExtra("itemcode_R", itemCodeR);
+                            intent.putExtra("description_R", descR);
+                            intent.putExtra("power_R", powerR);
+                            intent.putExtra("qty_R", itemQtyR);
+                            intent.putExtra("itemprice_R", itemPriceR);
+                            intent.putExtra("itemtotal_R", itemTotalPriceR);
+
+                            //Area Lens L
+                            intent.putExtra("itemcode_L", itemCodeL);
+                            intent.putExtra("description_L", descL);
+                            intent.putExtra("power_L", powerL);
+                            intent.putExtra("qty_L", itemQtyL);
+                            intent.putExtra("itemprice_L", itemPriceL);
+                            intent.putExtra("itemtotal_L", itemTotalPriceL);
+
+                            //Area Diskon
+                            intent.putExtra("description_diskon", listLineNo);
+                            intent.putExtra("discount_r", discountR);
+                            intent.putExtra("discount_l", discountL);
+                            intent.putExtra("extra_margin_discount", "10");
+
+                            //Area Facet
+                            intent.putExtra("itemcode_facet", itemFacetCode);
+                            intent.putExtra("description_facet", facetDescription);
+                            intent.putExtra("qty_facet", qtyFacet);
+                            intent.putExtra("price_facet", itemFacetPrice);
+                            intent.putExtra("total_facet", totalFacet);
+                            intent.putExtra("margin_facet", "8");
+                            intent.putExtra("extra_margin_facet", "8");
+
+                            //Area Tinting
+                            intent.putExtra("itemcode_tinting", itemTintingCode);
+                            intent.putExtra("description_tinting", tintingDescription);
+                            intent.putExtra("qty_tinting", qtyTinting);
+                            intent.putExtra("price_tinting", itemTintPrice);
+                            intent.putExtra("total_tinting", totalTinting);
+                            intent.putExtra("margin_tinting", "8");
+                            intent.putExtra("extra_margin_tinting", "8");
+
+                            intent.putExtra("total_price", totalPrice);
+
+                            startActivity(intent);
+
+                            finish();
+                        }
+                        else
+                        {
+                            File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+                            file = sample.toString();
+
+                            uploadTxt(file);
+                        }
+                    }
+                    else if (object.names().get(0).equals("error"))
+                    {
+                        Toasty.error(getApplicationContext(), "Failed to update address", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ERROR UPDATE CITY", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("province", provinsi);
+                hashMap.put("address", alamat);
+                hashMap.put("city", kota);
+                hashMap.put("username", namaOptik);
+
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkCity(final String namaOptik)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKCITY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String city = object.getString("city");
+
+                    if (city.equals("-") || city.isEmpty())
+                    {
+//                        Toasty.error(getApplicationContext(), "Pilih kota terlebih dahulu", Toast.LENGTH_SHORT).show();
+
+                        final UniversalFontTextView lblAddress, lblProvince, lblCity;
+                        final BootstrapEditText txtAddress;
+                        final BetterSpinner spinCity, spinProvince;
+                        BootstrapButton btnUpdate, btnCancel;
+
+                        getProvince();
+
+                        final LovelyCustomDialog lovelyCustomDialog = new LovelyCustomDialog(FormOrderLensActivity.this);
+                        LayoutInflater layoutInflater = getLayoutInflater();
+                        View view = layoutInflater.inflate(R.layout.form_profile_address, null);
+                        lovelyCustomDialog.setView(view);
+                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopTitleColor(Color.WHITE);
+                        lovelyCustomDialog.setTopTitle("Update information address");
+
+                        lblAddress = view.findViewById(R.id.form_profile_address_lblAddress);
+                        lblProvince= view.findViewById(R.id.form_profile_address_lblProvince);
+                        lblCity    = view.findViewById(R.id.form_profile_address_lblCity);
+                        txtAddress = view.findViewById(R.id.form_profile_address_txtAddress);
+                        spinProvince= view.findViewById(R.id.form_profile_address_spinProvince);
+                        spinCity    = view.findViewById(R.id.form_profile_address_spinCity);
+                        btnUpdate  = view.findViewById(R.id.form_profile_address_btnUpdate);
+                        btnCancel  = view.findViewById(R.id.form_profile_address_btnCancel);
+
+//                        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(FormOrderLensActivity.this,
+//                                R.layout.spin_framemodel_item, spin_province);
+//                        spinProvince.setAdapter(spin_adapter);
+
+                        spinProvince.setAdapter(new ArrayAdapter<>(FormOrderLensActivity.this,
+                                android.R.layout.simple_spinner_item, data_province));
+
+                        spinCity.setVisibility(View.GONE);
+
+                        spinProvince.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                String prov = data_province.get(position);
+
+//                                Toasty.warning(FormOrderLensActivity.this, prov, Toast.LENGTH_SHORT).show();
+
+                                getCity(prov);
+
+                                spinCity.setVisibility(View.VISIBLE);
+                                spinCity.setText("");
+
+                                spinCity.setAdapter(new ArrayAdapter<>(FormOrderLensActivity.this,
+                                        android.R.layout.simple_spinner_item, data_city));
+                            }
+                        });
+
+                        btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                lovelyCustomDialog.dismiss();
+                            }
+                        });
+
+                        btnUpdate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String alamat   = txtAddress.getText().toString();
+                                String provinsi = spinProvince.getText().toString();
+                                String kota     = spinCity.getText().toString();
+
+                                if (alamat.isEmpty())
+                                {
+                                    lblAddress.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblAddress.setVisibility(View.GONE);
+                                }
+
+                                if (provinsi.isEmpty())
+                                {
+                                    lblProvince.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblProvince.setVisibility(View.GONE);
+                                }
+
+                                if (kota.isEmpty())
+                                {
+                                    lblCity.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    lblCity.setVisibility(View.GONE);
+                                }
+
+                                if (!alamat.isEmpty() && !provinsi.isEmpty() && !kota.isEmpty())
+                                {
+                                    updateCity(namaOptik, alamat, provinsi, kota);
+
+                                    lovelyCustomDialog.dismiss();
+                                }
+                             }
+                        });
+
+                        lovelyCustomDialog.show();
+                    }
+                    else
+                    {
+                        if (opticFlag.contentEquals("1"))
+                        {
+                            Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+                            Float lensdiscount = 0f;
+                            Float totalPrice = 0f;
+                            String lensdesc   = txt_lensdesc.getText().toString();
+
+                            if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+                            {
+                                lensprice = itemPriceR + itemPriceL;
+                                float discR = oprDiscount * itemPriceR / 100;
+                                float discL = oprDiscount * itemPriceL / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+
+                                lensdiscount = discR + discL;
+                            }
+                            else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+                            {
+                                lensprice = itemPriceStR + itemPriceStL;
+                                float discR = oprDiscount * itemPriceStR / 100;
+                                float discL = oprDiscount * itemPriceStL / 100;
+                                //Integer disc = oprDiscount * itemPriceSt / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+                                lensdiscount = discR + discL;
+                            }
+
+                            if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+                            {
+                                lensfacet   = itemFacetPrice + itemFacetPrice;
+                                lenstinting = itemTintPrice + itemTintPrice;
+
+                                qtyFacet = "2";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "2";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+                            }
+                            else
+                            {
+                                //lensprice   = (lensprice / 2);
+                                //lensdiscount= (lensdiscount / 2);
+                                lensfacet   = itemFacetPrice;
+                                lenstinting = itemTintPrice;
+
+                                qtyFacet   = "1";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "1";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+
+                                itemWeight  = itemWeight / 2;
+                            }
+
+                            totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+
+                            File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+                            file = sample.toString();
+
+                            uploadTempTxt(file);
+
+
+
+                            Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+                            intent.putExtra("id_party", opticId.replace(",", ""));
+                            intent.putExtra("city_info", opticCity);
+                            intent.putExtra("price_lens", lensprice);
+                            intent.putExtra("description_lens", lensdesc);
+                            intent.putExtra("discount_lens", lensdiscount);
+                            intent.putExtra("facet_lens", lensfacet);
+                            intent.putExtra("tinting_lens", lenstinting);
+                            intent.putExtra("item_weight", itemWeight);
+                            intent.putExtra("flag_pasang", flagPasang);
+                            intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("flag_shipping", flagShipping);
+                            intent.putExtra("order_number", txt_orderNumber.getText().toString());
+                            intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("margin_lens", "35");
+                            intent.putExtra("extramargin_lens", "15");
+
+                            //Area Lens R
+                            intent.putExtra("itemcode_R", itemCodeR);
+                            intent.putExtra("description_R", descR);
+                            intent.putExtra("power_R", powerR);
+                            intent.putExtra("qty_R", itemQtyR);
+                            intent.putExtra("itemprice_R", itemPriceR);
+                            intent.putExtra("itemtotal_R", itemTotalPriceR);
+
+                            //Area Lens L
+                            intent.putExtra("itemcode_L", itemCodeL);
+                            intent.putExtra("description_L", descL);
+                            intent.putExtra("power_L", powerL);
+                            intent.putExtra("qty_L", itemQtyL);
+                            intent.putExtra("itemprice_L", itemPriceL);
+                            intent.putExtra("itemtotal_L", itemTotalPriceL);
+
+                            //Area Diskon
+                            intent.putExtra("description_diskon", listLineNo);
+                            intent.putExtra("discount_r", discountR);
+                            intent.putExtra("discount_l", discountL);
+                            intent.putExtra("extra_margin_discount", "10");
+
+                            //Area Facet
+                            intent.putExtra("itemcode_facet", itemFacetCode);
+                            intent.putExtra("description_facet", facetDescription);
+                            intent.putExtra("qty_facet", qtyFacet);
+                            intent.putExtra("price_facet", itemFacetPrice);
+                            intent.putExtra("total_facet", totalFacet);
+                            intent.putExtra("margin_facet", "8");
+                            intent.putExtra("extra_margin_facet", "8");
+
+                            //Area Tinting
+                            intent.putExtra("itemcode_tinting", itemTintingCode);
+                            intent.putExtra("description_tinting", tintingDescription);
+                            intent.putExtra("qty_tinting", qtyTinting);
+                            intent.putExtra("price_tinting", itemTintPrice);
+                            intent.putExtra("total_tinting", totalTinting);
+                            intent.putExtra("margin_tinting", "8");
+                            intent.putExtra("extra_margin_tinting", "8");
+
+                            intent.putExtra("total_price", totalPrice);
+
+                            startActivity(intent);
+
+                            finish();
+                        }
+                        else
+                        {
+                            File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
+                            file = sample.toString();
+
+                            uploadTxt(file);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("CITY LOG", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("username", namaOptik);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

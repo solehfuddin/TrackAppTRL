@@ -170,15 +170,19 @@ public class HomeFragment extends Fragment {
                         }
                         else
                         {
-                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("product_id", list_brandrandom.get(pos).getProduct_id());
-                            detailFrameFragment.setArguments(bundle);
+//                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("product_id", list_brandrandom.get(pos).getProduct_id());
+//                            detailFrameFragment.setArguments(bundle);
+//
+//                            getActivity().getSupportFragmentManager().beginTransaction()
+//                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+//                                    .addToBackStack(null)
+//                                    .commit();
 
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
-                                    .addToBackStack(null)
-                                    .commit();
+                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+                            intent.putExtra("id", Integer.valueOf(list_brandrandom.get(pos).getProduct_id()));
+                            startActivity(intent);
                         }
                     }
                 }, ACTIVITY_TAG);
@@ -331,6 +335,7 @@ public class HomeFragment extends Fragment {
                         String frameImage   = jsonObject.getString("frame_image");
                         String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
                         String frameDisc    = jsonObject.getString("frame_disc");
+                        String frameBrand   = jsonObject.getString("frame_brand");
 //                        String totalFrame   = jsonObject.getString("total_output");
 
                         Data_fragment_bestproduct item = new Data_fragment_bestproduct();
@@ -339,6 +344,7 @@ public class HomeFragment extends Fragment {
                         item.setProduct_image(frameImage);
                         item.setProduct_realprice("Rp " + framePrice);
                         item.setProduct_discpercent(frameDisc + " %");
+                        item.setProduct_brand(frameBrand);
 
                         list_hotsale.add(item);
                     }
@@ -377,6 +383,7 @@ public class HomeFragment extends Fragment {
                         String frameImage   = jsonObject.getString("frame_image");
                         String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
                         String frameDisc    = jsonObject.getString("frame_disc");
+                        String frameBrand   = jsonObject.getString("frame_brand");
 //                        String totalFrame   = jsonObject.getString("total_output");
 
                         Data_fragment_bestproduct item = new Data_fragment_bestproduct();
@@ -385,6 +392,7 @@ public class HomeFragment extends Fragment {
                         item.setProduct_image(frameImage);
                         item.setProduct_realprice("Rp " + framePrice);
                         item.setProduct_discpercent(frameDisc + " %");
+                        item.setProduct_brand(frameBrand);
 
                         list_brandrandom.add(item);
                     }

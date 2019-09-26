@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import ozaydin.serkan.com.image_zoom_view.ImageViewZoom;
 
 public class Adapter_slider_product extends PagerAdapter {
     private List<String> listImage;
@@ -36,7 +39,11 @@ public class Adapter_slider_product extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_slider_product, container, false);
-        ImageView imageView = view.findViewById(R.id.list_sliderproduct_image);
+//        PhotoView imageView = view.findViewById(R.id.list_sliderproduct_image);
+        ImageViewZoom imageView = view.findViewById(R.id.list_sliderproduct_image);
+
+//        ZoomInImageViewAttacher attacher = new ZoomInImageViewAttacher(imageView);
+//        attacher.setZoomable(true);
         Picasso.with(context).load(listImage.get(position)).centerCrop().fit().into(imageView);
         container.addView(view, 0);
         return view;

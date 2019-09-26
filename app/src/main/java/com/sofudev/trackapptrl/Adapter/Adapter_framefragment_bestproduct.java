@@ -56,6 +56,7 @@ public class Adapter_framefragment_bestproduct extends RecyclerView.Adapter<Adap
             holder.txt_productid.setText(item.get(position).getProduct_id());
             holder.txt_productcode.setText(item.get(position).getProduct_code());
             holder.txt_productname.setText(item.get(position).getProduct_name());
+            holder.txt_brand.setText(item.get(position).getProduct_brand());
             //holder.txt_discprice.setText(item.get(position).getProduct_discprice());
             holder.txt_realprice.setText(item.get(position).getProduct_realprice());
             holder.txt_realprice.setVisibility(View.GONE);
@@ -127,6 +128,7 @@ public class Adapter_framefragment_bestproduct extends RecyclerView.Adapter<Adap
             holder.txt_productid.setText(item.get(position).getProduct_id());
             holder.txt_productcode.setText(item.get(position).getProduct_code());
             holder.txt_productname.setText(item.get(position).getProduct_name());
+            holder.txt_brand.setText(item.get(position).getProduct_brand());
             //holder.txt_discprice.setText(item.get(position).getProduct_discprice());
             holder.txt_realprice.setText(item.get(position).getProduct_realprice());
             //holder.txt_discpercent.setText(item.get(position).getProduct_discprice());
@@ -219,7 +221,8 @@ public class Adapter_framefragment_bestproduct extends RecyclerView.Adapter<Adap
     class FragmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         ImageView img_product;
-        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice;
+        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice,
+                                txt_brand;
         SparkButton btn_wish;
 
         public FragmentViewHolder(View itemView) {
@@ -232,6 +235,7 @@ public class Adapter_framefragment_bestproduct extends RecyclerView.Adapter<Adap
             txt_productname = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_bestproduct_txtProductname);
             txt_productcode = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_bestproduct_txtProductcode);
             txt_realprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_bestproduct_txtRealprice);
+            txt_brand       = itemView.findViewById(R.id.listitem_fragment_bestproduct_txtBrand);
 //            txt_discprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_bestproduct_txtDiscprice);
 
             //txt_realprice.setPaintFlags(txt_realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
