@@ -2,8 +2,12 @@ package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.LongDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,16 +25,21 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
+import com.sofudev.trackapptrl.Data.Data_lensorderweb;
+import com.sofudev.trackapptrl.Data.Data_lensorderweb_item;
 import com.sofudev.trackapptrl.Data.Data_paymentmethod;
 import com.sofudev.trackapptrl.Data.Data_spin_shipment;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelDetailOrderHistory;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelOrderHistory;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;
+import com.ssomai.android.scalablelayout.ScalableLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,34 +76,53 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_SHOWSESSIONPAYMENTCC = config.Ip_address + config.payment_show_expiredDurationCC;
     String URL_SHOWSESSIONPAYMENTLOAN = config.Ip_address + config.payment_show_expiredDurationLOAN;
     String URL_SHOWSESSIONPAYMENTKP = config.Ip_address + config.payment_show_expiredDurationKP;
-    String URL_GETUSERINFO  = config.Ip_address + config.profile_user_detail;
     String URL_POSTBILLING= config.payment_method_postBilling;
+    String URL_CHECKMEMBER  = config.Ip_address + config.shipment_checkMember;
+    String URL_INSERTLENSORDER = config.Ip_address + config.orderlens_insert_lensorder;
+    String URL_INSERTLENSITEM  = config.Ip_address + config.orderlens_insert_lensorderitem;
+    String URL_UPDATESTOCK     = config.Ip_address + config.orderlens_update_stock;
+    String URL_INSERTORDERENTRY= config.Ip_address + config.orderlens_insert_statusentry;
+    String URL_GETSIDERX       = config.Ip_address + config.orderlens_get_sidelensrx;
+    String URL_GETSIDESTOCK    = config.Ip_address + config.orderlens_get_sidelensstock;
 
 
     ACProgressCustom loading;
     Button btnCheckout;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceFacet, txtPriceTinting, txtPriceShipping,
-                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod;
+                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping;
+    ScalableLayout scalableCourier;
+    RecyclerView recyclerCourier;
     ImageView imgLensModel;
     ListView listPayment;
+    CardView cardPayment;
     String orderNumber, opticUsername, hargaLensa, deskripsiLensa, diskonLensa, facetLensa, tintingLensa, totalPrice,
-            tempTotal, cityOptic, itemWeight, lensCategory, date1, date2, addTemp, flagShipping, patientName, idParty,
-            shippingMethod, kodeBilling, duration, expDate, ownerPhone;
+            tempTotal, cityOptic, provinceOptic ,itemWeight, lensCategory, date1, date2, addTemp, flagShipping, patientName, idParty,
+            shippingMethod, kodeBilling, duration, expDate, ownerPhone, memberFlag, opticName, opticAddress, phoneNumber,
+            note, lenstype, lensdesc, opticFlag;
     String itemCodeR, descR, powerR, uom, qtyR, priceR, totalPriceR, marginR, extraMarginR, itemCodeL, descL, powerL,
             qtyL, priceL, totalPriceL, marginL, extraMarginL, discountItem, discountR, discountL, extraMarginDiscount,
             itemFacetCode, facetDescription, facetqty, facetPrice, facetTotal, facetMargin, facetExtraMargin,
             itemTintingCode, tintingDescription, tintingqty, tintingPrice, tintingTotal, tintingMargin, tintingExtraMargin;
+    String sphR, sphL, cylR, cylL, axsR, axsL, addR, addL, coatCode, coatDesc, tintCode, tintDesc, corridor, mpdR, mpdL,
+            pv, wrap, panto, vd, facetInfo, frameModel, dbl, hor, ver, frameCode, province, shipCourier, shipPrice, shipService, shipId,
+            sideR, sideL, itemIdR, itemIdL, discOperandR, discNameR, discOperandL, discNameL, prod_attr_valR, prod_attr_valL,
+            divName, categoryLens;
 
-    int totalWeight = 0;
-    Spinner spinShipment;
-    private static final String[] shipment = new String[] {"Shipping Method"};
-    private static final String[] payment = new String[] {"QR Code", "Virtual Account", "Credit Card", "Loan"};
+    Integer pr, ptr, pl, ptl, tintp;
+    Float disR, disL;
+//    Spinner spinShipment;
+//    private static final String[] shipment = new String[] {"Shipping Method"};
+//    private static final String[] payment = new String[] {"QR Code", "Virtual Account", "Credit Card", "Loan"};
     List<Data_paymentmethod> paymentmethodList = new ArrayList<>();
     List<Data_spin_shipment> shipmentList = new ArrayList<>();
-    ArrayAdapter adapterListShipment;
+//    ArrayAdapter adapterListShipment;
+    Data_lensorderweb dataHeader = new Data_lensorderweb();
+    Data_lensorderweb_item dataItemR = new Data_lensorderweb_item();
+    Data_lensorderweb_item dataItemL = new Data_lensorderweb_item();
 
+    Adapter_courier_service adapterCourierService;
     Adapter_paymentmethod adapter_paymentmethod;
-    Adapter_spinner_shipment adapter_spinner_shipment;
+//    Adapter_spinner_shipment adapter_spinner_shipment;
     String selectedItem;
 
     Calendar calendar = Calendar.getInstance();
@@ -105,27 +133,30 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form_lens_summary);
         showLoading();
 
-        btnCheckout     = (Button) findViewById(R.id.activity_lenssummary_btn_checkout);
-        txtLensDescr    = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_lensdesc);
-        txtPriceLens    = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_pricelens);
-        txtPriceDisc    = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_pricedisc);
-        txtPriceFacet   = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_pricefacet);
-        txtPriceTinting = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_pricetinting);
-        txtPriceShipping= (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_priceshipment);
-        txtPriceTotal   = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_pricetotal);
-        txtItemWeight   = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_itemweight);
-        txtLensModel    = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_lensmodel);
-        txtSide         = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_side);
-        txtShippingMethod = (UniversalFontTextView) findViewById(R.id.activity_lenssummary_txt_shippingmethod);
-        spinShipment    = (Spinner) findViewById(R.id.activity_lenssummary_spin_shipment);
-        imgLensModel    = (ImageView) findViewById(R.id.activity_lenssummary_img_logo);
-        listPayment     = (ListView) findViewById(R.id.activity_lenssummary_listview_paymentMethod);
+        scalableCourier =  findViewById(R.id.activity_lenssummary_scalableCourier);
+        recyclerCourier =  findViewById(R.id.activity_lenssummary_recyclerCourier);
+        btnCheckout     =  findViewById(R.id.activity_lenssummary_btn_checkout);
+        txtLensDescr    =  findViewById(R.id.activity_lenssummary_txt_lensdesc);
+        txtPriceLens    =  findViewById(R.id.activity_lenssummary_txt_pricelens);
+        txtPriceDisc    =  findViewById(R.id.activity_lenssummary_txt_pricedisc);
+        txtPriceFacet   =  findViewById(R.id.activity_lenssummary_txt_pricefacet);
+        txtPriceTinting =  findViewById(R.id.activity_lenssummary_txt_pricetinting);
+        txtPriceShipping=  findViewById(R.id.activity_lenssummary_txt_priceshipment);
+        txtInfoShipping =  findViewById(R.id.activity_lenssummary_txtInfoShipping);
+        txtPriceTotal   =  findViewById(R.id.activity_lenssummary_txt_pricetotal);
+        txtItemWeight   =  findViewById(R.id.activity_lenssummary_txt_itemweight);
+        txtLensModel    =  findViewById(R.id.activity_lenssummary_txt_lensmodel);
+        txtSide         =  findViewById(R.id.activity_lenssummary_txt_side);
+        txtShippingMethod =  findViewById(R.id.activity_lenssummary_txt_shippingmethod);
+//        spinShipment    =  findViewById(R.id.activity_lenssummary_spin_shipment);
+        imgLensModel    =  findViewById(R.id.activity_lenssummary_img_logo);
+        listPayment     =  findViewById(R.id.activity_lenssummary_listview_paymentMethod);
+        cardPayment     =  findViewById(R.id.activity_lenssummary_card_payment);
+
+        LinearLayoutManager horizonManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerCourier.setLayoutManager(horizonManager);
 
         gettingPrice();
-
-        btnCheckout.setBackgroundColor(Color.LTGRAY);
-        btnCheckout.setTextColor(Color.BLACK);
-        btnCheckout.setEnabled(false);
 
         //adapterListShipment = new ArrayAdapter(this, R.layout.listview_payment, payment);
 
@@ -176,93 +207,632 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         //spinShipment.setAdapter(new ArrayAdapter<>(FormLensSummaryActivity.this, R.layout.spin_shipment_title, shipment));
 
         getAllPayment();
-        getAllKurir(cityOptic);
+
+        checkMember(opticUsername);
+
+        if (opticFlag.equals("0"))
+        {
+            scalableCourier.setVisibility(View.GONE);
+            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+            shipPrice = "0";
+            String price = CurencyFormat(shipPrice.toString());
+            Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipPrice);
+            addTemp = CurencyFormat(addNew.toString());
+            txtPriceShipping.setText(String.valueOf(price));
+            txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+        }
+        else
+        {
+            getAllKurir(cityOptic, province);
+            scalableCourier.setVisibility(View.VISIBLE);
+            txtInfoShipping.setVisibility(View.GONE);
+        }
 
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //showLoading();
-                insertLokalDb();
 
-                if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
+                if (memberFlag.contentEquals("1"))
                 {
-                    String paymentType = "internetBanking";
-                    String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
-                    grossAmount = grossAmount.replace(",00", "");
-                    String orderId     = orderNumber;
+                    insertLokalDb();
 
-                    postBillingQR(paymentType, grossAmount, orderId);
+                    if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
+                    {
+                        String paymentType = "internetBanking";
+                        String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
+                        grossAmount = grossAmount.replace(",00", "");
+                        String orderId     = orderNumber;
 
-                }
-                else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
-                        selectedItem.contains("Virtual Account"))
-                {
-                    String paymentType = "bankTransfer";
-                    String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
-                    grossAmount = grossAmount.replace(",00", "");
-                    String orderId     = orderNumber;
+                        postBillingQR(paymentType, grossAmount, orderId);
 
-                    postBillingVA(paymentType, grossAmount, orderId);
-                }
-                else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
-                        selectedItem.contains("Credit Card"))
-                {
-                    createBillingCC(orderNumber, "creditCard");
-                }
-                else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
-                        selectedItem.contains("Loan"))
-                {
+                    }
+                    else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
+                            selectedItem.contains("Virtual Account"))
+                    {
+                        String paymentType = "bankTransfer";
+                        String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
+                        grossAmount = grossAmount.replace(",00", "");
+                        String orderId     = orderNumber;
+
+                        postBillingVA(paymentType, grossAmount, orderId);
+                    }
+                    else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
+                            selectedItem.contains("Credit Card"))
+                    {
+                        createBillingCC(orderNumber, "creditCard");
+                    }
+                    else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
+                            selectedItem.contains("Loan"))
+                    {
 //                    createBillingLoan(orderNumber, "loanKS");
-                    String paymentType = "loanKS";
-                    String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
-                    grossAmount = grossAmount.replace(",00", "");
-                    String orderId     = orderNumber;
+                        String paymentType = "loanKS";
+                        String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
+                        grossAmount = grossAmount.replace(",00", "");
+                        String orderId     = orderNumber;
 
 //                    Toasty.info(getApplicationContext(), "Total amount : " + grossAmount, Toast.LENGTH_SHORT).show();
 
-                    postBillingLoan(paymentType, grossAmount, orderId);
-                }
-                else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
-                        selectedItem.contains("Kreditpro"))
-                {
+                        postBillingLoan(paymentType, grossAmount, orderId);
+                    }
+                    else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
+                            selectedItem.contains("Kreditpro"))
+                    {
 //                    Intent intent = new Intent(FormLensSummaryActivity.this, FormPaymentKreditpro.class);
 //                    startActivity(intent);
 
-                    createBillingKP(orderNumber, "kreditPro");
+                        createBillingKP(orderNumber, "kreditPro");
+                    }
+
+                    dataHeader.setOrderNumber(orderNumber);
+                    dataHeader.setCustomerId(Integer.valueOf(idParty));
+                    dataHeader.setOpticName(opticName);
+                    dataHeader.setOpticAddress(opticAddress);
+                    dataHeader.setOpticCity(cityOptic);
+                    dataHeader.setPatientName(patientName);
+                    dataHeader.setPhoneNumber(phoneNumber);
+                    dataHeader.setNote(note);
+                    dataHeader.setProdDivType(divName);
+                    dataHeader.setIdLensa(lenstype);
+                    dataHeader.setDescription(lensdesc);
+
+                    String sphr, sphl, cylr, cyll;
+
+                    if (!sphR.isEmpty())
+                    {
+                        if (Double.valueOf(sphR) > 0)
+                        {
+                            sphr = "+" + String.valueOf(sphR);
+                        }
+                        else
+                        {
+                            sphr = String.valueOf(sphR);
+                        }
+                    }
+                    else
+                    {
+                        sphr = "";
+                    }
+
+                    if (!sphL.isEmpty())
+                    {
+                        if (Double.valueOf(sphL) > 0)
+                        {
+                            sphl = "+" + String.valueOf(sphL);
+                        }
+                        else
+                        {
+                            sphl = String.valueOf(sphL);
+                        }
+                    }
+                    else
+                    {
+                        sphl = "";
+                    }
+
+                    if (!cylR.isEmpty())
+                    {
+                        if (Double.valueOf(cylR) > 0)
+                        {
+                            cylr = "+" + String.valueOf(cylR);
+                        }
+                        else
+                        {
+                            cylr = String.valueOf(cylR);
+                        }
+                    }
+                    else
+                    {
+                        cylr = "";
+                    }
+
+                    if (!cylL.isEmpty())
+                    {
+                        if (Double.valueOf(cylL) > 0)
+                        {
+                            cyll = "+" + String.valueOf(cylL);
+                        }
+                        else
+                        {
+                            cyll = String.valueOf(cylL);
+                        }
+                    }
+                    else
+                    {
+                        cyll = "";
+                    }
+
+                    if (corridor == null || corridor.contentEquals("None") || corridor.contains("None") || corridor.equals("None")
+                            || corridor.isEmpty() || corridor.contentEquals("") || corridor.contains("") || corridor.equals(""))
+                    {
+                        corridor = "";
+                    }
+
+                    if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
+                            || frameModel.equals("-- Model --"))
+                    {
+                        frameModel = "";
+                    }
+
+                    dataHeader.setSphR(sphr);
+                    dataHeader.setSphL(sphl);
+                    dataHeader.setCylR(cylr);
+                    dataHeader.setCylL(cyll);
+                    dataHeader.setAxsR(axsR);
+                    dataHeader.setAxsL(axsL);
+                    dataHeader.setAddR(addR);
+                    dataHeader.setAddL(addL);
+                    dataHeader.setPrisR("-");
+                    dataHeader.setPrisL("-");
+
+                    dataHeader.setCoatCode(coatCode);
+                    dataHeader.setCoatDesc(coatDesc);
+                    dataHeader.setTintCode(tintCode);
+                    dataHeader.setTintDesc(tintDesc);
+                    dataHeader.setCorridor(corridor);
+                    dataHeader.setMpdR(mpdR);
+                    dataHeader.setMpdL(mpdL);
+                    dataHeader.setPv(pv);
+                    dataHeader.setWrap(wrap);
+                    dataHeader.setPanto(panto);
+                    dataHeader.setVd(vd);
+                    dataHeader.setFacetInfo(facetInfo);
+                    dataHeader.setFrameModel(frameModel);
+                    dataHeader.setDbl(dbl);
+                    dataHeader.setHor(hor);
+                    dataHeader.setVer(ver);
+                    dataHeader.setFrameCode(frameCode);
+                    dataHeader.setShippingId(Integer.valueOf(shipId));
+                    dataHeader.setShippingCourier(shipCourier);
+                    dataHeader.setShippingService(shipService);
+                    dataHeader.setShippingCity(cityOptic);
+                    dataHeader.setShippingProvince(province);
+                    dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
+                    dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
+                    dataHeader.setGrandTotal(Integer.valueOf(removeRupiah(txtPriceTotal.getText().toString().replace(",00", ""))));
+                    dataHeader.setCash_carry("Pending");
+
+                    dataItemR.setOrderNumber(orderNumber);
+                    dataItemR.setItemId(itemIdR);
+                    dataItemR.setItemCode(itemCodeR);
+                    dataItemR.setDescription(descR);
+                    dataItemR.setRl(sideR);
+                    dataItemR.setQty(Integer.parseInt(qtyR));
+                    dataItemR.setUnitStandardPrice(pr);
+                    dataItemR.setUnitStandardWeight(20);
+                    dataItemR.setDiscountName(discNameR);
+                    dataItemR.setDiscount(Integer.valueOf(discOperandR));
+                    dataItemR.setTotalWeight(20);
+                    dataItemR.setTintingPrice(tintp);
+                    dataItemR.setAmount(ptr);
+
+                    dataItemL.setOrderNumber(orderNumber);
+                    dataItemL.setItemId(itemIdL);
+                    dataItemL.setItemCode(itemCodeL);
+                    dataItemL.setDescription(descL);
+                    dataItemL.setRl(sideL);
+                    dataItemL.setQty(Integer.parseInt(qtyL));
+                    dataItemL.setUnitStandardPrice(pl);
+                    dataItemL.setUnitStandardWeight(20);
+                    dataItemL.setDiscountName(discNameL);
+                    dataItemL.setDiscount(Integer.valueOf(discOperandL));
+                    dataItemL.setTotalWeight(20);
+                    dataItemL.setTintingPrice(tintp);
+                    dataItemL.setAmount(ptl);
+
+                    insertLensOrderHeader(dataHeader);
+
+                    if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
+                    {
+                        dataItemR.setQty(2);
+                        int total = ptr * 2;
+                        dataItemR.setAmount(total);
+                        insertLensOrderItem(dataItemR);
+
+                        if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+                        {
+                            potongStock(itemIdR, "2");
+                        }
+                    }
+                    else
+                    {
+                        if (!itemCodeR.isEmpty())
+                        {
+                            insertLensOrderItem(dataItemR);
+
+                            if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+                            {
+                                potongStock(itemIdR, "1");
+                            }
+                        }
+
+                        if (!itemCodeL.isEmpty())
+                        {
+                            insertLensOrderItem(dataItemL);
+
+                            if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+                            {
+                                potongStock(itemIdL, "1");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+//                    Toasty.info(getApplicationContext(), "Insert non payment", Toast.LENGTH_SHORT).show();
+
+                    dataHeader.setOrderNumber(orderNumber);
+                    Log.d("HEADER OrderNumber : ", dataHeader.getOrderNumber());
+                    dataHeader.setCustomerId(Integer.valueOf(idParty));
+                    Log.d("HEADER CustomerId : ", String.valueOf(dataHeader.getCustomerId()));
+                    dataHeader.setOpticName(opticName);
+                    Log.d("HEADER OpticName : ", dataHeader.getOpticName());
+                    dataHeader.setOpticAddress(opticAddress);
+                    Log.d("HEADER OpticAddress : ", dataHeader.getOpticAddress());
+                    dataHeader.setOpticCity(cityOptic);
+                    Log.d("HEADER OpticCity : ", dataHeader.getOpticCity());
+                    dataHeader.setPatientName(patientName);
+                    Log.d("HEADER PatientName : ", dataHeader.getPatientName());
+                    dataHeader.setPhoneNumber(phoneNumber);
+                    Log.d("HEADER PhoneNumber : ", dataHeader.getPhoneNumber());
+                    dataHeader.setNote(note);
+                    Log.d("HEADER Note : ", dataHeader.getNote());
+                    dataHeader.setProdDivType(divName);
+                    Log.d("HEADER ProdDiv : ", dataHeader.getProdDivType());
+                    dataHeader.setIdLensa(lenstype);
+                    Log.d("HEADER IdLensa : ", dataHeader.getIdLensa());
+                    dataHeader.setDescription(lensdesc);
+                    Log.d("HEADER Description : ", dataHeader.getDescription());
+
+                    String sphr, sphl, cylr, cyll;
+
+                    if (!sphR.isEmpty())
+                    {
+                        if (Double.valueOf(sphR) > 0)
+                        {
+                            sphr = "+" + String.valueOf(sphR);
+                        }
+                        else
+                        {
+                            sphr = String.valueOf(sphR);
+                        }
+                    }
+                    else
+                    {
+                        sphr = "0";
+                    }
+
+                    if (!sphL.isEmpty())
+                    {
+                        if (Double.valueOf(sphL) > 0)
+                        {
+                            sphl = "+" + String.valueOf(sphL);
+                        }
+                        else
+                        {
+                            sphl = String.valueOf(sphL);
+                        }
+                    }
+                    else
+                    {
+                        sphl = "0";
+                    }
+
+                    if (!cylR.isEmpty())
+                    {
+                        if (Double.valueOf(cylR) > 0)
+                        {
+                            cylr = "+" + String.valueOf(cylR);
+                        }
+                        else
+                        {
+                            cylr = String.valueOf(cylR);
+                        }
+                    }
+                    else
+                    {
+                        cylr = "0";
+                    }
+
+                    if (!cylL.isEmpty())
+                    {
+                        if (Double.valueOf(cylL) > 0)
+                        {
+                            cyll = "+" + String.valueOf(cylL);
+                        }
+                        else
+                        {
+                            cyll = String.valueOf(cylL);
+                        }
+                    }
+                    else
+                    {
+                        cyll = "0";
+                    }
+
+                    if (axsR.isEmpty())
+                    {
+                        axsR = "0";
+                    }
+
+                    if (axsL.isEmpty())
+                    {
+                        axsL = "0";
+                    }
+
+                    if (addR.isEmpty())
+                    {
+                        addR = "0";
+                    }
+
+                    if (addL.isEmpty())
+                    {
+                        addL = "0";
+                    }
+
+                    if (corridor == null || corridor.contentEquals("None") || corridor.contains("None") || corridor.equals("None")
+                            || corridor.isEmpty() || corridor.contentEquals("") || corridor.contains("") || corridor.equals(""))
+                    {
+                        corridor = "";
+                    }
+
+                    if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
+                            || frameModel.equals("-- Model --"))
+                    {
+                        frameModel = "";
+                    }
+
+                    dataHeader.setSphR(sphr);
+                    Log.d("HEADER SphR : ", dataHeader.getSphR());
+                    dataHeader.setSphL(sphl);
+                    Log.d("HEADER SphL : ", dataHeader.getSphL());
+                    dataHeader.setCylR(cylr);
+                    Log.d("HEADER CylR : ", dataHeader.getCylR());
+                    dataHeader.setCylL(cyll);
+                    Log.d("HEADER CylL : ", dataHeader.getCylL());
+                    dataHeader.setAxsR(axsR);
+                    Log.d("HEADER AxsR : ", dataHeader.getAxsR());
+                    dataHeader.setAxsL(axsL);
+                    Log.d("HEADER AxsL : ", dataHeader.getAxsL());
+                    dataHeader.setAddR(addR);
+                    Log.d("HEADER AddR : ", dataHeader.getAddR());
+                    dataHeader.setAddL(addL);
+                    Log.d("HEADER AddL : ", dataHeader.getAddL());
+                    dataHeader.setPrisR("0");
+                    dataHeader.setPrisL("0");
+
+                    dataHeader.setCoatCode(coatCode);
+                    Log.d("HEADER CoatCode : ", dataHeader.getCoatCode());
+                    dataHeader.setCoatDesc(coatDesc);
+                    Log.d("HEADER CoatDesc : ", dataHeader.getCoatDesc());
+                    dataHeader.setTintCode(tintCode);
+                    Log.d("HEADER TintCode : ", dataHeader.getTintCode());
+                    dataHeader.setTintDesc(tintDesc);
+                    Log.d("HEADER TintDesc : ", dataHeader.getTintDesc());
+                    dataHeader.setCorridor(corridor);
+                    Log.d("HEADER Corridor : ", dataHeader.getCorridor());
+                    dataHeader.setMpdR(mpdR);
+                    Log.d("HEADER MpdR : ", dataHeader.getMpdR());
+                    dataHeader.setMpdL(mpdL);
+                    Log.d("HEADER MpdL : ", dataHeader.getMpdL());
+                    dataHeader.setPv(pv);
+                    Log.d("HEADER Pv : ", dataHeader.getPv());
+                    dataHeader.setWrap(wrap);
+                    Log.d("HEADER Wrap : ", dataHeader.getWrap());
+                    dataHeader.setPanto(panto);
+                    Log.d("HEADER Panto : ", dataHeader.getPanto());
+                    dataHeader.setVd(vd);
+                    Log.d("HEADER Vertex : ", dataHeader.getVd());
+                    dataHeader.setFacetInfo(facetInfo);
+                    Log.d("HEADER FacetInfo : ", dataHeader.getFacetInfo());
+                    dataHeader.setFrameModel(frameModel);
+                    Log.d("HEADER FrameModel : ", dataHeader.getFrameModel());
+                    dataHeader.setDbl(dbl);
+                    Log.d("HEADER Dbl : ", dataHeader.getDbl());
+                    dataHeader.setHor(hor);
+                    Log.d("HEADER hor : ", dataHeader.getHor());
+                    dataHeader.setVer(ver);
+                    Log.d("HEADER ver : ", dataHeader.getVer());
+                    dataHeader.setFrameCode(frameCode);
+                    Log.d("HEADER FrameCode : ", dataHeader.getFrameCode());
+                    dataHeader.setShippingId(Integer.valueOf(shipId));
+                    Log.d("HEADER ShippingId : ", String.valueOf(dataHeader.getShippingId()));
+                    dataHeader.setShippingCourier(shipCourier);
+                    Log.d("HEADER ShipCourier : ", dataHeader.getShippingCourier());
+                    dataHeader.setShippingService(shipService);
+                    Log.d("HEADER ShipService : ", dataHeader.getShippingService());
+                    dataHeader.setShippingCity(cityOptic);
+                    Log.d("HEADER ShipCity : ", dataHeader.getShippingCity());
+                    dataHeader.setShippingProvince(province);
+                    Log.d("HEADER ShipProv : ", dataHeader.getShippingProvince());
+                    dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
+                    Log.d("HEADER ShipPrice : ", String.valueOf(dataHeader.getShippingPrice()));
+                    dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
+                    Log.d("HEADER FacetPrice : ", String.valueOf(dataHeader.getFacetPrice()));
+                    dataHeader.setGrandTotal(Integer.valueOf(removeRupiah(txtPriceTotal.getText().toString().replace(",00", ""))));
+                    Log.d("HEADER GrantTotal : ", String.valueOf(dataHeader.getGrandTotal()));
+                    dataHeader.setCash_carry("Non Payment Method");
+                    Log.d("HEADER CashCarry : ", dataHeader.getCash_carry());
+
+                    dataItemR.setOrderNumber(orderNumber);
+                    Log.d("ITEM OrderNumber R : ", dataItemR.getOrderNumber());
+                    dataItemR.setItemId(itemIdR);
+                    Log.d("ITEM ItemId R : ", dataItemR.getItemId());
+                    dataItemR.setItemCode(itemCodeR);
+                    Log.d("ITEM ItemCode R : ", dataItemR.getItemCode());
+                    dataItemR.setDescription(descR);
+                    Log.d("ITEM Descr R : ", dataItemR.getDescription());
+                    if (sideR == null)
+                    {
+                        sideR = "";
+                    }
+                    dataItemR.setRl(sideR);
+                    Log.d("ITEM Side R : ", dataItemR.getRl());
+                    dataItemR.setQty(Integer.parseInt(qtyR));
+                    Log.d("ITEM Qty R : ", String.valueOf(dataItemR.getQty()));
+                    dataItemR.setUnitStandardPrice(pr);
+                    Log.d("ITEM Price R : ", String.valueOf(dataItemR.getUnitStandardPrice()));
+                    dataItemR.setUnitStandardWeight(20);
+                    Log.d("ITEM Weight R : ", String.valueOf(dataItemR.getUnitStandardWeight()));
+                    dataItemR.setDiscountName(discNameR);
+                    Log.d("ITEM DiscName R : ", dataItemR.getDiscountName());
+                    dataItemR.setDiscount(Integer.valueOf(discOperandR));
+                    Log.d("ITEM Disc R : ", String.valueOf(dataItemR.getDiscount()));
+                    dataItemR.setTotalWeight(20);
+                    Log.d("ITEM TotalWeight R : ", String.valueOf(dataItemR.getTotalWeight()));
+                    dataItemR.setTintingPrice(tintp);
+                    Log.d("ITEM Tinting R : ", String.valueOf(dataItemR.getTintingPrice()));
+                    dataItemR.setAmount(ptr);
+                    Log.d("ITEM Amount R : ", String.valueOf(dataItemR.getAmount()));
+
+                    dataItemL.setOrderNumber(orderNumber);
+                    Log.d("ITEM OrderNumber L : ", dataItemL.getOrderNumber());
+                    dataItemL.setItemId(itemIdL);
+                    Log.d("ITEM ItemId L : ", dataItemL.getItemId());
+                    dataItemL.setItemCode(itemCodeL);
+                    Log.d("ITEM ItemCode L : ", dataItemL.getItemCode());
+                    dataItemL.setDescription(descL);
+                    Log.d("ITEM Descr L : ", dataItemL.getDescription());
+                    if (sideL == null)
+                    {
+                        sideL = "";
+                    }
+                    dataItemL.setRl(sideL);
+                    Log.d("ITEM Side L : ", dataItemL.getRl());
+                    dataItemL.setQty(Integer.parseInt(qtyL));
+                    Log.d("ITEM Qty L : ", String.valueOf(dataItemL.getQty()));
+                    dataItemL.setUnitStandardPrice(pl);
+                    Log.d("ITEM Price L : ", String.valueOf(dataItemL.getUnitStandardPrice()));
+                    dataItemL.setUnitStandardWeight(20);
+                    Log.d("ITEM Weigh L : ", String.valueOf(dataItemL.getUnitStandardWeight()));
+                    dataItemL.setDiscountName(discNameL);
+                    Log.d("ITEM DiscName L : ", dataItemL.getDiscountName());
+                    dataItemL.setDiscount(Integer.valueOf(discOperandL));
+                    Log.d("ITEM Disc L : ", String.valueOf(dataItemL.getDiscount()));
+                    dataItemL.setTotalWeight(20);
+                    Log.d("ITEM TotalWeight L : ", String.valueOf(dataItemL.getTotalWeight()));
+                    dataItemL.setTintingPrice(tintp);
+                    Log.d("ITEM Tinting L : ", String.valueOf(dataItemL.getTintingPrice()));
+                    dataItemL.setAmount(ptl);
+                    Log.d("ITEM Amount L : ", String.valueOf(dataItemL.getAmount()));
+
+                    insertLensOrderHeader(dataHeader);
+
+                    if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
+                    {
+                        dataItemR.setQty(2);
+                        int total = ptr * 2;
+                        dataItemR.setAmount(total);
+                        insertLensOrderItem(dataItemR);
+                    }
+                    else
+                    {
+                        if (!itemCodeR.isEmpty())
+                        {
+                            insertLensOrderItem(dataItemR);
+                        }
+
+                        if (!itemCodeL.isEmpty())
+                        {
+                            insertLensOrderItem(dataItemL);
+                        }
+                    }
+
+//                    if (!itemCodeR.isEmpty())
+//                    {
+//                        insertLensOrderItem(dataItemR);
+//                    }
+//
+//                    if (!itemCodeL.isEmpty())
+//                    {
+//                        insertLensOrderItem(dataItemL);
+//                    }
+
+                    insertStatusEntry(orderNumber);
                 }
 
                 loading.dismiss();
             }
         });
 
-        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        adapterCourierService = new Adapter_courier_service(this, shipmentList, new RecyclerViewOnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String shipmentPrice;
+            public void onItemClick(View view, int pos, String id) {
+                shipPrice   = shipmentList.get(pos).getPrice();
+                shipId      = String.valueOf(shipmentList.get(pos).getId());
+                shipCourier = shipmentList.get(pos).getKurir();
+                shipService = shipmentList.get(pos).getService();
+                shipPrice   = shipmentList.get(pos).getPrice();
 
-                if (!shipmentList.isEmpty())
-                {
-                    shipmentPrice = shipmentList.get(position).getPrice();
-                    shippingMethod= "Tarif Pengiriman " + shipmentList.get(position).getKurir();
-                    txtPriceShipping.setText(CurencyFormat(shipmentPrice));
-                }
-                else
-                {
-                    shipmentPrice = "0,00";
-                    shippingMethod= "Gratis Tarif Pengiriman";
-                    txtPriceShipping.setText(shipmentPrice);
-                }
+                String price = CurencyFormat(shipPrice.toString());
 
-                Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipmentPrice);
+                Log.d("Callback Price", "Shipment : " + shipPrice);
+
+                Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipPrice);
                 addTemp = CurencyFormat(addNew.toString());
-                txtPriceTotal.setText("Rp " + addTemp);
-            }
+                txtPriceShipping.setText(String.valueOf(price));
+                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+//                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
             }
         });
+
+//        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String shipmentPrice;
+//
+//                if (!shipmentList.isEmpty())
+//                {
+//                    shipId = String.valueOf(shipmentList.get(position).getId());
+//                    shipmentPrice = shipmentList.get(position).getPrice();
+//                    shipPrice = shipmentList.get(position).getPrice();
+//                    shipCourier = shipmentList.get(position).getKurir();
+//                    shippingMethod= "Tarif Pengiriman " + shipmentList.get(position).getKurir();
+//                    txtPriceShipping.setText(CurencyFormat(shipmentPrice));
+//                }
+//                else
+//                {
+//                    shipId = "0";
+//                    shipPrice = "0";
+//                    shipCourier = "";
+//                    shipmentPrice = "0,00";
+//                    shippingMethod= "Gratis Tarif Pengiriman";
+//                    txtPriceShipping.setText(shipmentPrice);
+//                }
+//
+//                Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipmentPrice);
+//                addTemp = CurencyFormat(addNew.toString());
+//                txtPriceTotal.setText("Rp " + addTemp);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         loading.dismiss();
     }
@@ -678,6 +1248,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -728,6 +1300,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -776,6 +1350,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -948,9 +1524,9 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-    private void getAllKurir(final String city)
+    private void getAllKurir(final String city, final String prov)
     {
-        adapter_spinner_shipment = new Adapter_spinner_shipment(FormLensSummaryActivity.this, shipmentList);
+//        adapter_spinner_shipment = new Adapter_spinner_shipment(FormLensSummaryActivity.this, shipmentList);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ALLDATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -961,23 +1537,51 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                        String kurir = jsonObject.getString("kurir");
-                        String icon  = jsonObject.getString("icon");
-                        String price = jsonObject.getString("price");
+                        String id       = jsonObject.getString("idShip");
+                        String kurir    = jsonObject.getString("kurir");
+                        String service  = jsonObject.getString("type");
+                        String icon     = jsonObject.getString("icon");
+                        String city     = jsonObject.getString("city");
+                        String province = jsonObject.getString("province");
+                        String price    = jsonObject.getString("price");
+                        String estimasi = jsonObject.getString("estimasi");
 
                         Data_spin_shipment data_spin_shipment = new Data_spin_shipment();
+                        data_spin_shipment.setId(Integer.valueOf(id));
                         data_spin_shipment.setKurir(kurir);
+                        data_spin_shipment.setService(service);
                         data_spin_shipment.setIcon(icon);
                         data_spin_shipment.setPrice(price);
+                        data_spin_shipment.setCity(city);
+                        data_spin_shipment.setProvince(province);
+                        data_spin_shipment.setEstimasi(estimasi);
 
                         shipmentList.add(data_spin_shipment);
                     }
+
+                    shipPrice   = shipmentList.get(0).getPrice();
+                    shipId      = String.valueOf(shipmentList.get(0).getId());
+                    shipCourier = shipmentList.get(0).getKurir();
+                    shipService = shipmentList.get(0).getService();
+                    shipPrice   = shipmentList.get(0).getPrice();
+
+                    String price = CurencyFormat(shipPrice.toString());
+
+                    Log.d("Callback Price", "Shipment : " + shipPrice);
+
+                    Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipPrice);
+                    addTemp = CurencyFormat(addNew.toString());
+                    txtPriceShipping.setText(String.valueOf(price));
+                    txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                    adapterCourierService.notifyDataSetChanged();
+                    recyclerCourier.setAdapter(adapterCourierService);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                adapter_spinner_shipment.notifyDataSetChanged();
-                spinShipment.setAdapter(adapter_spinner_shipment);
+//                adapter_spinner_shipment.notifyDataSetChanged();
+//                spinShipment.setAdapter(adapter_spinner_shipment);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -989,6 +1593,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("city", city);
+                hashMap.put("province", prov);
                 return hashMap;
             }
         };
@@ -1027,6 +1632,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         cityOptic = bundle.getString("city_info");
         Integer f = bundle.getInt("item_weight");
         String h  = bundle.getString("flag_pasang");
+        opticFlag = bundle.getString("optic_flag");
 
         Float g   = bundle.getFloat("total_price");
         opticUsername = bundle.getString("username_info");
@@ -1034,6 +1640,41 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         orderNumber   = bundle.getString("order_number");
         patientName   = bundle.getString("patient_name");
         idParty       = bundle.getString("id_party");
+        phoneNumber   = bundle.getString("phone_number");
+        note          = bundle.getString("note");
+        divName       = bundle.getString("prodDivType");
+        lenstype      = bundle.getString("lenstype");
+        lensdesc      = bundle.getString("lensdesc");
+        prod_attr_valR= bundle.getString("prod_attr_valR");
+        prod_attr_valL= bundle.getString("prod_attr_valL");
+
+        sphR          = bundle.getString("sphR");
+        sphL          = bundle.getString("sphL");
+        cylR          = bundle.getString("cylR");
+        cylL          = bundle.getString("cylL");
+        axsR          = bundle.getString("axsR");
+        axsL          = bundle.getString("axsL");
+        addR          = bundle.getString("addR");
+        addL          = bundle.getString("addL");
+        coatCode      = bundle.getString("coatCode");
+        coatDesc      = bundle.getString("coatDesc");
+        tintCode      = bundle.getString("tintCode");
+        tintDesc      = bundle.getString("tintDesc");
+        corridor      = bundle.getString("corridor");
+        mpdR          = bundle.getString("mpdR");
+        mpdL          = bundle.getString("mpdL");
+        pv            = bundle.getString("pv");
+        wrap          = bundle.getString("wrap");
+        panto         = bundle.getString("panto");
+        vd            = bundle.getString("vd");
+        facetInfo     = bundle.getString("facetInfo");
+        frameModel    = bundle.getString("frameModel");
+        dbl           = bundle.getString("dbl");
+        hor           = bundle.getString("hor");
+        ver           = bundle.getString("ver");
+        frameCode     = bundle.getString("frameCode");
+        categoryLens  = bundle.getString("categoryLens");
+
 
         hargaLensa = CurencyFormat(a.toString());
         deskripsiLensa = b;
@@ -1052,34 +1693,108 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         itemWeight = f.toString();
 
         //AREA R
+        itemIdR     = bundle.getString("itemid_R");
         itemCodeR   = bundle.getString("itemcode_R");
         descR       = bundle.getString("description_R");
         powerR      = bundle.getString("power_R");
         uom         = "PCS";
         qtyR        = bundle.getString("qty_R");
-        Integer pr  = bundle.getInt("itemprice_R");
+
+        if (qtyR == null)
+        {
+            qtyR = "0";
+        }
+
+        if (itemIdR == null)
+        {
+            itemIdR = "0";
+        }
+
+        if (itemCodeR == null)
+        {
+            itemCodeR = "";
+        }
+
+        if (descR == null)
+        {
+            descR = "";
+        }
+
+        if (powerR == null)
+        {
+            powerR = "";
+        }
+
+        if (uom == null)
+        {
+            uom = "";
+        }
+
+        if (qtyR == null)
+        {
+            qtyR = "";
+        }
+
+        pr          = bundle.getInt("itemprice_R");
         priceR      = CurencyFormat(pr.toString());
-        Integer ptr = bundle.getInt("itemtotal_R");
+        ptr         = bundle.getInt("itemtotal_R");
         totalPriceR = CurencyFormat(ptr.toString());
         marginR     = bundle.getString("margin_lens");
         extraMarginR= bundle.getString("extramargin_lens");
 
         //AREA L
+        itemIdL     = bundle.getString("itemid_L");
         itemCodeL   = bundle.getString("itemcode_L");
         descL       = bundle.getString("description_L");
         powerL      = bundle.getString("power_L");
         uom         = "PCS";
         qtyL        = bundle.getString("qty_L");
-        Integer pl  = bundle.getInt("itemprice_L");
+
+        if (qtyL == null)
+        {
+            qtyL = "0";
+        }
+
+        if (itemIdL == null)
+        {
+            itemIdL = "0";
+        }
+
+        if (itemCodeL == null)
+        {
+            itemCodeL = "";
+        }
+
+        if (descL == null)
+        {
+            descL = "";
+        }
+
+        if (powerL == null)
+        {
+            powerL = "";
+        }
+
+        if (uom == null)
+        {
+            uom = "";
+        }
+
+        if (qtyL == null)
+        {
+            qtyL = "";
+        }
+
+        pl          = bundle.getInt("itemprice_L");
         priceL      = CurencyFormat(pl.toString());
-        Integer ptl = bundle.getInt("itemtotal_L");
+        ptl         = bundle.getInt("itemtotal_L");
         totalPriceL = CurencyFormat(ptl.toString());
         marginL     = bundle.getString("margin_lens");
         extraMarginL= bundle.getString("extramargin_lens");
 
         //Area diskon
         discountItem= bundle.getString("description_diskon");
-        Float disR  = bundle.getFloat("discount_r");
+        disR        = bundle.getFloat("discount_r");
         discountR   = CurencyFormat(disR.toString());
         if (discountR.equals(",00") || discountR.equals(",00"))
         {
@@ -1088,7 +1803,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         else {
             discountR = "-" + discountR;
         }
-        Float disL  = bundle.getFloat("discount_l");
+        disL        = bundle.getFloat("discount_l");
         discountL   = CurencyFormat(disL.toString());
         if (discountL.equals(",00") || discountL.equals(",00"))
         {
@@ -1114,7 +1829,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         itemTintingCode     = bundle.getString("itemcode_tinting");
         tintingDescription  = bundle.getString("description_tinting");
         tintingqty          = bundle.getString("qty_tinting");
-        Integer tintp       = bundle.getInt("price_tinting");
+        tintp               = bundle.getInt("price_tinting");
         tintingPrice        = CurencyFormat(tintp.toString());
         Integer tintt       = bundle.getInt("total_tinting");
         tintingTotal        = CurencyFormat(tintt.toString());
@@ -1147,7 +1862,38 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             txtSide.setText("R");
         }
 
+        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+        {
+            if (itemIdR != null)
+            {
+                getSideRXR(itemIdR);
+            }
+
+            if (itemIdL != null)
+            {
+                getSideRXL(itemIdL);
+            }
+        }
+        else
+        {
+            if (itemIdR != null)
+            {
+                getSideSTOCKR(itemIdR);
+            }
+
+            if (itemIdL != null)
+            {
+                getSideSTOCKL(itemIdL);
+            }
+        }
+
+        Toasty.info(getApplicationContext(), "Category : " + categoryLens, Toast.LENGTH_SHORT).show();
+
         getLensInformation();
+//        getInfoLensR(itemCodeR);
+//        getInfoLensL(itemCodeL);
+        getDiscountItemR(prod_attr_valR, opticUsername);
+        getDiscountItemL(prod_attr_valL, opticUsername);
     }
 
     private void getLensInformation()
@@ -1545,5 +2291,491 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void checkMember(final String opticUsername)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKMEMBER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    memberFlag = object.getString("memberFlag");
+                    opticName  = object.getString("cust_name");
+                    opticAddress = object.getString("address1");
+                    province   = object.getString("province");
+
+
+                    Log.d("MEMBER FLAG ", memberFlag);
+
+                    if (memberFlag.contentEquals("1"))
+                    {
+                        cardPayment.setVisibility(View.VISIBLE);
+
+                        btnCheckout.setBackgroundColor(Color.LTGRAY);
+                        btnCheckout.setTextColor(Color.BLACK);
+                        btnCheckout.setEnabled(false);
+                    }
+                    else
+                    {
+                        cardPayment.setVisibility(View.GONE);
+
+                        btnCheckout.setBackgroundColor(getResources().getColor(R.color.colorFirst));
+                        btnCheckout.setTextColor(Color.WHITE);
+                        btnCheckout.setEnabled(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("CHECK MEMBER ERROR", error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("username", opticUsername);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getSideRXR(final String itemId)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETSIDERX, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    sideR   = object.getString("side");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error != null)
+                {
+                    Log.d("ERROR INFO LENS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("itemId", itemId);
+                return hashmap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getSideRXL(final String itemId)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETSIDERX, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    sideL   = object.getString("side");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error != null)
+                {
+                    Log.d("ERROR INFO LENS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("itemId", itemId);
+                return hashmap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getSideSTOCKR(final String itemId)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETSIDESTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    sideR   = object.getString("side");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error != null)
+                {
+                    Log.d("ERROR INFO LENS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("itemId", itemId);
+                return hashmap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getSideSTOCKL(final String itemId)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETSIDESTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    sideL   = object.getString("side");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error != null)
+                {
+                    Log.d("ERROR INFO LENS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("itemId", itemId);
+                return hashmap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertLensOrderHeader(final Data_lensorderweb header)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTLENSORDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
+
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("INSERT LENSORDER WEB", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+
+                hashMap.put("orderNumber", header.getOrderNumber());
+                hashMap.put("customerId", String.valueOf(header.getCustomerId()));
+                hashMap.put("opticName", header.getOpticName());
+                hashMap.put("opticAddress", header.getOpticAddress());
+                hashMap.put("opticCity", header.getOpticCity());
+                hashMap.put("patientName", header.getPatientName());
+                hashMap.put("phoneNumber", header.getPhoneNumber());
+                hashMap.put("note", header.getNote());
+                hashMap.put("prodDivType", header.getProdDivType());
+                hashMap.put("idLensa", header.getIdLensa());
+                hashMap.put("description", header.getDescription());
+                hashMap.put("sphR", header.getSphR());
+                hashMap.put("sphL", header.getSphL());
+                hashMap.put("cylR", header.getCylR());
+                hashMap.put("cylL", header.getCylL());
+                hashMap.put("axsR", header.getAxsR());
+                hashMap.put("axsL", header.getAxsL());
+                hashMap.put("addR", header.getAddR());
+                hashMap.put("addL", header.getAddL());
+                hashMap.put("prisR", header.getPrisR());
+                hashMap.put("prisL", header.getPrisL());
+                hashMap.put("coatCode", header.getCoatCode());
+                hashMap.put("coatDesc", header.getCoatDesc());
+                hashMap.put("tintCode", header.getTintCode());
+                hashMap.put("tintDesc", header.getTintDesc());
+                hashMap.put("corridor", header.getCorridor());
+                hashMap.put("mpdL", header.getMpdL());
+                hashMap.put("mpdR", header.getMpdR());
+                hashMap.put("pv", header.getPv());
+                hashMap.put("wrap", header.getWrap());
+                hashMap.put("panto", header.getPanto());
+                hashMap.put("vd", header.getVd());
+                hashMap.put("facetInfo", header.getFacetInfo());
+                hashMap.put("frameModel", header.getFrameModel());
+                hashMap.put("dbl", header.getDbl());
+                hashMap.put("hor", header.getHor());
+                hashMap.put("ver", header.getVer());
+                hashMap.put("frameCode", header.getFrameCode());
+                hashMap.put("shippingId", String.valueOf(header.getShippingId()));
+                hashMap.put("shippingCourier", header.getShippingCourier());
+                hashMap.put("shippingCity", header.getShippingCity());
+                hashMap.put("shippingProv", header.getShippingProvince());
+                hashMap.put("shippingService", header.getShippingService());
+                hashMap.put("shippingPrice", String.valueOf(header.getShippingPrice()));
+                hashMap.put("facetPrice", String.valueOf(header.getFacetPrice()));
+                hashMap.put("grandTotal", String.valueOf(header.getGrandTotal()));
+                hashMap.put("cashCarry", header.getCash_carry());
+
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertLensOrderItem(final Data_lensorderweb_item item)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTLENSITEM, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
+
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ITEM ERROR ", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", item.getOrderNumber());
+                hashMap.put("itemId", item.getItemId());
+                hashMap.put("itemCode", item.getItemCode());
+                hashMap.put("description", item.getDescription());
+                hashMap.put("rl", item.getRl());
+                hashMap.put("qty", String.valueOf(item.getQty()));
+                hashMap.put("unitStandardPrice", String.valueOf(item.getUnitStandardPrice()));
+                hashMap.put("unitStandardWeight", String.valueOf(item.getUnitStandardWeight()));
+                hashMap.put("discountName", item.getDiscountName());
+                hashMap.put("discount", String.valueOf(item.getDiscount()));
+                hashMap.put("totalWeight", String.valueOf(item.getTotalWeight()));
+                hashMap.put("tintingPrice", String.valueOf(item.getTintingPrice()));
+                hashMap.put("amount", String.valueOf(item.getAmount()));
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertStatusEntry(final String orderNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTORDERENTRY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+//                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
+//
+//                        finish();
+
+                        Log.d("SUCCESS STATUS ENTRY", "success");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getDiscountItemR(final String prodAttrR, final String custNumber)
+    {
+        Config config = new Config();
+        String URL = config.Ip_address + config.discount_item_getDiscount;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    discOperandR    = jsonObject.getString("operand");
+                    String listLine = jsonObject.getString("list_line");
+                    String name     = jsonObject.getString("name");
+                    discNameR       = name + "." + listLine;
+                    //Toasty.success(getApplicationContext(), "Diskon = " + oprDiscount + "%", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                    discOperandR = "0";
+                    discNameR    = "";
+//                    Toasty.error(getApplicationContext(), oprDiscount.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("prod_attr", prodAttrR);
+                hashMap.put("customer_number", custNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getDiscountItemL(final String prodAttrL, final String custNumber)
+    {
+        Config config = new Config();
+        String URL = config.Ip_address + config.discount_item_getDiscount;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    discOperandL    = jsonObject.getString("operand");
+                    String listLine = jsonObject.getString("list_line");
+                    String name     = jsonObject.getString("name");
+                    discNameL       = name + "." + listLine;
+                    //Toasty.success(getApplicationContext(), "Diskon = " + oprDiscount + "%", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                    discOperandL = "0";
+                    discNameL    = "";
+//                    Toasty.error(getApplicationContext(), oprDiscount.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("prod_attr", prodAttrL);
+                hashMap.put("customer_number", custNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void potongStock(final String itemId, final String qty)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_UPDATESTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("Success"))
+                    {
+                        Log.d("Update Stock", itemId + " Berhasil Dipotong sisa : " + qty);
+                    }
+                    else if (jsonObject.names().get(0).equals("error"))
+                    {
+                        Log.d("Update Stock", itemId + " GAGAL DIUBAH");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("Error Potong Stok", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("item_id", itemId);
+                hashMap.put("qty", qty);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

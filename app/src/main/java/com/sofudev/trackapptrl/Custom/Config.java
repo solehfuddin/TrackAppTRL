@@ -95,6 +95,9 @@ public class Config {
     public String orderlens_get_coating           = "index.php/Android_lensorder_new/getCoating";
     public String orderlens_get_product           = "index.php/Android_lensorder_new/getProduct";
     public String orderlens_get_lensdiv           = "index.php/Android_lensorder_new/getLensdiv";
+    public String orderlens_get_detailaccount     = "index.php/Android_lensorder_new/getDetailAccount";
+    public String orderlens_check_reminder        = "index.php/Android_lensorder_new/checkReminder";
+    public String orderlens_send_reminder         = "index.php/Android_lensorder_new/reminderPaymentByMail";
 
     /* Area order dashboard information panel*/
     public String orderdashboard_informationpanel = "index.php/Android_orderdashboard/showInformationPanelStatus";
@@ -109,9 +112,12 @@ public class Config {
     public String frame_showdetail_product        = "index.php/android_frameproduct/showDetailProduct";
     public String frame_showdetail_color          = "index.php/Android_frameproduct/showDetailColor";
     public String frame_generate_orderId          = "index.php/Android_frameorder/generateId";
+    public String frame_getoracle_id              = "index.php/Android_frameorder/getOracleId";
     public String frame_insert_header             = "index.php/android_frameorder/insertFrameHeader";
     public String frame_insert_statusnonpayment   = "index.php/android_frameorder/insertStatusNonPayment";
     public String frame_insert_lineitem           = "index.php/android_frameorder/insertLineItem";
+//    public String frame_check_stockframe          = "index.php/android_frameorder/checkStockFrame";
+    public String frame_update_stockframe         = "index.php/android_frameorder/updateStockFrame";
     public String frame_getall_frame              = "index.php/Android_orderhistoryframe/getAllFrame";
     public String frame_getframe_byrange          = "index.php/Android_orderhistoryframe/getAllFrameByRange";
     public String frame_getlineitem_frame         = "index.php/Android_orderhistoryframe/getDetailFrame";
@@ -136,6 +142,7 @@ public class Config {
     /* Area Facet Item */
     public String facet_item_getFacetItem         = "index.php/Android_facetitem/paymentGetItemFacet";
     public String facet_item_getFacetPrice        = "index.php/Android_facetitem/paymentGetPriceFacet";
+    public String facet_item_getLensFacet         = "index.php/Android_facetitem/paymentGetLensFacet";
 
     /* Area Tinting Item */
     public String tint_item_getOtherTint          = "index.php/Android_tintitem/paymentGetOtherTintPrice";
@@ -146,6 +153,7 @@ public class Config {
     public String spinner_shipment_getAllProvince = "index.php/Android_shipment/getProvince";
     public String spinner_shipment_getCity        = "index.php/Android_shipment/getCity";
     public String spinner_shipment_updateCity     = "index.php/Android_shipment/updateAddress";
+    public String shipment_checkMember            = "index.php/Android_shipment/check_member";
 
     /* Area Lens Summary */
     public String lens_summary_getLensInfo        = "index.php/Android_lenssummary/getLensInformation";
@@ -189,7 +197,7 @@ public class Config {
     public String payment_method_postBilling      = "http://www.timurrayalab.com/webapi/callPACPayment.php";
 //    public String payment_method_creditCard       = "http://ortu.izikita.net/soleh/testingccnew.php";
     public String payment_method_creditCard       = "http://www.timurrayalab.com/webapi/testingccnew.php";
-    public String payment_method_autoMoveOrder    = "index.php/Android_payment/moveSuccessOrder";
+    public String payment_method_autoMoveOrder    = "index.php/Android_payment/moveSuccessOrder1";
     public String payment_method_updateStatus     = "index.php/Android_payment/moveSuccessOrder1";
     public String payment_method_cancelBilling    = "index.php/Android_payment/cancelpayment/";
 //    public String payment_method_cancelBilling    = "index.php/Android_payment/cancelpayment/";
@@ -221,6 +229,7 @@ public class Config {
     public String show_cyl                        = "index.php/Android_lensstock/showPowerCyl";
     public String show_add                        = "index.php/Android_lensstock/showPowerAdd";
     public String show_price                      = "index.php/Android_lensstock/showPrice";
+    public String update_stock_lens_partai        = "index.php/Android_lensstock/updateStockLens";
 
     /* AREA LENS STOCK PARTAI */
     public String orderpartai_generateId          = "index.php/Android_lensstockorder/generateId";
@@ -235,4 +244,22 @@ public class Config {
     public String orderpartai_showpayment_va      = "index.php/Android_orderhistorypartai/showInfoPaymentVA";
     public String orderpartai_showpayment_cc      = "index.php/Android_orderhistorypartai/showInfoPaymentCC";
     public String orderpartai_showpayment_loan    = "index.php/Android_orderhistorypartai/showInfoPaymentLoan";
+
+    /* AREA INTEGRASI LENS DENGAN WEB ECOMMERCE*/
+    public String orderlens_insert_lensorder      = "index.php/Android_lensorder_web/insertLensorder";
+    public String orderlens_insert_lensorderitem  = "index.php/Android_lensorder_web/insertLensorderItem";
+    public String orderlens_insert_statusentry    = "index.php/Android_lensorder_web/insertStatusEntry";
+    public String orderlens_get_orderid           = "index.php/Android_lensorder_web/getOrderId";
+    public String orderlens_get_infolens          = "index.php/Android_lensorder_web/getInfoLens";
+    public String orderlens_get_sidelensrx        = "index.php/Android_lensorder_web/getSideLensRX";
+    public String orderlens_get_sidelensstock     = "index.php/Android_lensorder_web/getSideLensStock";
+    public String orderlens_check_stock           = "index.php/Android_lensorder_web/checkStockLens";
+    public String orderlens_update_stock          = "index.php/Android_lensorder_web/updateStockLens";
+
+    /* AREA INTEGRASI HISTORY LENS DENGAN WEB ECOMMERCE */
+    public String lenshistory_getOrderTodayWeb    = "index.php/Android_orderhistory/getOrderTodayWeb";
+    public String lenshistory_getOrderByPatient   = "index.php/Android_orderhistory/getOrderByPatient";
+    public String lenshistory_getOrderByRange     = "index.php/Android_orderhistory/getOrderByDate";
+    public String lenshistory_checkpayment_ornot  = "index.php/Android_orderhistory/checkPaymentOrNot";
+    public String lenshistory_chooselens          = "index.php/Android_orderhistory/chooseOrderLens";
 }

@@ -15,6 +15,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -117,8 +118,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     String ACTIVITY_TAG;
 
     List<String> listSortBy = new ArrayList<>();
-    List<Integer> listBrand = new ArrayList<>();
-    List<Integer> listColor = new ArrayList<>();
+//    ArrayList<String> itemBrand  = new ArrayList<>();
+    String itemBrand, outputSelected;
+    List<String> listBrand = new ArrayList<>();
+    List<String> listColor = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -421,14 +424,22 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
         recyclerBrand.setAdapter(adapter_brandfilter);
 
-        listBrand.clear();
-        listColor.clear();
+//        listBrand.clear();
+//        listColor.clear();
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Clear to default
+                valueMin = "0";
+                valueMax = "7000000";
+
+                chooseBrand = null;
+
+                Log.d("RESETTER", "BACK TO DEFAULT");
+
                 itemBestProduct.clear();
-//                valueMin = removeRupiah(txtRangeMin.getText().toString());
+
                 valueMax = removeRupiah(txtRangeMax.getText().toString());
 
                 Object[] allBrand = listBrand.toArray();
@@ -437,33 +448,38 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 //Toasty.info(getContext(), "Pos " + Arrays.toString(allBrand), Toast.LENGTH_SHORT).show();
 
                 filterPrice = "AND price.`price_list_item` BETWEEN " + 0 + " AND " + valueMax;
-                if (allBrand.length > 0)
+                if (filterBrand != null)
                 {
-                    chooseBrand = Arrays.toString(allBrand).replace('[', ' ').replace(']', ' ').trim();
-                    filterBrand = "AND item.`category_item` IN ( " + chooseBrand + ")";
+//                    chooseBrand = Arrays.toString(allBrand).replace('[', ' ').replace(']', ' ').trim();
+//                    filterBrand = "AND category.`id` IN ( " + chooseBrand + ")";
 
 //                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
 //                    Log.d("READ THIS : ", filterPrice + " " + filterBrand);
+                    chooseBrand = filterBrand.replace("AND category.`id` IN (", "").replace(")","");
+                    Log.d("READ THIS : Baca nih ", chooseBrand);
                 }
                 else
                 {
                     filterBrand = "";
                 }
 
-                if (allColor.length > 0)
+                if (filterColor != null)
                 {
-                    chooseColor = Arrays.toString(allColor).replace('[', ' ').replace(']', ' ').trim();
-                    filterColor = "AND item.`color_type` IN (" + chooseColor + ")";
+//                    chooseColor = Arrays.toString(allColor).replace('[', ' ').replace(']', ' ').trim();
+//                    filterColor = "AND item.`color_type` IN (" + chooseColor + ")";
 
 //                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
 //                    Log.d("READ THIS : ", filterPrice + " " + filterBrand + " " + filterColor);
+
+                    chooseColor = filterColor.replace("AND item.`color_type` IN (", "").replace(")","");
+                    Log.d("READ THIS : Baca juga ", chooseColor);
                 }
                 else
                 {
                     filterColor = "";
+//                    chooseColor = "";
                 }
 
-//                Toasty.info(getContext(), filterPrice, Toast.LENGTH_SHORT).show();
                 from = 0;
                 limit = 8;
 
@@ -715,6 +731,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         String image    = jsonObject.getString("frame_image");
                         String price    = jsonObject.getString("frame_price");
                         String discperc = jsonObject.getString("frame_disc");
+                        String brandName= jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
                         String tempPrice = CurencyFormat(price);
                         totalData= jsonObject.getString("total_output");
 
@@ -723,7 +742,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         data.setProduct_name(title);
                         data.setProduct_image(image);
                         data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc + "%");
+                        data.setProduct_discpercent(discperc);
+                        data.setProduct_brand(brandName);
+                        data.setProduct_qty(frameQty);
+                        data.setProduct_weight(frameWeight);
 
                         itemBestProduct.add(data);
                     }
@@ -776,6 +798,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         String image    = jsonObject.getString("frame_image");
                         String price    = jsonObject.getString("frame_price");
                         String discperc = jsonObject.getString("frame_disc");
+                        String brandName= jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
                         String tempPrice = CurencyFormat(price);
 
                         Data_fragment_bestproduct data = new Data_fragment_bestproduct();
@@ -784,6 +809,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         data.setProduct_image(image);
                         data.setProduct_realprice("Rp " + tempPrice);
                         data.setProduct_discpercent(discperc);
+                        data.setProduct_brand(brandName);
+                        data.setProduct_qty(frameQty);
+                        data.setProduct_weight(frameWeight);
 
                         itemBestProduct.add(data);
                     }
@@ -850,6 +878,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                             String price = jsonObject.getString("frame_price");
                             String discperc = jsonObject.getString("frame_disc");
                             String tempPrice = CurencyFormat(price);
+                            String brandName = jsonObject.getString("frame_brand");
+                            String frameQty     = jsonObject.getString("frame_qty");
+                            String frameWeight  = jsonObject.getString("frame_weight");
                             totalData = jsonObject.getString("total_output");
 
                             Data_fragment_bestproduct data = new Data_fragment_bestproduct();
@@ -857,7 +888,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                             data.setProduct_name(title);
                             data.setProduct_image(image);
                             data.setProduct_realprice("Rp " + tempPrice);
-                            data.setProduct_discpercent(discperc + " %");
+                            data.setProduct_discpercent(discperc);
+                            data.setProduct_brand(brandName);
+                            data.setProduct_qty(frameQty);
+                            data.setProduct_weight(frameWeight);
 
                             itemBestProduct.add(data);
 
@@ -920,6 +954,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         String image    = jsonObject.getString("frame_image");
                         String price    = jsonObject.getString("frame_price");
                         String discperc = jsonObject.getString("frame_disc");
+                        String brandName= jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
                         String tempPrice = CurencyFormat(price);
 
                         Data_fragment_bestproduct data = new Data_fragment_bestproduct();
@@ -927,7 +964,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         data.setProduct_name(title);
                         data.setProduct_image(image);
                         data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc + " %");
+                        data.setProduct_discpercent(discperc);
+                        data.setProduct_brand(brandName);
+                        data.setProduct_qty(frameQty);
+                        data.setProduct_weight(frameWeight);
 
                         itemBestProduct.add(data);
                     }
@@ -1071,6 +1111,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         String image    = jsonObject.getString("frame_image");
                         String price    = jsonObject.getString("frame_price");
                         String discperc = jsonObject.getString("frame_disc");
+                        String brandName= jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
                         String tempPrice = CurencyFormat(price);
                         totalData= jsonObject.getString("total_output");
 
@@ -1079,7 +1122,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         data.setProduct_name(title);
                         data.setProduct_image(image);
                         data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc + " %");
+                        data.setProduct_discpercent(discperc);
+                        data.setProduct_brand(brandName);
+                        data.setProduct_qty(frameQty);
+                        data.setProduct_weight(frameWeight);
 
                         itemBestProduct.add(data);
                     }
@@ -1121,17 +1167,34 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
     CustomAdapterFrameBrand customAdapterFrameFragment = new CustomAdapterFrameBrand() {
         @Override
-        public void response(int position, String title) {
-//            Toasty.info(getContext(), "Pos " + position + " title " + title, Toast.LENGTH_SHORT).show();
-            //listBrand.add(position);
-            listBrand.add(position);
+        public void response(String position, String title) {
+            if (title.length() > 0)
+            {
+                filterBrand = position;
+            }
+            else
+            {
+                filterBrand = "";
+            }
+//            filterBrand = "AND category.`id` IN ( " + outputSelected + ")";
+
+//            Log.d("Output Selected : ", outputSelected);
         }
     };
 
     CustomAdapterFrameColor customAdapterFrameColor = new CustomAdapterFrameColor() {
         @Override
-        public void response(int position, String title) {
-            listColor.add(position);
+        public void response(String position, String title) {
+//            listColor.add(position);
+
+            if (title.length() > 0)
+            {
+                filterColor = position;
+            }
+            else
+            {
+                filterColor = "";
+            }
         }
     };
 }

@@ -43,6 +43,8 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
         ModelLensPartai data = item.get(position);
 
         int discount = data.getProductDisc();
+        int weight   = data.getProductWeight();
+        int stock    = data.getProductStock();
 
         Picasso.with(context).load(data.getProductImage()).resize(100, 100).into(holder.imgItem);
         holder.txtId.setText(String.valueOf(data.getProductId()));
@@ -55,6 +57,35 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
         holder.txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductDiscPrice())));
         holder.txtPriceDisc.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         holder.txtPriceDisc.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductPrice())));
+
+        if (stock < 0)
+        {
+//            holder.txtNotFound.setVisibility(View.GONE);
+
+//            holder.txtPriceDisc.setVisibility(View.VISIBLE);
+//            holder.txtPrice.setVisibility(View.VISIBLE);
+//            holder.txtSide.setVisibility(View.VISIBLE);
+//            holder.btnPlus.setVisibility(View.VISIBLE);
+//            holder.txtQty.setVisibility(View.VISIBLE);
+//            holder.btnMinus.setVisibility(View.VISIBLE);
+//            holder.lblQty.setVisibility(View.VISIBLE);
+
+            holder.txtStockKurang.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+//            holder.txtNotFound.setVisibility(View.VISIBLE);
+
+//            holder.txtPriceDisc.setVisibility(View.GONE);
+//            holder.txtPrice.setVisibility(View.GONE);
+//            holder.txtSide.setVisibility(View.GONE);
+//            holder.btnPlus.setVisibility(View.GONE);
+//            holder.txtQty.setVisibility(View.GONE);
+//            holder.btnMinus.setVisibility(View.GONE);
+//            holder.lblQty.setVisibility(View.GONE);
+
+            holder.txtStockKurang.setVisibility(View.INVISIBLE);
+        }
 
         if (discount > 0)
         {
@@ -86,8 +117,8 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgItem, btnMinus, btnPlus;
-        UniversalFontTextView txtId, txtName, txtSph, txtCyl, txtAdd, txtQty, txtSide, txtPrice, txtDisc,
-                txtPriceDisc, btnRemove;
+        UniversalFontTextView txtId, txtName, txtSph, txtCyl, txtAdd, txtQty, txtSide, txtPrice, txtDisc, txtNotFound,
+                txtStockKurang, txtPriceDisc, btnRemove, lblQty;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -100,11 +131,14 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
             txtSph      = itemView.findViewById(R.id.item_partaiproduct_txtSph);
             txtCyl      = itemView.findViewById(R.id.item_partaiproduct_txtCyl);
             txtAdd      = itemView.findViewById(R.id.item_partaiproduct_txtAdd);
+            lblQty      = itemView.findViewById(R.id.item_partaiproduct_lblQty);
             txtQty      = itemView.findViewById(R.id.item_partaiproduct_txtQty);
             txtSide     = itemView.findViewById(R.id.item_partaiproduct_txtSide);
             txtPrice    = itemView.findViewById(R.id.item_partaiproduct_txtPrice);
             txtDisc     = itemView.findViewById(R.id.item_partaiproduct_txtDisc);
             txtPriceDisc= itemView.findViewById(R.id.item_partaiproduct_txtPriceDisc);
+            txtNotFound = itemView.findViewById(R.id.item_partaiproduct_lblItemNotFound);
+            txtStockKurang = itemView.findViewById(R.id.item_partaiproduct_lblStockKurang);
             btnRemove   = itemView.findViewById(R.id.item_partaiproduct_btnRemove);
 
             btnRemove.setOnClickListener(this);

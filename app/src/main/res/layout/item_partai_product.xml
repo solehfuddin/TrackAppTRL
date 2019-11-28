@@ -184,6 +184,7 @@
                     app:scale_height="22" />
 
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_lblQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -191,6 +192,7 @@
                     android:maxLines="1"
                     android:text="Quantity :"
                     android:textSize="13sp"
+                    android:visibility="visible"
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="15"
                     app:scale_left="130"
@@ -204,6 +206,7 @@
                     android:layout_height="25dp"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_remove_circle_outline"
+                    android:visibility="visible"
                     app:scale_top="74"
                     app:scale_left="220"
                     app:scale_width="28"
@@ -217,6 +220,7 @@
                     android:layout_gravity="center"
                     android:textAlignment="center"
                     android:layout_marginLeft="5dp"
+                    android:visibility="visible"
                     android:maxLines="1"
                     android:text="10"
                     android:textSize="13sp"
@@ -233,6 +237,7 @@
                     android:layout_height="25dp"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_add_circle_outline"
+                    android:visibility="visible"
                     app:scale_top="75"
                     app:scale_left="305"
                     app:scale_width="28"
@@ -248,6 +253,7 @@
                     android:background="@color/colorFirst"
                     android:text="R"
                     android:textColor="@color/white"
+                    android:visibility="visible"
                     android:textSize="13sp"
                     android:textAlignment="center"
                     app:customFont="UbuntuMedium.ttf"
@@ -266,6 +272,7 @@
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="Rp. 10.104.000"
+                    android:visibility="visible"
                     android:layout_marginRight="5dp"
                     android:textColor="@color/colorRed"
                     app:customFont="UbuntuMedium.ttf"
@@ -284,12 +291,35 @@
                     android:maxLines="1"
                     android:textSize="11dp"
                     android:text="Rp. 310.519.900"
+                    android:visibility="visible"
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="110"
                     app:scale_left="250"
                     app:scale_width="110"
                     app:scale_height="30"
                     app:scale_textsize="14"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_lblItemNotFound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:textSize="11dp"
+                    android:text=" Item ini tidak tersedia"
+                    android:drawableLeft="@drawable/ic_info_white"
+                    android:visibility="gone"
+                    android:background="#F44336"
+                    android:textColor="@color/white"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    app:scale_top="85"
+                    app:scale_left="158"
+                    app:scale_width="198"
+                    app:scale_height="30"
+                    app:scale_textsize="16"/>
 
             </com.ssomai.android.scalablelayout.ScalableLayout>
 
@@ -305,7 +335,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
@@ -319,9 +349,30 @@
                 android:gravity="center_vertical"
                 android:layout_alignParentLeft="true"
                 android:maxLines="1"
+                android:layout_marginTop="6dp"
                 android:text="REMOVE"
                 android:textSize="14sp"
                 android:textColor="@color/colorRed"
+                android:textStyle="bold"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/item_partaiproduct_lblStockKurang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:drawableLeft="@drawable/ic_info_white"
+                android:layout_alignParentRight="true"
+                android:maxLines="1"
+                android:text="Stok tidak cukup"
+                android:textSize="12sp"
+                android:background="#FF9800"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:customFont="UbuntuMedium.ttf" />
         </RelativeLayout>

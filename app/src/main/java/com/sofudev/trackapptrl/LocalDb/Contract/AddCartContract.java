@@ -12,5 +12,7 @@ public class AddCartContract {
     public static final String PRODUCT_DISCOUNT = "product_discount";
     public static final String PRODUCT_NEWPRICE = "product_newprice";
     public static final String PRODUCT_NEWDISCPRICE = "product_newdiscprice";
+    public static final String PRODUCT_STOCK = "product_stock";
+    public static final String PRODUCT_WEIGHT= "product_weight";
     public static final String PRODUCT_IMG  = "product_image";
 }

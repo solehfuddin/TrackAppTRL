@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,10 +22,6 @@ import com.varunest.sparkbutton.SparkButton;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-
-/**
- * Created by sholeh on 4/30/2019.
- */
 
 public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapter_framefragment_dashboard.ViewHolder> {
     private Context context;
@@ -62,16 +59,47 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             holder.txt_brandName.setText(item.get(position).getProduct_brand());
             holder.txt_realprice.setVisibility(View.GONE);
             holder.txt_productid.setVisibility(View.GONE);
-            String discount = item.get(position).getProduct_discpercent();
+//            String discount = item.get(position).getProduct_discpercent();
+//
+//            if (discount.contentEquals("null"))
+//            {
+//                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+//            }
+//            else if (discount.contentEquals("0 %"))
+//            {
+//                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+//            }
+//            else
+//            {
+//                holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+//            }
 
-            if (discount.contentEquals("null"))
+            int discount = Integer.parseInt(item.get(position).getProduct_discpercent());
+            if (discount > 0)
             {
-                holder.txt_discpercent.setVisibility(View.GONE);
-                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+                String disc = String.valueOf(discount) + " %";
+                holder.txt_discpercent.setVisibility(View.VISIBLE);
+                holder.txt_discpercent.setText(disc);
             }
             else
             {
-                holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+            }
+
+            int qty = Integer.parseInt(item.get(position).getProduct_qty());
+
+            if (qty > 0)
+            {
+                holder.txt_available.setText("Stok Tersedia");
+                holder.txt_available.setTextColor(Color.parseColor("#45ac2d"));
+            }
+            else
+            {
+                holder.txt_available.setText("Stok Habis");
+                holder.txt_available.setTextColor(Color.parseColor("#f90606"));
             }
 
             holder.btn_wish.setVisibility(View.GONE);
@@ -128,16 +156,47 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             holder.txt_realprice.setText(item.get(position).getProduct_realprice());
             holder.txt_brandName.setText(item.get(position).getProduct_brand());
             holder.txt_productid.setVisibility(View.GONE);
-            String discount = item.get(position).getProduct_discpercent();
+//            String discount = item.get(position).getProduct_discpercent();
+//
+//            if (discount.contentEquals("null"))
+//            {
+//                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+//            }
+//            else if (discount.contentEquals("0 %"))
+//            {
+//                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+//            }
+//            else
+//            {
+//                holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+//            }
 
-            if (discount.contentEquals("null"))
+            int discount = Integer.parseInt(item.get(position).getProduct_discpercent());
+            if (discount > 0)
             {
-                holder.txt_discpercent.setVisibility(View.GONE);
-                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+                String disc = item.get(position).getProduct_discpercent() + " %";
+                holder.txt_discpercent.setVisibility(View.VISIBLE);
+                holder.txt_discpercent.setText(disc);
             }
             else
             {
-                holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+                holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+            }
+
+            int qty = Integer.parseInt(item.get(position).getProduct_qty());
+
+            if (qty > 0)
+            {
+                holder.txt_available.setText("Stok Tersedia");
+                holder.txt_available.setTextColor(Color.parseColor("#45ac2d"));
+            }
+            else
+            {
+                holder.txt_available.setText("Stok Habis");
+                holder.txt_available.setTextColor(Color.parseColor("#f90606"));
             }
 
             holder.btn_wish.setVisibility(View.GONE);
@@ -213,7 +272,7 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_product;
         UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice,
-                                txt_brandName;
+                                txt_brandName, txt_available;
         SparkButton btn_wish;
 
         public ViewHolder(@NonNull View itemView) {
@@ -225,6 +284,7 @@ public class Adapter_framefragment_dashboard extends RecyclerView.Adapter<Adapte
             txt_productname = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductname);
             txt_realprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtRealprice);
             txt_brandName   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtBrand);
+            txt_available   = itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductavailable);
 
             btn_wish        = itemView.findViewById(R.id.listitem_fragment_dashboard_btnWish);
 

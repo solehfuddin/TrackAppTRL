@@ -1,10 +1,18 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_frame_header {
-    int idParty, shippingId, shippingPrice, totalPrice;
-    String orderId, shippingName, opticCity, opticProvince, opticName, opticAddress, paymentCashCarry;
+    private int idParty, shippingId, shippingPrice, totalPrice;
+    private String orderId, shippingName, shippingService, opticCity, opticProvince, opticName, opticAddress, paymentCashCarry;
 
     public Data_frame_header() {
+    }
+
+    public String getShippingService() {
+        return shippingService;
+    }
+
+    public void setShippingService(String shippingService) {
+        this.shippingService = shippingService;
     }
 
     public int getIdParty() {

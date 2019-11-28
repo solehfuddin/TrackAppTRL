@@ -837,7 +837,7 @@ public class MainActivity extends AppCompatActivity
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String , String> hashMap = new HashMap<>();
                 hashMap.put("id_party", id);
-                hashMap.put("is_online", "1");
+                hashMap.put("is_online", "0");
                 hashMap.put("device_info", deviceInfo);
                 hashMap.put("date_time", datetime);
                 return hashMap;

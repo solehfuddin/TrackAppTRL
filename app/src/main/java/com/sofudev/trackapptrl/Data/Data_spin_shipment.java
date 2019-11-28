@@ -1,8 +1,40 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_spin_shipment {
-    int id;
-    String kurir, icon, price;
+    private int id;
+    private String kurir, service, icon, price, province, city, estimasi;
+
+    public String getEstimasi() {
+        return estimasi;
+    }
+
+    public void setEstimasi(String estimasi) {
+        this.estimasi = estimasi;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public int getId() {
         return id;

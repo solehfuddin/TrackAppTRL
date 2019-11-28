@@ -47,9 +47,29 @@ public class Adapter_add_cart extends RecyclerView.Adapter<Adapter_add_cart.View
         holder.txt_productname.setText(data.getProductName());
         holder.txt_productqty.setText(String.valueOf(data.getProductQty()));
         holder.txt_productprice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductDiscPrice())));
-        holder.txt_producdiscprice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.txt_producdiscprice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductPrice())));
-        holder.txt_productdisc.setText(String.valueOf(data.getProductDisc() + " % "));
+
+        int stock = data.getProductStock();
+        if (stock < 0)
+        {
+            holder.txt_stockkurang.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.txt_stockkurang.setVisibility(View.GONE);
+        }
+
+        int disc = data.getProductDisc();
+        if (disc > 0)
+        {
+            holder.txt_productdisc.setText(String.valueOf(data.getProductDisc() + " % "));
+            holder.txt_producdiscprice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.txt_producdiscprice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductPrice())));
+        }
+        else
+        {
+            holder.txt_productdisc.setVisibility(View.GONE);
+            holder.txt_producdiscprice.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -72,7 +92,7 @@ public class Adapter_add_cart extends RecyclerView.Adapter<Adapter_add_cart.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_product, btn_plus, btn_minus;
         UniversalFontTextView txt_productname, txt_productid, txt_productqty, txt_productprice, txt_productdisc,
-                            txt_producdiscprice, btn_remove;
+                            txt_producdiscprice, txt_stockkurang, btn_remove;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -86,6 +106,7 @@ public class Adapter_add_cart extends RecyclerView.Adapter<Adapter_add_cart.View
             txt_productprice = itemView.findViewById(R.id.item_cartproduct_txtPrice);
             txt_producdiscprice = itemView.findViewById(R.id.item_cartproduct_txtPriceDisc);
             txt_productdisc = itemView.findViewById(R.id.item_cartproduct_txtDisc);
+            txt_stockkurang = itemView.findViewById(R.id.item_cartproduct_lblStockKurang);
             btn_remove = itemView.findViewById(R.id.item_cartproduct_btnRemove);
 
             btn_remove.setOnClickListener(this);

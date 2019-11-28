@@ -3,17 +3,22 @@ package com.sofudev.trackapptrl.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.sofudev.trackapptrl.Custom.CustomAdapterFrameBrand;
 import com.sofudev.trackapptrl.Data.Data_brand_filter;
 import com.sofudev.trackapptrl.R;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class Adapter_brandfilter extends RecyclerView.Adapter<Adapter_brandfilter.ViewHolder> {
@@ -21,6 +26,8 @@ public class Adapter_brandfilter extends RecyclerView.Adapter<Adapter_brandfilte
     private List<Data_brand_filter> item;
     private CustomAdapterFrameBrand Icommunication;
     private String chooseBrand;
+
+    private ArrayList<String> checkedBrand = new ArrayList<>();
 
     public Adapter_brandfilter(Context context, List<Data_brand_filter> item, CustomAdapterFrameBrand Icommunication, String chooseBrand) {
         this.context = context;
@@ -43,7 +50,7 @@ public class Adapter_brandfilter extends RecyclerView.Adapter<Adapter_brandfilte
 
         int chooser = item.get(pos).getBrandId();
 
-        if (chooseBrand != null)
+        if (chooseBrand != null && !chooseBrand.isEmpty())
         {
             String value[] = chooseBrand.split(",");
 
@@ -53,7 +60,11 @@ public class Adapter_brandfilter extends RecyclerView.Adapter<Adapter_brandfilte
                 if (chooser == Integer.valueOf(output.trim()))
                 {
                     viewHolder.cb_brand.setChecked(true);
+
+                    checkedBrand.add(String.valueOf(chooser));
                 }
+
+//                checkedBrand.add(String.valueOf(output.trim()));
             }
         }
 
@@ -62,8 +73,33 @@ public class Adapter_brandfilter extends RecyclerView.Adapter<Adapter_brandfilte
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                 {
-                    //Toasty.info(context, item.get(pos).getBrandPrefix(), Toast.LENGTH_SHORT).show();
-                    Icommunication.response(item.get(pos).getBrandId(), item.get(pos).getBrandName());
+
+//                    Icommunication.response(item.get(pos).getBrandId(), item.get(pos).getBrandName());
+
+
+                    checkedBrand.add(String.valueOf(item.get(pos).getBrandId()));
+
+                }
+                else
+                {
+//                    checkedBrand.remove(item.get(pos).getBrandId());
+                    checkedBrand.remove(String.valueOf(item.get(pos).getBrandId()));
+                }
+
+                if (!checkedBrand.isEmpty())
+                {
+                    String output = "AND category.`id` IN ( " + checkedBrand.toString() + ")";
+
+                    output = output.replace("[","").replace("]","").trim();
+
+                    Icommunication.response(output, checkedBrand.toString());
+
+                    Toasty.info(context, output, Toast.LENGTH_SHORT).show();
+                    Log.d("SELECTED BRAND", checkedBrand.toString());
+                }
+                else
+                {
+                    Icommunication.response("", checkedBrand.toString());
                 }
             }
         });

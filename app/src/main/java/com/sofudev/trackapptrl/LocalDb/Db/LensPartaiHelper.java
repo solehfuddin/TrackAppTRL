@@ -27,6 +27,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUC
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_QTY;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_SIDE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_SPH;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_STOCK;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_WEIGHT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.TABLE_LENSPARTAI;
 
 public class LensPartaiHelper {
@@ -94,6 +96,8 @@ public class LensPartaiHelper {
                 lensPartai.setProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
                 lensPartai.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
                 lensPartai.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
+                lensPartai.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
+                lensPartai.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 lensPartai.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
 
                 arrayList.add(lensPartai);
@@ -128,6 +132,8 @@ public class LensPartaiHelper {
                 item.setProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
                 item.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
                 item.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
+                item.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
+                item.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
             }
 
@@ -153,6 +159,8 @@ public class LensPartaiHelper {
         args.put(PRODUCT_DISCPRICE, lensPartai.getProductDiscPrice());
         args.put(PRODUCT_NEWPRICE, lensPartai.getNewProductPrice());
         args.put(PRODUCT_NEWDISCPRICE, lensPartai.getNewProductDiscPrice());
+        args.put(PRODUCT_STOCK, lensPartai.getProductStock());
+        args.put(PRODUCT_WEIGHT, lensPartai.getProductWeight());
         args.put(PRODUCT_IMG, lensPartai.getProductImage());
 
         return database.insert(DATABASE_TABLE, null, args);

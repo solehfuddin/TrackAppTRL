@@ -746,6 +746,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", username);
                         startActivity(intent);
                     }
                 } catch (JSONException e) {
@@ -795,6 +797,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", username);
                         startActivity(intent);
                     }
                 } catch (JSONException e) {
@@ -842,6 +846,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", username);
                         startActivity(intent);
                     }
                 } catch (JSONException e) {

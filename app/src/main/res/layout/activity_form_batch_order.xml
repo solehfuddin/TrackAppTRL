@@ -348,13 +348,50 @@
                 android:layout_height="wrap_content"
                 android:visibility="visible"/>
 
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:id="@+id/form_batchorder_scalableCourier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/form_batchorder_recyclerview"
+                android:visibility="visible"
+                android:layout_marginTop="5dp"
+                app:scale_base_height="220"
+                app:scale_base_width="400">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="COURIER SERVICE"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_height="30"
+                    app:scale_textsize="18"
+                    app:scale_top="5"
+                    app:scale_width="400" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/form_batchorder_recyclerCourier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_height="190"
+                    app:scale_textsize="18"
+                    app:scale_top="35"
+                    app:scale_width="400"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
             <android.support.v7.widget.CardView
                 android:id="@+id/form_batchorder_cardsummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:visibility="visible"
-                android:layout_below="@+id/form_batchorder_recyclerview"
+                android:layout_below="@+id/form_batchorder_scalableCourier"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
@@ -364,7 +401,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="5dp"
-                    app:scale_base_height="200"
+                    app:scale_base_height="230"
                     app:scale_base_width="400">
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
@@ -486,6 +523,24 @@
                         app:scale_top="110"
                         app:scale_width="110" />
 
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_batchorder_txtInfoShipping"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:visibility="visible"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorRed"
+                        android:text="Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="40"
+                        app:scale_left="10"
+                        app:scale_textsize="16"
+                        app:scale_top="138"
+                        app:scale_width="375" />
+
                     <View
                         android:id="@+id/divider2"
                         android:layout_width="368dp"
@@ -493,7 +548,7 @@
                         android:background="@color/colorContent"
                         app:scale_height="2"
                         app:scale_left="10"
-                        app:scale_top="140"
+                        app:scale_top="188"
                         app:scale_width="380"
                         tools:ignore="MissingPrefix" />
 
@@ -508,7 +563,7 @@
                         app:scale_height="30"
                         app:scale_left="10"
                         app:scale_textsize="17"
-                        app:scale_top="160"
+                        app:scale_top="197"
                         app:scale_width="190" />
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
@@ -524,7 +579,7 @@
                         app:scale_height="30"
                         app:scale_left="200"
                         app:scale_textsize="17"
-                        app:scale_top="160"
+                        app:scale_top="197"
                         app:scale_width="190" />
                 </com.ssomai.android.scalablelayout.ScalableLayout>
             </android.support.v7.widget.CardView>

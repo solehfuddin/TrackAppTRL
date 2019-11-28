@@ -23,6 +23,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_N
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_NEWPRICE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_PRICE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_QTY;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_STOCK;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_WEIGHT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.TABLE_ADDCART;
 
 public class AddCartHelper {
@@ -87,6 +89,8 @@ public class AddCartHelper {
                 addCart.setProductDisc(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCOUNT)));
                 addCart.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
                 addCart.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
+                addCart.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
+                addCart.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 addCart.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
 
                 arrayList.add(addCart);
@@ -117,6 +121,8 @@ public class AddCartHelper {
                 item.setProductDisc(cursor.getInt(cursor.getColumnIndexOrThrow("product_discount")));
                 item.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow("product_newprice")));
                 item.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow("product_newdiscprice")));
+                item.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow("product_stock")));
+                item.setProductWeight(cursor.getInt(cursor.getColumnIndex("product_weight")));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow("product_image")));
             }
 
@@ -138,6 +144,8 @@ public class AddCartHelper {
         args.put(PRODUCT_DISCOUNT, addCart.getProductDisc());
         args.put(PRODUCT_NEWPRICE, addCart.getNewProductPrice());
         args.put(PRODUCT_NEWDISCPRICE, addCart.getNewProductDiscPrice());
+        args.put(PRODUCT_STOCK, addCart.getProductStock());
+        args.put(PRODUCT_WEIGHT, addCart.getProductWeight());
         args.put(PRODUCT_IMG, addCart.getProductImage());
 
         return database.insert(DATABASE_TABLE, null, args);

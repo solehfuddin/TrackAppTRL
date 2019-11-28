@@ -5,142 +5,189 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    app:cardElevation="3dp"
+    app:cardElevation="0dp"
     app:cardCornerRadius="1dp"
-    app:cardUseCompatPadding="true"
-    android:background="@color/white">
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="8dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/listitem_fragment_bestproduct_imgProduct"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/bumperbanner" />
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/listitem_fragment_bestproduct_txtDiscpercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/holo_red_dark"
-                android:padding="2dp"
-                android:text="50% off"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:customFont="MavenPro-Regular.ttf"/>
-
-            <com.varunest.sparkbutton.SparkButton
-                android:id="@+id/listitem_fragment_bestproduct_btnWish"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="151dp"
-                app:sparkbutton_activeImage="@drawable/ic_favorite"
-                app:sparkbutton_animationSpeed="1.5"
-                app:sparkbutton_iconSize="20dp"
-                app:sparkbutton_inActiveImage="@drawable/ic_favorite_border"
-                app:sparkbutton_primaryColor="@color/colorEnd"
-                app:sparkbutton_secondaryColor="@color/colorRed" />
-        </RelativeLayout>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/item_search_cardview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:cardCornerRadius="11.8dp"
-            android:layout_gravity="right">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_corner_black">
-
-                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                    android:id="@+id/listitem_fragment_bestproduct_txtBrand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="Borelli"
-                    android:textSize="12sp"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white"
-                    app:customFont="LatoBold.ttf" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-            android:id="@+id/listitem_fragment_bestproduct_txtProductid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Product Id"
-            android:visibility="gone"
-            android:textSize="14sp"
-            app:customFont="MavenPro-Regular.ttf" />
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-            android:id="@+id/listitem_fragment_bestproduct_txtProductname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="Product Name"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"
-            android:maxLines="1"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            app:customFont="UbuntuMedium.ttf" />
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-            android:id="@+id/listitem_fragment_bestproduct_txtProductcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Product Code"
-            android:textSize="14sp"
-            app:customFont="MavenPro-Regular.ttf" />
+        android:layout_height="match_parent"
+        android:background="@drawable/border_black">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="3dp"
-            android:weightSum="10">
+            android:orientation="vertical"
+            android:layout_margin="8dp">
 
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/listitem_fragment_bestproduct_txtRealprice"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:customFont="MavenPro-Regular.ttf"
-                android:text="Real Price"
-                android:textSize="14sp"
-                android:textColor="@android:color/black"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/listitem_fragment_bestproduct_imgProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/bumperbanner" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/listitem_fragment_bestproduct_txtDiscpercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_red_dark"
+                    android:padding="2dp"
+                    android:text="50% off"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    app:customFont="MavenPro-Regular.ttf"/>
+
+                <com.varunest.sparkbutton.SparkButton
+                    android:id="@+id/listitem_fragment_bestproduct_btnWish"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="151dp"
+                    app:sparkbutton_activeImage="@drawable/ic_favorite"
+                    app:sparkbutton_animationSpeed="1.5"
+                    app:sparkbutton_iconSize="20dp"
+                    app:sparkbutton_inActiveImage="@drawable/ic_favorite_border"
+                    app:sparkbutton_primaryColor="@color/colorEnd"
+                    app:sparkbutton_secondaryColor="@color/colorRed" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/item_search_cardview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="155dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_alignParentLeft="true">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/listitem_fragment_bestproduct_txtBrand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="Borelli"
+                            android:textSize="12sp"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/white"
+                            app:customFont="LatoBold.ttf" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
+
+            <!--<android.support.v7.widget.CardView-->
+            <!--android:id="@+id/item_search_cardview"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--app:cardCornerRadius="11.8dp"-->
+            <!--android:layout_gravity="right">-->
+
+            <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/round_corner_black">-->
 
             <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
-            <!--android:id="@+id/listitem_fragment_bestproduct_txtDiscprice"-->
-            <!--android:layout_weight="5"-->
-            <!--android:layout_width="0dp"-->
+            <!--android:id="@+id/listitem_fragment_bestproduct_txtBrand"-->
+            <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
-            <!--android:text="Discount Price"-->
-            <!--android:gravity="end"-->
-            <!--android:textColor="@android:color/holo_red_dark"-->
-            <!--android:textSize="14sp"-->
-            <!--app:customFont="DroidBold.ttf"/>-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:paddingRight="8dp"-->
+            <!--android:text="Borelli"-->
+            <!--android:textSize="12sp"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:textColor="@color/white"-->
+            <!--app:customFont="LatoBold.ttf" />-->
+
+            <!--</RelativeLayout>-->
+
+            <!--</android.support.v7.widget.CardView>-->
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_fragment_bestproduct_txtProductid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Id"
+                android:visibility="gone"
+                android:textSize="14sp"
+                app:customFont="MavenPro-Regular.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_fragment_bestproduct_txtProductname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="Product Name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_fragment_bestproduct_txtProductcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Code"
+                android:textSize="14sp"
+                app:customFont="MavenPro-Regular.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_fragment_bestproduct_txtProductavailable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Stok Tersedia"
+                android:textColor="@color/colorToolbar"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
+                android:weightSum="10">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/listitem_fragment_bestproduct_txtRealprice"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:customFont="MavenPro-Regular.ttf"
+                    android:text="Real Price"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"/>
+
+                <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+                <!--android:id="@+id/listitem_fragment_bestproduct_txtDiscprice"-->
+                <!--android:layout_weight="5"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Discount Price"-->
+                <!--android:gravity="end"-->
+                <!--android:textColor="@android:color/holo_red_dark"-->
+                <!--android:textSize="14sp"-->
+                <!--app:customFont="DroidBold.ttf"/>-->
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

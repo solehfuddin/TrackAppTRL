@@ -375,6 +375,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 app:scale_base_width="400"
+                                android:visibility="gone"
                                 app:scale_base_height="40">
 
                                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
@@ -515,6 +516,22 @@
 
                             </com.ssomai.android.scalablelayout.ScalableLayout>
                         </LinearLayout>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_lenssummary_txtInfoShipping"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="3"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="0dp"
+                            android:visibility="visible"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorRed"
+                            android:text="Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya"
+                            android:textSize="16sp"
+                            app:customFont="MavenPro-Regular.ttf" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -562,19 +579,55 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:id="@+id/activity_lenssummary_scalableCourier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="-5dp"
+                android:layout_below="@+id/cardView"
+                app:scale_base_height="220"
+                app:scale_base_width="400">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="COURIER SERVICE"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_height="30"
+                    app:scale_textsize="18"
+                    app:scale_top="5"
+                    app:scale_width="400" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/activity_lenssummary_recyclerCourier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_height="190"
+                    app:scale_textsize="18"
+                    app:scale_top="35"
+                    app:scale_width="400"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+
             <android.support.v7.widget.CardView
+                android:id="@+id/activity_lenssummary_card_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginStart="5dp"
+                android:focusable="true"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="3dp"
-                app:cardUseCompatPadding="true"
-                android:id="@+id/cardView2"
-                android:focusable="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -588,41 +641,41 @@
                         app:scale_base_width="400">
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:layout_margin="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
                             android:text="CHOOSE PAYMENT METHOD"
+                            android:textColor="@android:color/black"
                             android:textSize="19sp"
                             android:textStyle="bold"
-                            android:textColor="@android:color/black"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_top="10"
-                            app:scale_width="400"
                             app:scale_height="24"
-                            app:scale_textsize="18"/>
+                            app:scale_textsize="18"
+                            app:scale_top="10"
+                            app:scale_width="400" />
 
                     </com.ssomai.android.scalablelayout.ScalableLayout>
 
                     <com.ssomai.android.scalablelayout.ScalableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:scale_base_width="400"
-                        app:scale_base_height="255">
+                        app:scale_base_height="255"
+                        app:scale_base_width="400">
 
                         <ListView
                             android:id="@+id/activity_lenssummary_listview_paymentMethod"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/white"
+                            android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:listSelector="@drawable/list_row_selector"
+                            android:background="@android:color/white"
                             android:choiceMode="singleChoice"
-                            app:scale_width="400"
-                            app:scale_height="255"/>
+                            android:listSelector="@drawable/list_row_selector"
+                            app:scale_height="255"
+                            app:scale_width="400" />
                     </com.ssomai.android.scalablelayout.ScalableLayout>
 
                 </LinearLayout>

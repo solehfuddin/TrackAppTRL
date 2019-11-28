@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,7 +61,9 @@ import com.sofudev.trackapptrl.Custom.SmsReceiver;
 import com.sofudev.trackapptrl.Custom.VolleyOneCallBack;
 import com.sofudev.trackapptrl.Data.Data_coating;
 import com.sofudev.trackapptrl.Data.Data_lenstype;
+import com.sofudev.trackapptrl.Data.Data_stok_satuan;
 import com.sofudev.trackapptrl.Data.Data_tinting;
+import com.sofudev.trackapptrl.LocalDb.Db.LensSatuanHelper;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
@@ -107,6 +110,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
     String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
     String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
     String URL_UPDATECITY    = config.Ip_address + config.spinner_shipment_updateCity;
+    String URL_CHECKSTOCK    = config.Ip_address + config.orderlens_check_stock;
 
     MCrypt mCrypt;
 
@@ -144,7 +148,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
     String emailaddress, mobilenumber, userinfo, pin_number ,coating;
     String filename, id_lensa, desc_lensa, file;
     String allData, dateTime, opticId, opticName, dateOnly, timeOnly, todayDate, opticProvince, opticUsername, opticCity,
-            orderNumber, opticFlag, phoneNumber;
+            orderNumber, opticFlag, phoneNumber, chooser;
     String model_frame, hor_frame, ver_frame, dbl_frame, frame_brand, infofacet, isfacet = "N", corridor;
     String typeLensa, description, categoryLens, purchaseLens, icon, lensDiv, itemIdR, itemIdL, itemIdSt, itemIdStR,
             itemIdStL, flagPasang, flagShipping, itemCodeR, descR, itemSphR, itemCylR, itemAxsR, itemAddR, powerR, itemQtyR,
@@ -152,8 +156,10 @@ public class FormOrderLensActivity extends AppCompatActivity {
             qtyFacet, itemTintingCode, tintingDescription, qtyTinting, flagRL;
     Integer itemPriceR, itemTotalPriceR, itemPriceL, itemTotalPriceL, itemPriceSt, itemPriceStR, itemPriceStL, oprDiscount,
             itemFacetPrice, itemTintPrice, itemWeight, countTemp, autoSum, totalFacet, totalTinting;
+    int sisaStok, sisaStokR, sisaStokL;
     String sph_l, sph_r, cyl_l, cyl_r, axs_l, axs_r, mpd_l, mpd_r, pd_l, pd_s, seg_h, color_tint, color_descr, add_l, add_r,
-            listLineNo;
+            listLineNo, prod_attr_valL, prod_attr_valR, divName;
+    String descriptionStock, descriptionStockR, descriptionStockL;
     private int onOff = 1;
     int smsFlag = 0, limiter = 1000, totalWeight = 0;
     float discountR, discountL;
@@ -161,6 +167,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
 
     String hargaR, hargaL;
+
+//    List<Data_stok_satuan> itemStokSatuan = new ArrayList<>();
+    LensSatuanHelper lensSatuanHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,13 +240,15 @@ public class FormOrderLensActivity extends AppCompatActivity {
         spin_coatgroup.setAdapter(new ArrayAdapter<>(this, R.layout.spin_framemodel_item, coat_group));
 
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = sdf3.format(calendar.getTime());
+        String otherDate = sdf4.format(calendar.getTime());
 
         backToDashboard();
         doneBackDashboard();
         getIdOptic();
         getUserInfo();
-        getOrderNumber(opticUsername,todayDate);
+        getOrderNumber(opticUsername,otherDate);
         countOrderTemp(opticUsername,todayDate);
         sumWeightOrder(opticUsername,todayDate);
         showDateTime();
@@ -296,7 +307,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         spin_tintgroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String chooser = spin_tintgroup.getSelectedItem().toString();
+                chooser = spin_tintgroup.getSelectedItem().toString();
 
                 if (!data_tintinggroup.isEmpty())
                 {
@@ -397,8 +408,13 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 }
             }
         });
+
+        lensSatuanHelper = LensSatuanHelper.getINSTANCE(FormOrderLensActivity.this);
+        lensSatuanHelper.open();
+
+        lensSatuanHelper.truncAllLensSatuan();
         
-        txt_segh.setEnabled(false);
+        txt_segh.setEnabled(true);
         txt_wrap.setEnabled(false);
         txt_phantose.setEnabled(false);
         txt_vertex.setEnabled(false);
@@ -465,7 +481,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    txt_segh.setEnabled(false);
+                    txt_segh.setEnabled(true);
                     txt_wrap.setEnabled(false);
                     txt_phantose.setEnabled(false);
                     txt_vertex.setEnabled(false);
@@ -475,7 +491,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 //                    txt_ver.setEnabled(false);
                     spin_framemodel.setVisibility(View.GONE);
 
-                    txt_segh.setText("");
+//                    txt_segh.setText("");
                     txt_wrap.setText("");
                     txt_phantose.setText("");
                     txt_vertex.setText("");
@@ -658,6 +674,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                     else
                                                     {
                                                         itemIdStR = jsonObject.getString("item_id");
+                                                        descriptionStockR = jsonObject.getString("item_desc") + " " + sphr + " " + cylr;
 
                                                         getItemPriceStRHandle(itemIdStR, new VolleyOneCallBack() {
                                                             @Override
@@ -672,7 +689,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                     hargaR = "False";
                                                                 }
 
-
+                                                                //Jika side L di-isi
                                                                 if (!sphl.isEmpty() | !cyll.isEmpty() | !addl.isEmpty())
                                                                 {
                                                                     getItemStockLHandle(kodeLensa, sphl, cyll, addl, "B", new VolleyOneCallBack() {
@@ -688,6 +705,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                 else
                                                                                 {
                                                                                     itemIdStL = jsonObject.getString("item_id");
+                                                                                    descriptionStockL = jsonObject.getString("item_desc") + " " + sphl + " " + cyll;
 
                                                                                     getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
                                                                                         @Override
@@ -702,63 +720,385 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                 hargaL = "False";
                                                                                             }
 
-                                                                                            String order = txt_orderNumber.getText().toString();
-                                                                                            String none = spin_corridor.getSelectedItem().toString().trim();
-
-                                                                                            if (sw_facet.isChecked())
+                                                                                            if (itemIdStR.contentEquals(itemIdStL) || itemIdStR.contains(itemIdStL))
                                                                                             {
-                                                                                                isfacet = "G";
+                                                                                                descriptionStock = descriptionStockR;
+                                                                                                Log.d("AREA 1", "Check stock : " + itemIdStR);
+
+                                                                                                final Data_stok_satuan itemSatuan = new Data_stok_satuan();
+
+                                                                                                cekStok(itemIdStR, new VolleyOneCallBack() {
+                                                                                                    @Override
+                                                                                                    public void onSuccess(String result) {
+                                                                                                        try {
+                                                                                                            JSONObject object1 = new JSONObject(result);
+
+                                                                                                            sisaStok = object1.getInt("qty_stock");
+
+//                                                                                                                int sisa = sisaStok - 2;
+
+                                                                                                            itemSatuan.setId(1);
+                                                                                                            itemSatuan.setDescription(descriptionStock);
+                                                                                                            itemSatuan.setQty(2);
+                                                                                                            itemSatuan.setStock(sisaStok);
+
+                                                                                                            Log.d("AREA 1", "Id satuan : " + itemSatuan.getId());
+                                                                                                            Log.d("AREA 1", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                                            Log.d("AREA 1", "Qty Order : " + itemSatuan.getQty());
+                                                                                                            Log.d("AREA 1", "Sisa Stok : " + sisaStok);
+
+                                                                                                            lensSatuanHelper.open();
+                                                                                                            long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                                            if (status > 0)
+                                                                                                            {
+                                                                                                                Log.d("AREA 1" ,"Item has been added to cart");
+                                                                                                            }
+
+//                                                                                                            itemStokSatuan.add(itemSatuan);
+                                                                                                            List<Data_stok_satuan> itemSatuan;
+                                                                                                            itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                                                            Log.d("AREA 1", "Item Stok Satuan : " + itemSatuan.size());
+                                                                                                            Log.d("AREA 1", "Deskripsi lensa : " + itemSatuan.get(0).getDescription());
+
+                                                                                                            List<Boolean> sisanya = new ArrayList<>();
+
+                                                                                                            for (int i = 0; i < itemSatuan.size(); i++)
+                                                                                                            {
+                                                                                                                String item = itemSatuan.get(i).getDescription();
+                                                                                                                int stock = itemSatuan.get(i).getStock();
+                                                                                                                int qty   = itemSatuan.get(i).getQty();
+                                                                                                                int sisa  = stock - qty;
+
+                                                                                                                Log.d("AREA 1", "Deskripsi : " + item);
+                                                                                                                Log.d("AREA 1", "Stock : " + stock);
+                                                                                                                Log.d("AREA 1", "qty : " + qty);
+                                                                                                                Log.d("AREA 1", "sisa : " + sisa);
+
+                                                                                                                if (sisa < 0)
+                                                                                                                {
+                                                                                                                    sisanya.add(i, false);
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    sisanya.add(i, true);
+                                                                                                                }
+                                                                                                            }
+
+                                                                                                            boolean cek = sisanya.contains(false);
+
+                                                                                                            if (cek) {
+                                                                                                                Log.d("Information Stok", "Ada item yang minus");
+
+                                                                                                                final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                                                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                                                WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                                                                dialog.setContentView(R.layout.dialog_warning);
+                                                                                                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                                                                lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                                                                lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                                                                lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                                                                UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                                                                txtTitle.setText("Stok " + itemSatuan.get(0).getDescription() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                                                                ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                                                                imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                                                                    @Override
+                                                                                                                    public void onClick(View v) {
+                                                                                                                        dialog.dismiss();
+                                                                                                                    }
+                                                                                                                });
+
+                                                                                                                dialog.show();
+                                                                                                                dialog.getWindow().setAttributes(lwindow);
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                                                                String order = txt_orderNumber.getText().toString();
+                                                                                                                String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                                                                if (sw_facet.isChecked())
+                                                                                                                {
+                                                                                                                    isfacet = "G";
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    String hor = txt_hor.getText().toString();
+                                                                                                                    String ver = txt_ver.getText().toString();
+
+                                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+                                                                                                                    {
+                                                                                                                        isfacet = "F";
+                                                                                                                    }
+                                                                                                                    else
+                                                                                                                    {
+                                                                                                                        isfacet = "N";
+                                                                                                                    }
+                                                                                                                }
+
+                                                                                                                Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                                                                if (none.equalsIgnoreCase("none"))
+                                                                                                                {
+                                                                                                                    Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                                                                }
+                                                                                                                else if (order.isEmpty())
+                                                                                                                {
+                                                                                                                    Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                                                                }
+                                                                                                                else {
+                                                                                                                    dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                                                                    dialog.setMessage("Are you sure all data is correct ?");
+                                                                                                                    dialog.setTopTitle("Confirmation Order");
+                                                                                                                    dialog.setTopTitleColor(Color.WHITE);
+                                                                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                    dialog.setCancelable(false);
+
+                                                                                                                    dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                                                        @Override
+                                                                                                                        public void onClick(View v) {
+                                                                                                                            saveOrder();
+                                                                                                                        }
+                                                                                                                    });
+
+                                                                                                                    dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                                                        @Override
+                                                                                                                        public void onClick(View v) {
+                                                                                                                            dialog.dismiss();
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                    dialog.show();
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } catch (JSONException e) {
+                                                                                                            e.printStackTrace();
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
                                                                                             }
                                                                                             else
                                                                                             {
-                                                                                                String hor = txt_hor.getText().toString();
-                                                                                                String ver = txt_ver.getText().toString();
+                                                                                                Log.d("AREA 1", "Check stock R : " + itemIdStR);
+                                                                                                Log.d("AREA 1", "Check stock L : " + itemIdStL);
 
-                                                                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                {
-                                                                                                    isfacet = "F";
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    isfacet = "N";
-                                                                                                }
-                                                                                            }
+                                                                                                final Data_stok_satuan itemSatuan = new Data_stok_satuan();
 
-                                                                                            Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
-
-                                                                                            if (none.equalsIgnoreCase("none"))
-                                                                                            {
-                                                                                                Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                                            }
-                                                                                            else if (order.isEmpty())
-                                                                                            {
-                                                                                                Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                                                dialog.setMessage("Are you sure all data is correct ?");
-                                                                                                dialog.setTopTitle("Confirmation Order");
-                                                                                                dialog.setTopTitleColor(Color.WHITE);
-                                                                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                                                dialog.setCancelable(false);
-
-                                                                                                dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                                cekStokR(itemIdStR, new VolleyOneCallBack() {
                                                                                                     @Override
-                                                                                                    public void onClick(View v) {
-                                                                                                        saveOrder();
+                                                                                                    public void onSuccess(String result) {
+                                                                                                        try {
+                                                                                                            JSONObject object1 = new JSONObject(result);
+
+                                                                                                            sisaStok = object1.getInt("qty_stock");
+
+                                                                                                            itemSatuan.setId(1);
+                                                                                                            itemSatuan.setDescription(descriptionStockR);
+                                                                                                            itemSatuan.setQty(1);
+                                                                                                            itemSatuan.setStock(sisaStok);
+
+                                                                                                            Log.d("AREA 1", "Id satuan : " + itemSatuan.getId());
+                                                                                                            Log.d("AREA 1", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                                            Log.d("AREA 1", "Qty Order : " + itemSatuan.getQty());
+                                                                                                            Log.d("AREA 1", "Sisa Stok : " + sisaStok);
+
+                                                                                                            lensSatuanHelper.open();
+                                                                                                            long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                                            if (status > 0)
+                                                                                                            {
+                                                                                                                Log.d("AREA 1" ,"Item has been added to cart");
+                                                                                                            }
+
+                                                                                                            cekStokL(itemIdStL, new VolleyOneCallBack() {
+                                                                                                                @Override
+                                                                                                                public void onSuccess(String result) {
+                                                                                                                    try {
+                                                                                                                        JSONObject object2 = new JSONObject(result);
+
+                                                                                                                        sisaStok = object2.getInt("qty_stock");
+
+                                                                                                                        itemSatuan.setId(2);
+                                                                                                                        itemSatuan.setDescription(descriptionStockL);
+                                                                                                                        itemSatuan.setQty(1);
+                                                                                                                        itemSatuan.setStock(sisaStok);
+
+                                                                                                                        Log.d("AREA 1", "Id satuan : " + itemSatuan.getId());
+                                                                                                                        Log.d("AREA 1", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                                                        Log.d("AREA 1", "Qty Order : " + itemSatuan.getQty());
+                                                                                                                        Log.d("AREA 1", "Sisa Stok : " + sisaStok);
+
+                                                                                                                        lensSatuanHelper.open();
+                                                                                                                        long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                                                        if (status > 0)
+                                                                                                                        {
+                                                                                                                            Log.d("AREA 1" ,"Item has been added to cart");
+                                                                                                                        }
+
+                                                                                                                        List<Data_stok_satuan> itemSatuan;
+                                                                                                                        itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                                                                        Log.d("AREA 1", "Item Stok Satuan : " + itemSatuan.size());
+
+                                                                                                                        List<Boolean> sisanya = new ArrayList<>();
+
+                                                                                                                        for (int i = 0; i < itemSatuan.size(); i++)
+                                                                                                                        {
+                                                                                                                            String item = itemSatuan.get(i).getDescription();
+                                                                                                                            int stock = itemSatuan.get(i).getStock();
+                                                                                                                            int qty   = itemSatuan.get(i).getQty();
+                                                                                                                            int sisa  = stock - qty;
+
+                                                                                                                            Log.d("AREA 1", "Deskripsi : " + item);
+                                                                                                                            Log.d("AREA 1", "Stock : " + stock);
+                                                                                                                            Log.d("AREA 1", "qty : " + qty);
+                                                                                                                            Log.d("AREA 1", "sisa : " + sisa);
+
+                                                                                                                            if (sisa < 0)
+                                                                                                                            {
+                                                                                                                                sisanya.add(i, false);
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                sisanya.add(i, true);
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                        boolean cek = sisanya.contains(false);
+
+                                                                                                                        if (cek) {
+                                                                                                                            Log.d("Information Stok", "Ada item yang minus");
+
+                                                                                                                            StringBuilder log = new StringBuilder();
+
+                                                                                                                            final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                                                                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                                                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                                                                            dialog.setContentView(R.layout.dialog_warning);
+                                                                                                                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                                                                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                                                                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                                                                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                                                                            int stockR  = itemSatuan.get(0).getStock();
+                                                                                                                            int qtyR    = itemSatuan.get(0).getQty();
+                                                                                                                            int sisaR   = stockR - qtyR;
+
+                                                                                                                            int stockL  = itemSatuan.get(1).getStock();
+                                                                                                                            int qtyL    = itemSatuan.get(1).getQty();
+                                                                                                                            int sisaL   = stockL - qtyL;
+
+                                                                                                                            if (sisaR < 0 && sisaL < 0)
+                                                                                                                            {
+                                                                                                                                log.append(itemSatuan.get(0).getDescription());
+                                                                                                                                log.append(" & ");
+                                                                                                                                log.append(itemSatuan.get(1).getDescription());
+                                                                                                                            }
+                                                                                                                            else if (sisaR < 0)
+                                                                                                                            {
+                                                                                                                                log.append(itemSatuan.get(0).getDescription());
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                log.append(itemSatuan.get(1).getDescription());
+                                                                                                                            }
+
+                                                                                                                            UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                                                                            txtTitle.setText("Stok " + log.toString() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                                                                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                                                                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                                                                                @Override
+                                                                                                                                public void onClick(View v) {
+                                                                                                                                    dialog.dismiss();
+                                                                                                                                }
+                                                                                                                            });
+
+                                                                                                                            dialog.show();
+                                                                                                                            dialog.getWindow().setAttributes(lwindow);
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                                                                            String order = txt_orderNumber.getText().toString();
+                                                                                                                            String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                                                                            if (sw_facet.isChecked())
+                                                                                                                            {
+                                                                                                                                isfacet = "G";
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                String hor = txt_hor.getText().toString();
+                                                                                                                                String ver = txt_ver.getText().toString();
+
+                                                                                                                                if (!hor.isEmpty() && !ver.isEmpty())
+                                                                                                                                {
+                                                                                                                                    isfacet = "F";
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    isfacet = "N";
+                                                                                                                                }
+                                                                                                                            }
+
+                                                                                                                            Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                                                                            if (none.equalsIgnoreCase("none"))
+                                                                                                                            {
+                                                                                                                                Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                                                                            }
+                                                                                                                            else if (order.isEmpty())
+                                                                                                                            {
+                                                                                                                                Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                                                                            }
+                                                                                                                            else {
+                                                                                                                                dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                                                                                dialog.setMessage("Are you sure all data is correct ?");
+                                                                                                                                dialog.setTopTitle("Confirmation Order");
+                                                                                                                                dialog.setTopTitleColor(Color.WHITE);
+                                                                                                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                                                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                                                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                                dialog.setCancelable(false);
+
+                                                                                                                                dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                                                                    @Override
+                                                                                                                                    public void onClick(View v) {
+                                                                                                                                        saveOrder();
+                                                                                                                                    }
+                                                                                                                                });
+
+                                                                                                                                dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                                                                    @Override
+                                                                                                                                    public void onClick(View v) {
+                                                                                                                                        dialog.dismiss();
+                                                                                                                                    }
+                                                                                                                                });
+                                                                                                                                dialog.show();
+                                                                                                                            }
+                                                                                                                        }
+
+                                                                                                                    } catch (JSONException e) {
+                                                                                                                        e.printStackTrace();
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                        } catch (JSONException e) {
+                                                                                                            e.printStackTrace();
+                                                                                                        }
+
                                                                                                     }
                                                                                                 });
 
-                                                                                                dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(View v) {
-                                                                                                        dialog.dismiss();
-                                                                                                    }
-                                                                                                });
-                                                                                                dialog.show();
                                                                                             }
                                                                                         }
                                                                                     });
@@ -770,67 +1110,169 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                         }
                                                                     });
                                                                 }
+                                                                //Jika side L di-isi
+
+                                                                //Jika Side L kosong
                                                                 else
                                                                 {
-                                                                    String order = txt_orderNumber.getText().toString();
-                                                                    String none = spin_corridor.getSelectedItem().toString().trim();
+                                                                    Log.d("AREA 2", "Check stock R : " + itemIdStR);
+                                                                    final Data_stok_satuan itemSatuan = new Data_stok_satuan();
 
-                                                                    if (sw_facet.isChecked())
-                                                                    {
-                                                                        isfacet = "G";
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        String hor = txt_hor.getText().toString();
-                                                                        String ver = txt_ver.getText().toString();
+                                                                    cekStokR(itemIdStR, new VolleyOneCallBack() {
+                                                                        @Override
+                                                                        public void onSuccess(String result) {
+                                                                            try {
+                                                                                JSONObject object1 = new JSONObject(result);
 
-                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                        {
-                                                                            isfacet = "F";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            isfacet = "N";
-                                                                        }
-                                                                    }
+                                                                                sisaStok = object1.getInt("qty_stock");
 
-                                                                    Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+                                                                                itemSatuan.setId(1);
+                                                                                itemSatuan.setDescription(descriptionStockR);
+                                                                                itemSatuan.setQty(1);
+                                                                                itemSatuan.setStock(sisaStok);
 
-                                                                    if (none.equalsIgnoreCase("none"))
-                                                                    {
-                                                                        Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                    }
-                                                                    else if (order.isEmpty())
-                                                                    {
-                                                                        Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                        dialog.setMessage("Are you sure all data is correct ?");
-                                                                        dialog.setTopTitle("Confirmation Order");
-                                                                        dialog.setTopTitleColor(Color.WHITE);
-                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                        dialog.setCancelable(false);
+                                                                                Log.d("AREA 2", "Id satuan : " + itemSatuan.getId());
+                                                                                Log.d("AREA 2", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                Log.d("AREA 2", "Qty Order : " + itemSatuan.getQty());
+                                                                                Log.d("AREA 2", "Sisa Stok : " + sisaStok);
 
-                                                                        dialog.setPositiveButton("Yes", new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                saveOrder();
+                                                                                lensSatuanHelper.open();
+                                                                                long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                if (status > 0)
+                                                                                {
+                                                                                    Log.d("AREA 2" ,"Item has been added to cart");
+                                                                                }
+
+//                                                                                                            itemStokSatuan.add(itemSatuan);
+                                                                                List<Data_stok_satuan> itemSatuan;
+                                                                                itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                                Log.d("AREA 2", "Item Stok Satuan : " + itemSatuan.size());
+                                                                                Log.d("AREA 2", "Deskripsi lensa : " + itemSatuan.get(0).getDescription());
+
+                                                                                List<Boolean> sisanya = new ArrayList<>();
+
+                                                                                for (int i = 0; i < itemSatuan.size(); i++)
+                                                                                {
+                                                                                    String item = itemSatuan.get(i).getDescription();
+                                                                                    int stock = itemSatuan.get(i).getStock();
+                                                                                    int qty   = itemSatuan.get(i).getQty();
+                                                                                    int sisa  = stock - qty;
+
+                                                                                    Log.d("AREA 2", "Deskripsi : " + item);
+                                                                                    Log.d("AREA 2", "Stock : " + stock);
+                                                                                    Log.d("AREA 2", "qty : " + qty);
+                                                                                    Log.d("AREA 2", "sisa : " + sisa);
+
+                                                                                    if (sisa < 0)
+                                                                                    {
+                                                                                        sisanya.add(i, false);
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        sisanya.add(i, true);
+                                                                                    }
+                                                                                }
+
+                                                                                boolean cek = sisanya.contains(false);
+
+                                                                                if (cek) {
+                                                                                    Log.d("Information Stok", "Ada item yang minus");
+
+                                                                                    final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                                    dialog.setContentView(R.layout.dialog_warning);
+                                                                                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                                    lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                                    UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                                    txtTitle.setText("Stok " + itemSatuan.get(0).getDescription() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                                    imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(View v) {
+                                                                                            dialog.dismiss();
+                                                                                        }
+                                                                                    });
+
+                                                                                    dialog.show();
+                                                                                    dialog.getWindow().setAttributes(lwindow);
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                                    String order = txt_orderNumber.getText().toString();
+                                                                                    String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                                    if (sw_facet.isChecked())
+                                                                                    {
+                                                                                        isfacet = "G";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        String hor = txt_hor.getText().toString();
+                                                                                        String ver = txt_ver.getText().toString();
+
+                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+                                                                                        {
+                                                                                            isfacet = "F";
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            isfacet = "N";
+                                                                                        }
+                                                                                    }
+
+                                                                                    Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                                    if (none.equalsIgnoreCase("none"))
+                                                                                    {
+                                                                                        Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                                    }
+                                                                                    else if (order.isEmpty())
+                                                                                    {
+                                                                                        Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                                        dialog.setMessage("Are you sure all data is correct ?");
+                                                                                        dialog.setTopTitle("Confirmation Order");
+                                                                                        dialog.setTopTitleColor(Color.WHITE);
+                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                        dialog.setCancelable(false);
+
+                                                                                        dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                            @Override
+                                                                                            public void onClick(View v) {
+                                                                                                saveOrder();
+                                                                                            }
+                                                                                        });
+
+                                                                                        dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                            @Override
+                                                                                            public void onClick(View v) {
+                                                                                                dialog.dismiss();
+                                                                                            }
+                                                                                        });
+                                                                                        dialog.show();
+                                                                                    }
+                                                                                }
+                                                                            } catch (JSONException e) {
+                                                                                e.printStackTrace();
                                                                             }
-                                                                        });
-
-                                                                        dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                dialog.dismiss();
-                                                                            }
-                                                                        });
-                                                                        dialog.show();
-                                                                    }
+                                                                        }
+                                                                    });
                                                                 }
+                                                                //Jika Side L kosong
 
 //                                                                Toasty.info(getApplicationContext(), "R Value: " + hargaR + " L Value: " + hargaL, Toast.LENGTH_SHORT).show();
                                                             }
@@ -843,96 +1285,196 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
+
+                                    //Jika Side R Kosong
                                     else
                                     {
                                         getItemStockLHandle(kodeLensa, sphl, cyll, addl, "B", new VolleyOneCallBack() {
                                             @Override
                                             public void onSuccess(String result) {
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(result);
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(result);
 
-                                                    if (jsonObject.names().get(0).equals("error"))
-                                                    {
-                                                        Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    else
-                                                    {
-                                                        itemIdStL = jsonObject.getString("item_id");
+                                                if (jsonObject.names().get(0).equals("error"))
+                                                {
+                                                    Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else
+                                                {
+                                                    itemIdStL = jsonObject.getString("item_id");
+                                                    descriptionStockL = jsonObject.getString("item_desc") + " " + sphl + " " + cyll;
 
-                                                        getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
+                                                    getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
+                                                        @Override
+                                                        public void onSuccess(String result) {
+
+                                                        if (result != null)
+                                                        {
+                                                            //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
+                                                            hargaL = "True";
+                                                        }
+                                                        else
+                                                        {
+                                                            hargaL = "False";
+                                                        }
+
+                                                        Log.d("AREA 3", "Check stock : " + itemIdStL);
+                                                        final Data_stok_satuan itemSatuan = new Data_stok_satuan();
+
+                                                        cekStokL(itemIdStL, new VolleyOneCallBack() {
                                                             @Override
                                                             public void onSuccess(String result) {
-                                                                if (result != null)
-                                                                {
-                                                                    //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
-                                                                    hargaL = "True";
-                                                                }
-                                                                else
-                                                                {
-                                                                    hargaL = "False";
-                                                                }
+                                                                try {
+                                                                    JSONObject object1 = new JSONObject(result);
 
-                                                                String order = txt_orderNumber.getText().toString();
-                                                                String none = spin_corridor.getSelectedItem().toString().trim();
+                                                                    sisaStok = object1.getInt("qty_stock");
 
-                                                                if (sw_facet.isChecked())
-                                                                {
-                                                                    isfacet = "G";
-                                                                }
-                                                                else
-                                                                {
-                                                                    String hor = txt_hor.getText().toString();
-                                                                    String ver = txt_ver.getText().toString();
+                                                                    itemSatuan.setId(1);
+                                                                    itemSatuan.setDescription(descriptionStockL);
+                                                                    itemSatuan.setQty(1);
+                                                                    itemSatuan.setStock(sisaStok);
 
-                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+                                                                    Log.d("AREA 3", "Id satuan : " + itemSatuan.getId());
+                                                                    Log.d("AREA 3", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                    Log.d("AREA 3", "Qty Order : " + itemSatuan.getQty());
+                                                                    Log.d("AREA 3", "Sisa Stok : " + sisaStok);
+
+                                                                    lensSatuanHelper.open();
+                                                                    long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                    if (status > 0)
                                                                     {
-                                                                        isfacet = "F";
+                                                                        Log.d("AREA 3" ,"Item has been added to cart");
+                                                                    }
+
+                                                                    List<Data_stok_satuan> itemSatuan;
+                                                                    itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                    Log.d("AREA 3", "Item Stok Satuan : " + itemSatuan.size());
+                                                                    Log.d("AREA 3", "Deskripsi lensa : " + itemSatuan.get(0).getDescription());
+
+                                                                    List<Boolean> sisanya = new ArrayList<>();
+
+                                                                    for (int i = 0; i < itemSatuan.size(); i++)
+                                                                    {
+                                                                        String item = itemSatuan.get(i).getDescription();
+                                                                        int stock = itemSatuan.get(i).getStock();
+                                                                        int qty   = itemSatuan.get(i).getQty();
+                                                                        int sisa  = stock - qty;
+
+                                                                        Log.d("AREA 3", "Deskripsi : " + item);
+                                                                        Log.d("AREA 3", "Stock : " + stock);
+                                                                        Log.d("AREA 3", "qty : " + qty);
+                                                                        Log.d("AREA 3", "sisa : " + sisa);
+
+                                                                        if (sisa < 0)
+                                                                        {
+                                                                            sisanya.add(i, false);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            sisanya.add(i, true);
+                                                                        }
+                                                                    }
+
+                                                                    boolean cek = sisanya.contains(false);
+
+                                                                    if (cek) {
+                                                                        Log.d("Information Stok", "Ada item yang minus");
+
+                                                                        final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                        dialog.setContentView(R.layout.dialog_warning);
+                                                                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                        lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                        UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                        txtTitle.setText("Stok " + itemSatuan.get(0).getDescription() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                        ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                        imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View v) {
+                                                                                dialog.dismiss();
+                                                                            }
+                                                                        });
+
+                                                                        dialog.show();
+                                                                        dialog.getWindow().setAttributes(lwindow);
                                                                     }
                                                                     else
                                                                     {
-                                                                        isfacet = "N";
+                                                                        Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                        String order = txt_orderNumber.getText().toString();
+                                                                        String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                        if (sw_facet.isChecked())
+                                                                        {
+                                                                            isfacet = "G";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            String hor = txt_hor.getText().toString();
+                                                                            String ver = txt_ver.getText().toString();
+
+                                                                            if (!hor.isEmpty() && !ver.isEmpty())
+                                                                            {
+                                                                                isfacet = "F";
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                isfacet = "N";
+                                                                            }
+                                                                        }
+
+                                                                        Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                        if (none.equalsIgnoreCase("none"))
+                                                                        {
+                                                                            Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                        }
+                                                                        else if (order.isEmpty())
+                                                                        {
+                                                                            Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                        }
+                                                                        else {
+                                                                            dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                            dialog.setMessage("Are you sure all data is correct ?");
+                                                                            dialog.setTopTitle("Confirmation Order");
+                                                                            dialog.setTopTitleColor(Color.WHITE);
+                                                                            dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                            dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                            dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                            dialog.setCancelable(false);
+
+                                                                            dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    saveOrder();
+                                                                                }
+                                                                            });
+
+                                                                            dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    dialog.dismiss();
+                                                                                }
+                                                                            });
+                                                                            dialog.show();
+                                                                        }
                                                                     }
-                                                                }
-
-                                                                Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
-
-                                                                if (none.equalsIgnoreCase("none"))
-                                                                {
-                                                                    Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                }
-                                                                else if (order.isEmpty())
-                                                                {
-                                                                    Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                }
-                                                                else
-                                                                {
-                                                                    dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                    dialog.setMessage("Are you sure all data is correct ?");
-                                                                    dialog.setTopTitle("Confirmation Order");
-                                                                    dialog.setTopTitleColor(Color.WHITE);
-                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                    dialog.setCancelable(false);
-
-                                                                    dialog.setPositiveButton("Yes", new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            saveOrder();
-                                                                        }
-                                                                    });
-
-                                                                    dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            dialog.dismiss();
-                                                                        }
-                                                                    });
-                                                                    dialog.show();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
                                                                 }
                                                             }
                                                         });
-                                                    }
+                                                        }
+                                                    });
+                                                }
                                                     //Toasty.info(getApplicationContext(), "Item Id L = " + itemIdStL, Toast.LENGTH_SHORT).show();
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -940,206 +1482,468 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
+                                    //Jika Side R Kosong
                                 }
                                 else
                                 {
+                                    //Jika kedua Side RL Diisi dan terdapat Sisi R dan L
                                     if (!sphr.isEmpty() | !cylr.isEmpty() | !addr.isEmpty())
                                     {
                                         getItemStockRHandle(kodeLensa, sphr, cylr, addr, "R", new VolleyOneCallBack() {
                                             @Override
                                             public void onSuccess(String result) {
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(result);
+                                            try
+                                            {
+                                                JSONObject jsonObject = new JSONObject(result);
 
-                                                    if (jsonObject.names().get(0).equals("error"))
-                                                    {
-                                                        Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    else
-                                                    {
-                                                        itemIdStR = jsonObject.getString("item_id");
+                                                if (jsonObject.names().get(0).equals("error"))
+                                                {
+                                                    Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else
+                                                {
+                                                    itemIdStR = jsonObject.getString("item_id");
+                                                    descriptionStockR = jsonObject.getString("item_desc") + " R " + sphr + " " + cylr + " ADD " + addr;
 
-                                                        getItemPriceStRHandle(itemIdStR, new VolleyOneCallBack() {
+                                                    getItemPriceStRHandle(itemIdStR, new VolleyOneCallBack() {
                                                             @Override
                                                             public void onSuccess(String result) {
-                                                                if (result != null)
-                                                                {
+                                                        if (result != null)
+                                                        {
                                                                     //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
-                                                                    hargaR = "True";
+                                                            hargaR = "True";
+                                                        }
+                                                        else
+                                                        {
+                                                            hargaR = "False";
+                                                        }
+
+                                                        if (!sphl.isEmpty() | !cyll.isEmpty() | !addl.isEmpty())
+                                                        {
+                                                            getItemStockLHandle(kodeLensa, sphl, cyll, addl, "L", new VolleyOneCallBack() {
+                                                                @Override
+                                                                public void onSuccess(String result) {
+                                                                try
+                                                                {
+                                                                    JSONObject jsonObject = new JSONObject(result);
+
+                                                                    if (jsonObject.names().get(0).equals("error"))
+                                                                    {
+                                                                        Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        itemIdStL = jsonObject.getString("item_id");
+                                                                        descriptionStockL = jsonObject.getString("item_desc") + " L " + sphl + " " + cyll + " ADD " + addl;
+
+                                                                        getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
+                                                                            @Override
+                                                                            public void onSuccess(String result) {
+                                                                            if (result != null)
+                                                                            {
+                                                                                //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
+                                                                                hargaL = "True";
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                hargaL = "False";
+                                                                            }
+
+                                                                            Log.d("AREA 4", "Check stock R : " + itemIdStR);
+                                                                            Log.d("AREA 4", "Check stock L : " + itemIdStL);
+
+                                                                            final Data_stok_satuan itemSatuan = new Data_stok_satuan();
+
+                                                                            cekStokR(itemIdStR, new VolleyOneCallBack() {
+                                                                                @Override
+                                                                                public void onSuccess(String result) {
+                                                                                    try {
+                                                                                        JSONObject object1 = new JSONObject(result);
+
+                                                                                        sisaStok = object1.getInt("qty_stock");
+
+                                                                                        itemSatuan.setId(1);
+                                                                                        itemSatuan.setDescription(descriptionStockR);
+                                                                                        itemSatuan.setQty(1);
+                                                                                        itemSatuan.setStock(sisaStok);
+
+                                                                                        Log.d("AREA 4", "Id satuan : " + itemSatuan.getId());
+                                                                                        Log.d("AREA 4", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                        Log.d("AREA 4", "Qty Order : " + itemSatuan.getQty());
+                                                                                        Log.d("AREA 4", "Sisa Stok : " + sisaStok);
+
+                                                                                        lensSatuanHelper.open();
+                                                                                        long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                        if (status > 0)
+                                                                                        {
+                                                                                            Log.d("AREA 4" ,"Item has been added to cart");
+                                                                                        }
+
+                                                                                        cekStokL(itemIdStL, new VolleyOneCallBack() {
+                                                                                            @Override
+                                                                                            public void onSuccess(String result) {
+                                                                                                try {
+                                                                                                    JSONObject object2 = new JSONObject(result);
+
+                                                                                                    sisaStok = object2.getInt("qty_stock");
+
+                                                                                                    itemSatuan.setId(2);
+                                                                                                    itemSatuan.setDescription(descriptionStockL);
+                                                                                                    itemSatuan.setQty(1);
+                                                                                                    itemSatuan.setStock(sisaStok);
+
+                                                                                                    Log.d("AREA 4", "Id satuan : " + itemSatuan.getId());
+                                                                                                    Log.d("AREA 4", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                                    Log.d("AREA 4", "Qty Order : " + itemSatuan.getQty());
+                                                                                                    Log.d("AREA 4", "Sisa Stok : " + sisaStok);
+
+                                                                                                    lensSatuanHelper.open();
+                                                                                                    long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                                    if (status > 0)
+                                                                                                    {
+                                                                                                        Log.d("AREA 4" ,"Item has been added to cart");
+                                                                                                    }
+
+                                                                                                    List<Data_stok_satuan> itemSatuan;
+                                                                                                    itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                                                    Log.d("AREA 4", "Item Stok Satuan : " + itemSatuan.size());
+
+                                                                                                    List<Boolean> sisanya = new ArrayList<>();
+
+                                                                                                    for (int i = 0; i < itemSatuan.size(); i++)
+                                                                                                    {
+                                                                                                        String item = itemSatuan.get(i).getDescription();
+                                                                                                        int stock = itemSatuan.get(i).getStock();
+                                                                                                        int qty   = itemSatuan.get(i).getQty();
+                                                                                                        int sisa  = stock - qty;
+
+                                                                                                        Log.d("AREA 4", "Deskripsi : " + item);
+                                                                                                        Log.d("AREA 4", "Stock : " + stock);
+                                                                                                        Log.d("AREA 4", "qty : " + qty);
+                                                                                                        Log.d("AREA 4", "sisa : " + sisa);
+
+                                                                                                        if (sisa < 0)
+                                                                                                        {
+                                                                                                            sisanya.add(i, false);
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            sisanya.add(i, true);
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    boolean cek = sisanya.contains(false);
+
+                                                                                                    if (cek) {
+                                                                                                        Log.d("Information Stok", "Ada item yang minus");
+
+                                                                                                        StringBuilder log = new StringBuilder();
+
+                                                                                                        final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                                                        dialog.setContentView(R.layout.dialog_warning);
+                                                                                                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                                                        lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                                                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                                                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                                                        int stockR  = itemSatuan.get(0).getStock();
+                                                                                                        int qtyR    = itemSatuan.get(0).getQty();
+                                                                                                        int sisaR   = stockR - qtyR;
+
+                                                                                                        int stockL  = itemSatuan.get(1).getStock();
+                                                                                                        int qtyL    = itemSatuan.get(1).getQty();
+                                                                                                        int sisaL   = stockL - qtyL;
+
+                                                                                                        if (sisaR < 0 && sisaL < 0)
+                                                                                                        {
+                                                                                                            log.append(itemSatuan.get(0).getDescription());
+                                                                                                            log.append(" & ");
+                                                                                                            log.append(itemSatuan.get(1).getDescription());
+                                                                                                        }
+                                                                                                        else if (sisaR < 0)
+                                                                                                        {
+                                                                                                            log.append(itemSatuan.get(0).getDescription());
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            log.append(itemSatuan.get(1).getDescription());
+                                                                                                        }
+
+                                                                                                        UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                                                        txtTitle.setText("Stok " + log.toString() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                                                        ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                                                        imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                                                            @Override
+                                                                                                            public void onClick(View v) {
+                                                                                                                dialog.dismiss();
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        dialog.show();
+                                                                                                        dialog.getWindow().setAttributes(lwindow);
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                                                        String order = txt_orderNumber.getText().toString();
+                                                                                                        String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                                                        if (sw_facet.isChecked())
+                                                                                                        {
+                                                                                                            isfacet = "G";
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            String hor = txt_hor.getText().toString();
+                                                                                                            String ver = txt_ver.getText().toString();
+
+                                                                                                            if (!hor.isEmpty() && !ver.isEmpty())
+                                                                                                            {
+                                                                                                                isfacet = "F";
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                isfacet = "N";
+                                                                                                            }
+                                                                                                        }
+
+                                                                                                        Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                                                        if (none.equalsIgnoreCase("none"))
+                                                                                                        {
+                                                                                                            Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                                                        }
+                                                                                                        else if (order.isEmpty())
+                                                                                                        {
+                                                                                                            Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                                                        }
+                                                                                                        else {
+                                                                                                            dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                                                            dialog.setMessage("Are you sure all data is correct ?");
+                                                                                                            dialog.setTopTitle("Confirmation Order");
+                                                                                                            dialog.setTopTitleColor(Color.WHITE);
+                                                                                                            dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                                                            dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                                                            dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                            dialog.setCancelable(false);
+
+                                                                                                            dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                                                @Override
+                                                                                                                public void onClick(View v) {
+                                                                                                                    saveOrder();
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                            dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                                                @Override
+                                                                                                                public void onClick(View v) {
+                                                                                                                    dialog.dismiss();
+                                                                                                                }
+                                                                                                            });
+                                                                                                            dialog.show();
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                } catch (JSONException e) {
+                                                                                                    e.printStackTrace();
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                                                                                        } catch (JSONException e) {
+                                                                                            e.printStackTrace();
+                                                                                        }
+
+                                                                                    }
+                                                                                });
+                                                                             }
+                                                                            });
+                                                                        }
+                                                                                //Toasty.info(getApplicationContext(), "Item Id L = " + itemIdStL, Toast.LENGTH_SHORT).show();
+                                                                        } catch (JSONException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                        }
+                                                                    });
                                                                 }
+                                                                //Jika kedua Side RL Diisi
+
+                                                                //Jika Side L Tidak Diisi
                                                                 else
                                                                 {
-                                                                    hargaR = "False";
-                                                                }
+                                                                    Log.d("AREA 5", "Check stock R : " + itemIdStR);
+                                                                    final Data_stok_satuan itemSatuan = new Data_stok_satuan();
 
-
-                                                                if (!sphl.isEmpty() | !cyll.isEmpty() | !addl.isEmpty())
-                                                                {
-                                                                    getItemStockLHandle(kodeLensa, sphl, cyll, addl, "L", new VolleyOneCallBack() {
+                                                                    cekStokR(itemIdStR, new VolleyOneCallBack() {
                                                                         @Override
                                                                         public void onSuccess(String result) {
                                                                             try {
-                                                                                JSONObject jsonObject = new JSONObject(result);
+                                                                                JSONObject object1 = new JSONObject(result);
 
-                                                                                if (jsonObject.names().get(0).equals("error"))
+                                                                                sisaStok = object1.getInt("qty_stock");
+
+                                                                                itemSatuan.setId(1);
+                                                                                itemSatuan.setDescription(descriptionStockR);
+                                                                                itemSatuan.setQty(1);
+                                                                                itemSatuan.setStock(sisaStok);
+
+                                                                                Log.d("AREA 5", "Id satuan : " + itemSatuan.getId());
+                                                                                Log.d("AREA 5", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                                Log.d("AREA 5", "Qty Order : " + itemSatuan.getQty());
+                                                                                Log.d("AREA 5", "Sisa Stok : " + sisaStok);
+
+                                                                                lensSatuanHelper.open();
+                                                                                long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                                if (status > 0)
                                                                                 {
-                                                                                    Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                                                                    Log.d("AREA 5" ,"Item has been added to cart");
+                                                                                }
+
+//                                                                                                            itemStokSatuan.add(itemSatuan);
+                                                                                List<Data_stok_satuan> itemSatuan;
+                                                                                itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                                Log.d("AREA 5", "Item Stok Satuan : " + itemSatuan.size());
+                                                                                Log.d("AREA 5", "Deskripsi lensa : " + itemSatuan.get(0).getDescription());
+
+                                                                                List<Boolean> sisanya = new ArrayList<>();
+
+                                                                                for (int i = 0; i < itemSatuan.size(); i++)
+                                                                                {
+                                                                                    String item = itemSatuan.get(i).getDescription();
+                                                                                    int stock = itemSatuan.get(i).getStock();
+                                                                                    int qty   = itemSatuan.get(i).getQty();
+                                                                                    int sisa  = stock - qty;
+
+                                                                                    Log.d("AREA 5", "Deskripsi : " + item);
+                                                                                    Log.d("AREA 5", "Stock : " + stock);
+                                                                                    Log.d("AREA 5", "qty : " + qty);
+                                                                                    Log.d("AREA 5", "sisa : " + sisa);
+
+                                                                                    if (sisa < 0)
+                                                                                    {
+                                                                                        sisanya.add(i, false);
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        sisanya.add(i, true);
+                                                                                    }
+                                                                                }
+
+                                                                                boolean cek = sisanya.contains(false);
+
+                                                                                if (cek) {
+                                                                                    Log.d("Information Stok", "Ada item yang minus");
+
+                                                                                    final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                                    dialog.setContentView(R.layout.dialog_warning);
+                                                                                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                                    lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                                    UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                                    txtTitle.setText("Stok " + itemSatuan.get(0).getDescription() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                                    imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(View v) {
+                                                                                            dialog.dismiss();
+                                                                                        }
+                                                                                    });
+
+                                                                                    dialog.show();
+                                                                                    dialog.getWindow().setAttributes(lwindow);
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    itemIdStL = jsonObject.getString("item_id");
+                                                                                    Log.d("Information Stok", "Aman lanjutkan");
 
-                                                                                    getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
-                                                                                        @Override
-                                                                                        public void onSuccess(String result) {
-                                                                                            if (result != null)
-                                                                                            {
-                                                                                                //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
-                                                                                                hargaL = "True";
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                hargaL = "False";
-                                                                                            }
+                                                                                    String order = txt_orderNumber.getText().toString();
+                                                                                    String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                            String order = txt_orderNumber.getText().toString();
-                                                                                            String none = spin_corridor.getSelectedItem().toString().trim();
+                                                                                    if (sw_facet.isChecked())
+                                                                                    {
+                                                                                        isfacet = "G";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        String hor = txt_hor.getText().toString();
+                                                                                        String ver = txt_ver.getText().toString();
 
-                                                                                            if (sw_facet.isChecked())
-                                                                                            {
-                                                                                                isfacet = "G";
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                String hor = txt_hor.getText().toString();
-                                                                                                String ver = txt_ver.getText().toString();
-
-                                                                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                {
-                                                                                                    isfacet = "F";
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    isfacet = "N";
-                                                                                                }
-                                                                                            }
-
-                                                                                            Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
-
-                                                                                            if (none.equalsIgnoreCase("none"))
-                                                                                            {
-                                                                                                Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                                            }
-                                                                                            else if (order.isEmpty())
-                                                                                            {
-                                                                                                Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                                                dialog.setMessage("Are you sure all data is correct ?");
-                                                                                                dialog.setTopTitle("Confirmation Order");
-                                                                                                dialog.setTopTitleColor(Color.WHITE);
-                                                                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                                                dialog.setCancelable(false);
-
-                                                                                                dialog.setPositiveButton("Yes", new View.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(View v) {
-                                                                                                        saveOrder();
-                                                                                                    }
-                                                                                                });
-
-                                                                                                dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(View v) {
-                                                                                                        dialog.dismiss();
-                                                                                                    }
-                                                                                                });
-                                                                                                dialog.show();
-                                                                                            }
+                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+                                                                                        {
+                                                                                            isfacet = "F";
                                                                                         }
-                                                                                    });
+                                                                                        else
+                                                                                        {
+                                                                                            isfacet = "N";
+                                                                                        }
+                                                                                    }
+
+                                                                                    Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                                    if (none.equalsIgnoreCase("none"))
+                                                                                    {
+                                                                                        Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                                    }
+                                                                                    else if (order.isEmpty())
+                                                                                    {
+                                                                                        Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                                        dialog.setMessage("Are you sure all data is correct ?");
+                                                                                        dialog.setTopTitle("Confirmation Order");
+                                                                                        dialog.setTopTitleColor(Color.WHITE);
+                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                        dialog.setCancelable(false);
+
+                                                                                        dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                            @Override
+                                                                                            public void onClick(View v) {
+                                                                                                saveOrder();
+                                                                                            }
+                                                                                        });
+
+                                                                                        dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                            @Override
+                                                                                            public void onClick(View v) {
+                                                                                                dialog.dismiss();
+                                                                                            }
+                                                                                        });
+                                                                                        dialog.show();
+                                                                                    }
                                                                                 }
-                                                                                //Toasty.info(getApplicationContext(), "Item Id L = " + itemIdStL, Toast.LENGTH_SHORT).show();
                                                                             } catch (JSONException e) {
                                                                                 e.printStackTrace();
                                                                             }
                                                                         }
                                                                     });
                                                                 }
-                                                                else
-                                                                {
-                                                                    String order = txt_orderNumber.getText().toString();
-                                                                    String none = spin_corridor.getSelectedItem().toString().trim();
-
-                                                                    if (sw_facet.isChecked())
-                                                                    {
-                                                                        isfacet = "G";
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        String hor = txt_hor.getText().toString();
-                                                                        String ver = txt_ver.getText().toString();
-
-                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                        {
-                                                                            isfacet = "F";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            isfacet = "N";
-                                                                        }
-                                                                    }
-
-                                                                    Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
-
-                                                                    if (none.equalsIgnoreCase("none"))
-                                                                    {
-                                                                        Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                    }
-                                                                    else if (order.isEmpty())
-                                                                    {
-                                                                        Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                        dialog.setMessage("Are you sure all data is correct ?");
-                                                                        dialog.setTopTitle("Confirmation Order");
-                                                                        dialog.setTopTitleColor(Color.WHITE);
-                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                        dialog.setCancelable(false);
-
-                                                                        dialog.setPositiveButton("Yes", new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                saveOrder();
-                                                                            }
-                                                                        });
-
-                                                                        dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                dialog.dismiss();
-                                                                            }
-                                                                        });
-                                                                        dialog.show();
-                                                                    }
-                                                                }
+                                                                //Jika Side L Tidak Diisi
 
 //                                                                Toasty.info(getApplicationContext(), "R Value: " + hargaR + " L Value: " + hargaL, Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                                     }
                                                     //Toasty.info(getApplicationContext(), "Item Id R = " + itemIdStR, Toast.LENGTH_SHORT).show();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                             }
                                         });
                                     }
@@ -1148,89 +1952,189 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                         getItemStockLHandle(kodeLensa, sphl, cyll, addl, "L", new VolleyOneCallBack() {
                                             @Override
                                             public void onSuccess(String result) {
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(result);
+                                            try
+                                            {
+                                                JSONObject jsonObject = new JSONObject(result);
 
-                                                    if (jsonObject.names().get(0).equals("error"))
-                                                    {
-                                                        Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    else
-                                                    {
-                                                        itemIdStL = jsonObject.getString("item_id");
+                                                if (jsonObject.names().get(0).equals("error"))
+                                                {
+                                                    Toasty.warning(getApplicationContext(), "Item tidak ditemukan", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else
+                                                {
+                                                    itemIdStL = jsonObject.getString("item_id");
+                                                    descriptionStockL = jsonObject.getString("item_desc") + " L " + sphl + " " + cyll + " ADD " + addl;
 
-                                                        getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
+                                                    getItemPriceStLHandle(itemIdStL, new VolleyOneCallBack() {
                                                             @Override
                                                             public void onSuccess(String result) {
-                                                                if (result != null)
-                                                                {
+                                                        if (result != null)
+                                                        {
                                                                     //Toasty.info(getApplicationContext(), "Price R: " + result, Toast.LENGTH_SHORT).show();
-                                                                    hargaL = "True";
-                                                                }
-                                                                else
-                                                                {
-                                                                    hargaL = "False";
-                                                                }
+                                                            hargaL = "True";
+                                                        }
+                                                        else
+                                                        {
+                                                            hargaL = "False";
+                                                        }
 
-                                                                String order = txt_orderNumber.getText().toString();
-                                                                String none = spin_corridor.getSelectedItem().toString().trim();
+                                                        Log.d("AREA 6", "Check stock : " + itemIdStL);
+                                                        final Data_stok_satuan itemSatuan = new Data_stok_satuan();
 
-                                                                if (sw_facet.isChecked())
+                                                        cekStokL(itemIdStL, new VolleyOneCallBack() {
+                                                            @Override
+                                                            public void onSuccess(String result) {
+                                                                try
                                                                 {
-                                                                    isfacet = "G";
-                                                                }
-                                                                else
-                                                                {
-                                                                    String hor = txt_hor.getText().toString();
-                                                                    String ver = txt_ver.getText().toString();
+                                                                    JSONObject object1 = new JSONObject(result);
 
-                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+                                                                    sisaStok = object1.getInt("qty_stock");
+
+                                                                    itemSatuan.setId(1);
+                                                                    itemSatuan.setDescription(descriptionStockL);
+                                                                    itemSatuan.setQty(1);
+                                                                    itemSatuan.setStock(sisaStok);
+
+                                                                    Log.d("AREA 6", "Id satuan : " + itemSatuan.getId());
+                                                                    Log.d("AREA 6", "Deskripsi satuan : " + itemSatuan.getDescription());
+                                                                    Log.d("AREA 6", "Qty Order : " + itemSatuan.getQty());
+                                                                    Log.d("AREA 6", "Sisa Stok : " + sisaStok);
+
+                                                                    lensSatuanHelper.open();
+                                                                    long status = lensSatuanHelper.insertLensSatuan(itemSatuan);
+
+                                                                    if (status > 0)
                                                                     {
-                                                                        isfacet = "F";
+                                                                        Log.d("AREA 6" ,"Item has been added to cart");
+                                                                    }
+
+                                                                    List<Data_stok_satuan> itemSatuan;
+                                                                    itemSatuan = lensSatuanHelper.getAllLensSatuan();
+                                                                    Log.d("AREA 6", "Item Stok Satuan : " + itemSatuan.size());
+                                                                    Log.d("AREA 6", "Deskripsi lensa : " + itemSatuan.get(0).getDescription());
+
+                                                                    List<Boolean> sisanya = new ArrayList<>();
+
+                                                                    for (int i = 0; i < itemSatuan.size(); i++)
+                                                                    {
+                                                                        String item = itemSatuan.get(i).getDescription();
+                                                                        int stock = itemSatuan.get(i).getStock();
+                                                                        int qty   = itemSatuan.get(i).getQty();
+                                                                        int sisa  = stock - qty;
+
+                                                                        Log.d("AREA 6", "Deskripsi : " + item);
+                                                                        Log.d("AREA 6", "Stock : " + stock);
+                                                                        Log.d("AREA 6", "qty : " + qty);
+                                                                        Log.d("AREA 6", "sisa : " + sisa);
+
+                                                                        if (sisa < 0)
+                                                                        {
+                                                                            sisanya.add(i, false);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            sisanya.add(i, true);
+                                                                        }
+                                                                    }
+
+                                                                    boolean cek = sisanya.contains(false);
+
+                                                                    if (cek) {
+                                                                        Log.d("Information Stok", "Ada item yang minus");
+
+                                                                        final Dialog dialog = new Dialog(FormOrderLensActivity.this);
+                                                                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                                                        dialog.setContentView(R.layout.dialog_warning);
+                                                                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                                                        lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                                                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                                                        UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                                                        txtTitle.setText("Stok " + itemSatuan.get(0).getDescription() + " kosong. Harap hubungi Customer Service kami di (021) 4610154 untuk proses order lebih lanjut");
+
+                                                                        ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                                                        imgClose.setOnClickListener(new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View v) {
+                                                                                dialog.dismiss();
+                                                                            }
+                                                                        });
+
+                                                                        dialog.show();
+                                                                        dialog.getWindow().setAttributes(lwindow);
                                                                     }
                                                                     else
                                                                     {
-                                                                        isfacet = "N";
+                                                                        Log.d("Information Stok", "Aman lanjutkan");
+
+                                                                        String order = txt_orderNumber.getText().toString();
+                                                                        String none = spin_corridor.getSelectedItem().toString().trim();
+
+                                                                        if (sw_facet.isChecked())
+                                                                        {
+                                                                            isfacet = "G";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            String hor = txt_hor.getText().toString();
+                                                                            String ver = txt_ver.getText().toString();
+
+                                                                            if (!hor.isEmpty() && !ver.isEmpty())
+                                                                            {
+                                                                                isfacet = "F";
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                isfacet = "N";
+                                                                            }
+                                                                        }
+
+                                                                        Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
+
+                                                                        if (none.equalsIgnoreCase("none"))
+                                                                        {
+                                                                            Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
+                                                                        }
+                                                                        else if (order.isEmpty())
+                                                                        {
+                                                                            Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
+                                                                            dialog.setMessage("Are you sure all data is correct ?");
+                                                                            dialog.setTopTitle("Confirmation Order");
+                                                                            dialog.setTopTitleColor(Color.WHITE);
+                                                                            dialog.setTopColorRes(R.color.bootstrap_brand_info);
+                                                                            dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
+                                                                            dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                            dialog.setCancelable(false);
+
+                                                                            dialog.setPositiveButton("Yes", new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    saveOrder();
+                                                                                }
+                                                                            });
+
+                                                                            dialog.setNegativeButton("No", new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    dialog.dismiss();
+                                                                                }
+                                                                            });
+                                                                            dialog.show();
+                                                                        }
                                                                     }
-                                                                }
-
-                                                                Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
-
-                                                                if (none.equalsIgnoreCase("none"))
-                                                                {
-                                                                    Toasty.error(getApplicationContext(), "Please check corridor !!!", Toast.LENGTH_LONG, true).show();
-                                                                }
-                                                                else if (order.isEmpty())
-                                                                {
-                                                                    Toasty.error(getApplicationContext(), "Please fill order number first", Toast.LENGTH_SHORT, true).show();
-                                                                }
-                                                                else
-                                                                {
-                                                                    dialog = new LovelyStandardDialog(FormOrderLensActivity.this);
-                                                                    dialog.setMessage("Are you sure all data is correct ?");
-                                                                    dialog.setTopTitle("Confirmation Order");
-                                                                    dialog.setTopTitleColor(Color.WHITE);
-                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
-                                                                    dialog.setCancelable(false);
-
-                                                                    dialog.setPositiveButton("Yes", new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            saveOrder();
-                                                                        }
-                                                                    });
-
-                                                                    dialog.setNegativeButton("No", new View.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(View v) {
-                                                                            dialog.dismiss();
-                                                                        }
-                                                                    });
-                                                                    dialog.show();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
                                                                 }
                                                             }
+                                                        });
+                                                        }
                                                         });
                                                     }
                                                     //Toasty.info(getApplicationContext(), "Item Id L = " + itemIdStL, Toast.LENGTH_SHORT).show();
@@ -1831,6 +2735,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
             else
             {
                 itemPriceR = 0;
+                itemCodeR = "";
             }
 
             if (!sphl.isEmpty() | !addl.isEmpty())
@@ -1840,13 +2745,15 @@ public class FormOrderLensActivity extends AppCompatActivity {
             else
             {
                 itemPriceL = 0;
+                itemCodeL = "";
             }
 
             //Get Price Facet
             if (isfacet.equals("G") | isfacet.contentEquals("G") | isfacet.contains("G"))
             {
                 //Parameter frameType, typeLensa, lensDiv
-                getFacetItem(frameType, lensDiv, typeLensa);
+//                getFacetItem(frameType, lensDiv, typeLensa);
+                getLensFacet(kodeLensa, frameType);
                 itemWeight = 233;
                 //Toasty.info(getApplicationContext(), frameType, Toast.LENGTH_SHORT).show();
             }
@@ -1961,7 +2868,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
             if (isfacet.equals("G") | isfacet.contentEquals("G") | isfacet.contains("G"))
             {
                 //Parameter frameType, typeLensa, lensDiv
-                getFacetItem(frameType, lensDiv, typeLensa);
+//                getFacetItem(frameType, lensDiv, typeLensa);
+                getLensFacet(kodeLensa, frameType);
                 itemWeight = 233;
             }
             else
@@ -3408,7 +4316,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                     //autoSentftp(filename);
                     insertTemp();
-                    information("INFORMATION", msg, R.drawable.success_outline, DefaultBootstrapBrand.SUCCESS);
+//                    information("INFORMATION", msg, R.drawable.success_outline, DefaultBootstrapBrand.SUCCESS);
                     moveTxt(filename);
 
                     //Auto reply and info new order
@@ -4843,6 +5751,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     else
                     {
                         itemIdStR = jsonObject.getString("item_id");
+                        itemIdR = itemIdStR;
 
                         if (!itemIdStR.isEmpty() | !itemIdStR.contentEquals("Null"))
                         {
@@ -4930,6 +5839,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     else
                     {
                         itemIdStL = jsonObject.getString("item_id");
+                        itemIdL = itemIdStL;
 
                         if (!itemIdStL.isEmpty() | !itemIdStL.contentEquals("null"))
                         {
@@ -4981,6 +5891,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     itemPriceR = Integer.parseInt(jsonObject.getString("price_list"));
+                    divName    = jsonObject.getString("div_name");
 
                     itemTotalPriceR = Integer.parseInt(itemQtyR) * itemPriceR;
 
@@ -5020,6 +5931,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     itemPriceL = Integer.parseInt(jsonObject.getString("price_list"));
+                    divName    = jsonObject.getString("div_name");
 
                     itemTotalPriceL = Integer.parseInt(itemQtyL) * itemPriceL;
 
@@ -5100,6 +6012,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     itemPriceStR = Integer.parseInt(jsonObject.getString("price_list"));
+                    divName    = jsonObject.getString("div_name");
 
                     itemPriceR = itemPriceStR;
                     itemTotalPriceR = Integer.parseInt(itemQtyR) * itemPriceR;
@@ -5183,6 +6096,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     itemPriceStL = Integer.parseInt(jsonObject.getString("price_list"));
+                    divName    = jsonObject.getString("div_name");
 
                     itemPriceL = itemPriceStL;
                     itemTotalPriceL = Integer.parseInt(itemQtyL) * itemPriceL;
@@ -5244,8 +6158,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             .append(segment7).append('.')
                             .append(segment8);
 
-                    String prod_attr_val = sb.toString();
-                    getDiscountItem(prod_attr_val, opticUsername);
+                    prod_attr_valR = sb.toString();
+                    getDiscountItem(prod_attr_valR, opticUsername);
                     //Toasty.info(getApplicationContext(), prod_attr_val, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -5301,8 +6215,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             .append(segment7).append('.')
                             .append(segment8);
 
-                    String prod_attr_val = sb.toString();
-                    getDiscountItem(prod_attr_val, opticUsername);
+                    prod_attr_valL = sb.toString();
+                    getDiscountItem(prod_attr_valL, opticUsername);
                     //Toasty.info(getApplicationContext(), prod_attr_val, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -5405,6 +6319,47 @@ public class FormOrderLensActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void getLensFacet(final String lenstype, final String frametype)
+    {
+        Config config = new Config();
+        String URL = config.Ip_address + config.facet_item_getLensFacet;
+
+        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String itemId = object.getString("item_id");
+
+                    Log.d("ITEM ID FACET ", itemId);
+
+                    getFacetPrice(itemId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("Error Get Lens Facet", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("lenstype", lenstype);
+                hashMap.put("frametype", frametype);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void getFacetPrice(final String itemId)
     {
         Config config = new Config();
@@ -5486,7 +6441,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
     private void getOrderNumber(final String user, final String date)
     {
         Config config = new Config();
-        String URL = config.Ip_address + config.lens_summary_getOrderNumber;
+//        String URL = config.Ip_address + config.lens_summary_getOrderNumber;
+        String URL = config.Ip_address + config.orderlens_get_orderid;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -5784,6 +6740,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
                             intent.putExtra("id_party", opticId.replace(",", ""));
                             intent.putExtra("city_info", opticCity);
+                            intent.putExtra("province", opticProvince);
                             intent.putExtra("price_lens", lensprice);
                             intent.putExtra("description_lens", lensdesc);
                             intent.putExtra("discount_lens", lensdiscount);
@@ -5792,13 +6749,49 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("item_weight", itemWeight);
                             intent.putExtra("flag_pasang", flagPasang);
                             intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("optic_flag", opticFlag);
                             intent.putExtra("flag_shipping", flagShipping);
                             intent.putExtra("order_number", txt_orderNumber.getText().toString());
                             intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("phone_number", txt_phonenumber.getText().toString());
+                            intent.putExtra("note", txt_orderInformation.getText().toString());
+                            intent.putExtra("prodDivType", divName);
+                            intent.putExtra("lenstype", txt_lenstype.getText().toString());
+                            intent.putExtra("lensdesc", txt_lensdesc.getText().toString());
+                            intent.putExtra("categoryLens", categoryLens);
+                            Log.d("FORM ORDER : ", categoryLens);
+
+                            intent.putExtra("sphR", txt_sphr.getText().toString());
+                            intent.putExtra("sphL", txt_sphl.getText().toString());
+                            intent.putExtra("cylR", txt_cylr.getText().toString());
+                            intent.putExtra("cylL", txt_cyll.getText().toString());
+                            intent.putExtra("axsR", txt_axsr.getText().toString());
+                            intent.putExtra("axsL", txt_axsl.getText().toString());
+                            intent.putExtra("addR", txt_addr.getText().toString());
+                            intent.putExtra("addL", txt_addl.getText().toString());
+                            intent.putExtra("coatCode", coating);
+                            intent.putExtra("coatDesc", txt_coatdescr.getText().toString());
+                            intent.putExtra("tintCode", color_tint);
+                            intent.putExtra("tintDesc", color_descr);
+                            intent.putExtra("corridor", corridor);
+                            intent.putExtra("mpdR", txt_mpdr.getText().toString());
+                            intent.putExtra("mpdL", txt_mpdl.getText().toString());
+                            intent.putExtra("pv", txt_segh.getText().toString());
+                            intent.putExtra("wrap", txt_wrap.getText().toString());
+                            intent.putExtra("panto", txt_phantose.getText().toString());
+                            intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetInfo", txt_infofacet.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("dbl", txt_dbl.getText().toString());
+                            intent.putExtra("hor", txt_hor.getText().toString());
+                            intent.putExtra("ver", txt_ver.getText().toString());
+                            intent.putExtra("frameCode", txt_framebrand.getText().toString());
+
                             intent.putExtra("margin_lens", "35");
                             intent.putExtra("extramargin_lens", "15");
 
                             //Area Lens R
+                            intent.putExtra("itemid_R", itemIdR);
                             intent.putExtra("itemcode_R", itemCodeR);
                             intent.putExtra("description_R", descR);
                             intent.putExtra("power_R", powerR);
@@ -5807,6 +6800,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("itemtotal_R", itemTotalPriceR);
 
                             //Area Lens L
+                            intent.putExtra("itemid_L", itemIdL);
                             intent.putExtra("itemcode_L", itemCodeL);
                             intent.putExtra("description_L", descL);
                             intent.putExtra("power_L", powerL);
@@ -5819,6 +6813,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("discount_r", discountR);
                             intent.putExtra("discount_l", discountL);
                             intent.putExtra("extra_margin_discount", "10");
+                            intent.putExtra("prod_attr_valR", prod_attr_valR);
+                            intent.putExtra("prod_attr_valL", prod_attr_valL);
 
                             //Area Facet
                             intent.putExtra("itemcode_facet", itemFacetCode);
@@ -5846,10 +6842,170 @@ public class FormOrderLensActivity extends AppCompatActivity {
                         }
                         else
                         {
+                            Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+                            Float lensdiscount = 0f;
+                            Float totalPrice = 0f;
+                            String lensdesc   = txt_lensdesc.getText().toString();
+
+                            if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+                            {
+                                lensprice = itemPriceR + itemPriceL;
+                                float discR = oprDiscount * itemPriceR / 100;
+                                float discL = oprDiscount * itemPriceL / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+
+                                lensdiscount = discR + discL;
+                            }
+                            else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+                            {
+                                lensprice = itemPriceStR + itemPriceStL;
+                                float discR = oprDiscount * itemPriceStR / 100;
+                                float discL = oprDiscount * itemPriceStL / 100;
+                                //Integer disc = oprDiscount * itemPriceSt / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+                                lensdiscount = discR + discL;
+                            }
+
+                            if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+                            {
+                                lensfacet   = itemFacetPrice + itemFacetPrice;
+                                lenstinting = itemTintPrice + itemTintPrice;
+
+                                qtyFacet = "2";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "2";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+                            }
+                            else
+                            {
+                                //lensprice   = (lensprice / 2);
+                                //lensdiscount= (lensdiscount / 2);
+                                lensfacet   = itemFacetPrice;
+                                lenstinting = itemTintPrice;
+
+                                qtyFacet   = "1";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "1";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+
+                                itemWeight  = itemWeight / 2;
+                            }
+
+                            totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+
                             File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
                             file = sample.toString();
 
                             uploadTxt(file);
+
+                            Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+                            intent.putExtra("id_party", opticId.replace(",", ""));
+                            intent.putExtra("city_info", opticCity);
+                            intent.putExtra("province", opticProvince);
+                            intent.putExtra("price_lens", lensprice);
+                            intent.putExtra("description_lens", lensdesc);
+                            intent.putExtra("discount_lens", lensdiscount);
+                            intent.putExtra("facet_lens", lensfacet);
+                            intent.putExtra("tinting_lens", lenstinting);
+                            intent.putExtra("item_weight", itemWeight);
+                            intent.putExtra("flag_pasang", flagPasang);
+                            intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("optic_flag", opticFlag);
+                            intent.putExtra("flag_shipping", flagShipping);
+                            intent.putExtra("order_number", txt_orderNumber.getText().toString());
+                            intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("phone_number", txt_phonenumber.getText().toString());
+                            intent.putExtra("note", txt_orderInformation.getText().toString());
+                            intent.putExtra("prodDivType", divName);
+                            intent.putExtra("lenstype", txt_lenstype.getText().toString());
+                            intent.putExtra("lensdesc", txt_lensdesc.getText().toString());
+                            intent.putExtra("categoryLens", categoryLens);
+                            Log.d("FORM ORDER : ", categoryLens);
+
+                            intent.putExtra("sphR", txt_sphr.getText().toString());
+                            intent.putExtra("sphL", txt_sphl.getText().toString());
+                            intent.putExtra("cylR", txt_cylr.getText().toString());
+                            intent.putExtra("cylL", txt_cyll.getText().toString());
+                            intent.putExtra("axsR", txt_axsr.getText().toString());
+                            intent.putExtra("axsL", txt_axsl.getText().toString());
+                            intent.putExtra("addR", txt_addr.getText().toString());
+                            intent.putExtra("addL", txt_addl.getText().toString());
+                            intent.putExtra("coatCode", coating);
+                            intent.putExtra("coatDesc", txt_coatdescr.getText().toString());
+                            intent.putExtra("tintCode", color_tint);
+                            intent.putExtra("tintDesc", color_descr);
+                            intent.putExtra("corridor", corridor);
+                            intent.putExtra("mpdR", txt_mpdr.getText().toString());
+                            intent.putExtra("mpdL", txt_mpdl.getText().toString());
+                            intent.putExtra("pv", txt_segh.getText().toString());
+                            intent.putExtra("wrap", txt_wrap.getText().toString());
+                            intent.putExtra("panto", txt_phantose.getText().toString());
+                            intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetInfo", txt_infofacet.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("dbl", txt_dbl.getText().toString());
+                            intent.putExtra("hor", txt_hor.getText().toString());
+                            intent.putExtra("ver", txt_ver.getText().toString());
+                            intent.putExtra("frameCode", txt_framebrand.getText().toString());
+
+                            intent.putExtra("margin_lens", "35");
+                            intent.putExtra("extramargin_lens", "15");
+
+                            //Area Lens R
+                            intent.putExtra("itemid_R", itemIdR);
+                            intent.putExtra("itemcode_R", itemCodeR);
+                            intent.putExtra("description_R", descR);
+                            intent.putExtra("power_R", powerR);
+                            intent.putExtra("qty_R", itemQtyR);
+                            intent.putExtra("itemprice_R", itemPriceR);
+                            intent.putExtra("itemtotal_R", itemTotalPriceR);
+
+                            //Area Lens L
+                            intent.putExtra("itemid_L", itemIdL);
+                            intent.putExtra("itemcode_L", itemCodeL);
+                            intent.putExtra("description_L", descL);
+                            intent.putExtra("power_L", powerL);
+                            intent.putExtra("qty_L", itemQtyL);
+                            intent.putExtra("itemprice_L", itemPriceL);
+                            intent.putExtra("itemtotal_L", itemTotalPriceL);
+
+                            //Area Diskon
+                            intent.putExtra("description_diskon", listLineNo);
+                            intent.putExtra("discount_r", discountR);
+                            intent.putExtra("discount_l", discountL);
+                            intent.putExtra("extra_margin_discount", "10");
+                            intent.putExtra("prod_attr_valR", prod_attr_valR);
+                            intent.putExtra("prod_attr_valL", prod_attr_valL);
+
+                            //Area Facet
+                            intent.putExtra("itemcode_facet", itemFacetCode);
+                            intent.putExtra("description_facet", facetDescription);
+                            intent.putExtra("qty_facet", qtyFacet);
+                            intent.putExtra("price_facet", itemFacetPrice);
+                            intent.putExtra("total_facet", totalFacet);
+                            intent.putExtra("margin_facet", "8");
+                            intent.putExtra("extra_margin_facet", "8");
+
+                            //Area Tinting
+                            intent.putExtra("itemcode_tinting", itemTintingCode);
+                            intent.putExtra("description_tinting", tintingDescription);
+                            intent.putExtra("qty_tinting", qtyTinting);
+                            intent.putExtra("price_tinting", itemTintPrice);
+                            intent.putExtra("total_tinting", totalTinting);
+                            intent.putExtra("margin_tinting", "8");
+                            intent.putExtra("extra_margin_tinting", "8");
+
+                            intent.putExtra("total_price", totalPrice);
+
+                            startActivity(intent);
+
+                            finish();
                         }
                     }
                     else if (object.names().get(0).equals("error"))
@@ -6068,6 +7224,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
                             intent.putExtra("id_party", opticId.replace(",", ""));
                             intent.putExtra("city_info", opticCity);
+                            intent.putExtra("province", opticProvince);
                             intent.putExtra("price_lens", lensprice);
                             intent.putExtra("description_lens", lensdesc);
                             intent.putExtra("discount_lens", lensdiscount);
@@ -6076,13 +7233,49 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("item_weight", itemWeight);
                             intent.putExtra("flag_pasang", flagPasang);
                             intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("optic_flag", opticFlag);
                             intent.putExtra("flag_shipping", flagShipping);
                             intent.putExtra("order_number", txt_orderNumber.getText().toString());
                             intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("phone_number", txt_phonenumber.getText().toString());
+                            intent.putExtra("note", txt_orderInformation.getText().toString());
+                            intent.putExtra("prodDivType", divName);
+                            intent.putExtra("lenstype", txt_lenstype.getText().toString());
+                            intent.putExtra("lensdesc", txt_lensdesc.getText().toString());
+                            intent.putExtra("categoryLens", categoryLens);
+                            Log.d("FORM ORDER : ", categoryLens);
+
+                            intent.putExtra("sphR", txt_sphr.getText().toString());
+                            intent.putExtra("sphL", txt_sphl.getText().toString());
+                            intent.putExtra("cylR", txt_cylr.getText().toString());
+                            intent.putExtra("cylL", txt_cyll.getText().toString());
+                            intent.putExtra("axsR", txt_axsr.getText().toString());
+                            intent.putExtra("axsL", txt_axsl.getText().toString());
+                            intent.putExtra("addR", txt_addr.getText().toString());
+                            intent.putExtra("addL", txt_addl.getText().toString());
+                            intent.putExtra("coatCode", coating);
+                            intent.putExtra("coatDesc", txt_coatdescr.getText().toString());
+                            intent.putExtra("tintCode", color_tint);
+                            intent.putExtra("tintDesc", color_descr);
+                            intent.putExtra("corridor", corridor);
+                            intent.putExtra("mpdR", txt_mpdr.getText().toString());
+                            intent.putExtra("mpdL", txt_mpdl.getText().toString());
+                            intent.putExtra("pv", txt_segh.getText().toString());
+                            intent.putExtra("wrap", txt_wrap.getText().toString());
+                            intent.putExtra("panto", txt_phantose.getText().toString());
+                            intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetInfo", txt_infofacet.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("dbl", txt_dbl.getText().toString());
+                            intent.putExtra("hor", txt_hor.getText().toString());
+                            intent.putExtra("ver", txt_ver.getText().toString());
+                            intent.putExtra("frameCode", txt_framebrand.getText().toString());
+
                             intent.putExtra("margin_lens", "35");
                             intent.putExtra("extramargin_lens", "15");
 
                             //Area Lens R
+                            intent.putExtra("itemid_R", itemIdR);
                             intent.putExtra("itemcode_R", itemCodeR);
                             intent.putExtra("description_R", descR);
                             intent.putExtra("power_R", powerR);
@@ -6091,6 +7284,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("itemtotal_R", itemTotalPriceR);
 
                             //Area Lens L
+                            intent.putExtra("itemid_L", itemIdL);
                             intent.putExtra("itemcode_L", itemCodeL);
                             intent.putExtra("description_L", descL);
                             intent.putExtra("power_L", powerL);
@@ -6103,6 +7297,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("discount_r", discountR);
                             intent.putExtra("discount_l", discountL);
                             intent.putExtra("extra_margin_discount", "10");
+                            intent.putExtra("prod_attr_valR", prod_attr_valR);
+                            intent.putExtra("prod_attr_valL", prod_attr_valL);
 
                             //Area Facet
                             intent.putExtra("itemcode_facet", itemFacetCode);
@@ -6130,10 +7326,171 @@ public class FormOrderLensActivity extends AppCompatActivity {
                         }
                         else
                         {
+                            Integer lensprice = 0, lensfacet = 0, lenstinting = 0;
+                            Float lensdiscount = 0f;
+                            Float totalPrice = 0f;
+                            String lensdesc   = txt_lensdesc.getText().toString();
+
+                            if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
+                            {
+                                lensprice = itemPriceR + itemPriceL;
+                                float discR = oprDiscount * itemPriceR / 100;
+                                float discL = oprDiscount * itemPriceL / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+
+                                lensdiscount = discR + discL;
+                            }
+                            else if (categoryLens.equals("S") || categoryLens.contentEquals("S"))
+                            {
+                                lensprice = itemPriceStR + itemPriceStL;
+                                float discR = oprDiscount * itemPriceStR / 100;
+                                float discL = oprDiscount * itemPriceStL / 100;
+                                //Integer disc = oprDiscount * itemPriceSt / 100;
+
+                                discountR = discR;
+                                discountL = discL;
+                                lensdiscount = discR + discL;
+                            }
+
+                            if (flagPasang.equals("2") | flagPasang.contains("2") | flagPasang.contentEquals("2"))
+                            {
+                                lensfacet   = itemFacetPrice + itemFacetPrice;
+                                lenstinting = itemTintPrice + itemTintPrice;
+
+                                qtyFacet = "2";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "2";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+                            }
+                            else
+                            {
+                                //lensprice   = (lensprice / 2);
+                                //lensdiscount= (lensdiscount / 2);
+                                lensfacet   = itemFacetPrice;
+                                lenstinting = itemTintPrice;
+
+                                qtyFacet   = "1";
+                                totalFacet = Integer.parseInt(qtyFacet) * itemFacetPrice;
+
+                                qtyTinting = "1";
+                                totalTinting = Integer.parseInt(qtyTinting) * itemTintPrice;
+
+                                itemWeight  = itemWeight / 2;
+                            }
+
+                            totalPrice =  ((float) lensprice - lensdiscount) + (float) lensfacet + (float) lenstinting;
+
                             File sample = new File(Environment.getExternalStorageDirectory(), "TRLAPP/OrderTemp/" + filename);
                             file = sample.toString();
 
                             uploadTxt(file);
+
+
+                            Intent intent = new Intent(FormOrderLensActivity.this, FormLensSummaryActivity.class);
+                            intent.putExtra("id_party", opticId.replace(",", ""));
+                            intent.putExtra("city_info", opticCity);
+                            intent.putExtra("province", opticProvince);
+                            intent.putExtra("price_lens", lensprice);
+                            intent.putExtra("description_lens", lensdesc);
+                            intent.putExtra("discount_lens", lensdiscount);
+                            intent.putExtra("facet_lens", lensfacet);
+                            intent.putExtra("tinting_lens", lenstinting);
+                            intent.putExtra("item_weight", itemWeight);
+                            intent.putExtra("flag_pasang", flagPasang);
+                            intent.putExtra("username_info", opticUsername);
+                            intent.putExtra("optic_flag", opticFlag);
+                            intent.putExtra("flag_shipping", flagShipping);
+                            intent.putExtra("order_number", txt_orderNumber.getText().toString());
+                            intent.putExtra("patient_name", txt_patientName.getText().toString());
+                            intent.putExtra("phone_number", txt_phonenumber.getText().toString());
+                            intent.putExtra("note", txt_orderInformation.getText().toString());
+                            intent.putExtra("prodDivType", divName);
+                            intent.putExtra("lenstype", txt_lenstype.getText().toString());
+                            intent.putExtra("lensdesc", txt_lensdesc.getText().toString());
+                            intent.putExtra("categoryLens", categoryLens);
+                            Log.d("FORM ORDER : ", categoryLens);
+
+                            intent.putExtra("sphR", txt_sphr.getText().toString());
+                            intent.putExtra("sphL", txt_sphl.getText().toString());
+                            intent.putExtra("cylR", txt_cylr.getText().toString());
+                            intent.putExtra("cylL", txt_cyll.getText().toString());
+                            intent.putExtra("axsR", txt_axsr.getText().toString());
+                            intent.putExtra("axsL", txt_axsl.getText().toString());
+                            intent.putExtra("addR", txt_addr.getText().toString());
+                            intent.putExtra("addL", txt_addl.getText().toString());
+                            intent.putExtra("coatCode", coating);
+                            intent.putExtra("coatDesc", txt_coatdescr.getText().toString());
+                            intent.putExtra("tintCode", color_tint);
+                            intent.putExtra("tintDesc", color_descr);
+                            intent.putExtra("corridor", corridor);
+                            intent.putExtra("mpdR", txt_mpdr.getText().toString());
+                            intent.putExtra("mpdL", txt_mpdl.getText().toString());
+                            intent.putExtra("pv", txt_segh.getText().toString());
+                            intent.putExtra("wrap", txt_wrap.getText().toString());
+                            intent.putExtra("panto", txt_phantose.getText().toString());
+                            intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetInfo", txt_infofacet.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("dbl", txt_dbl.getText().toString());
+                            intent.putExtra("hor", txt_hor.getText().toString());
+                            intent.putExtra("ver", txt_ver.getText().toString());
+                            intent.putExtra("frameCode", txt_framebrand.getText().toString());
+
+                            intent.putExtra("margin_lens", "35");
+                            intent.putExtra("extramargin_lens", "15");
+
+                            //Area Lens R
+                            intent.putExtra("itemid_R", itemIdR);
+                            intent.putExtra("itemcode_R", itemCodeR);
+                            intent.putExtra("description_R", descR);
+                            intent.putExtra("power_R", powerR);
+                            intent.putExtra("qty_R", itemQtyR);
+                            intent.putExtra("itemprice_R", itemPriceR);
+                            intent.putExtra("itemtotal_R", itemTotalPriceR);
+
+                            //Area Lens L
+                            intent.putExtra("itemid_L", itemIdL);
+                            intent.putExtra("itemcode_L", itemCodeL);
+                            intent.putExtra("description_L", descL);
+                            intent.putExtra("power_L", powerL);
+                            intent.putExtra("qty_L", itemQtyL);
+                            intent.putExtra("itemprice_L", itemPriceL);
+                            intent.putExtra("itemtotal_L", itemTotalPriceL);
+
+                            //Area Diskon
+                            intent.putExtra("description_diskon", listLineNo);
+                            intent.putExtra("discount_r", discountR);
+                            intent.putExtra("discount_l", discountL);
+                            intent.putExtra("extra_margin_discount", "10");
+                            intent.putExtra("prod_attr_valR", prod_attr_valR);
+                            intent.putExtra("prod_attr_valL", prod_attr_valL);
+
+                            //Area Facet
+                            intent.putExtra("itemcode_facet", itemFacetCode);
+                            intent.putExtra("description_facet", facetDescription);
+                            intent.putExtra("qty_facet", qtyFacet);
+                            intent.putExtra("price_facet", itemFacetPrice);
+                            intent.putExtra("total_facet", totalFacet);
+                            intent.putExtra("margin_facet", "8");
+                            intent.putExtra("extra_margin_facet", "8");
+
+                            //Area Tinting
+                            intent.putExtra("itemcode_tinting", itemTintingCode);
+                            intent.putExtra("description_tinting", tintingDescription);
+                            intent.putExtra("qty_tinting", qtyTinting);
+                            intent.putExtra("price_tinting", itemTintPrice);
+                            intent.putExtra("total_tinting", totalTinting);
+                            intent.putExtra("margin_tinting", "8");
+                            intent.putExtra("extra_margin_tinting", "8");
+
+                            intent.putExtra("total_price", totalPrice);
+
+                            startActivity(intent);
+
+                            finish();
                         }
                     }
                 } catch (JSONException e) {
@@ -6150,6 +7507,120 @@ public class FormOrderLensActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("username", namaOptik);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void cekStok(final String itemid, final VolleyOneCallBack callBack)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKSTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.d("Cek Stok", response);
+//
+//                    sisaStok = jsonObject.getInt("qty_stock");
+//                    Log.d("Cek Stok","qty stock : " + sisaStok);
+//                    descriptionStock = jsonObject.getString("desc_stock");
+//                    Log.d("Cek Stok","description stock : " + descriptionStock);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Cek Stok", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("item_id", itemid);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void cekStokR(final String itemid, final VolleyOneCallBack callBack)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKSTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.d("Cek Stok R", response);
+//
+//                    sisaStokR = jsonObject.getInt("qty_stock");
+//                    Log.d("Cek Stok R", "Qty stock R : " + sisaStokR);
+////                    descriptionStockR = jsonObject.getString("desc_stock");
+////                    Log.d("Cek Stok R", "Description stock R : " + descriptionStockR);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Cek Stok R", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("item_id", itemid);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void cekStokL(final String itemid, final VolleyOneCallBack callBack)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKSTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.d("Cek Stok L", response);
+//
+//                    sisaStokL = jsonObject.getInt("qty_stock");
+//                    Log.d("Cek Stok L", "Qty stock L : " + sisaStokL);
+////                    descriptionStockR = jsonObject.getString("desc_stock");
+////                    Log.d("Cek Stok R", "Description stock R : " + descriptionStockR);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                callBack.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Cek Stok R", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("item_id", itemid);
                 return hashMap;
             }
         };

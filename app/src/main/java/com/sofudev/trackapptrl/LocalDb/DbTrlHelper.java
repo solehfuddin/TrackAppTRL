@@ -8,8 +8,13 @@ import com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract;
 import com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract;
 import com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract;
 
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_STOCK;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.TABLE_ADDCART;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.TABLE_LENSPARTAI;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.PRODUCT_ID;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.PRODUCT_NAME;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.PRODUCT_QTY;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.TABLE_LENSSATUAN;
 import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.SEARCH_ID;
 import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.SEARCH_TITLE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.RecentSearchContract.TABLE_RECENT_SEARCH;
@@ -54,6 +59,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
                     " %s TEXT)",
             TABLE_LENSPARTAI,
             LensPartaiContract.PRODUCT_ID,
@@ -69,6 +76,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             LensPartaiContract.PRODUCT_DISCPRICE,
             LensPartaiContract.PRODUCT_NEWPRICE,
             LensPartaiContract.PRODUCT_NEWDISCPRICE,
+            LensPartaiContract.PRODUCT_STOCK,
+            LensPartaiContract.PRODUCT_WEIGHT,
             LensPartaiContract.PRODUCT_IMG
     );
 
@@ -76,6 +85,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
                     + " (%s INTEGER PRIMARY KEY," +
                     " %s VARCHAR (200)," +
                     " %s VARCHAR (150)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
@@ -93,7 +104,21 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             AddCartContract.PRODUCT_DISCOUNT,
             AddCartContract.PRODUCT_NEWPRICE,
             AddCartContract.PRODUCT_NEWDISCPRICE,
+            AddCartContract.PRODUCT_STOCK,
+            AddCartContract.PRODUCT_WEIGHT,
             AddCartContract.PRODUCT_IMG
+    );
+
+    private static final String CREATE_TBL_LENSSATUAN = String.format("CREATE TABLE %s"
+                    + " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " %s TEXT," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11))",
+            TABLE_LENSSATUAN,
+            PRODUCT_ID,
+            PRODUCT_NAME,
+            PRODUCT_QTY,
+            PRODUCT_STOCK
     );
 
     private static final String CREATE_TBL_RECENTSEARCH = String.format("CREATE TABLE %s"
@@ -121,6 +146,7 @@ public class DbTrlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TBL_WISHLIST);
         sqLiteDatabase.execSQL(CREATE_TBL_ADDCART);
         sqLiteDatabase.execSQL(CREATE_TBL_LENSPARTAI);
+        sqLiteDatabase.execSQL(CREATE_TBL_LENSSATUAN);
         sqLiteDatabase.execSQL(CREATE_TBL_RECENTSEARCH);
         sqLiteDatabase.execSQL(CREATE_TBL_RECENTVIEW);
     }
@@ -130,6 +156,7 @@ public class DbTrlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_WISHLIST);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_ADDCART);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_LENSPARTAI);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_LENSSATUAN);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_SEARCH);
         sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_VIEW);
         onCreate(sqLiteDatabase);

@@ -1,10 +1,26 @@
 package com.sofudev.trackapptrl.LocalDb.Model;
 
 public class ModelLensPartai {
-    private int productId, productPrice, productQty, productDisc, productDiscPrice, newProductPrice, newProductDiscPrice;
+    private int productId, productPrice, productQty, productDisc, productDiscPrice, newProductPrice, newProductDiscPrice, productStock, productWeight;
     private String productCode, productDesc, powerSph, powerCyl, powerAdd, productSide, productImage;
 
     public ModelLensPartai() {
+    }
+
+    public int getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(int productStock) {
+        this.productStock = productStock;
+    }
+
+    public int getProductWeight() {
+        return productWeight;
+    }
+
+    public void setProductWeight(int productWeight) {
+        this.productWeight = productWeight;
     }
 
     public int getProductDiscPrice() {

@@ -3,6 +3,7 @@ package com.sofudev.trackapptrl.Form;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.LongDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -29,6 +30,7 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_cart;
+import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
@@ -42,6 +44,7 @@ import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;
+import com.ssomai.android.scalablelayout.ScalableLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,9 +65,11 @@ public class AddCartProductActivity extends AppCompatActivity {
     Config config = new Config();
     String URL_ALLDATA = config.Ip_address + config.spinner_shipment_getAllData;
     String URL_GENID   = config.Ip_address + config.frame_generate_orderId;
+    String URL_GETORAID = config.Ip_address + config.frame_getoracle_id;
     String URL_INSERTHEADER = config.Ip_address + config.frame_insert_header;
     String URL_INSERTNONTPAYMENT = config.Ip_address + config.frame_insert_statusnonpayment;
     String URL_INSERTLINETITEM   = config.Ip_address + config.frame_insert_lineitem;
+    String URL_UPDATESTOCK = config.Ip_address + config.frame_update_stockframe;
     String URL_ALLPAYMENT = config.Ip_address + config.payment_method_showAllData;
     String URL_POSTBILLING= config.payment_method_postBilling;
     String URL_INSERTBILLQR = config.Ip_address + config.payment_insert_billingQR;
@@ -79,10 +84,11 @@ public class AddCartProductActivity extends AppCompatActivity {
     ImageView btn_back;
     ScrollView nestedDetail;
     CardView cardView;
+    ScalableLayout scalableCourier;
     LinearLayout linearLayout, linearPayment;
-    RecyclerView recyclerView;
-    UniversalFontTextView txtPrice, txtDisc, txtTitleShip, txtShipping, txtTotal;
-    Spinner spinShipment;
+    RecyclerView recyclerView, recyclerCourier;
+    UniversalFontTextView txtPrice, txtDisc, txtTitleShip, txtShipping, txtTotal, txtInfoShipping;
+//    Spinner spinShipment;
     Button btnContinueShop, btnContinue;
 
     ListView listPayment;
@@ -94,7 +100,8 @@ public class AddCartProductActivity extends AppCompatActivity {
     List<Data_spin_shipment> shipmentList = new ArrayList<>();
     List<Data_paymentmethod> paymentmethodList = new ArrayList<>();
     Adapter_add_cart adapterAddCart;
-    Adapter_spinner_shipment adapter_spinner_shipment;
+    Adapter_courier_service adapterCourierService;
+//    Adapter_spinner_shipment adapter_spinner_shipment;
     Adapter_paymentmethod adapter_paymentmethod;
 
     Data_frame_header dataFrameHeader;
@@ -102,7 +109,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticFlag, opticAddress, shipmentPrice, shippingName,
-            orderId;
+            shippingService, orderId, subcustId, subcustLocId, estimasi;
     String selectedItem, kodeBilling, duration, expDate;
 
     @Override
@@ -113,16 +120,19 @@ public class AddCartProductActivity extends AppCompatActivity {
         btn_back = findViewById(R.id.addcart_product_btnback);
         nestedDetail = findViewById(R.id.addcart_product_nestedscroll);
         recyclerView = findViewById(R.id.addcart_product_recycler);
+        recyclerCourier = findViewById(R.id.addcart_product_recyclerCourier);
+        scalableCourier = findViewById(R.id.addcart_product_scalableCourier);
         txtPrice = findViewById(R.id.addcart_product_txtitemprice);
         txtDisc = findViewById(R.id.addcart_product_txtitemdisc);
         txtTitleShip = findViewById(R.id.addcart_product_txttitleship);
         txtShipping = findViewById(R.id.addcart_product_txtitemship);
+        txtInfoShipping = findViewById(R.id.addcart_product_txtInfoShipping);
         txtTotal = findViewById(R.id.addcart_product_txttotalprice);
         linearLayout = findViewById(R.id.addcart_product_linearLayout);
         linearPayment = findViewById(R.id.addcart_product_linearPayment);
         btnContinueShop = findViewById(R.id.addcart_product_btnContinueShopping);
         cardView = findViewById(R.id.addcart_product_cardview);
-        spinShipment = findViewById(R.id.addcart_product_spinshipment);
+//        spinShipment = findViewById(R.id.addcart_product_spinshipment);
 //        cardView = findViewById(R.id.addcart_product_cardsummary);
         btnContinue = findViewById(R.id.addcart_product_btncontinue);
 
@@ -131,6 +141,9 @@ public class AddCartProductActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
+        LinearLayoutManager horizonManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerCourier.setLayoutManager(horizonManager);
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,16 +186,26 @@ public class AddCartProductActivity extends AppCompatActivity {
 
         showCart();
 
-        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!shipmentList.isEmpty())
-                {
-                    shipmentPrice = shipmentList.get(i).getPrice();
-                    shippingId    = shipmentList.get(i).getId();
-                    shippingName  = shipmentList.get(i).getKurir();
-                    txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
-
+//        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (!shipmentList.isEmpty())
+//                {
+//                    shipmentPrice = shipmentList.get(i).getPrice();
+//                    shippingId    = shipmentList.get(i).getId();
+//                    shippingName  = shipmentList.get(i).getKurir();
+//                    txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+//
+////                    shipmentPrice = "0";
+////                    shippingId    = 0;
+////                    shippingName  = "";
+////                    if (shipmentPrice.equals("0"))
+////                    {
+////                        txtShipping.setText("Free");
+////                    }
+//                }
+//                else
+//                {
 //                    shipmentPrice = "0";
 //                    shippingId    = 0;
 //                    shippingName  = "";
@@ -190,111 +213,211 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                    {
 //                        txtShipping.setText("Free");
 //                    }
-                }
-                else
-                {
-                    shipmentPrice = "0";
-                    shippingId    = 0;
-                    shippingName  = "";
-                    if (shipmentPrice.equals("0"))
-                    {
-                        txtShipping.setText("Free");
-                    }
-                }
-
-                totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
-                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//                }
+//
+//                totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toasty.info(getApplicationContext(), opticId, Toast.LENGTH_SHORT).show();
+                int len = itemCart.size();
+                List<Boolean> sisanya = new ArrayList<>();
 
-                if (!opticId.equals("null,"))
+                for (int i = 0; i < len; i++)
                 {
-//                    Toasty.info(getApplicationContext(), orderId, Toast.LENGTH_SHORT).show();
+                    String item = itemCart.get(i).getProductName();
+                    int stock = itemCart.get(i).getProductStock();
+                    int qty   = itemCart.get(i).getProductQty();
+                    int sisa  = stock - qty;
 
-//                    opticFlag = "0";
-                    if (opticFlag.equals("0"))
+                    Log.d("Stock " + item, " Sisa = " + sisa);
+
+                    if (sisa < 0)
                     {
-//                        Toasty.info(getApplicationContext(), "Pembayaran Non Tunai", Toast.LENGTH_SHORT).show();
-                        dataFrameHeader = new Data_frame_header();
-                        dataFrameHeader.setOrderId(orderId);
-                        dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                        dataFrameHeader.setShippingId(shippingId);
-                        dataFrameHeader.setShippingName(shippingName);
-                        dataFrameHeader.setOpticCity(opticCity);
-                        dataFrameHeader.setOpticProvince(opticProvince);
-                        dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
-                        dataFrameHeader.setTotalPrice(totalAllPrice);
-                        dataFrameHeader.setOpticName(opticName.replace(",", ""));
-                        dataFrameHeader.setOpticAddress(opticAddress);
-                        dataFrameHeader.setPaymentCashCarry("Non Payment Method");
-
-                        insertHeader(dataFrameHeader);
-                        insertNonPaymentStatus(orderId);
-
-                        for (int i = 0; i < itemCart.size(); i++)
-                        {
-                            dataFrameItem = new Data_frame_item();
-                            dataFrameItem.setOrderId(orderId);
-                            dataFrameItem.setLineNumber(i);
-                            dataFrameItem.setFrameId(itemCart.get(i).getProductId());
-                            dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
-                            dataFrameItem.setFrameName(itemCart.get(i).getProductName());
-                            dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
-                            dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
-                            dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
-                            dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
-
-                            insertLineItem(dataFrameItem);
-                        }
-
-//                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
-                        int trunc = addCartHelper.truncCart();
-
-                        if (trunc > 0)
-                        {
-                            Toasty.success(getApplicationContext(), "Success, Order telah diterima timur raya", Toast.LENGTH_SHORT).show();
-                        }
+                        sisanya.add(i, false);
                     }
                     else
                     {
+                        sisanya.add(i, true);
+                    }
+                }
+
+                boolean cek = sisanya.contains(false);
+
+                if (cek)
+                {
+                    Log.d("Information Cart", "Ada item yang minus");
+
+                    final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                    dialog.setContentView(R.layout.dialog_warning);
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    lwindow.copyFrom(dialog.getWindow().getAttributes());
+                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                    imgClose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                    dialog.getWindow().setAttributes(lwindow);
+                }
+                else
+                {
+                    Log.d("Information Cart", "Aman lanjutkan");
+
+                    if (!opticId.equals("null,"))
+                    {
+//                    Toasty.info(getApplicationContext(), orderId, Toast.LENGTH_SHORT).show();
+
+//                    opticFlag = "0";
+                        if (opticFlag.equals("0"))
+                        {
+//                        Toasty.info(getApplicationContext(), "Pembayaran Non Tunai", Toast.LENGTH_SHORT).show();
+                            dataFrameHeader = new Data_frame_header();
+                            dataFrameHeader.setOrderId(orderId);
+                            dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                            dataFrameHeader.setShippingId(shippingId);
+                            dataFrameHeader.setShippingName(shippingName);
+                            dataFrameHeader.setShippingService(shippingService);
+                            dataFrameHeader.setOpticCity(opticCity);
+                            dataFrameHeader.setOpticProvince(opticProvince);
+                            dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
+                            dataFrameHeader.setTotalPrice(totalAllPrice);
+                            dataFrameHeader.setOpticName(opticName.replace(",", ""));
+                            dataFrameHeader.setOpticAddress(opticAddress);
+                            dataFrameHeader.setPaymentCashCarry("Non Payment Method");
+
+                            Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
+                            Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
+                            Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
+                            Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
+                            Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
+                            Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
+                            Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
+                            Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
+                            Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
+                            Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
+                            Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
+                            Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
+
+                            insertHeader(dataFrameHeader, subcustId, subcustLocId);
+                            insertNonPaymentStatus(orderId);
+
+                            for (int i = 0; i < itemCart.size(); i++)
+                            {
+                                dataFrameItem = new Data_frame_item();
+                                dataFrameItem.setOrderId(orderId);
+                                dataFrameItem.setLineNumber(i);
+                                dataFrameItem.setFrameId(itemCart.get(i).getProductId());
+                                dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
+                                dataFrameItem.setFrameName(itemCart.get(i).getProductName());
+                                dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
+                                dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
+                                dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+                                dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+
+                                insertLineItem(dataFrameItem);
+                            }
+
+//                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
+                            int trunc = addCartHelper.truncCart();
+
+                            if (trunc > 0)
+                            {
+//                                Toasty.success(getApplicationContext(), "Success, Order telah diterima timur raya", Toast.LENGTH_SHORT).show();
+
+                                final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                                dialog.setContentView(R.layout.dialog_warning);
+                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                lwindow.copyFrom(dialog.getWindow().getAttributes());
+                                lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                                ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
+                                UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                                txtTitle.setText("Success, order anda telah diterima Timur Raya");
+                                imgIcon.setImageResource(R.drawable.success_outline);
+                                imgClose.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+
+                                        addCartHelper.open();
+                                        int counter  = addCartHelper.countAddCart();
+
+                                        Intent intent = new Intent();
+                                        intent.putExtra("counter", counter);
+                                        setResult(2, intent);
+
+                                        finish();
+                                    }
+                                });
+
+                                dialog.show();
+                                dialog.getWindow().setAttributes(lwindow);
+                            }
+                        }
+                        else
+                        {
 //                        Toasty.success(getApplicationContext(), "Pembayaran Tunai", Toast.LENGTH_SHORT).show();
 
-                        final Dialog dialog = new Dialog(AddCartProductActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+                            for (int j = 0; j < itemCart.size(); j++)
+                            {
+                                String item_id = String.valueOf(itemCart.get(j).getProductId());
+                                int stock = itemCart.get(j).getProductStock();
+                                int qty   = itemCart.get(j).getProductQty();
+                                int sisa  = stock - qty;
 
-                        dialog.setContentView(R.layout.dialog_choose_payment);
-                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                        lwindow.copyFrom(dialog.getWindow().getAttributes());
-                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+                                potongStock(item_id, String.valueOf(sisa));
+                            }
 
-                        listPayment = dialog.findViewById(R.id.dialog_choosepayment_listview);
-                        btnChoosePayment = dialog.findViewById(R.id.dialog_choosepayment_btnChoose);
+                            final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
-                        getAllPayment();
+                            dialog.setContentView(R.layout.dialog_choose_payment);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                        listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                selectedItem  = paymentmethodList.get(i).getPaymentMethod();
+                            listPayment = dialog.findViewById(R.id.dialog_choosepayment_listview);
+                            btnChoosePayment = dialog.findViewById(R.id.dialog_choosepayment_btnChoose);
 
-                                if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro")
-                                        || selectedItem.contains("Kreditpro"))
-                                {
-                                    btnChoosePayment.setBackgroundColor(Color.LTGRAY);
-                                    btnChoosePayment.setEnabled(false);
-                                }
+                            getAllPayment();
+
+                            listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    selectedItem  = paymentmethodList.get(i).getPaymentMethod();
+
+                                    if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro")
+                                            || selectedItem.contains("Kreditpro"))
+                                    {
+                                        btnChoosePayment.setBackgroundColor(Color.LTGRAY);
+                                        btnChoosePayment.setEnabled(false);
+                                    }
 //                                    else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account")
 //                                            || selectedItem.contains("Virtual Account"))
 //                                    {
@@ -307,54 +430,54 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                        btnChoosePayment.setBackgroundColor(Color.LTGRAY);
 //                                        btnChoosePayment.setEnabled(false);
 //                                    }
-                                else
-                                {
-                                    btnChoosePayment.setBackgroundColor(getResources().getColor(R.color.colorFirst));
-                                    btnChoosePayment.setEnabled(true);
+                                    else
+                                    {
+                                        btnChoosePayment.setBackgroundColor(getResources().getColor(R.color.colorFirst));
+                                        btnChoosePayment.setEnabled(true);
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                        btnChoosePayment.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //showLoading();
+                            btnChoosePayment.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //showLoading();
 
-                                if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
-                                {
-                                    String paymentType = "internetBanking";
-                                    String grossAmount = String.valueOf(totalAllPrice);
-                                    String orderNumber = orderId;
+                                    if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
+                                    {
+                                        String paymentType = "internetBanking";
+                                        String grossAmount = String.valueOf(totalAllPrice);
+                                        String orderNumber = orderId;
 
-                                    postBillingQR(paymentType, grossAmount, orderNumber);
+                                        postBillingQR(paymentType, grossAmount, orderNumber);
 
-                                }
-                                else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
-                                        selectedItem.contains("Virtual Account"))
-                                {
-                                    String paymentType = "bankTransfer";
-                                    String grossAmount = String.valueOf(totalAllPrice);
-                                    String orderNumber = orderId;
+                                    }
+                                    else if (selectedItem.contentEquals("Virtual Account") || selectedItem.equals("Virtual Account") ||
+                                            selectedItem.contains("Virtual Account"))
+                                    {
+                                        String paymentType = "bankTransfer";
+                                        String grossAmount = String.valueOf(totalAllPrice);
+                                        String orderNumber = orderId;
 
-                                    postBillingVA(paymentType, grossAmount, orderNumber);
-                                }
-                                else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
-                                        selectedItem.contains("Credit Card"))
-                                {
-                                    createBillingCC(orderId, "creditCard");
-                                }
-                                else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
-                                        selectedItem.contains("Loan"))
-                                {
+                                        postBillingVA(paymentType, grossAmount, orderNumber);
+                                    }
+                                    else if (selectedItem.contentEquals("Credit Card") || selectedItem.equals("Credit Card") ||
+                                            selectedItem.contains("Credit Card"))
+                                    {
+                                        createBillingCC(orderId, "creditCard");
+                                    }
+                                    else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
+                                            selectedItem.contains("Loan"))
+                                    {
 
-                                    String paymentType = "loanKS";
-                                    String grossAmount = String.valueOf(totalAllPrice);
-                                    String orderNumber = orderId;
+                                        String paymentType = "loanKS";
+                                        String grossAmount = String.valueOf(totalAllPrice);
+                                        String orderNumber = orderId;
 
-                                    //Toasty.info(getApplicationContext(), "Order Number : " + orderNumber, Toast.LENGTH_SHORT).show();
+                                        //Toasty.info(getApplicationContext(), "Order Number : " + orderNumber, Toast.LENGTH_SHORT).show();
 
-                                    postBillingLoan(paymentType, grossAmount, orderNumber);
-                                }
+                                        postBillingLoan(paymentType, grossAmount, orderNumber);
+                                    }
 //                                else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
 //                                        selectedItem.contains("Kreditpro"))
 //                                {
@@ -364,67 +487,96 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                    createBillingKP(orderNumber, "kreditPro");
 //                                }
 
-                                //loading.dismiss();
-                                dialog.dismiss();
+                                    //loading.dismiss();
+                                    dialog.dismiss();
 
-                                dataFrameHeader = new Data_frame_header();
-                                dataFrameHeader.setOrderId(orderId);
-                                dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                                dataFrameHeader.setShippingId(shippingId);
-                                dataFrameHeader.setShippingName(shippingName);
-                                dataFrameHeader.setOpticCity(opticCity);
-                                dataFrameHeader.setOpticProvince(opticProvince);
-                                dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
-                                dataFrameHeader.setTotalPrice(totalAllPrice);
-                                dataFrameHeader.setOpticName(opticName.replace(",", ""));
-                                dataFrameHeader.setOpticAddress(opticAddress);
-                                dataFrameHeader.setPaymentCashCarry("Pending");
+                                    dataFrameHeader = new Data_frame_header();
+                                    dataFrameHeader.setOrderId(orderId);
+                                    dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                                    dataFrameHeader.setShippingId(shippingId);
+                                    dataFrameHeader.setShippingName(shippingName);
+                                    dataFrameHeader.setShippingService(shippingService);
+                                    dataFrameHeader.setOpticCity(opticCity);
+                                    dataFrameHeader.setOpticProvince(opticProvince);
+                                    dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
+                                    dataFrameHeader.setTotalPrice(totalAllPrice);
+                                    dataFrameHeader.setOpticName(opticName.replace(",", ""));
+                                    dataFrameHeader.setOpticAddress(opticAddress);
+                                    dataFrameHeader.setPaymentCashCarry("Pending");
 
-                                insertHeader(dataFrameHeader);
+                                    Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
+                                    Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
+                                    Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
+                                    Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
+                                    Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
+                                    Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
+                                    Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
+                                    Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
+                                    Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
+                                    Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
+                                    Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
+                                    Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
 
-                                for (int i = 0; i < itemCart.size(); i++)
-                                {
-                                    dataFrameItem = new Data_frame_item();
-                                    dataFrameItem.setOrderId(orderId);
-                                    dataFrameItem.setLineNumber(i);
-                                    dataFrameItem.setFrameId(itemCart.get(i).getProductId());
-                                    dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
-                                    dataFrameItem.setFrameName(itemCart.get(i).getProductName());
-                                    dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
-                                    dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
-                                    dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
-                                    dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+                                    insertHeader(dataFrameHeader, subcustId, subcustLocId);
 
-                                    insertLineItem(dataFrameItem);
-                                }
+                                    for (int i = 0; i < itemCart.size(); i++)
+                                    {
+                                        dataFrameItem = new Data_frame_item();
+                                        dataFrameItem.setOrderId(orderId);
+                                        dataFrameItem.setLineNumber(i);
+                                        dataFrameItem.setFrameId(itemCart.get(i).getProductId());
+                                        dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
+                                        dataFrameItem.setFrameName(itemCart.get(i).getProductName());
+                                        dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
+                                        dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
+                                        dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+                                        dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
 
-                                linearLayout.setVisibility(View.VISIBLE);
-                                linearPayment.setVisibility(View.GONE);
-                                nestedDetail.setVisibility(View.GONE);
-                                cardView.setVisibility(View.GONE);
+                                        insertLineItem(dataFrameItem);
+                                    }
 
-                                int trunc = addCartHelper.truncCart();
+                                    linearLayout.setVisibility(View.VISIBLE);
+                                    linearPayment.setVisibility(View.GONE);
+                                    nestedDetail.setVisibility(View.GONE);
+                                    cardView.setVisibility(View.GONE);
 
-                                if (trunc > 0)
-                                {
+                                    int trunc = addCartHelper.truncCart();
+
+                                    if (trunc > 0)
+                                    {
 //                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
 
-                                    Log.d("INFO FRAME", "Order telah dihapus");
+                                        Log.d("INFO FRAME", "Order telah dihapus");
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                        dialog.show();
-                        dialog.getWindow().setAttributes(lwindow);
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lwindow);
 
 //                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
 
+                        }
+                    }
+                    else
+                    {
+                        Toasty.error(getApplicationContext(), "Please login for order !", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else
-                {
-                    Toasty.error(getApplicationContext(), "Please login for order !", Toast.LENGTH_SHORT).show();
-                }
+//
+//                for (int j = 0; j < sisanya.size(); j++)
+//                {
+//                    Log.d("Sisa item ", " = " + sisanya.get(j));
+//
+//                    if (sisanya.get(j) > 0)
+//                    {
+//                        Toasty.info(getApplicationContext(), "Lanjutkan ke pembayaran", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else
+//                    {
+//                        Toasty.error(getApplicationContext(), "Itemnya kurang", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
             }
         });
     }
@@ -452,11 +604,54 @@ public class AddCartProductActivity extends AppCompatActivity {
             opticUsername = bundle.getString("usernameInfo");
             opticCity   = bundle.getString("city");
             opticFlag   = bundle.getString("flag");
+
+            getOraId(opticId);
         }
         opticId     = opticId + ",";
         opticName   = opticName + ",";
 
         //Toast.makeText(getApplicationContext(), opticUsername, Toast.LENGTH_SHORT).show();
+    }
+
+    private void potongStock(final String itemId, final String qty)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_UPDATESTOCK, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("Success"))
+                    {
+                        Log.d("Update Stock", itemId + " Berhasil Dipotong sisa : " + qty);
+                    }
+                    else if (jsonObject.names().get(0).equals("error"))
+                    {
+                        Log.d("Update Stock", itemId + " GAGAL DIUBAH");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("Error Potong Stok", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("item_id", itemId);
+                hashMap.put("qty", qty);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void getAllPayment()
@@ -505,7 +700,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         {
             txtTitleShip.setVisibility(View.GONE);
             txtShipping.setVisibility(View.GONE);
-            spinShipment.setVisibility(View.GONE);
+//            spinShipment.setVisibility(View.GONE);
 
             shipmentPrice = "0";
             totalAllPrice = priceDisc;
@@ -513,11 +708,29 @@ public class AddCartProductActivity extends AppCompatActivity {
         }
         else
         {
+//            getAllKurir(opticCity, opticProvince);
+
+            if (opticFlag.equals("0"))
+            {
+                scalableCourier.setVisibility(View.GONE);
+                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+                shipmentPrice = "0";
+                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+                txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+            }
+            else
+            {
+//                txtInfoShipping.setText("Estimasi pengiriman order anda sekitar " + estimasi);
+                txtInfoShipping.setVisibility(View.GONE);
+                getAllKurir(opticCity, opticProvince);
+                scalableCourier.setVisibility(View.VISIBLE);
+            }
+
             txtTitleShip.setVisibility(View.VISIBLE);
             txtShipping.setVisibility(View.VISIBLE);
-            spinShipment.setVisibility(View.VISIBLE);
-
-            getAllKurir(opticCity);
+//            spinShipment.setVisibility(View.VISIBLE);
         }
 
         itemCart = addCartHelper.getAllCart();
@@ -592,17 +805,20 @@ public class AddCartProductActivity extends AppCompatActivity {
 
                         int price = modelAddCart.getProductPrice();
                         int qty   = modelAddCart.getProductQty();
+                        int stock = modelAddCart.getProductStock();
                         int discprice = modelAddCart.getProductDiscPrice();
 
                             qty = qty + 1;
                             int newprice = price * qty;
                             int newdiscprice = discprice * qty;
+                            stock = stock - qty;
 
                             //Toasty.info(getApplicationContext(), String.valueOf(qty), Toast.LENGTH_SHORT).show();
 
                             modelAddCart.setNewProductPrice(newprice);
                             modelAddCart.setProductQty(qty);
                             modelAddCart.setNewProductDiscPrice(newdiscprice);
+                            modelAddCart.setProductStock(stock);
 
                             itemCart.set(pos, modelAddCart);
                             addCartHelper.updateCartQty(modelAddCart);
@@ -647,8 +863,10 @@ public class AddCartProductActivity extends AppCompatActivity {
                         int mPrice = mModelAddCart.getProductPrice();
                         int mQty   = mModelAddCart.getProductQty();
                         int mDiscprice = mModelAddCart.getProductDiscPrice();
+                        int mStock = mModelAddCart.getProductStock();
 
                         mQty = mQty - 1;
+                        mStock = mStock + mQty;
 
                         if (mQty == 0)
                         {
@@ -664,6 +882,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                             mModelAddCart.setNewProductPrice(mNewPrice);
                             mModelAddCart.setProductQty(mQty);
                             mModelAddCart.setNewProductDiscPrice(mNewdiscprice);
+                            mModelAddCart.setProductStock(mStock);
 
                             itemCart.set(pos, mModelAddCart);
                             addCartHelper.updateCartQty(mModelAddCart);
@@ -702,6 +921,22 @@ public class AddCartProductActivity extends AppCompatActivity {
                         setResult(2, nIntent);
                         break;
                 }
+            }
+        });
+
+        adapterCourierService = new Adapter_courier_service(this, shipmentList, new RecyclerViewOnClickListener() {
+            @Override
+            public void onItemClick(View view, int pos, String id) {
+                shipmentPrice = shipmentList.get(pos).getPrice();
+                shippingId    = shipmentList.get(pos).getId();
+                shippingName  = shipmentList.get(pos).getKurir();
+                shippingService = shipmentList.get(pos).getService();
+                shipmentPrice = shipmentList.get(pos).getPrice();
+
+                Log.d("Callback Price", "Shipment : " + shipmentPrice);
+                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+                txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
             }
         });
 
@@ -776,7 +1011,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void insertHeader(final Data_frame_header item)
+    private void insertHeader(final Data_frame_header item, final String subcustId, final String subcustLocId)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTHEADER, new Response.Listener<String>() {
             @Override
@@ -805,6 +1040,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                 hashMap.put("id_party", String.valueOf(item.getIdParty()));
                 hashMap.put("shipping_id", String.valueOf(item.getShippingId()));
                 hashMap.put("shipping_name", item.getShippingName());
+                hashMap.put("shipping_service", item.getShippingService());
                 hashMap.put("optic_city", item.getOpticCity());
                 hashMap.put("optic_province", item.getOpticProvince());
                 hashMap.put("shipping_price", String.valueOf(item.getShippingPrice()));
@@ -812,6 +1048,8 @@ public class AddCartProductActivity extends AppCompatActivity {
                 hashMap.put("optic_name", item.getOpticName());
                 hashMap.put("optic_address", item.getOpticAddress());
                 hashMap.put("payment_cashcarry", item.getPaymentCashCarry());
+                hashMap.put("subcust_id", subcustId);
+                hashMap.put("subcust_loc_id", subcustLocId);
 
                 return hashMap;
             }
@@ -894,9 +1132,9 @@ public class AddCartProductActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void getAllKurir(final String city)
+    private void getAllKurir(final String city, final String prov)
     {
-        adapter_spinner_shipment = new Adapter_spinner_shipment(AddCartProductActivity.this, shipmentList);
+//        adapter_spinner_shipment = new Adapter_spinner_shipment(AddCartProductActivity.this, shipmentList);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ALLDATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -906,29 +1144,45 @@ public class AddCartProductActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String idShip= jsonObject.getString("idShip");
-                        String kurir = jsonObject.getString("kurir");
-                        String icon  = jsonObject.getString("icon");
-                        String price = jsonObject.getString("price");
+                        String idShip   = jsonObject.getString("idShip");
+                        String kurir    = jsonObject.getString("kurir");
+                        String service  = jsonObject.getString("type");
+                        String icon     = jsonObject.getString("icon");
+                        String city     = jsonObject.getString("city");
+                        String province = jsonObject.getString("province");
+                        String price    = jsonObject.getString("price");
+                        estimasi = jsonObject.getString("estimasi");
 
                         Data_spin_shipment data_spin_shipment = new Data_spin_shipment();
                         data_spin_shipment.setId(Integer.valueOf(idShip));
                         data_spin_shipment.setKurir(kurir);
+                        data_spin_shipment.setService(service);
                         data_spin_shipment.setIcon(icon);
                         data_spin_shipment.setPrice(price);
+                        data_spin_shipment.setCity(city);
+                        data_spin_shipment.setProvince(province);
+                        data_spin_shipment.setEstimasi(estimasi);
 
                         shipmentList.add(data_spin_shipment);
                     }
 
                     shipmentPrice = shipmentList.get(0).getPrice();
+                    shippingName  = shipmentList.get(0).getKurir();
+                    shippingService = shipmentList.get(0).getService();
+                    shippingId    = shipmentList.get(0).getId();
+
                     totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+                    txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
                     txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                    adapterCourierService.notifyDataSetChanged();
+                    recyclerCourier.setAdapter(adapterCourierService);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                adapter_spinner_shipment.notifyDataSetChanged();
-                spinShipment.setAdapter(adapter_spinner_shipment);
+//                adapter_spinner_shipment.notifyDataSetChanged();
+//                spinShipment.setAdapter(adapter_spinner_shipment);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -940,6 +1194,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("city", city);
+                hashMap.put("province", prov);
                 return hashMap;
             }
         };
@@ -1062,6 +1317,8 @@ public class AddCartProductActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -1199,6 +1456,8 @@ public class AddCartProductActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -1287,6 +1546,8 @@ public class AddCartProductActivity extends AppCompatActivity {
                         intent.putExtra("amount", amount);
                         intent.putExtra("duration", duration);
                         intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
                         startActivity(intent);
                     }
                     else
@@ -1456,5 +1717,39 @@ public class AddCartProductActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getOraId(final String idParty)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETORAID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    subcustId = object.getString("subcust_id");
+                    subcustLocId = object.getString("subcust_loc_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR GET ORAID : ", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_party", idParty);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

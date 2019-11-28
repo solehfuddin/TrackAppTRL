@@ -1,8 +1,25 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_partai_header {
-    private String orderNumber, opticName, opticAddress, opticCity, phoneNumber, shippingName, opticProvince, payment_cashcarry;
+    private String orderNumber, opticName, opticAddress, opticCity, phoneNumber, shippingName, opticProvince, payment_cashcarry,
+                    prodDivType, shippingService;
     private int idParty, shippingId, shippingPrice, totalPrice;
+
+    public String getProdDivType() {
+        return prodDivType;
+    }
+
+    public void setProdDivType(String prodDivType) {
+        this.prodDivType = prodDivType;
+    }
+
+    public String getShippingService() {
+        return shippingService;
+    }
+
+    public void setShippingService(String shippingService) {
+        this.shippingService = shippingService;
+    }
 
     public String getPayment_cashcarry() {
         return payment_cashcarry;

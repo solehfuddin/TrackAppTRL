@@ -2,6 +2,7 @@ package com.sofudev.trackapptrl.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,16 +70,15 @@ public class DetailFrameFragment extends Fragment {
     String HOTSALEURL       = config.Ip_address + config.dashboard_hot_sale;
 
     ViewPager pagerImage;
-    ImageView btnBack;
     RippleView btnCart;
-    SparkButton btnWishlist;
+
     UniversalFontTextView txtLenscode, txtDiscPrice, txtRealPrice, txtDisc, txtBrand, txtAvailability, txtDescription;
     RecyclerView recyColor, recyAnotherProduct;
 
     private static int currentPage = 0, frameId;
     private static int NUM_PAGES = 0;
     String frameName, frameSku, frameImage, framePrice, frameDisc, frameDiscPrice, frameAvailibilty,
-            frameBrand, frameColor;
+            frameBrand, frameColor, frameQty, frameWeight;
 
     LinearLayoutManager horizontal_manager;
     List<String> allImg = new ArrayList<>();
@@ -89,10 +89,8 @@ public class DetailFrameFragment extends Fragment {
     Adapter_colordetail adapter_colordetail;
 
     //Lokal db
-    WishlistHelper wishlistHelper;
     AddCartHelper addCartHelper;
     RecentViewHelper recentViewHelper;
-    int click = 0;
 
     public DetailFrameFragment() {
         // Required empty public constructor
@@ -121,9 +119,8 @@ public class DetailFrameFragment extends Fragment {
         //Toasty.info(getContext(), value, Toast.LENGTH_SHORT).show();
 
         pagerImage  = view.findViewById(R.id.fragment_detailproduct_imgProduct);
-        btnBack     = view.findViewById(R.id.fragment_detailproduct_btnback);
         btnCart     = view.findViewById(R.id.fragment_detailproduct_btnCart);
-        btnWishlist = view.findViewById(R.id.fragment_detailproduct_btnWishlist);
+
         txtLenscode = view.findViewById(R.id.fragment_detailproduct_txtLenscode);
         txtDiscPrice= view.findViewById(R.id.fragment_detailproduct_txtDiscPrice);
         txtRealPrice= view.findViewById(R.id.fragment_detailproduct_txtRealPrice);
@@ -150,7 +147,6 @@ public class DetailFrameFragment extends Fragment {
 
         NUM_PAGES = allImg.size();
 
-        wishlistHelper = WishlistHelper.getInstance(getContext());
         addCartHelper = AddCartHelper.getINSTANCE(getContext());
         recentViewHelper = RecentViewHelper.getINSTANCE(getContext());
         recentViewHelper.open();
@@ -214,21 +210,6 @@ public class DetailFrameFragment extends Fragment {
 
         recyAnotherProduct.setAdapter(adapter_hotsale_product);
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                if (from.contentEquals("0"))
-//                {
-//                    getActivity().getSupportFragmentManager().popBackStack();
-//                }
-//                else
-//                {
-//                    getActivity().finish();
-//                }
-
-                getActivity().finish();
-            }
-        });
 
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +226,8 @@ public class DetailFrameFragment extends Fragment {
                 item.setProductDisc(Integer.valueOf(removeDiskon(frameDisc)));
                 item.setNewProductPrice(Integer.valueOf(removeRupiah(framePrice)));
                 item.setNewProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
+                item.setProductStock(Integer.valueOf(frameQty));
+                item.setProductWeight(Integer.valueOf(frameWeight));
                 item.setProductImage(frameImage);
 
                 long status = addCartHelper.insertAddCart(item);
@@ -261,64 +244,6 @@ public class DetailFrameFragment extends Fragment {
                 if (badgeCounter != null)
                 {
                     badgeCounter.countCartlist(count);
-                }
-            }
-        });
-
-        btnWishlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (click == 0)
-                {
-                    btnWishlist.setInactiveImage(R.drawable.ic_favorite_white);
-                    click = 1;
-
-                    wishlistHelper.open();
-
-                    //Toasty.info(getApplicationContext(), String.valueOf(frameId), Toast.LENGTH_SHORT).show();
-
-                    ModelWishlist item = new ModelWishlist();
-                    item.setProductid(frameId);
-                    item.setProductcode(frameSku);
-                    item.setProductname(frameName);
-                    item.setProductimg(frameImage);
-                    item.setProductprice(Integer.valueOf(removeRupiah(framePrice)));
-                    item.setProductdiscount(Integer.valueOf(removeDiskon(frameDisc)));
-
-//                Toasty.info(getApplicationContext(), removeRupiah(frameDiscPrice) + " " +
-//                        removeDiskon(frameDisc) + " " + String.valueOf(frameId), Toast.LENGTH_SHORT).show();
-
-                    long status = wishlistHelper.insertWishlist(item);
-
-                    if (status > 0)
-                    {
-//                   Toasty.success(getApplicationContext(), "Item " + String.valueOf(frameId)
-//                           + " has add to wishlist", Toast.LENGTH_SHORT).show();
-
-                        Toasty.success(getContext(), "Item has been added to wishlist", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else
-                {
-                    btnWishlist.setInactiveImage(R.drawable.ic_favorite_border_white);
-                    click = 0;
-
-                    int status = wishlistHelper.deleteWishlist(frameId);
-                    if (status > 0)
-                    {
-                        Toasty.info(getContext(), "Item has been removed from wishlist", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                wishlistHelper = WishlistHelper.getInstance(getContext());
-
-                wishlistHelper.open();
-
-                int count = wishlistHelper.countWishlist();
-
-                if (badgeCounter != null)
-                {
-                    badgeCounter.countWishlist(count);
                 }
             }
         });
@@ -353,22 +278,54 @@ public class DetailFrameFragment extends Fragment {
                         frameAvailibilty = jsonObject.getString("frame_availibilty");
                         frameBrand  = jsonObject.getString("frame_brand");
                         frameColor  = jsonObject.getString("frame_color");
+                        frameQty    = jsonObject.getString("frame_qty");
+                        frameWeight = jsonObject.getString("frame_weight");
 
                         allImg.add(frameImage);
                     }
 
-                    frameDisc = frameDisc + " % ";
                     frameDiscPrice = "Rp. " + CurencyFormat(frameDiscPrice);
                     framePrice     = "Rp. " + CurencyFormat(framePrice);
-                    String stock = "IN STOCK";
+                    int disc = Integer.valueOf(frameDisc);
+                    if (disc > 0)
+                    {
+                        frameDisc = frameDisc + " % ";
+                        txtDisc.setVisibility(View.VISIBLE);
+                        txtDisc.setText(frameDisc);
+
+                        txtRealPrice.setVisibility(View.VISIBLE);
+                        txtRealPrice.setPaintFlags(txtRealPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        txtRealPrice.setText(framePrice);
+                    }
+                    else
+                    {
+                        txtDisc.setVisibility(View.GONE);
+                        txtRealPrice.setVisibility(View.GONE);
+                    }
+
+                    // String stock = "IN STOCK";
+                    int qty = Integer.valueOf(frameQty);
+                    if (qty > 0)
+                    {
+                        txtAvailability.setText("Tersedia");
+                        txtAvailability.setTextColor(Color.parseColor("#45ac2d"));
+
+                        btnCart.setEnabled(true);
+                        btnCart.setBackgroundColor(Color.parseColor("#3395ff"));
+                    }
+                    else
+                    {
+                        txtAvailability.setText("Habis");
+                        txtAvailability.setTextColor(Color.parseColor("#f90606"));
+
+                        btnCart.setEnabled(false);
+                        btnCart.setBackgroundColor(Color.parseColor("#757575"));
+                    }
 
                     txtLenscode.setText(frameName);
                     txtDiscPrice.setText(frameDiscPrice);
-                    txtRealPrice.setPaintFlags(txtRealPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    txtRealPrice.setText(framePrice);
-                    txtDisc.setText(frameDisc);
+
                     txtBrand.setText(frameBrand);
-                    txtAvailability.setText(stock);
                     txtDescription.setText(frameSku);
 
                     Data_recent_view dataRecentView = new Data_recent_view();
@@ -481,6 +438,8 @@ public class DetailFrameFragment extends Fragment {
                         String frameImage   = jsonObject.getString("frame_image");
                         String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
                         String frameDisc    = jsonObject.getString("frame_disc");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
 //                        String totalFrame   = jsonObject.getString("total_output");
 
                         Data_fragment_bestproduct item = new Data_fragment_bestproduct();
@@ -488,7 +447,9 @@ public class DetailFrameFragment extends Fragment {
                         item.setProduct_name(frameName);
                         item.setProduct_image(frameImage);
                         item.setProduct_realprice("Rp " + framePrice);
-                        item.setProduct_discpercent(frameDisc + " %");
+                        item.setProduct_discpercent(frameDisc);
+                        item.setProduct_qty(frameQty);
+                        item.setProduct_weight(frameWeight);
 
                         list_hotsale.add(item);
                     }

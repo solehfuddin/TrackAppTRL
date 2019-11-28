@@ -22,7 +22,10 @@ import com.sofudev.trackapptrl.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
@@ -58,15 +61,17 @@ public class FormOrderDetailActivity extends AppCompatActivity {
             }
         });
 
+        getData();
+
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/printreceipt/lensa/" + key));
+//                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/printreceipt/lensa/" + key));
+
+                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/printreceipt/lensaweb/" + key));
                 startActivity(openBrowser);
             }
         });
-
-        getData();
     }
 
     private void getData()
@@ -79,7 +84,8 @@ public class FormOrderDetailActivity extends AppCompatActivity {
 
     private void getInformationDetail(final String key_order)
     {
-        String URL = config.Ip_address + config.order_history_chooseOrder;
+//        String URL = config.Ip_address + config.order_history_chooseOrder;
+        String URL = config.Ip_address + config.lenshistory_chooselens;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -92,7 +98,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
                     txtPasien.setText(jsonObject.getString("nama_pasien"));
                     txtTanggal.setText(jsonObject.getString("tanggal_order"));
                     txtProduk.setText(jsonObject.getString("nama_produk"));
-                    txtHarga.setText(jsonObject.getString("total_harga"));
+                    txtHarga.setText("Rp. " + CurencyFormat(jsonObject.getString("total_harga")));
                     txtStatus.setText(jsonObject.getString("status_bayar"));
                     txtNomorOrder.setText(nomor + jsonObject.getString("order_number"));
                 } catch (JSONException e) {
@@ -116,5 +122,15 @@ public class FormOrderDetailActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private String CurencyFormat(String Rp){
+        if (Rp.contentEquals("0") | Rp.equals("0"))
+        {
+            return "0,00";
+        }
 
+        Double money = Double.valueOf(Rp);
+        String strFormat ="#,###";
+        DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
+        return df.format(money);
+    }
 }

@@ -1,12 +1,24 @@
 package com.sofudev.trackapptrl.Data;
 
-/**
- * Created by sholeh on 03/09/2018.
- */
-
 public class Data_fragment_bestproduct {
     private String product_image, product_id, product_name, product_code, product_realprice, product_discprice,
-            product_discpercent, product_brand;
+            product_discpercent, product_brand, product_qty, product_weight;
+
+    public String getProduct_qty() {
+        return product_qty;
+    }
+
+    public void setProduct_qty(String product_qty) {
+        this.product_qty = product_qty;
+    }
+
+    public String getProduct_weight() {
+        return product_weight;
+    }
+
+    public void setProduct_weight(String product_weight) {
+        this.product_weight = product_weight;
+    }
 
     public String getProduct_brand() {
         return product_brand;

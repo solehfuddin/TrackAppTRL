@@ -55,9 +55,12 @@ public class Adapter_orderhistory_optic extends RecyclerView.Adapter<Adapter_ord
         holder.txt_date.setText(item.get(position).getTanggalOrder());
         holder.txt_pricetotal.setText(item.get(position).getTotalBiaya());
         String status = item.get(position).getStatusOrder();
+        holder.txt_status.setText(status);
 
-        if (status.equals("Pending") || status.contains("Pending") || status.contentEquals("Pending"))
+        if (status.equals("Pending") || status.contains("Pending") || status.contentEquals("Pending") ||
+                status.contentEquals("PENDING") || status.equals("PENDING") || status.contains("PENDING"))
         {
+            status = "Pending";
             holder.txt_status.setText(status);
             holder.txt_status.setTextColor(Color.parseColor("#ffcc0000"));
         }

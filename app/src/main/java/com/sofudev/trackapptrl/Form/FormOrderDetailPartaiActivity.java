@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -193,12 +194,21 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
                         String shipCity = object.getString("shippingCity");
                         String shipProvince = object.getString("shippingProvince");
 
-                        if (shipPrice.isEmpty())
+                        Log.d("Info ShipName", shipName);
+
+                        if (shipName.contains("null") || shipName.equals("null") || shipName.contentEquals("null")
+                                || shipPrice.isEmpty())
                         {
+//                            Toasty.error(getApplicationContext(), shipName, Toast.LENGTH_SHORT).show();
+
                             cardShip.setVisibility(View.GONE);
                         }
+                        else
+                        {
+                            cardShip.setVisibility(View.VISIBLE);
+                        }
 
-                        cardShip.setVisibility(View.VISIBLE);
+//                        cardShip.setVisibility(View.VISIBLE);
                         shipPrice = "Rp. " + CurencyFormat(shipPrice);
 
                         txtShipName.setText(shipName);

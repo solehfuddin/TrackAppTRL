@@ -282,6 +282,17 @@ public class DashboardActivity extends AppCompatActivity
         updateToken(token);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int counter = wishlistHelper.countWishlist();
+        txt_countwishlist.setText(" " + counter + " ");
+
+        int countCart = addCartHelper.countAddCart();
+        txt_countCart.setText(" " + countCart + " ");
+    }
+
     private void updateToken(final String token)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URLTOKEN, new Response.Listener<String>() {
@@ -440,6 +451,7 @@ public class DashboardActivity extends AppCompatActivity
             else if (id == R.id.nav_orderhistory)
             {
                 Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                intent.putExtra("idparty", navdash_id.getText().toString());
                 intent.putExtra("user_info", username);
                 startActivity(intent);
             }
@@ -1672,6 +1684,7 @@ public class DashboardActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString("activity", "dashboard");
         homeFragment.setArguments(bundle);
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //        fragmentTransaction.replace(R.id.appbar_dashboard_fragment_container, homeFragment);
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment);
@@ -2240,12 +2253,15 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     public void countWishlist(int counter) {
-        txt_countwishlist.setText(" " + counter + " ");
+//        txt_countwishlist.setText(" " + counter + " ");
+
+        Log.d("WISHLIST : ", String.valueOf(counter));
     }
 
     @Override
     public void countCartlist(int counter) {
-        txt_countCart.setText(" " + counter + " ");
+//        txt_countCart.setText(" " + counter + " ");
+        Log.d("CART : ", String.valueOf(counter));
     }
 
     @Override

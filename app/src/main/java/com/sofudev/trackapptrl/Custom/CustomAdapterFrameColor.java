@@ -5,5 +5,5 @@ package com.sofudev.trackapptrl.Custom;
  */
 
 public interface CustomAdapterFrameColor {
-    void response(int position, String title);
+    void response(String position, String title);
 }

@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -11,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_homecategory;
 import com.sofudev.trackapptrl.Adapter.Adapter_homeproduct;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
@@ -60,6 +63,13 @@ import ss.com.bannerslider.views.BannerSlider;
 
 public class HomeFragment extends Fragment {
 
+    public static final int REQUEST_CODE = 101;
+    public static final int RESULT_CODE  = 201;
+
+    public int COUNTER_WISHLIST = 0;
+    public int COUNTER_CART = 0;
+
+    OnBadgeCounter badgeCounter;
     private OnFragmentInteractionListener mListener;
     BannerSlider banner_header;
     Config config  = new Config();
@@ -146,7 +156,8 @@ public class HomeFragment extends Fragment {
 
                             Intent intent = new Intent(getContext(), DetailProductActivity.class);
                             intent.putExtra("id", Integer.valueOf(list_hotsale.get(pos).getProduct_id()));
-                            startActivity(intent);
+//                            startActivity(intent);
+                            startActivityForResult(intent, REQUEST_CODE);
                         }
                     }
                 }, ACTIVITY_TAG);
@@ -182,7 +193,8 @@ public class HomeFragment extends Fragment {
 
                             Intent intent = new Intent(getContext(), DetailProductActivity.class);
                             intent.putExtra("id", Integer.valueOf(list_brandrandom.get(pos).getProduct_id()));
-                            startActivity(intent);
+//                            startActivity(intent);
+                            startActivityForResult(intent, REQUEST_CODE);
                         }
                     }
                 }, ACTIVITY_TAG);
@@ -199,7 +211,71 @@ public class HomeFragment extends Fragment {
 
         showHotsale();
         showBrandrandom();
+
+//        badgeCounter.countCartlist(COUNTER_CART);
+//        badgeCounter.countWishlist(COUNTER_WISHLIST);
+//
+//        Log.d("Sent HOME Wishlist : ", String.valueOf(COUNTER_WISHLIST));
+//        Log.d("Sent HOME Cart : ", String.valueOf(COUNTER_CART));
+
+//        Intent intent1 = new Intent();
+//        intent1.putExtra("counter", COUNTER_WISHLIST);
+//        getActivity().setResult(1, intent1);
+
         return thisView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        badgeCounter = (OnBadgeCounter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        badgeCounter = null;
+    }
+
+    //    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_CODE_WISHLIST && resultCode == RESULT_CODE_WISHLIST)
+//        {
+//            int counter = data.getIntExtra(COUNTER_WISHLIST, 0);
+////            txt_countwishlist.setText(" " + counter + " ");
+//
+//            Log.d("COUNTER WISHLIST : ", String.valueOf(counter));
+//        }
+//        else if (requestCode == REQUEST_CODE_CART && resultCode == RESULT_CODE_CART)
+//        {
+//            int counter = data.getIntExtra(COUNTER_CART, 0);
+////            txt_countCart.setText(" " + counter + " ");
+//            Log.d("COUNTER CART : ", String.valueOf(counter));
+//        }
+//    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE)
+        {
+            COUNTER_WISHLIST = data.getIntExtra("counter1", 0);
+            COUNTER_CART     = data.getIntExtra("counter2", 0);
+//            txt_countwishlist.setText(" " + counter + " ");
+//            Log.d("HOME Wishlist : ", String.valueOf(counter));
+        }
+
+//        if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE)
+//        {
+//            COUNTER_CART = data.getIntExtra("counter2", 0);
+////            txt_countCart.setText(" " + counter + " ");
+////            Log.d("HOME CartList : ", String.valueOf(counter));
+//        }
+
+        Log.d("HOME Wishlist : ", String.valueOf(COUNTER_WISHLIST));
+        Log.d("HOME Cart : ", String.valueOf(COUNTER_CART));
     }
 
     private void getData()
@@ -336,6 +412,8 @@ public class HomeFragment extends Fragment {
                         String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
                         String frameDisc    = jsonObject.getString("frame_disc");
                         String frameBrand   = jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
 //                        String totalFrame   = jsonObject.getString("total_output");
 
                         Data_fragment_bestproduct item = new Data_fragment_bestproduct();
@@ -343,14 +421,22 @@ public class HomeFragment extends Fragment {
                         item.setProduct_name(frameName);
                         item.setProduct_image(frameImage);
                         item.setProduct_realprice("Rp " + framePrice);
-                        item.setProduct_discpercent(frameDisc + " %");
+                        item.setProduct_discpercent(frameDisc);
                         item.setProduct_brand(frameBrand);
+                        item.setProduct_qty(frameQty);
+                        item.setProduct_weight(frameWeight);
 
                         list_hotsale.add(item);
                     }
 
                     hideLoading();
                     adapter_hotsale_product.notifyDataSetChanged();
+
+                    if (badgeCounter != null)
+                    {
+                        badgeCounter.countWishlist(COUNTER_WISHLIST);
+                        badgeCounter.countCartlist(COUNTER_CART);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -384,6 +470,8 @@ public class HomeFragment extends Fragment {
                         String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
                         String frameDisc    = jsonObject.getString("frame_disc");
                         String frameBrand   = jsonObject.getString("frame_brand");
+                        String frameQty     = jsonObject.getString("frame_qty");
+                        String frameWeight  = jsonObject.getString("frame_weight");
 //                        String totalFrame   = jsonObject.getString("total_output");
 
                         Data_fragment_bestproduct item = new Data_fragment_bestproduct();
@@ -391,8 +479,10 @@ public class HomeFragment extends Fragment {
                         item.setProduct_name(frameName);
                         item.setProduct_image(frameImage);
                         item.setProduct_realprice("Rp " + framePrice);
-                        item.setProduct_discpercent(frameDisc + " %");
+                        item.setProduct_discpercent(frameDisc);
                         item.setProduct_brand(frameBrand);
+                        item.setProduct_qty(frameQty);
+                        item.setProduct_weight(frameWeight);
 
                         list_brandrandom.add(item);
                     }

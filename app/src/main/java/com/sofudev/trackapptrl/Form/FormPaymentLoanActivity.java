@@ -52,6 +52,9 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
     String URLPHONE = config.Ip_address + config.order_history_getPhoneNumber;
     String URLUPDATEPHONE = config.Ip_address + config.order_history_updatePhoneNumber;
     String URLGETSALDO = config.payment_method_loanSaldo;
+    String URLGETDETAILACCOUNT = config.Ip_address + config.orderlens_get_detailaccount;
+    String URLSENDREMINDER     = config.Ip_address + config.orderlens_send_reminder;
+    String URLCHECKREMINDER    = config.Ip_address + config.orderlens_check_reminder;
 
     ImageView btnBack;
     UniversalFontTextView txtOrderNumber, txtTimer, txtDate, txtBillingId, txtAmount;
@@ -61,7 +64,7 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
 
     Adapter_panduantransfer adapter_panduantransfer;
     List<String> list_panduantransfer = new ArrayList<>();
-    String phone, orderNumber, username;
+    String phone, orderNumber, username, emailaddress, opticname, billingCode, amount, expDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +117,9 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         orderNumber        = bundle.getString("orderNumber");
-        String billingCode = bundle.getString("billingCode");
-        String amount      = bundle.getString("amount");
-        String expDate     = bundle.getString("expDate");
+        billingCode = bundle.getString("billingCode");
+        amount      = bundle.getString("amount");
+        expDate     = bundle.getString("expDate");
         String duration    = bundle.getString("duration");
         username    = bundle.getString("username");
 
@@ -128,6 +131,7 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
 //        Toasty.info(getApplicationContext(), username, Toast.LENGTH_SHORT).show();
 
         getPhoneNumber(username);
+        getDetailAccount(username);
 
         setTimer(txtTimer, Integer.parseInt(duration));
     }
@@ -425,5 +429,128 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getDetailAccount(final String username)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLGETDETAILACCOUNT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    emailaddress = object.getString("emailaddress");
+                    opticname    = object.getString("opticname");
+
+//                    Toasty.info(getApplicationContext(), "Email " + emailaddress, Toast.LENGTH_SHORT).show();
+
+                    checkReminder(orderNumber);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR GET DETAIL", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("username", username);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkReminder(final String orderNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLCHECKREMINDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        reminderPayment(orderNumber, emailaddress, username, opticname, billingCode, amount, "QR Code", expDate);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("CHECK REMINDER", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void reminderPayment(final String orderNumber, final String email_address, final String username,
+                                 final String optic_name, final String billingCode,
+                                 final String amount, final String paymentMethod, final String expDate)
+    {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSENDREMINDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Toasty.info(getApplicationContext(), "Reminder has been success", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (jsonObject.names().get(0).equals("error"))
+                    {
+                        Toasty.warning(getApplicationContext(), jsonObject.getString("error"), Toast.LENGTH_SHORT, true).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+                //hideLoading();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                hashMap.put("email_address", email_address);
+                hashMap.put("username", username);
+                hashMap.put("optic_name", optic_name);
+                hashMap.put("billingCode", billingCode);
+                hashMap.put("amount", amount);
+                hashMap.put("paymentMethod", paymentMethod);
+                hashMap.put("expDate", expDate);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 }

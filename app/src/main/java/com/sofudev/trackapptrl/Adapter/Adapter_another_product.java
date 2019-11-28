@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,15 +57,41 @@ public class Adapter_another_product extends RecyclerView.Adapter<Adapter_anothe
         holder.txt_realprice.setText(item.get(position).getProduct_realprice());
 
         holder.txt_productid.setVisibility(View.GONE);
-        String discount = item.get(position).getProduct_discpercent();
-        if (discount.contentEquals("null"))
+//        String discount = item.get(position).getProduct_discpercent();
+//        if (discount.contentEquals("null"))
+//        {
+//            holder.txt_discpercent.setVisibility(View.GONE);
+//            holder.txt_discpercent.setPadding(20, 30, 20, 30);
+//        }
+//        else
+//        {
+//            holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+//        }
+
+        int discount = Integer.parseInt(item.get(position).getProduct_discpercent());
+        if (discount > 0)
         {
-            holder.txt_discpercent.setVisibility(View.GONE);
-            holder.txt_discpercent.setPadding(20, 30, 20, 30);
+            String disc = String.valueOf(discount) + " %";
+            holder.txt_discpercent.setVisibility(View.VISIBLE);
+            holder.txt_discpercent.setText(disc);
         }
         else
         {
-            holder.txt_discpercent.setText(item.get(position).getProduct_discpercent());
+            holder.txt_discpercent.setVisibility(View.GONE);
+//                holder.txt_discpercent.setPadding(20, 30, 20, 30);
+        }
+
+        int qty = Integer.parseInt(item.get(position).getProduct_qty());
+
+        if (qty > 0)
+        {
+            holder.txt_available.setText("Stok Tersedia");
+            holder.txt_available.setTextColor(Color.parseColor("#45ac2d"));
+        }
+        else
+        {
+            holder.txt_available.setText("Stok Habis");
+            holder.txt_available.setTextColor(Color.parseColor("#f90606"));
         }
 
         holder.btn_wish.setVisibility(View.GONE);
@@ -138,7 +165,8 @@ public class Adapter_another_product extends RecyclerView.Adapter<Adapter_anothe
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_product;
-        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice;
+        UniversalFontTextView txt_productid, txt_discpercent, txt_productname, txt_productcode, txt_realprice, txt_discprice,
+            txt_available;
         SparkButton btn_wish;
 
         public ViewHolder(@NonNull View itemView) {
@@ -150,6 +178,7 @@ public class Adapter_another_product extends RecyclerView.Adapter<Adapter_anothe
             txt_productname = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductname);
             //txt_productcode = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductcode);
             txt_realprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_dashboard_txtRealprice);
+            txt_available   = itemView.findViewById(R.id.listitem_fragment_dashboard_txtProductavailable);
 //            txt_discprice   = (UniversalFontTextView) itemView.findViewById(R.id.listitem_fragment_bestproduct_txtDiscprice);
 
             //txt_realprice.setPaintFlags(txt_realprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

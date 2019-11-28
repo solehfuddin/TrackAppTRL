@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="10dp"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true"
+    android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="130dp"
+            android:layout_height="165dp"
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+            <ImageView
+                android:id="@+id/listitem_courier_service_imgCheck"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="right"
+                android:visibility="invisible"
+                android:src="@drawable/check"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/listitem_courier_service_txtCourierName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Product Name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:customFont="UbuntuMedium.ttf" />
+
+                <ImageView
+                    android:id="@+id/listitem_courier_service_imgCourier"
+                    android:layout_width="100dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/listitem_courier_service_txtCourierName"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/bumperbanner" />
+            </RelativeLayout>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_courier_service_txtIdCourier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Id"
+                android:visibility="gone"
+                android:textSize="10sp"
+                app:customFont="MavenPro-Regular.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_courier_service_txtCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:customFont="MavenPro-Regular.ttf"
+                android:layout_marginTop="5dp"
+                android:text="City"
+                android:textAlignment="center"
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listitem_courier_service_txtProvince"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:customFont="MavenPro-Regular.ttf"
+                android:layout_marginTop="5dp"
+                android:text="Province"
+                android:textAlignment="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/truck"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/listitem_courier_service_txtEstimate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:customFont="MavenPro-Regular.ttf"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="1dp"
+                    android:text="2-3 Hari Kerja"
+                    android:textAlignment="center"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+</android.support.v7.widget.CardView>

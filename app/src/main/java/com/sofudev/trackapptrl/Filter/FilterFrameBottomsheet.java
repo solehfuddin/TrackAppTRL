@@ -60,7 +60,7 @@ public class FilterFrameBottomsheet extends BottomSheetDialog implements View.On
     private List<Data_color_filter> dataColor = new ArrayList<>();
     private List<Integer> listColor = new ArrayList<>();
     List<Data_brand_filter> dataBrand = new ArrayList<>();
-    List<Integer> listBrand = new ArrayList<>();
+    List<String> listBrand = new ArrayList<>();
 
     @SuppressLint("StaticFieldLeak")
     private static FilterFrameBottomsheet instance;
@@ -102,13 +102,13 @@ public class FilterFrameBottomsheet extends BottomSheetDialog implements View.On
 
 //        rangePrice.setMinStartValue(Float.valueOf(valueMin)).setMaxStartValue(Float.valueOf(valueMax)).apply();
 
-        recyclerColor.setLayoutManager(new GridLayoutManager(getContext(), 6));
-        adapter_colorfilter = new Adapter_colorfilter(getContext(), dataColor, customAdapterFrameColor, chooseColor);
-        recyclerColor.setAdapter(adapter_colorfilter);
+//        recyclerColor.setLayoutManager(new GridLayoutManager(getContext(), 6));
+//        adapter_colorfilter = new Adapter_colorfilter(getContext(), dataColor, customAdapterFrameColor, chooseColor);
+//        recyclerColor.setAdapter(adapter_colorfilter);
 
-        recyclerBrand.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
-        recyclerBrand.setAdapter(adapter_brandfilter);
+//        recyclerBrand.setLayoutManager(new GridLayoutManager(getContext(), 4));
+//        adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
+//        recyclerBrand.setAdapter(adapter_brandfilter);
 
 //        txtRangeMin.setOnKeyListener(new View.OnKeyListener() {
 //            @Override
@@ -252,21 +252,28 @@ public class FilterFrameBottomsheet extends BottomSheetDialog implements View.On
         return output;
     }
 
-    CustomAdapterFrameBrand customAdapterFrameFragment = new CustomAdapterFrameBrand() {
-        @Override
-        public void response(int position, String title) {
-//            Toasty.info(getContext(), "Pos " + position + " title " + title, Toast.LENGTH_SHORT).show();
-            //listBrand.add(position);
-            listBrand.add(position);
-        }
-    };
+//    CustomAdapterFrameBrand customAdapterFrameFragment = new CustomAdapterFrameBrand() {
+//        @Override
+//        public void response(int position, String title) {
+////            Toasty.info(getContext(), "Pos " + position + " title " + title, Toast.LENGTH_SHORT).show();
+//            //listBrand.add(position);
+//
+//        }
+//    };
 
-    CustomAdapterFrameColor customAdapterFrameColor = new CustomAdapterFrameColor() {
-        @Override
-        public void response(int position, String title) {
-            listColor.add(position);
-        }
-    };
+//    CustomAdapterFrameBrand customAdapterFrameFragment  = new CustomAdapterFrameBrand() {
+//        @Override
+//        public void response(String position, String title) {
+//            listBrand.add(position);
+//        }
+//    };
+
+//    CustomAdapterFrameColor customAdapterFrameColor = new CustomAdapterFrameColor() {
+//        @Override
+//        public void response(int position, String title) {
+//            listColor.add(position);
+//        }
+//    };
 
     @Override
     public void onClick(View v) {

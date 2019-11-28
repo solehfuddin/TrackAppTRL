@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="10dp"
+    android:id="@+id/cardView2"
+    android:focusableInTouchMode="false"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/dialog_warning_imgClose"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_margin="15dp"
+            android:src="@drawable/close"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:id="@+id/dialog_warning_imgIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/warning"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/dialog_warning_txtInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Pastikan item yang anda pesan memiliki stok yang cukup"
+                android:textAlignment="center"
+                android:textColor="@color/colorFirst"
+                android:textSize="18sp"
+                app:customFont="UbuntuMedium.ttf"/>
+        </LinearLayout>
+
+        <!--<com.andexert.library.RippleView-->
+            <!--android:id="@+id/dialog_updatephone_btnUpdate"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_marginRight="50dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_weight="3"-->
+            <!--android:background="@color/colorFirst">-->
+
+            <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:text="Close"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="14sp" />-->
+        <!--</com.andexert.library.RippleView>-->
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

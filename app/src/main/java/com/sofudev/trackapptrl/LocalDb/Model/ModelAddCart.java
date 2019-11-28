@@ -1,10 +1,26 @@
 package com.sofudev.trackapptrl.LocalDb.Model;
 
 public class ModelAddCart {
-    private int productId, productQty, productPrice, productDiscPrice, productDisc, newProductPrice, newProductDiscPrice;
+    private int productId, productQty, productPrice, productDiscPrice, productDisc, newProductPrice, newProductDiscPrice, productStock, productWeight;
     private String productName, productCode, productImage;
 
     public ModelAddCart() {
+    }
+
+    public int getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(int productStock) {
+        this.productStock = productStock;
+    }
+
+    public int getProductWeight() {
+        return productWeight;
+    }
+
+    public void setProductWeight(int productWeight) {
+        this.productWeight = productWeight;
     }
 
     public int getNewProductPrice() {

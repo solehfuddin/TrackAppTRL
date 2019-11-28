@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sofudev.trackapptrl.Custom.CustomAdapterFrameColor;
 import com.sofudev.trackapptrl.Data.Data_color_filter;
@@ -17,13 +19,18 @@ import com.sofudev.trackapptrl.R;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class Adapter_colorfilter extends RecyclerView.Adapter<Adapter_colorfilter.ViewHolder> {
     private List<Data_color_filter> item;
     private Context context;
     private CustomAdapterFrameColor Icommunication;
     private String chooseColor;
+
+    private ArrayList<String> checkedColor = new ArrayList<>();
 
     public Adapter_colorfilter(Context context, List<Data_color_filter> item, CustomAdapterFrameColor Icommunication, String chooseColor) {
         this.item = item;
@@ -40,24 +47,17 @@ public class Adapter_colorfilter extends RecyclerView.Adapter<Adapter_colorfilte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
-        viewHolder.checkBox.setUnCheckedColor(Color.parseColor(item.get(i).getColorCode()));
-        viewHolder.checkBox.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
-                if (isChecked)
-                {
-                    //Toasty.info(context, item.get(i).getColorName(), Toast.LENGTH_SHORT).show();
-                    Icommunication.response(item.get(i).getColorId(), item.get(i).getColorName());
-                }
-            }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            viewHolder.checkBox.setTooltipText(item.get(i).getColorName());
-        }
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        final int pos = viewHolder.getAdapterPosition();
 
-        int chooser = item.get(i).getColorId();
-        if (chooseColor != null)
+        viewHolder.checkBox.setUnCheckedColor(Color.parseColor(item.get(pos).getColorCode()));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            viewHolder.checkBox.setTooltipText(item.get(i).getColorName());
+//        }
+
+        int chooser = item.get(pos).getColorId();
+
+        if (chooseColor != null && !chooseColor.isEmpty())
         {
             String value[] = chooseColor.split(",");
 
@@ -66,9 +66,44 @@ public class Adapter_colorfilter extends RecyclerView.Adapter<Adapter_colorfilte
                 if (chooser == Integer.valueOf(output.trim()))
                 {
                     viewHolder.checkBox.setChecked(true);
+
+                    checkedColor.add(String.valueOf(chooser));
                 }
             }
         }
+
+        viewHolder.checkBox.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
+                if (isChecked)
+                {
+                    //Toasty.info(context, item.get(i).getColorName(), Toast.LENGTH_SHORT).show();
+//                    Icommunication.response(item.get(i).getColorId(), item.get(i).getColorName());
+
+                    checkedColor.add(String.valueOf(item.get(pos).getColorId()));
+                }
+                else
+                {
+                    checkedColor.remove(String.valueOf(item.get(pos).getColorId()));
+                }
+
+                if (!checkedColor.isEmpty())
+                {
+                    String output = "AND item.`color_type` IN ( " + checkedColor.toString() + ")";
+
+                    output = output.replace("[","").replace("]","").trim();
+
+                    Icommunication.response(output, checkedColor.toString());
+
+                    Toasty.info(context, output, Toast.LENGTH_SHORT).show();
+                    Log.d("SELECTED COLOR", checkedColor.toString());
+                }
+                else
+                {
+                    Icommunication.response("", checkedColor.toString());
+                }
+            }
+        });
     }
 
     @Override
