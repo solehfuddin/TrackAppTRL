@@ -1,8 +1,42 @@
 package com.sofudev.trackapptrl.LocalDb.Model;
 
 public class ModelLensPartai {
-    private int productId, productPrice, productQty, productDisc, productDiscPrice, newProductPrice, newProductDiscPrice, productStock, productWeight;
-    private String productCode, productDesc, powerSph, powerCyl, powerAdd, productSide, productImage;
+    private int productId, productPrice, productQty, productStock, productWeight,
+                productDiscSale;
+    private double productDisc, productDiscPrice, newProductDiscPrice, productDiscPriceSale, newProductPrice;
+    private String productCode;
+    private String productDesc;
+    private String powerSph;
+    private String powerCyl;
+    private String powerAdd;
+    private String productSide;
+    private String productImage;
+
+    public double getProductDiscPriceSale() {
+        return productDiscPriceSale;
+    }
+
+    public void setProductDiscPriceSale(double productDiscPriceSale) {
+        this.productDiscPriceSale = productDiscPriceSale;
+    }
+
+    public int getProductDiscSale() {
+        return productDiscSale;
+    }
+
+    public void setProductDiscSale(int productDiscSale) {
+        this.productDiscSale = productDiscSale;
+    }
+
+    public String getProductTitleSale() {
+        return productTitleSale;
+    }
+
+    public void setProductTitleSale(String productTitleSale) {
+        this.productTitleSale = productTitleSale;
+    }
+
+    private String productTitleSale;
 
     public ModelLensPartai() {
     }
@@ -23,11 +57,11 @@ public class ModelLensPartai {
         this.productWeight = productWeight;
     }
 
-    public int getProductDiscPrice() {
+    public double getProductDiscPrice() {
         return productDiscPrice;
     }
 
-    public void setProductDiscPrice(int productDiscPrice) {
+    public void setProductDiscPrice(double productDiscPrice) {
         this.productDiscPrice = productDiscPrice;
     }
 
@@ -71,27 +105,27 @@ public class ModelLensPartai {
         this.productQty = productQty;
     }
 
-    public int getProductDisc() {
+    public double getProductDisc() {
         return productDisc;
     }
 
-    public void setProductDisc(int productDisc) {
+    public void setProductDisc(double productDisc) {
         this.productDisc = productDisc;
     }
 
-    public int getNewProductPrice() {
+    public double getNewProductPrice() {
         return newProductPrice;
     }
 
-    public void setNewProductPrice(int newProductPrice) {
+    public void setNewProductPrice(double newProductPrice) {
         this.newProductPrice = newProductPrice;
     }
 
-    public int getNewProductDiscPrice() {
+    public double getNewProductDiscPrice() {
         return newProductDiscPrice;
     }
 
-    public void setNewProductDiscPrice(int newProductDiscPrice) {
+    public void setNewProductDiscPrice(double newProductDiscPrice) {
         this.newProductDiscPrice = newProductDiscPrice;
     }
 

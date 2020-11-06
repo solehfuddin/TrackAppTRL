@@ -40,11 +40,13 @@ import com.sofudev.trackapptrl.Adapter.Adapter_power_sph;
 import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_lenstype;
 import com.sofudev.trackapptrl.Data.Data_partai_header;
 import com.sofudev.trackapptrl.Data.Data_partai_item;
 import com.sofudev.trackapptrl.Data.Data_paymentmethod;
+import com.sofudev.trackapptrl.Data.Data_spheader;
 import com.sofudev.trackapptrl.Data.Data_spin_shipment;
 import com.sofudev.trackapptrl.LocalDb.Db.LensPartaiHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelLensPartai;
@@ -74,6 +76,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String URLPOWERCYL = config.Ip_address + config.show_cyl;
     String URLPOWERADD = config.Ip_address + config.show_add;
     String URLGETPRICE = config.Ip_address + config.show_price;
+    String URLGETPRICESP = config.Ip_address + config.show_price_sp;
     String URLGETSTBSTOCK = config.Ip_address + config.discount_item_getStbItem;
     String URLGETDISCOUNT = config.Ip_address + config.discount_item_getDiscount;
     String URL_ALLDATA = config.Ip_address + config.spinner_shipment_getAllData;
@@ -83,16 +86,25 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String URLINSERTITEM   = config.Ip_address + config.orderpartai_insertItem;
     String URL_UPDATESTOCK = config.Ip_address + config.update_stock_lens_partai;
     String URLNONPAYMENT   = config.Ip_address + config.frame_insert_statusnonpayment;
-    String URL_ALLPAYMENT = config.Ip_address + config.payment_method_showAllData;
-    String URL_POSTBILLING= config.payment_method_postBilling;
+    String URL_ALLPAYMENT  = config.Ip_address + config.payment_method_showAllData;
+    String URL_POSTBILLING = config.payment_method_postBilling;
     String URL_INSERTBILLQR = config.Ip_address + config.payment_insert_billingQR;
     String URL_INSERTBILLVA = config.Ip_address + config.payment_insert_billingVA;
     String URL_INSERTBILLCC = config.Ip_address + config.payment_insert_billingCC;
     String URL_INSERTBILLLOAN = config.Ip_address + config.payment_insert_billingLOAN;
+    String URL_INSERTBILLDEPOSIT = config.Ip_address + config.payment_insert_billingDeposit;
     String URL_SHOWSESSIONPAYMENTQR = config.Ip_address + config.payment_show_expiredDurationQR;
     String URL_SHOWSESSIONPAYMENTVA = config.Ip_address + config.payment_show_expiredDurationVA;
     String URL_SHOWSESSIONPAYMENTCC = config.Ip_address + config.payment_show_expiredDurationCC;
     String URL_SHOWSESSIONPAYMENTLOAN = config.Ip_address + config.payment_show_expiredDurationLOAN;
+    String URL_SHOWSESSIONPAYMENTDEPOSIT = config.Ip_address + config.payment_show_expiredDurationDeposit;
+    String URL_GETMEMBERFLAG        = config.Ip_address + config.memberflag_getStatus;
+    String URL_GETACTIVESALE        = config.Ip_address + config.flashsale_getActiveSale;
+    String URL_GETSPHEADER          = config.Ip_address + config.ordersp_get_spHeader;
+    String URL_INSERTSPHEADER       = config.Ip_address + config.ordersp_insert_spHeader;
+    String URL_INSERTDURATION       = config.Ip_address + config.ordersp_insert_duration;
+    String URL_INSERTSAMTEMP        = config.Ip_address + config.ordersp_insert_samTemp;
+    String URL_INSERTTRXHEADER      = config.Ip_address + config.ordersp_insert_trxHeader;
 
     ACProgressCustom loading;
     ImageView btnBack, btnAddItem;
@@ -125,13 +137,19 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     ArrayList<String> item_cyl = new ArrayList<>();
     ArrayList<String> item_add = new ArrayList<>();
     List<Data_spin_shipment> shipmentList = new ArrayList<>();
+    Data_spheader dataSpHeader = new Data_spheader();
 
     String id_lensa, desc_lensa, power_sph, power_cyl, power_add;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, opticFlag, shipmentPrice,
-            shippingName, shippingService, orderId, phone, orgName;
+            shippingName, shippingService, orderId, phone, orgName, idSp;
+    String headerNoSp, headerTipeSp, headerSales, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
+            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage;
     String sphpos = null, cylpos = null, addpos = null;
-    String selectedItem, kodeBilling, duration, expDate, prodAttrVal;
-    int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId, availableStock;
+    String selectedItem, kodeBilling, duration, expDate, prodAttrVal, flashsaleNote;
+    int shippingId, availableStock, flagPayment, flagDiscSale, headerDp,
+        mNewPriceSale, isSp;
+
+    double totalAllPrice, totalPrice, priceDisc, totalDisc;
 
     LensPartaiHelper lensPartaiHelper;
 
@@ -140,12 +158,23 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_batch_order);
 
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
         lensPartaiHelper = LensPartaiHelper.getINSTANCE(getApplicationContext());
         lensPartaiHelper.open();
 
         getIdOptic();
-        generateOrderNumber(opticUsername);
+        if (idSp.equals("0"))
+        {
+            generateOrderNumber(opticUsername);
+        }
+        else
+        {
+            orderId = idSp;
+        }
+
         getPhoneNumber(opticUsername);
+        getActiveSale();
 
         scalableCourier = findViewById(R.id.form_batchorder_scalableCourier);
         btnBack = findViewById(R.id.form_batchorder_btnback);
@@ -192,94 +221,65 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //lensPartaiHelper.truncLensPartai();
-
-                int len = item_partai.size();
-                List<Boolean> sisanya = new ArrayList<>();
-
-                for (int i = 0; i < len; i++)
+                if (flagPayment == 0)
                 {
-                    String item = item_partai.get(i).getProductDesc();
-                    int stock = item_partai.get(i).getProductStock();
-                    int qty   = item_partai.get(i).getProductQty();
-                    int sisa  = stock - qty;
+                    Data_partai_header data_header = new Data_partai_header();
+                    data_header.setOrderNumber(orderId);
+                    data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                    data_header.setOpticName(opticName.replace(",", ""));
+                    data_header.setOpticAddress(opticAddress);
+                    data_header.setOpticCity(opticCity);
+                    data_header.setPhoneNumber(phone);
+                    data_header.setProdDivType(orgName);
+                    data_header.setShippingId(shippingId);
+                    data_header.setShippingName(shippingName);
+                    data_header.setOpticProvince(opticProvince);
+                    data_header.setShippingService(shippingService);
+                    data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
+                    data_header.setTotalPrice(totalAllPrice);
+                    data_header.setPayment_cashcarry("Non Payment Method");
+                    data_header.setFlashNote(flashsaleNote);
+                    data_header.setOrderSp(String.valueOf(isSp));
 
-                    Log.d("Stock " + item, " Sisa = " + sisa);
+                    Log.d("Header Partai", "OrderNumber = " + data_header.getOrderNumber());
+                    Log.d("Header Partai", "IdParty = " + data_header.getIdParty());
+                    Log.d("Header Partai", "OpticName = " + data_header.getOpticName());
+                    Log.d("Header Partai", "OpticAddress = " + data_header.getOpticAddress());
+                    Log.d("Header Partai", "OpticCity = " + data_header.getOpticCity());
+                    Log.d("Header Partai", "Phone = " + data_header.getPhoneNumber());
+                    Log.d("Header Partai", "OrgName = " + data_header.getProdDivType());
+                    Log.d("Header Partai", "ShippingId = " + data_header.getShippingId());
+                    Log.d("Header Partai", "ShippingName = " + data_header.getShippingName());
+                    Log.d("Header Partai", "Province = " + data_header.getOpticProvince());
+                    Log.d("Header Partai", "Service = " + data_header.getShippingService());
+                    Log.d("Header Partai", "ShipPrice = " + data_header.getShippingPrice());
+                    Log.d("Header Partai", "TotalPrice  = " + data_header.getTotalPrice());
+                    Log.d("Header Partai", "CashCarry = " + data_header.getPayment_cashcarry());
+                    Log.d("Header Partai", "Flash Note = " + data_header.getFlashNote());
 
-                    if (sisa < 0)
+                    insertHeader(data_header);
+
+                    if (isSp == 1)
                     {
-                        sisanya.add(i, false);
-                    }
-                    else
-                    {
-                        sisanya.add(i, true);
-                    }
-                }
+                        dataSpHeader.setNoSp(headerNoSp);
+                        dataSpHeader.setTypeSp(headerTipeSp);
+                        dataSpHeader.setSales(headerSales);
+                        dataSpHeader.setCustName(headerCustName);
+                        dataSpHeader.setAddress(headerAddress);
+                        dataSpHeader.setCity(headerCity);
+                        dataSpHeader.setOrderVia(headerOrderVia);
+                        dataSpHeader.setDp(headerDp);
+                        dataSpHeader.setDisc(headerDisc);
+                        dataSpHeader.setCondition(headerCondition);
+                        dataSpHeader.setInstallment(headerInstallment);
+                        dataSpHeader.setStartInstallment(headerStartInstallment);
+                        dataSpHeader.setShipAddress(headerShippingAddress);
+                        dataSpHeader.setPhoto(headerImage);
+                        dataSpHeader.setStatus(headerStatus);
 
-                boolean cek = sisanya.contains(false);
-
-                if (cek)
-                {
-                    Log.d("Information Cart", "Ada item yang minus");
-
-                    final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
-
-                    dialog.setContentView(R.layout.dialog_warning);
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    lwindow.copyFrom(dialog.getWindow().getAttributes());
-                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
-
-                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                    imgClose.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    dialog.show();
-                    dialog.getWindow().setAttributes(lwindow);
-                }
-                else
-                {
-                    Log.d("Information Cart", "Aman lanjutkan");
-
-                    if (opticFlag.equals("0"))
-                    {
-                        Data_partai_header data_header = new Data_partai_header();
-                        data_header.setOrderNumber(orderId);
-                        data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                        data_header.setOpticName(opticName.replace(",", ""));
-                        data_header.setOpticAddress(opticAddress);
-                        data_header.setOpticCity(opticCity);
-                        data_header.setPhoneNumber(phone);
-                        data_header.setProdDivType(orgName);
-                        data_header.setShippingId(shippingId);
-                        data_header.setShippingName(shippingName);
-                        data_header.setOpticProvince(opticProvince);
-                        data_header.setShippingService(shippingService);
-                        data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
-                        data_header.setTotalPrice(totalAllPrice);
-                        data_header.setPayment_cashcarry("Non Payment Method");
-
-                        Log.d("Header Partai", "OrderNumber = " + data_header.getOrderNumber());
-                        Log.d("Header Partai", "IdParty = " + data_header.getIdParty());
-                        Log.d("Header Partai", "OpticName = " + data_header.getOpticName());
-                        Log.d("Header Partai", "OpticAddress = " + data_header.getOpticAddress());
-                        Log.d("Header Partai", "OpticCity = " + data_header.getOpticCity());
-                        Log.d("Header Partai", "Phone = " + data_header.getPhoneNumber());
-                        Log.d("Header Partai", "OrgName = " + data_header.getProdDivType());
-                        Log.d("Header Partai", "ShippingId = " + data_header.getShippingId());
-                        Log.d("Header Partai", "ShippingName = " + data_header.getShippingName());
-                        Log.d("Header Partai", "Province = " + data_header.getOpticProvince());
-                        Log.d("Header Partai", "Service = " + data_header.getShippingService());
-                        Log.d("Header Partai", "ShipPrice = " + data_header.getShippingPrice());
-                        Log.d("Header Partai", "TotalPrice  = " + data_header.getTotalPrice());
-                        Log.d("Header Partai", "CashCarry = " + data_header.getPayment_cashcarry());
-
-                        insertHeader(data_header);
+                        insertSpHeader(dataSpHeader);
+                        insertSP(URL_INSERTSAMTEMP, dataSpHeader);
+                        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
 
                         for (int i = 0; i < item_partai.size(); i++)
                         {
@@ -293,14 +293,100 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             data_item.setPrice(item_partai.get(i).getProductPrice());
                             data_item.setDiscount_name("");
                             data_item.setDiscount(item_partai.get(i).getProductDisc());
+                            Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
+                            data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
                             data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
 
-                            insertItem(data_item);
+//                            insertItem(data_item);
+                            insertItemDurr(data_item);
                         }
+                    }
 
-                        insertNonPayment(orderId);
+                    for (int i = 0; i < item_partai.size(); i++)
+                    {
+                        Data_partai_item data_item = new Data_partai_item();
+                        data_item.setOrderNumber(orderId);
+                        data_item.setItemId(item_partai.get(i).getProductId());
+                        data_item.setItemCode(item_partai.get(i).getProductCode());
+                        data_item.setDescription(item_partai.get(i).getProductDesc());
+                        data_item.setSide(item_partai.get(i).getProductSide());
+                        data_item.setQty(item_partai.get(i).getProductQty());
+                        data_item.setPrice(item_partai.get(i).getProductPrice());
+                        data_item.setDiscount_name("");
+                        data_item.setDiscount(item_partai.get(i).getProductDisc());
+                        Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
+                        data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
+                        data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
+
+                        insertItem(data_item);
+                    }
+
+                    insertNonPayment(orderId);
 
 //                        Toasty.info(getApplicationContext(), "Congratulation, Order has been success", Toast.LENGTH_SHORT).show();
+
+                    final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                    dialog.setContentView(R.layout.dialog_warning);
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    lwindow.copyFrom(dialog.getWindow().getAttributes());
+                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                    ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
+                    UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                    txtTitle.setText("Success, order anda telah diterima Timur Raya");
+                    imgIcon.setImageResource(R.drawable.success_outline);
+                    imgClose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+
+                            if (isSp == 1)
+                            {
+                                Intent intent = new Intent("finishLp");
+                                sendBroadcast(intent);
+                            }
+
+                            finish();
+                        }
+                    });
+
+                    dialog.show();
+                    dialog.getWindow().setAttributes(lwindow);
+                }
+                else
+                {
+                    int len = item_partai.size();
+                    List<Boolean> sisanya = new ArrayList<>();
+
+                    for (int i = 0; i < len; i++)
+                    {
+                        String item = item_partai.get(i).getProductDesc();
+                        int stock = item_partai.get(i).getProductStock();
+                        int qty   = item_partai.get(i).getProductQty();
+                        int sisa  = stock - qty;
+
+                        Log.d("Stock " + item, " Sisa = " + stock);
+
+                        if (stock < 0)
+                        {
+                            sisanya.add(i, false);
+                        }
+                        else
+                        {
+                            sisanya.add(i, true);
+                        }
+                    }
+
+                    boolean cek = sisanya.contains(false);
+
+                    if (cek)
+                    {
+                        Log.d("Information Cart", "Ada item yang minus");
 
                         final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -313,16 +399,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
                         ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                        ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
-                        UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
-                        txtTitle.setText("Success, order anda telah diterima Timur Raya");
-                        imgIcon.setImageResource(R.drawable.success_outline);
                         imgClose.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
-
-                                finish();
                             }
                         });
 
@@ -331,16 +411,9 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        for (int j = 0; j < item_partai.size(); j++)
-                        {
-                            String item_id = String.valueOf(item_partai.get(j).getProductId());
-                            int stock = item_partai.get(j).getProductStock();
-                            int qty   = item_partai.get(j).getProductQty();
-                            int sisa  = stock - qty;
+                        Log.d("Information Cart", "Aman lanjutkan");
 
-                            potongStock(item_id, String.valueOf(sisa));
-                        }
-
+//                    if (opticFlag.equals("0"))
                         final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
@@ -426,6 +499,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
                                     postBillingLoan(paymentType, grossAmount, orderNumber);
                                 }
+                                else if (selectedItem.contentEquals("Deposit") || selectedItem.equals("Deposit") ||
+                                        selectedItem.contains("Deposit"))
+                                {
+                                    createBillingDeposit(orderId, "deposit");
+                                }
 //                                else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
 //                                        selectedItem.contains("Kreditpro"))
 //                                {
@@ -453,6 +531,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                                 data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
                                 data_header.setTotalPrice(totalAllPrice);
                                 data_header.setPayment_cashcarry("Pending");
+                                data_header.setFlashNote(flashsaleNote);
+                                data_header.setOrderSp(String.valueOf(isSp));
 
                                 insertHeader(data_header);
 
@@ -468,9 +548,20 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                                     data_item.setPrice(item_partai.get(i).getProductPrice());
                                     data_item.setDiscount_name("");
                                     data_item.setDiscount(item_partai.get(i).getProductDisc());
+                                    data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
                                     data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
 
                                     insertItem(data_item);
+                                }
+
+                                for (int j = 0; j < item_partai.size(); j++)
+                                {
+                                    String item_id = String.valueOf(item_partai.get(j).getProductId());
+                                    int stock = item_partai.get(j).getProductStock();
+                                    int qty   = item_partai.get(j).getProductQty();
+//                            int sisa  = stock - qty;
+
+                                    potongStock(item_id, String.valueOf(qty));
                                 }
 
                                 linearLayout.setVisibility(View.VISIBLE);
@@ -479,6 +570,15 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                                 cardView.setVisibility(View.GONE);
                                 scalableCourier.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.GONE);
+
+                                int trunc = lensPartaiHelper.truncLensPartai();
+
+                                if (trunc > 0)
+                                {
+//                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
+
+                                    Log.d("INFO BATCH", "Order telah dihapus");
+                                }
                             }
                         });
 
@@ -500,12 +600,19 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
         totalPrice = lensPartaiHelper.countTotalPrice();
         priceDisc  = lensPartaiHelper.countTotalDiscPrice();
-        totalDisc  = totalPrice - priceDisc;
+
+        if (isSp == 1)
+        {
+            totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+        }
+        else
+        {
+            totalDisc  = totalPrice - priceDisc;
+        }
+
 
         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
         txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
-
-        showCart();
 
 //        spinShipping.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -555,8 +662,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 shippingService = shipmentList.get(pos).getService();
                 shipmentPrice = shipmentList.get(pos).getPrice();
 
+                double priceSale = lensPartaiHelper.countTotalPriceSale();
+//                double test = lensPartaiHelper.countTest();
+
                 Log.d("Callback Price", "Shipment : " + shipmentPrice);
-                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+                totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
                 txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
                 txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
             }
@@ -732,8 +842,459 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 String cyl  = txtCyl.getText().toString();
                 String add  = txtAdd.getText().toString();
 
-                showPrice(kode, sph, cyl, add);
-                getAllKurir(opticCity, opticProvince);
+                if (isSp == 1)
+                {
+                    showPriceSp(kode, sph, cyl, add);
+                }
+                else
+                {
+                    showPrice(kode, sph, cyl, add);
+                }
+
+                try {
+                    Thread.sleep(500);
+
+                    if (flagPayment == 0)
+                    {
+//                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+                        txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+//                shipmentPrice = "0";
+//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+//                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                        double priceSale = lensPartaiHelper.countTotalPriceSale();
+                        double test = lensPartaiHelper.countTest();
+
+                        shipmentPrice = "0";
+                        totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
+                        txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                        txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+                        scalableCourier.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        txtInfoShipping.setVisibility(View.GONE);
+                        scalableCourier.setVisibility(View.VISIBLE);
+
+                    }
+
+                    txtTitleShip.setVisibility(View.VISIBLE);
+                    txtShippingPrice.setVisibility(View.VISIBLE);
+
+                    lensPartaiHelper.open();
+                    item_partai = lensPartaiHelper.getAllPartai();
+                    adapter_add_partai = new Adapter_add_partai(getApplicationContext(), item_partai, new RecyclerViewOnClickListener() {
+                        @Override
+                        public void onItemClick(View view, int pos, String id) {
+                            int btn = view.getId();
+
+                            switch (btn){
+                                case R.id.item_partaiproduct_btnRemove:
+                                    lensPartaiHelper.deleteLensPartai(item_partai.get(pos).getProductId());
+
+                                    item_partai.remove(pos);
+                                    adapter_add_partai.notifyItemRemoved(pos);
+
+                                    if (item_partai.size() > 0)
+                                    {
+                                        linearLayout.setVisibility(View.GONE);
+                                        linearPayment.setVisibility(View.VISIBLE);
+                                        cardContinue.setVisibility(View.VISIBLE);
+                                        cardView.setVisibility(View.VISIBLE);
+
+                                        if (flagPayment == 1)
+                                        {
+                                            scalableCourier.setVisibility(View.VISIBLE);
+                                        }
+                                        else
+                                        {
+                                            scalableCourier.setVisibility(View.GONE);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        linearLayout.setVisibility(View.VISIBLE);
+                                        linearPayment.setVisibility(View.GONE);
+                                        cardContinue.setVisibility(View.GONE);
+                                        cardView.setVisibility(View.GONE);
+                                        scalableCourier.setVisibility(View.GONE);
+                                    }
+
+                                    adapter_add_partai.notifyDataSetChanged();
+                                    recyclerView.setAdapter(adapter_add_partai);
+
+                                    totalPrice = lensPartaiHelper.countTotalPrice();
+                                    priceDisc  = lensPartaiHelper.countTotalDiscPrice();
+
+                                    if (isSp == 1)
+                                    {
+                                        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                                    }
+                                    else
+                                    {
+                                        totalDisc  = totalPrice - priceDisc;
+                                    }
+                                    double priceSale = lensPartaiHelper.countTotalPriceSale();
+                                    double test1 = lensPartaiHelper.countTest();
+
+                                    txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                                    txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
+
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+                                    if (flagPayment == 0)
+                                    {
+//                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+                                        txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+//                shipmentPrice = "0";
+//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+//                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                                        shipmentPrice = "0";
+                                        totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
+                                        txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                                        txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+                                    }
+                                    else
+                                    {
+                                        txtInfoShipping.setVisibility(View.GONE);
+                                    }
+
+                                    txtTitleShip.setVisibility(View.VISIBLE);
+                                    txtShippingPrice.setVisibility(View.VISIBLE);
+
+                                    BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(FormBatchOrderActivity.this);
+                                    snackBarMessage.showWarningMessage("Item has been removed");
+
+                                    break;
+
+                                case R.id.item_partaiproduct_btnPlus:
+                                    ModelLensPartai modelPartai = lensPartaiHelper.getLensPartai(item_partai.get(pos).getProductId());
+
+                                    int price = modelPartai.getProductPrice();
+                                    int qty   = modelPartai.getProductQty();
+                                    int stock = modelPartai.getProductStock();
+                                    double discprice = modelPartai.getProductDiscPrice();
+                                    int discsale  = modelPartai.getProductDiscSale();
+
+                                    qty = qty + 1;
+                                    int newprice = qty * price;
+                                    double newdiscprice = qty * discprice;
+                                    int pricesale  = discsale * newprice / 100;
+
+                                    Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Price : " + newprice);
+                                    Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Discount price : " + newdiscprice);
+                                    Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Discount sale : " + pricesale);
+
+                                    modelPartai.setProductQty(qty);
+                                    modelPartai.setNewProductPrice(newprice);
+                                    modelPartai.setNewProductDiscPrice(newdiscprice);
+                                    modelPartai.setProductDiscPriceSale(pricesale);
+
+                                    item_partai.set(pos, modelPartai);
+                                    lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                                    lensPartaiHelper.updateLensPartaiDiscSale(modelPartai);
+                                    adapter_add_partai.notifyDataSetChanged();
+
+                                    totalPrice = lensPartaiHelper.countTotalPrice();
+                                    priceDisc  = lensPartaiHelper.countTotalDiscPrice();
+                                    if (isSp == 1)
+                                    {
+                                        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                                    }
+                                    else
+                                    {
+                                        totalDisc  = totalPrice - priceDisc;
+                                    }
+
+                                    double totalPriceSale = lensPartaiHelper.countTotalPriceSale();
+                                    double test2 = lensPartaiHelper.countTest();
+
+                                    txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                                    txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
+
+                                    //Handle sp atau bukan ketika qty ditambahkan
+                                    if (isSp == 1)
+                                    {
+                                        stock = stock - qty;
+                                        Log.d("Informasi Stok Add", String.valueOf(stock));
+
+                                        modelPartai.setProductStock(stock);
+                                        item_partai.set(pos, modelPartai);
+                                        lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                                        adapter_add_partai.notifyDataSetChanged();
+
+                                        totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                        txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+//                                        scalableCourier.setVisibility(View.VISIBLE);
+                                    }
+                                    else
+                                    {
+                                        if (flagPayment == 1)
+                                        {
+                                            stock = stock - qty;
+                                            Log.d("Informasi Stok Add", String.valueOf(stock));
+
+                                            modelPartai.setProductStock(stock);
+                                            item_partai.set(pos, modelPartai);
+                                            lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                                            adapter_add_partai.notifyDataSetChanged();
+
+                                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                                            scalableCourier.setVisibility(View.VISIBLE);
+                                        }
+                                        else
+                                        {
+                                            shipmentPrice = "0";
+                                            totalAllPrice = (totalPrice - totalDisc - totalPriceSale) + Integer.valueOf(shipmentPrice);
+
+                                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+
+                                            scalableCourier.setVisibility(View.GONE);
+                                        }
+                                    }
+
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+//                        if (flagPayment == 0)
+//                        {
+////                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//                            scalableCourier.setVisibility(View.GONE);
+//                            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//
+////                shipmentPrice = "0";
+////                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+////                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+////                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//
+//                            shipmentPrice = "0";
+//                            totalAllPrice = (totalPrice - totalDisc - totalPriceSale) + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                        }
+//                        else
+//                        {
+//                            txtInfoShipping.setVisibility(View.GONE);
+//                            getAllKurir(opticCity, opticProvince);
+//                            scalableCourier.setVisibility(View.VISIBLE);
+//                        }
+
+//                        txtTitleShip.setVisibility(View.VISIBLE);
+//                        txtShippingPrice.setVisibility(View.VISIBLE);
+
+                                    break;
+
+                                case R.id.item_partaiproduct_btnMinus:
+                                    ModelLensPartai modellensPartai = lensPartaiHelper.getLensPartai(item_partai.get(pos).getProductId());
+
+                                    int mPrice = modellensPartai.getProductPrice();
+                                    int mQty   = modellensPartai.getProductQty();
+                                    double mDiscPrice = modellensPartai.getProductDiscPrice();
+                                    int mStock = modellensPartai.getProductStock();
+                                    int mDiscSale  = modellensPartai.getProductDiscSale();
+
+                                    mQty = mQty - 1;
+
+                                    if (mQty == 0)
+                                    {
+                                        BottomSnackBarMessage snackMsg = new BottomSnackBarMessage(FormBatchOrderActivity.this);
+                                        snackMsg.showWarningMessage("Qty minimal 1 pcs");
+                                    }
+                                    else
+                                    {
+                                        int mNewPrice = mQty * mPrice;
+                                        double mNewDiscPrice = mQty * mDiscPrice;
+                                        mNewPriceSale  = mDiscSale * mNewPrice / 100;
+
+                                        Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Price : " + mNewPrice);
+                                        Log.d(FormBatchOrderActivity.class.getSimpleName(), "New DiscPrice : " + mNewDiscPrice);
+                                        Log.d(FormBatchOrderActivity.class.getSimpleName(), "New DiscSale : " + mNewPriceSale);
+
+                                        modellensPartai.setProductQty(mQty);
+                                        modellensPartai.setNewProductPrice(mNewPrice);
+                                        modellensPartai.setNewProductDiscPrice(mNewDiscPrice);
+                                        modellensPartai.setProductDiscPriceSale(mNewPriceSale);
+
+                                        item_partai.set(pos, modellensPartai);
+                                        lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                                        lensPartaiHelper.updateLensPartaiDiscSale(modellensPartai);
+                                        adapter_add_partai.notifyDataSetChanged();
+                                    }
+
+                                    totalPrice = lensPartaiHelper.countTotalPrice();
+                                    priceDisc  = lensPartaiHelper.countTotalDiscPrice();
+                                    if (isSp == 1)
+                                    {
+                                        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                                    }
+                                    else
+                                    {
+                                        totalDisc  = totalPrice - priceDisc;
+                                    }
+
+                                    double newTotalPriceSale = lensPartaiHelper.countTotalPriceSale();
+                                    double test3 = lensPartaiHelper.countTest();
+
+                                    txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                                    txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
+
+                                    //Handle sp atau bukan ketika qty dikurangi
+                                    if (isSp == 1)
+                                    {
+                                        if (mQty == 0)
+                                        {
+                                            mQty = mQty + 1;
+                                        }
+//
+                                        mStock = mStock - mQty;
+                                        Log.d("Informasi Stok Minus", String.valueOf(mStock));
+                                        modellensPartai.setProductStock(mStock);
+
+                                        item_partai.set(pos, modellensPartai);
+                                        lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                                        adapter_add_partai.notifyDataSetChanged();
+
+                                        totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                        txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+//                                        scalableCourier.setVisibility(View.VISIBLE);
+                                    }
+                                    else
+                                    {
+                                        if (flagPayment == 1)
+                                        {
+                                            if (mQty == 0)
+                                            {
+                                                mQty = mQty + 1;
+                                            }
+//
+                                            mStock = mStock - mQty;
+                                            Log.d("Informasi Stok Minus", String.valueOf(mStock));
+                                            modellensPartai.setProductStock(mStock);
+
+                                            item_partai.set(pos, modellensPartai);
+                                            lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                                            adapter_add_partai.notifyDataSetChanged();
+
+                                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                                            scalableCourier.setVisibility(View.VISIBLE);
+                                        }
+                                        else
+                                        {
+                                            shipmentPrice = "0";
+                                            totalAllPrice = (totalPrice - totalDisc - newTotalPriceSale) + Integer.valueOf(shipmentPrice);
+
+                                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+
+                                            scalableCourier.setVisibility(View.GONE);
+                                        }
+                                    }
+
+
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+//                        if (flagPayment == 0)
+//                        {
+////                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//                            scalableCourier.setVisibility(View.GONE);
+//                            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//
+////                shipmentPrice = "0";
+////                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+////                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+////                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//
+//                            shipmentPrice = "0";
+//                            totalAllPrice = (totalPrice - totalDisc - newTotalPriceSale) + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                        }
+//                        else
+//                        {
+//                            txtInfoShipping.setVisibility(View.GONE);
+//                            getAllKurir(opticCity, opticProvince);
+//                            scalableCourier.setVisibility(View.VISIBLE);
+//                        }
+
+                                    txtTitleShip.setVisibility(View.VISIBLE);
+                                    txtShippingPrice.setVisibility(View.VISIBLE);
+
+                                    break;
+                            }
+                        }
+                    });
+
+                    if (item_partai.size() > 0)
+                    {
+                        linearLayout.setVisibility(View.GONE);
+                        linearPayment.setVisibility(View.VISIBLE);
+                        cardContinue.setVisibility(View.VISIBLE);
+                        cardView.setVisibility(View.VISIBLE);
+
+                        if (flagPayment == 1)
+                        {
+                            scalableCourier.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            scalableCourier.setVisibility(View.GONE);
+                        }
+                    }
+                    else
+                    {
+                        linearLayout.setVisibility(View.VISIBLE);
+                        linearPayment.setVisibility(View.GONE);
+                        cardContinue.setVisibility(View.GONE);
+                        cardView.setVisibility(View.GONE);
+                        scalableCourier.setVisibility(View.GONE);
+                    }
+
+                    recyclerView.setAdapter(adapter_add_partai);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -756,7 +1317,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         }
 
         Double money = Double.valueOf(Rp);
-        String strFormat ="#,###";
+        String strFormat ="#,###.#";
         DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
         return df.format(money);
     }
@@ -773,6 +1334,29 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             opticCity   = bundle.getString("city");
             opticFlag   = bundle.getString("flag");
             opticAddress= bundle.getString("province_address");
+            idSp        = bundle.getString("idSp");
+            isSp        = bundle.getInt("isSp", 0);
+
+            if (isSp == 1)
+            {
+                headerNoSp  = bundle.getString("header_nosp");
+                headerTipeSp= bundle.getString("header_tipesp");
+                headerSales = bundle.getString("header_sales");
+                headerCustName = bundle.getString("header_custname");
+                headerAddress  = bundle.getString("header_address");
+                headerCity     = bundle.getString("header_city");
+                headerOrderVia = bundle.getString("header_ordervia");
+                headerDp       = bundle.getInt("header_dp");
+                headerDisc     = bundle.getString("header_disc");
+                headerCondition= bundle.getString("header_condition");
+                headerInstallment = bundle.getString("header_installment");
+                headerStartInstallment = bundle.getString("header_startinstallment");
+                headerShippingAddress = bundle.getString("header_shippingaddress");
+                headerStatus   = bundle.getString("header_status");
+                headerImage    = bundle.getString("header_image");
+            }
+
+            getPaymentOrNot(opticFlag);
         }
         opticId     = opticId + ",";
         opticName   = opticName + ",";
@@ -836,10 +1420,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         }
         else
         {
-            if (opticFlag.equals("0"))
+//            if (opticFlag.equals("0"))
+            if (flagPayment == 0)
             {
 //                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
-                scalableCourier.setVisibility(View.GONE);
                 txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
 
 //                shipmentPrice = "0";
@@ -847,15 +1431,18 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 //                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
 //                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
 
+                double priceSale = lensPartaiHelper.countTotalPriceSale();
+                double test4 = lensPartaiHelper.countTest();
+
                 shipmentPrice = "0";
-                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+                totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
                 txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                 txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+                scalableCourier.setVisibility(View.GONE);
             }
             else
             {
                 txtInfoShipping.setVisibility(View.GONE);
-                getAllKurir(opticCity, opticProvince);
                 scalableCourier.setVisibility(View.VISIBLE);
             }
 
@@ -884,7 +1471,15 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             linearPayment.setVisibility(View.VISIBLE);
                             cardContinue.setVisibility(View.VISIBLE);
                             cardView.setVisibility(View.VISIBLE);
-//                            scalableCourier.setVisibility(View.VISIBLE);
+
+                            if (flagPayment == 1)
+                            {
+                                scalableCourier.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                scalableCourier.setVisibility(View.GONE);
+                            }
                         }
                         else
                         {
@@ -892,7 +1487,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             linearPayment.setVisibility(View.GONE);
                             cardContinue.setVisibility(View.GONE);
                             cardView.setVisibility(View.GONE);
-//                            scalableCourier.setVisibility(View.GONE);
+                            scalableCourier.setVisibility(View.GONE);
                         }
 
                         adapter_add_partai.notifyDataSetChanged();
@@ -900,22 +1495,55 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
                         totalPrice = lensPartaiHelper.countTotalPrice();
                         priceDisc  = lensPartaiHelper.countTotalDiscPrice();
-                        totalDisc  = totalPrice - priceDisc;
+                        if (isSp == 1)
+                        {
+                            totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                        }
+                        else
+                        {
+                            totalDisc  = totalPrice - priceDisc;
+                        }
+                        double priceSale = lensPartaiHelper.countTotalPriceSale();
+                        double test5 = lensPartaiHelper.countTest();
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
-                        if (opticCity == null)
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+                        if (flagPayment == 0)
                         {
+//                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+                            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+//                shipmentPrice = "0";
+//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+//                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
                             shipmentPrice = "0";
-                            totalAllPrice = priceDisc;
+                            totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
                             txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
                         }
                         else
                         {
-                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
-                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtInfoShipping.setVisibility(View.GONE);
                         }
+
+                        txtTitleShip.setVisibility(View.VISIBLE);
+                        txtShippingPrice.setVisibility(View.VISIBLE);
 
                         BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(FormBatchOrderActivity.this);
                         snackBarMessage.showWarningMessage("Item has been removed");
@@ -928,43 +1556,129 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         int price = modelPartai.getProductPrice();
                         int qty   = modelPartai.getProductQty();
                         int stock = modelPartai.getProductStock();
-                        int discprice = modelPartai.getProductDiscPrice();
+                        double discprice = modelPartai.getProductDiscPrice();
+                        int discsale  = modelPartai.getProductDiscSale();
 
                         qty = qty + 1;
                         int newprice = qty * price;
-                        int newdiscprice = qty * discprice;
-                        stock = stock - qty;
+                        double newdiscprice = qty * discprice;
+                        int pricesale  = discsale * newprice / 100;
 
                         Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Price : " + newprice);
                         Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Discount price : " + newdiscprice);
+                        Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Discount sale : " + pricesale);
 
                         modelPartai.setProductQty(qty);
                         modelPartai.setNewProductPrice(newprice);
                         modelPartai.setNewProductDiscPrice(newdiscprice);
-                        modelPartai.setProductStock(stock);
+                        modelPartai.setProductDiscPriceSale(pricesale);
 
                         item_partai.set(pos, modelPartai);
                         lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                        lensPartaiHelper.updateLensPartaiDiscSale(modelPartai);
                         adapter_add_partai.notifyDataSetChanged();
 
                         totalPrice = lensPartaiHelper.countTotalPrice();
                         priceDisc  = lensPartaiHelper.countTotalDiscPrice();
-                        totalDisc  = totalPrice - priceDisc;
+                        if (isSp == 1)
+                        {
+                            totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                        }
+                        else
+                        {
+                            totalDisc  = totalPrice - priceDisc;
+                        }
+
+                        double totalPriceSale = lensPartaiHelper.countTotalPriceSale();
+                        double test6 = lensPartaiHelper.countTest();
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
-                        if (opticCity == null)
+                        //handle sp atau tidak ketika ditambah qty
+                        if (isSp == 1)
                         {
-                            shipmentPrice = "0";
-                            totalAllPrice = priceDisc;
+                            stock = stock - qty;
+                            Log.d("Informasi Stok Add", String.valueOf(stock));
+
+                            modelPartai.setProductStock(stock);
+                            item_partai.set(pos, modelPartai);
+                            lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                            adapter_add_partai.notifyDataSetChanged();
+
+                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
                             txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+//                            scalableCourier.setVisibility(View.VISIBLE);
                         }
                         else
                         {
-                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
-                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            if (flagPayment == 1)
+                            {
+                                stock = stock - qty;
+                                Log.d("Informasi Stok Add", String.valueOf(stock));
+
+                                modelPartai.setProductStock(stock);
+                                item_partai.set(pos, modelPartai);
+                                lensPartaiHelper.updateLensPartaiQty(modelPartai);
+                                adapter_add_partai.notifyDataSetChanged();
+
+                                totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                                scalableCourier.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                shipmentPrice = "0";
+                                totalAllPrice = (totalPrice - totalDisc - totalPriceSale) + Integer.valueOf(shipmentPrice);
+
+                                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+
+                                scalableCourier.setVisibility(View.GONE);
+                            }
                         }
+
+
+
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+//                        if (flagPayment == 0)
+//                        {
+////                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//                            scalableCourier.setVisibility(View.GONE);
+//                            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//
+////                shipmentPrice = "0";
+////                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+////                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+////                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//
+//                            shipmentPrice = "0";
+//                            totalAllPrice = (totalPrice - totalDisc - totalPriceSale) + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                        }
+//                        else
+//                        {
+//                            txtInfoShipping.setVisibility(View.GONE);
+//                            getAllKurir(opticCity, opticProvince);
+//                            scalableCourier.setVisibility(View.VISIBLE);
+//                        }
+
+//                        txtTitleShip.setVisibility(View.VISIBLE);
+//                        txtShippingPrice.setVisibility(View.VISIBLE);
 
                         break;
 
@@ -973,11 +1687,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
                         int mPrice = modellensPartai.getProductPrice();
                         int mQty   = modellensPartai.getProductQty();
-                        int mDiscPrice = modellensPartai.getProductDiscPrice();
+                        double mDiscPrice = modellensPartai.getProductDiscPrice();
                         int mStock = modellensPartai.getProductStock();
+                        int mDiscSale  = modellensPartai.getProductDiscSale();
 
                         mQty = mQty - 1;
-//                        mStock = mStock + mQty;
 
                         if (mQty == 0)
                         {
@@ -987,36 +1701,135 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         else
                         {
                             int mNewPrice = mQty * mPrice;
-                            int mNewDiscPrice = mQty * mDiscPrice;
+                            double mNewDiscPrice = mQty * mDiscPrice;
+                            mNewPriceSale  = mDiscSale * mNewPrice / 100;
+
+                            Log.d(FormBatchOrderActivity.class.getSimpleName(), "New Price : " + mNewPrice);
+                            Log.d(FormBatchOrderActivity.class.getSimpleName(), "New DiscPrice : " + mNewDiscPrice);
+                            Log.d(FormBatchOrderActivity.class.getSimpleName(), "New DiscSale : " + mNewPriceSale);
 
                             modellensPartai.setProductQty(mQty);
                             modellensPartai.setNewProductPrice(mNewPrice);
                             modellensPartai.setNewProductDiscPrice(mNewDiscPrice);
-                            modellensPartai.setProductStock(mStock);
+                            modellensPartai.setProductDiscPriceSale(mNewPriceSale);
 
                             item_partai.set(pos, modellensPartai);
                             lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                            lensPartaiHelper.updateLensPartaiDiscSale(modellensPartai);
                             adapter_add_partai.notifyDataSetChanged();
                         }
 
                         totalPrice = lensPartaiHelper.countTotalPrice();
                         priceDisc  = lensPartaiHelper.countTotalDiscPrice();
-                        totalDisc  = totalPrice - priceDisc;
+                        if (isSp == 1)
+                        {
+                            totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                        }
+                        else
+                        {
+                            totalDisc  = totalPrice - priceDisc;
+                        }
+
+                        double newTotalPriceSale = lensPartaiHelper.countTotalPriceSale();
+                        double test7 = lensPartaiHelper.countTest();
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
-                        if (opticCity == null)
+                        //Handle sp atau tidak ketika dikurangi qty
+                        if (isSp == 1)
                         {
-                            shipmentPrice = "0";
-                            totalAllPrice = priceDisc;
+                            if (mQty == 0)
+                            {
+                                mQty = mQty + 1;
+                            }
+//
+                            mStock = mStock - mQty;
+                            Log.d("Informasi Stok Minus", String.valueOf(mStock));
+                            modellensPartai.setProductStock(mStock);
+
+                            item_partai.set(pos, modellensPartai);
+                            lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                            adapter_add_partai.notifyDataSetChanged();
+
+                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
                             txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+//                            scalableCourier.setVisibility(View.VISIBLE);
                         }
                         else
                         {
-                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
-                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            if (flagPayment == 1)
+                            {
+                                if (mQty == 0)
+                                {
+                                    mQty = mQty + 1;
+                                }
+//
+                                mStock = mStock - mQty;
+                                Log.d("Informasi Stok Minus", String.valueOf(mStock));
+                                modellensPartai.setProductStock(mStock);
+
+                                item_partai.set(pos, modellensPartai);
+                                lensPartaiHelper.updateLensPartaiQty(modellensPartai);
+                                adapter_add_partai.notifyDataSetChanged();
+
+                                totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+                                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                                scalableCourier.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                shipmentPrice = "0";
+                                totalAllPrice = (totalPrice - totalDisc - newTotalPriceSale) + Integer.valueOf(shipmentPrice);
+
+                                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+
+                                scalableCourier.setVisibility(View.GONE);
+                            }
                         }
+
+
+
+//                        if (flagPayment == 0)
+//                        {
+//                            shipmentPrice = "0";
+//                            totalAllPrice = priceDisc;
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+//                        else
+//                        {
+//                            totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                        }
+
+//                        if (flagPayment == 0)
+//                        {
+////                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//                            scalableCourier.setVisibility(View.GONE);
+//                            txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+//
+////                shipmentPrice = "0";
+////                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+////                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+////                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//
+//                            shipmentPrice = "0";
+//                            totalAllPrice = (totalPrice - totalDisc - newTotalPriceSale) + Integer.valueOf(shipmentPrice);
+//                            txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                            txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                        }
+//                        else
+//                        {
+//                            txtInfoShipping.setVisibility(View.GONE);
+//                            getAllKurir(opticCity, opticProvince);
+//                            scalableCourier.setVisibility(View.VISIBLE);
+//                        }
+
+                        txtTitleShip.setVisibility(View.VISIBLE);
+                        txtShippingPrice.setVisibility(View.VISIBLE);
 
                         break;
                 }
@@ -1029,7 +1842,15 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             linearPayment.setVisibility(View.VISIBLE);
             cardContinue.setVisibility(View.VISIBLE);
             cardView.setVisibility(View.VISIBLE);
-//            scalableCourier.setVisibility(View.VISIBLE);
+
+            if (flagPayment == 1)
+            {
+                scalableCourier.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                scalableCourier.setVisibility(View.GONE);
+            }
         }
         else
         {
@@ -1037,7 +1858,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             linearPayment.setVisibility(View.GONE);
             cardContinue.setVisibility(View.GONE);
             cardView.setVisibility(View.GONE);
-//            scalableCourier.setVisibility(View.GONE);
+            scalableCourier.setVisibility(View.GONE);
         }
 
         recyclerView.setAdapter(adapter_add_partai);
@@ -1337,7 +2158,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             String productAdd       = object.getString("add");
                             String productSide      = object.getString("side");
                             String productQty       = "1";
-                            String productprice     = object.getString("price");
+                            int productDiscSale     = object.getInt("disc_sale");
+                            int productprice        = object.getInt("price");
                             String productDisc      = "0";
                             String productDiscprice = "0";
                             String productNewPrice  = object.getString("price");
@@ -1351,10 +2173,24 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
                             //Toasty.info(getApplicationContext(), price, Toast.LENGTH_SHORT).show();
 
+//                            int discSale = (productDiscSale / 100) * productprice;
+
+                            Log.d("Value Disc", String.valueOf(productDiscSale));
+                            Log.d("Value Price", String.valueOf(productprice));
+
+                            int discSale = (productDiscSale * productprice) / 100;
+
+                            Log.d("Value DiscSale", String.valueOf(discSale));
+
                             if (availableStock < 1)
                             {
-                                productprice = "0";
+                                productprice = 0;
                                 productNewPrice = "0";
+                            }
+                            else
+                            {
+//                                availableStock = availableStock - 1;
+//                                productStock = String.valueOf(availableStock);
                             }
 
                             ModelLensPartai itemPartai = new ModelLensPartai();
@@ -1366,7 +2202,140 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             itemPartai.setPowerAdd(productAdd);
                             itemPartai.setProductSide(productSide);
                             itemPartai.setProductQty(Integer.valueOf(productQty));
-                            itemPartai.setProductPrice(Integer.valueOf(productprice));
+                            itemPartai.setProductTitleSale(flashsaleNote);
+                            itemPartai.setProductDiscSale(productDiscSale);
+                            itemPartai.setProductDiscPriceSale(discSale);
+                            itemPartai.setProductPrice(productprice);
+                            itemPartai.setProductDisc(Integer.valueOf(productDisc));
+                            itemPartai.setProductDiscPrice(Integer.valueOf(productDiscprice));
+                            itemPartai.setNewProductPrice(Integer.valueOf(productNewPrice));
+                            itemPartai.setNewProductDiscPrice(Integer.valueOf(productNewDiscprice));
+                            itemPartai.setProductStock(Integer.valueOf(productStock));
+                            itemPartai.setProductWeight(Integer.valueOf(productWeight));
+                            itemPartai.setProductImage(productImage);
+
+                            long status = lensPartaiHelper.insertLensPartai(itemPartai);
+
+                            if (status > 0)
+                            {
+                                //Log.d(FormBatchOrderActivity.class.getSimpleName(), "Data disimpan ke sqlite");
+                                //Toasty.success(getApplicationContext(), "Item has been save in sqlite", Toast.LENGTH_SHORT).show();
+
+                                //showCart();
+                                showStbStockItem(itemPartai);
+
+                                BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(FormBatchOrderActivity.this);
+                                snackBarMessage.showSuccessMessage("New Item has been added");
+                            }
+                            else
+                            {
+                                BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(FormBatchOrderActivity.this);
+                                snackBarMessage.showWarningMessage("Upps, this item has been added");
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("lenscode", kodeLensa);
+                hashMap.put("sph", sph);
+                hashMap.put("cyl", cyl);
+                hashMap.put("add", add);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void showPriceSp(final String kodeLensa, final String sph, final String cyl, final String add)
+    {
+        lensPartaiHelper.open();
+        //lensPartaiHelper.truncLensPartai();
+
+        StringRequest request = new StringRequest(Request.Method.POST, URLGETPRICESP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        if (object.names().get(0).equals("Error"))
+                        {
+                            BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(FormBatchOrderActivity.this);
+                            snackBarMessage.showErrorMessage("Maaf, data tidak dapat ditemukan");
+                        }
+                        else
+                        {
+                            String productId        = object.getString("item_id");
+                            String productCode      = object.getString("item_code");
+                            String productDesc      = object.getString("item_desc");
+                            String productSph       = object.getString("sph");
+                            String productCyl       = object.getString("cyl");
+                            String productAdd       = object.getString("add");
+                            String productSide      = object.getString("side");
+                            String productQty       = "1";
+                            int productDiscSale     = object.getInt("disc_sale");
+                            int productprice        = object.getInt("price");
+                            String productDisc      = "0";
+                            String productDiscprice = "0";
+                            String productNewPrice  = object.getString("price");
+                            String productNewDiscprice = "0";
+                            String productStock     = object.getString("qty");
+                            String productWeight    = object.getString("weight");
+                            String productImage     = object.getString("image");
+                            orgName                 = object.getString("org_name");
+                            availableStock          = object.getInt("qty");
+                            prodAttrVal             = object.getString("prod_attr");
+
+                            //Toasty.info(getApplicationContext(), price, Toast.LENGTH_SHORT).show();
+
+//                            int discSale = (productDiscSale / 100) * productprice;
+
+                            Log.d("Value Disc", String.valueOf(productDiscSale));
+                            Log.d("Value Price", String.valueOf(productprice));
+
+                            int discSale = (productDiscSale * productprice) / 100;
+
+                            Log.d("Value DiscSale", String.valueOf(discSale));
+
+                            if (availableStock < 1)
+                            {
+                                productprice = 0;
+                                productNewPrice = "0";
+                            }
+                            else
+                            {
+//                                availableStock = availableStock - 1;
+//                                productStock = String.valueOf(availableStock);
+                            }
+
+                            ModelLensPartai itemPartai = new ModelLensPartai();
+                            itemPartai.setProductId(Integer.valueOf(productId));
+                            itemPartai.setProductCode(productCode);
+                            itemPartai.setProductDesc(productDesc);
+                            itemPartai.setPowerSph(productSph);
+                            itemPartai.setPowerCyl(productCyl);
+                            itemPartai.setPowerAdd(productAdd);
+                            itemPartai.setProductSide(productSide);
+                            itemPartai.setProductQty(Integer.valueOf(productQty));
+                            itemPartai.setProductTitleSale(flashsaleNote);
+                            itemPartai.setProductDiscSale(productDiscSale);
+                            itemPartai.setProductDiscPriceSale(discSale);
+                            itemPartai.setProductPrice(productprice);
                             itemPartai.setProductDisc(Integer.valueOf(productDisc));
                             itemPartai.setProductDiscPrice(Integer.valueOf(productDiscprice));
                             itemPartai.setNewProductPrice(Integer.valueOf(productNewPrice));
@@ -1478,7 +2447,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 try {
                     JSONObject object = new JSONObject(response);
 
-                    int diskon;
+                    double diskon;
 
                     if (object.names().get(0).equals("error"))
                     {
@@ -1486,17 +2455,20 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        diskon = object.getInt("operand");
+                        diskon = object.getDouble("operand");
                     }
 
                     Log.d(FormBatchOrderActivity.class.getSimpleName(), "Diskon = " + diskon);
 
-                    int price     = partai.getProductPrice();
+                    double price     = partai.getProductPrice();
                     Log.d(FormBatchOrderActivity.class.getSimpleName(), "Harga item = " + price);
-                    int discprice = diskon * price / 100;
+                    double discprice = diskon * price / 100;
                     Log.d(FormBatchOrderActivity.class.getSimpleName(), "Harga diskon = " + discprice);
-                    int newprice = price - discprice;
+                    double newprice = price - discprice;
                     Log.d(FormBatchOrderActivity.class.getSimpleName(), "Harga setelah diskon = " + newprice);
+                    double priceSale = lensPartaiHelper.countTotalPriceSale();
+                    double test8 = lensPartaiHelper.countTest();
+                    Log.d(FormBatchOrderActivity.class.getSimpleName(), "Harga diskon flashsale = " + priceSale);
 
                     ModelLensPartai data = new ModelLensPartai();
                     data.setProductId(Integer.valueOf(partai.getProductId()));
@@ -1509,17 +2481,46 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     //Toasty.info(getApplicationContext(), "Diskon = " + diskon, Toast.LENGTH_SHORT).show();
                     if (status > 0)
                     {
-                        //shipmentList.clear();
                         showCart();
-                        //getAllKurir(opticCity);
-
                         totalPrice = lensPartaiHelper.countTotalPrice();
                         priceDisc  = lensPartaiHelper.countTotalDiscPrice();
-                        totalDisc  = totalPrice - priceDisc;
+                        if (isSp == 1)
+                        {
+                            totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+                        }
+                        else
+                        {
+                            totalDisc  = totalPrice - priceDisc;
+                        }
 
                         txtSubtotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtSubtotalDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
                     }
+
+                    if (flagPayment == 0)
+                    {
+//                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+                        scalableCourier.setVisibility(View.GONE);
+                        txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
+
+//                shipmentPrice = "0";
+//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
+//                txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+//                txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+
+                        shipmentPrice = "0";
+                        totalAllPrice = (totalPrice - totalDisc - priceSale) + Integer.valueOf(shipmentPrice);
+                        txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                        txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
+                    }
+                    else
+                    {
+                        txtInfoShipping.setVisibility(View.GONE);
+                        scalableCourier.setVisibility(View.VISIBLE);
+                    }
+
+                    txtTitleShip.setVisibility(View.VISIBLE);
+                    txtShippingPrice.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1544,7 +2545,6 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void getAllKurir(final String city, final String prov)
     {
-        shipmentList.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ALLDATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1583,7 +2583,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
                     txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                     txtShippingPrice.setText("Rp. " + CurencyFormat(shipmentPrice));
-                    txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+//                    txtTotalPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
 
                     adapterCourierService.notifyDataSetChanged();
                     recyclerCourier.setAdapter(adapterCourierService);
@@ -1715,6 +2715,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 hashMap.put("shipping_price", String.valueOf(item.getShippingPrice()));
                 hashMap.put("total_price", String.valueOf(item.getTotalPrice()));
                 hashMap.put("payment_cashcarry", item.getPayment_cashcarry());
+                hashMap.put("flash_note", item.getFlashNote());
+                hashMap.put("order_sp", item.getOrderSp());
                 return hashMap;
             }
         };
@@ -1764,7 +2766,43 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 hashMap.put("price", String.valueOf(item.getPrice()));
                 hashMap.put("discount_name", item.getDiscount_name());
                 hashMap.put("discount", String.valueOf(item.getDiscount()));
+                hashMap.put("discount_sale", String.valueOf(item.getDisc_flashsale()));
                 hashMap.put("total_price", String.valueOf(item.getTotal_price()));
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertItemDurr(final Data_partai_item item)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTDURATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("no_sp", item.getOrderNumber());
+                hashMap.put("item_id", String.valueOf(item.getItemId()));
+                hashMap.put("qty", String.valueOf(item.getQty()));
                 return hashMap;
             }
         };
@@ -2114,6 +3152,48 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void createBillingDeposit(final String orderNumber, final String paymentType)
+    {
+        showLoading();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLDEPOSIT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    loading.hide();
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        //Call ShowSessionPayment
+//                        autoInsertOrder();
+                        showSessionPaymentDeposit(orderNumber);
+                    }
+                    else if (jsonObject.names().get(0).equals("invalid"))
+                    {
+                        Toasty.warning(getApplicationContext(), "Data harus diisi", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap <String, String> hashMap = new HashMap<>();
+                hashMap.put("ordernumber", orderNumber);
+                hashMap.put("payment_type", paymentType);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
     private void showSessionPaymentQR(final String orderNumber)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SHOWSESSIONPAYMENTQR, new Response.Listener<String>() {
@@ -2321,5 +3401,318 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showSessionPaymentDeposit(final String orderNumber)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SHOWSESSIONPAYMENTDEPOSIT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String amount = String.valueOf(totalAllPrice);
+                    duration = jsonObject.getString("dur");
+                    expDate  = jsonObject.getString("exp_date");
+
+                    if (duration != null)
+                    {
+                        Intent intent = new Intent(FormBatchOrderActivity.this, FormPaymentDeposit.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("duration", duration);
+                        intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Toasty.warning(getApplicationContext(), "Please, Try Again !", Toast.LENGTH_SHORT).show();
+                    }
+
+//                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap <String, String> hashMap = new HashMap<>();
+                hashMap.put("order_number", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getPaymentOrNot(final String id)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETMEMBERFLAG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        Log.d("Status Payment", "Data Not Found");
+                    }
+                    else
+                    {
+                        flagPayment = object.getInt("order_partai");
+
+                        if (flagPayment == 1)
+                        {
+                            Log.d("Status Payment", "With Payment");
+
+                            shipmentList.clear();
+                            getAllKurir(opticCity, opticProvince);
+                        }
+                        else
+                        {
+                            Log.d("Status Payment", "Non Payment");
+                        }
+
+                        showCart();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Status", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id", id);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getActiveSale()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETACTIVESALE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        Log.d("Status sale", "Tidak ada flashsale");
+
+                        flagDiscSale = 0;
+                    }
+                    else
+                    {
+                        Log.d("Status sale", "Ada flashsale");
+
+                        flashsaleNote = object.getString("title");
+                        flagDiscSale = 1;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty() || error.getMessage().equals(null))
+                {
+                    Log.d("Error Active Sale", error.getMessage());
+                }
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+//    private void getSp() {
+//        if (isSp.equals("1"))
+//        {
+//            StringRequest request = new StringRequest(Request.Method.POST, URL_GETSPHEADER, new Response.Listener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    try {
+//                        JSONObject object = new JSONObject(response);
+//
+//                        dataSpHeader.setNoSp(object.getString("no_sp"));
+//                        dataSpHeader.setTypeSp(object.getString("type_sp"));
+//                        dataSpHeader.setSales(object.getString("sales"));
+//                        dataSpHeader.setCustName(object.getString("cust_name"));
+//                        dataSpHeader.setAddress(object.getString("address"));
+//                        dataSpHeader.setCity(object.getString("city"));
+//                        dataSpHeader.setOrderVia(object.getString("order_via"));
+//                        dataSpHeader.setDp(object.getInt("down_payment"));
+//                        dataSpHeader.setDisc(object.getString("disc"));
+//                        dataSpHeader.setCondition(object.getString("condition"));
+//                        dataSpHeader.setInstallment(object.getString("installment"));
+//                        dataSpHeader.setStartInstallment(object.getString("start_installment"));
+//                        dataSpHeader.setShipAddress(object.getString("shipping_address"));
+//                        dataSpHeader.setPhoto(object.getString("path"));
+//                        dataSpHeader.setStatus(object.getString("status"));
+//
+//                        Log.d("GET SP", object.getString("no_sp"));
+//                        Log.d("GET SP", object.getString("type_sp"));
+//                        Log.d("GET SP", object.getString("sales"));
+//                        Log.d("GET SP", object.getString("cust_name"));
+//                        Log.d("GET SP", object.getString("address"));
+//                        Log.d("GET SP", object.getString("city"));
+//                        Log.d("GET SP", object.getString("order_via"));
+//                        Log.d("GET SP", object.getString("down_payment"));
+//                        Log.d("GET SP", object.getString("disc"));
+//                        Log.d("GET SP", object.getString("condition"));
+//                        Log.d("GET SP", object.getString("installment"));
+//                        Log.d("GET SP", object.getString("start_installment"));
+//                        Log.d("GET SP", object.getString("shipping_address"));
+//                        Log.d("GET SP", object.getString("path"));
+//                        Log.d("GET SP", object.getString("status"));
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    if (error.getMessage() != null)
+//                    {
+//                        Log.d("GET SP", error.getMessage());
+//                    }
+//                }
+//            }){
+//                @Override
+//                protected Map<String, String> getParams() throws AuthFailureError {
+//                    HashMap<String, String> hashMap = new HashMap<>();
+//                    hashMap.put("no_sp", idSp);
+//                    return hashMap;
+//                }
+//            };
+//
+//            AppController.getInstance().addToRequestQueue(request);
+//        }
+//    }
+
+    private void insertSP(final String URL, final Data_spheader item) {
+        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Log.d("INSERT SP", "Data has been save");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("INSERT SP", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("type_sp", item.getTypeSp());
+                hashMap.put("sales", item.getSales());
+                hashMap.put("no_sp", item.getNoSp());
+                hashMap.put("customer_name", item.getCustName());
+                hashMap.put("address", item.getAddress());
+                hashMap.put("city", item.getCity());
+                hashMap.put("order_via", item.getOrderVia());
+                hashMap.put("down_payment", String.valueOf(item.getDp()));
+                hashMap.put("discount", String.valueOf(item.getDisc()));
+                hashMap.put("conditions", item.getCondition());
+                hashMap.put("installment", item.getInstallment());
+                hashMap.put("start_installment", item.getStartInstallment());
+                hashMap.put("shipping_address", item.getShipAddress());
+                hashMap.put("photo", "\\\\192.168.44.21\\ordertxt\\orderandroid\\Foto SP\\foto\\" + item.getPhoto());
+                hashMap.put("status", item.getStatus());
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertSpHeader(final Data_spheader item) {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTSPHEADER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Log.d("INSERT SP", "Success");
+
+//                        updatePhoto(dataHeader, URL_UPDATEPHOTO);
+                    }
+                    else if (object.names().get(0).equals("error"))
+                    {
+                        Log.d("INSERT SP", "Error");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("INSERT SP", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("no_sp", item.getNoSp());
+                hashMap.put("type_sp", item.getTypeSp());
+                hashMap.put("sales", item.getSales());
+                hashMap.put("customer_name", item.getCustName());
+                hashMap.put("address", item.getAddress());
+                hashMap.put("city", item.getCity());
+                hashMap.put("order_via", "ANDROID");
+                hashMap.put("down_payment", String.valueOf(item.getDp()));
+                hashMap.put("discount", String.valueOf(item.getDisc()));
+                hashMap.put("conditions", item.getCondition());
+                hashMap.put("installment", item.getInstallment());
+                hashMap.put("start_installment", item.getStartInstallment());
+                hashMap.put("shipping_address", item.getShipAddress());
+                hashMap.put("photo", "http://180.250.96.154/trl-dev/assets/images/ordersp/" + item.getPhoto());
+                hashMap.put("path", item.getPhoto());
+                hashMap.put("status", item.getStatus());
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

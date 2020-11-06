@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
 public class FormPaymentLoanSuccess extends AppCompatActivity {
@@ -20,6 +21,8 @@ public class FormPaymentLoanSuccess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_loan_success);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         txtBillingId = findViewById(R.id.form_paymentloan_success_txtBillingId);
         txtTotalBill = findViewById(R.id.form_paymentloan_success_txtTotalBill);

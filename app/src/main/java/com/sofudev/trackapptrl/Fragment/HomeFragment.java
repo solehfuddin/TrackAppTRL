@@ -7,18 +7,26 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,6 +36,7 @@ import com.android.volley.request.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_framefragment_bestproduct;
 import com.sofudev.trackapptrl.Adapter.Adapter_framefragment_dashboard;
@@ -35,6 +44,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_homecategory;
 import com.sofudev.trackapptrl.Adapter.Adapter_homeproduct;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
@@ -42,7 +52,9 @@ import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
 import com.sofudev.trackapptrl.Data.Data_home_category;
 import com.sofudev.trackapptrl.Data.Data_home_product;
 import com.sofudev.trackapptrl.DetailProductActivity;
+import com.sofudev.trackapptrl.Form.AddCartProductActivity;
 import com.sofudev.trackapptrl.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +67,8 @@ import java.util.List;
 import java.util.Locale;
 
 import cc.cloudist.acplibrary.ACProgressCustom;
+import cn.iwgang.countdownview.CountdownView;
+import cn.iwgang.countdownview.DynamicConfig;
 import es.dmoral.toasty.Toasty;
 import ss.com.bannerslider.banners.Banner;
 import ss.com.bannerslider.banners.DrawableBanner;
@@ -79,8 +93,13 @@ public class HomeFragment extends Fragment {
     String PRODUCT_URL  = config.Ip_address + config.dashboard_product_home;
     String HOTSALE_URL  = config.Ip_address + config.dashboard_hot_sale;
     String BRANDRANDOM_URL = config.Ip_address + config.dashboard_brand_random;
+    String GETACTIVESALE_URL = config.Ip_address + config.flashsale_getActiveSale;
+    String GETIMAGEPROMO_IRL = config.Ip_address + config.flashsale_getImagePromo;
 
     RecyclerView recyclerView_category, recyclerView_product;
+    CountdownView count_flashsale;
+    LinearLayout linear_flashsale, linear_hotsale;
+
     LinearLayoutManager horizontal_manager;
     Adapter_homecategory adapter_homecategory;
     Adapter_homeproduct adapter_homeproduct;
@@ -93,24 +112,169 @@ public class HomeFragment extends Fragment {
     List<Data_fragment_bestproduct> list_hotsale = new ArrayList<>();
 
     ACProgressCustom loading;
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, banner_promo;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View thisView = inflater.inflate(R.layout.fragment_home, container, false);
-        getActivity().setTitle("");
+        return inflater.inflate(R.layout.fragment_home, container, false);
+//        getActivity().setTitle("");
+//
+//        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
+//
+//        banner_header = (BannerSlider) thisView.findViewById(R.id.fragment_home_headerslider);
+//        recyclerView_category = (RecyclerView) thisView.findViewById(R.id.fragment_home_recyclercategory);
+//        recyclerView_category.setHasFixedSize(true);
+//        recyclerView_product  = (RecyclerView) thisView.findViewById(R.id.fragment_home_recyclerproducts);
+//        recyclerView_product.setHasFixedSize(true);
+//
+//        count_flashsale = thisView.findViewById(R.id.fragment_home_countdown);
+//        linear_flashsale= (LinearLayout) thisView.findViewById(R.id.fragment_home_linearSale);
+//        linear_hotsale  = (LinearLayout) thisView.findViewById(R.id.fragment_home_linearhotsale);
+//
+////        DynamicConfig dynamicConfig = new DynamicConfig.Builder().setConvertDaysToHours(true).build();
+////        count_flashsale.dynamicShow(dynamicConfig);
+//
+//        //Make horizontal on recyclerview
+//        horizontal_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        recyclerView_category.setLayoutManager(horizontal_manager);
+//
+//        //Make vertical recycler with grid
+//        RecyclerView.LayoutManager verticalgridLayout = new GridLayoutManager(getContext(), 2);
+//        recyclerView_product.setLayoutManager(verticalgridLayout);
+////        recyclerView_product.setNestedScrollingEnabled(false);
+//        recyclerView_product.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
+//        recyclerView_product.setItemAnimator(new DefaultItemAnimator());
+//
+//        getData();
+//
+//        adapter_hotsale_product = new Adapter_framefragment_dashboard(getContext(), list_hotsale,
+//                new RecyclerViewOnClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int pos, String id) {
+////                Toasty.success(getContext(), list_hotsale.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
+////                        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+////
+////                        startActivity(intent);
+//
+////                        Intent intent = new Intent(getActivity(), DetailProductActivity.class);
+////                        intent.putExtra("id_lensa", list_hotsale.get(pos).getProduct_id());
+////                        startActivity(intent);
+//
+//                        if (ACTIVITY_TAG.equals("main"))
+//                        {
+//                            Toasty.warning(getActivity(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+////                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+////                            Bundle bundle = new Bundle();
+////                            bundle.putString("from", "0");
+////                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+////                            detailFrameFragment.setArguments(bundle);
+////
+////                            getActivity().getSupportFragmentManager().beginTransaction()
+////                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+////                                    .addToBackStack(null)
+////                                    .commit();
+//
+//                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+//                            intent.putExtra("id", Integer.valueOf(list_hotsale.get(pos).getProduct_id()));
+////                            startActivity(intent);
+//                            startActivityForResult(intent, REQUEST_CODE);
+//                        }
+//                    }
+//                }, ACTIVITY_TAG);
+//
+//        adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), list_brandrandom,
+//                new RecyclerViewOnClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int pos, String id) {
+////                        Toasty.info(getContext(), list_brandrandom.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
+////                        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+////
+////                        startActivity(intent);
+//
+////                        Intent intent = new Intent(getActivity(), DetailProductActivity.class);
+////                        intent.putExtra("id_lensa", list_brandrandom.get(pos).getProduct_id());
+////                        startActivity(intent);
+//
+//                        if (ACTIVITY_TAG.equals("main"))
+//                        {
+//                            Toasty.warning(getActivity(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+////                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+////                            Bundle bundle = new Bundle();
+////                            bundle.putString("product_id", list_brandrandom.get(pos).getProduct_id());
+////                            detailFrameFragment.setArguments(bundle);
+////
+////                            getActivity().getSupportFragmentManager().beginTransaction()
+////                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+////                                    .addToBackStack(null)
+////                                    .commit();
+//
+//                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+//                            intent.putExtra("id", Integer.valueOf(list_brandrandom.get(pos).getProduct_id()));
+////                            startActivity(intent);
+//                            startActivityForResult(intent, REQUEST_CODE);
+//                        }
+//                    }
+//                }, ACTIVITY_TAG);
+//
+//
+//
+//        //adapter_brand_product = new Adapter_framefragment_brand(getContext(), list_brandavail);
+//
+//        showLoading();
+//        showBannerFromDb();
+////        showFromDb();
+//        //showProduct();
+//
+//        showHotsale();
+//        showBrandrandom();
+//        getDurationSale();
+//        getImagePromo();
+//
+////        badgeCounter.countCartlist(COUNTER_CART);
+////        badgeCounter.countWishlist(COUNTER_WISHLIST);
+////
+////        Log.d("Sent HOME Wishlist : ", String.valueOf(COUNTER_WISHLIST));
+////        Log.d("Sent HOME Cart : ", String.valueOf(COUNTER_CART));
+//
+////        Intent intent1 = new Intent();
+////        intent1.putExtra("counter", COUNTER_WISHLIST);
+////        getActivity().setResult(1, intent1);
 
-        banner_header = (BannerSlider) thisView.findViewById(R.id.fragment_home_headerslider);
-        recyclerView_category = (RecyclerView) thisView.findViewById(R.id.fragment_home_recyclercategory);
+//        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        getActivity().setTitle("");
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
+
+        banner_header = (BannerSlider) view.findViewById(R.id.fragment_home_headerslider);
+        recyclerView_category = (RecyclerView) view.findViewById(R.id.fragment_home_recyclercategory);
         recyclerView_category.setHasFixedSize(true);
-        recyclerView_product  = (RecyclerView) thisView.findViewById(R.id.fragment_home_recyclerproducts);
+        recyclerView_product  = (RecyclerView) view.findViewById(R.id.fragment_home_recyclerproducts);
         recyclerView_product.setHasFixedSize(true);
+
+        count_flashsale = view.findViewById(R.id.fragment_home_countdown);
+        linear_flashsale= (LinearLayout) view.findViewById(R.id.fragment_home_linearSale);
+        linear_hotsale  = (LinearLayout) view.findViewById(R.id.fragment_home_linearhotsale);
+
+//        DynamicConfig dynamicConfig = new DynamicConfig.Builder().setConvertDaysToHours(true).build();
+//        count_flashsale.dynamicShow(dynamicConfig);
 
         //Make horizontal on recyclerview
         horizontal_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -119,6 +283,7 @@ public class HomeFragment extends Fragment {
         //Make vertical recycler with grid
         RecyclerView.LayoutManager verticalgridLayout = new GridLayoutManager(getContext(), 2);
         recyclerView_product.setLayoutManager(verticalgridLayout);
+//        recyclerView_product.setNestedScrollingEnabled(false);
         recyclerView_product.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
         recyclerView_product.setItemAnimator(new DefaultItemAnimator());
 
@@ -139,7 +304,7 @@ public class HomeFragment extends Fragment {
 
                         if (ACTIVITY_TAG.equals("main"))
                         {
-                            Toasty.warning(getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+                            Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -177,7 +342,7 @@ public class HomeFragment extends Fragment {
 
                         if (ACTIVITY_TAG.equals("main"))
                         {
-                            Toasty.warning(getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+                            Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -199,10 +364,9 @@ public class HomeFragment extends Fragment {
                     }
                 }, ACTIVITY_TAG);
 
-        recyclerView_category.setAdapter(adapter_hotsale_product);
+
 
         //adapter_brand_product = new Adapter_framefragment_brand(getContext(), list_brandavail);
-        recyclerView_product.setAdapter(adapter_framefragment_bestproduct);
 
         showLoading();
         showBannerFromDb();
@@ -211,6 +375,8 @@ public class HomeFragment extends Fragment {
 
         showHotsale();
         showBrandrandom();
+        getDurationSale();
+        getImagePromo();
 
 //        badgeCounter.countCartlist(COUNTER_CART);
 //        badgeCounter.countWishlist(COUNTER_WISHLIST);
@@ -221,8 +387,6 @@ public class HomeFragment extends Fragment {
 //        Intent intent1 = new Intent();
 //        intent1.putExtra("counter", COUNTER_WISHLIST);
 //        getActivity().setResult(1, intent1);
-
-        return thisView;
     }
 
     @Override
@@ -235,6 +399,74 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         badgeCounter = null;
+    }
+
+    private void getDurationSale()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, GETACTIVESALE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        linear_flashsale.setVisibility(View.GONE);
+                        linear_hotsale.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        int durr = object.getInt("expired");
+                        banner_promo = object.getString("banner");
+
+                        linear_flashsale.setVisibility(View.VISIBLE);
+                        linear_hotsale.setVisibility(View.GONE);
+
+//                        dialogPromo();
+
+                        count_flashsale.start(durr);
+                        count_flashsale.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+                            @Override
+                            public void onEnd(CountdownView cv) {
+                                linear_flashsale.setVisibility(View.GONE);
+
+                                linear_hotsale.setVisibility(View.VISIBLE);
+
+                                Fragment frg = null;
+                                frg = getFragmentManager().findFragmentByTag("home");
+                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(frg);
+                                ft.attach(frg);
+                                ft.commitAllowingStateLoss();
+
+                                horizontal_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                                recyclerView_category.setLayoutManager(horizontal_manager);
+
+                                RecyclerView.LayoutManager verticalgridLayout = new GridLayoutManager(getContext(), 2);
+                                recyclerView_product.setLayoutManager(verticalgridLayout);
+                                recyclerView_product.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
+                                recyclerView_product.setItemAnimator(new DefaultItemAnimator());
+
+                                showHotsale();
+                                showBrandrandom();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null && !error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Duration", error.getMessage());
+                }
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     //    @Override
@@ -282,7 +514,10 @@ public class HomeFragment extends Fragment {
     {
         Bundle bundle = getArguments();
 
-        ACTIVITY_TAG = bundle.getString("activity");
+        if (bundle != null)
+        {
+            ACTIVITY_TAG = bundle.getString("activity");
+        }
     }
 
     private void showBannerFromDb()
@@ -396,6 +631,7 @@ public class HomeFragment extends Fragment {
 
     private void showHotsale()
     {
+        list_hotsale.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOTSALE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -431,6 +667,7 @@ public class HomeFragment extends Fragment {
 
                     hideLoading();
                     adapter_hotsale_product.notifyDataSetChanged();
+                    recyclerView_category.setAdapter(adapter_hotsale_product);
 
                     if (badgeCounter != null)
                     {
@@ -444,16 +681,19 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
         stringRequest.setShouldCache(false);
-        Volley.newRequestQueue(getContext()).add(stringRequest);
+//        Volley.newRequestQueue(getContext()).add(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
     private void showBrandrandom()
     {
+        list_brandrandom.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BRANDRANDOM_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -488,6 +728,7 @@ public class HomeFragment extends Fragment {
                     }
 
                     adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    recyclerView_product.setAdapter(adapter_framefragment_bestproduct);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -495,53 +736,53 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
         stringRequest.setShouldCache(false);
-        Volley.newRequestQueue(getContext()).add(stringRequest);
+//        Volley.newRequestQueue(getContext()).add(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-//    private void showProduct()
-//    {
-//        //list_product.clear();
-//        StringRequest stringRequest = new StringRequest(PRODUCT_URL, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+    private void getImagePromo()
+    {
+        StringRequest stringRequest = new StringRequest(GETIMAGEPROMO_IRL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Respon Promo", response);
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
 //                        String title = jsonObject.getString("title");
-//                        String image = jsonObject.getString("image");
-//
-//                        Data_home_product data = new Data_home_product();
-//                        data.setTitle(title);
-//                        data.setImage(image);
-//
-//                        list_product.add(data);
-//                    }
-//
-//                    adapter_homeproduct = new Adapter_homeproduct(getContext(), list_product);
-//                    //adapter_homeproduct.notifyDataSetChanged();
-//                    recyclerView_product.setAdapter(adapter_homeproduct);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//            }
-//        });
-//
-//        stringRequest.setShouldCache(false);
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
+                        String image = jsonObject.getString("image");
+
+                        if (!image.isEmpty())
+                        {
+                            Log.d("Image Promo", "link : " + image);
+
+                            dialogPromo(image);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        stringRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
 
     private void showLoading()
     {
@@ -566,37 +807,84 @@ public class HomeFragment extends Fragment {
         UniversalFontTextView txt_information, txt_message;
         final BootstrapButton btn_ok;
 
-        final Dialog dialog = new Dialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.info_status);
-        dialog.setCancelable(false);
+        if(getActivity() != null){
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.info_status);
+            dialog.setCancelable(false);
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        img_status      = (ImageView) dialog.findViewById(R.id.info_status_imageview);
-        txt_information = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtInformation);
-        txt_message     = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtMessage);
-        btn_ok          = (BootstrapButton) dialog.findViewById(R.id.info_status_btnOk);
+            img_status      = (ImageView) dialog.findViewById(R.id.info_status_imageview);
+            txt_information = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtInformation);
+            txt_message     = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtMessage);
+            btn_ok          = (BootstrapButton) dialog.findViewById(R.id.info_status_btnOk);
 
-        img_status.setImageResource(resource);
-        txt_information.setText(info);
-        txt_message.setText(message);
-        btn_ok.setBootstrapBrand(defaultcolorbtn);
+            img_status.setImageResource(resource);
+            txt_information.setText(info);
+            txt_message.setText(message);
+            btn_ok.setBootstrapBrand(defaultcolorbtn);
 
-        showLoading();
+            showLoading();
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFromDb();
-                showBannerFromDb();
-                //showProduct();
-                dialog.dismiss();
-            }
-        });
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFromDb();
+                    showBannerFromDb();
+                    //showProduct();
+                    dialog.dismiss();
+                }
+            });
 
-        dialog.show();
+            dialog.show();
+        }
+    }
+
+    private void dialogPromo(String url)
+    {
+        if (getContext() != null)
+        {
+            final Dialog dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        Window window = getDialog().getWindow();
+//        int width = displayMetrics.widthPixels;
+//        int height= displayMetrics.heightPixels;
+//
+//        int dialogWidth = (int) (width * 0.7f);
+//        int dialogHeight= (int) (height * 0.7f);
+
+            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+            dialog.setContentView(R.layout.dialog_promo);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            lwindow.copyFrom(dialog.getWindow().getAttributes());
+            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lwindow.height= WindowManager.LayoutParams.MATCH_PARENT;
+
+            ImageView imgClose = dialog.findViewById(R.id.dialog_promo_imgClose);
+            ImageView imgBgDialogSale = dialog.findViewById(R.id.dialog_promo_imgBg);
+            ProgressWheel progressDialogSale = dialog.findViewById(R.id.dialog_promo_progressBar);
+            progressDialogSale.setVisibility(View.GONE);
+
+//        String url = "http://180.250.96.154/trl-webs/assets/images/promo/extra_diskon_frame.jpg";
+//        String uri = "http://www.timurrayalab.com/dev/uploads/img/127.jpg";
+            Picasso.with(getContext()).load(url).into(imgBgDialogSale);
+
+            imgClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+            dialog.getWindow().setAttributes(lwindow);
+        }
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

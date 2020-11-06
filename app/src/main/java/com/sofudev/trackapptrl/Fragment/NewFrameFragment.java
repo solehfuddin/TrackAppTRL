@@ -7,6 +7,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -51,10 +53,12 @@ import com.sofudev.trackapptrl.Adapter.Adapter_brandfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_colorfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_framefragment_bestproduct;
 import com.sofudev.trackapptrl.Adapter.Adapter_sortbyframe;
+import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.BlackStyle;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomAdapterFrameBrand;
 import com.sofudev.trackapptrl.Custom.CustomAdapterFrameColor;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.GridSpacingItemDecoration;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
@@ -78,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.iwgang.countdownview.CountdownView;
 import es.dmoral.toasty.Toasty;
 import viethoa.com.snackbar.BottomSnackBarMessage;
 
@@ -92,6 +97,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     String sortFilterUrl= config.Ip_address + config.frame_filterwith_sort;
     String showColorUrl = config.Ip_address + config.frame_showcolor_filter;
     String showBrandUrl = config.Ip_address + config.frame_showbrand_filter;
+    String GETACTIVESALE_URL = config.Ip_address + config.flashsale_getActiveSale;
 
     RecyclerView recyclerView,recyclerColor, recyclerBrand;
 //    private EditText txtRangeMin, txtRangeMax;
@@ -99,10 +105,13 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     private EditText txtRangeMax;
     private SeekBar rangePrice;
     ProgressWheel progress;
-    private BootstrapButton btnApply, btnClear;
+    BootstrapButton btnApply, btnClear;
     AwesomeTextView btnFilter, btnSort;
     ImageView imgNotfound;
+    LinearLayout linear_flashsale;
+    CountdownView countdown_flashsale;
 
+    View view;
     Adapter_framefragment_bestproduct adapter_framefragment_bestproduct;
     Adapter_colorfilter adapter_colorfilter;
     Adapter_brandfilter adapter_brandfilter;
@@ -124,10 +133,143 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     List<String> listColor = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_frame, container, false);
+        return view = inflater.inflate(R.layout.fragment_new_frame, container, false);
+
+//        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
+//
+//        imgNotfound = view.findViewById(R.id.fragment_newframe_notfound);
+//
+//        recyclerView = view.findViewById(R.id.fragment_newframe_recyclerview);
+//        recyclerView.setHasFixedSize(true);
+//
+//        btnFilter = view.findViewById(R.id.fragment_newframe_btnfilter);
+//        btnSort = view.findViewById(R.id.fragment_newframe_btnsort);
+//
+//        linear_flashsale = view.findViewById(R.id.fragment_newframe_linearSale);
+//        countdown_flashsale = view.findViewById(R.id.fragment_newframe_countdown);
+//
+//        btnFilter.setBootstrapBrand(new BlackStyle(getContext()));
+//        btnSort.setBootstrapBrand(new BlackStyle(getContext()));
+//
+//        btnFilter.setOnClickListener(this);
+//        btnSort.setOnClickListener(this);
+//
+//        RecyclerView.LayoutManager verticalGrid = new GridLayoutManager(getContext(), 2);
+//        recyclerView.setLayoutManager(verticalGrid);
+//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//
+//        progress = view.findViewById(R.id.fragment_newframe_progressBar);
+//        getData();
+//
+//        adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
+//                new RecyclerViewOnClickListener() {
+//            @Override
+//            public void onItemClick(View view, int pos, String id) {
+////                Toasty.success(getContext(), itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
+////                Intent intent = new Intent(getActivity(), DetailProductActivity.class);
+////                intent.putExtra("id_lensa", itemBestProduct.get(pos).getProduct_id());
+////                startActivity(intent);
+//
+//                if (ACTIVITY_TAG.equals("main"))
+//                {
+//                    Toasty.warning(getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+//                }
+//                else
+//                {
+////                    DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+////                    Bundle bundle = new Bundle();
+////                    bundle.putString("product_id", itemBestProduct.get(pos).getProduct_id());
+////                    detailFrameFragment.setArguments(bundle);
+////
+////                    getActivity().getSupportFragmentManager().beginTransaction()
+////                            .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+////                            .addToBackStack(null)
+////                            .commit();
+//
+//                    Intent intent = new Intent(getContext(), DetailProductActivity.class);
+//                    intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
+//                    startActivity(intent);
+//                }
+//            }
+//        }, ACTIVITY_TAG);
+//
+//        recyclerView.setAdapter(adapter_framefragment_bestproduct);
+//        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+//
+//        itemBestProduct.clear();
+//        from = 0;
+//        limit = 8;
+//
+//        showData(from.toString(), limit.toString());
+//        getDurationSale();
+//        hasil = (from + limit);
+//
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (dy > 0)
+//                {
+//                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN))
+//                    {
+//                        switch (pos){
+//                            case 1:
+//                                showDataByGroup(hasil.toString(), limit.toString(), "item.`item_code` ASC");
+//                                hasil = hasil + limit;
+//                                //Toasty.info(getContext(), "hasil : " + hasil, Toast.LENGTH_SHORT).show();
+//                                break;
+//
+//                            case 2:
+//                                showDataByGroup(hasil.toString(), limit.toString(), "item.`item_code` DESC");
+//                                hasil = hasil + limit;
+//                                break;
+//
+//                            case 3:
+//                                showDataByPrice(hasil.toString(), limit.toString(), "price.`price_list_item` ASC");
+//                                hasil = hasil + limit;
+//                                break;
+//
+//                            case 4:
+//                                showDataByPrice(hasil.toString(), limit.toString(), "price.`price_list_item` DESC");
+//                                hasil = hasil + limit;
+//                                break;
+//
+//                            case 5:
+//                                showScrollByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+//                                        hasil.toString(), limit.toString());
+//                                hasil = hasil + limit;
+//                                break;
+//
+//                            default:
+//                                showData(hasil.toString(), limit.toString());
+//                                hasil = (hasil + limit);
+//                                //Toasty.info(getContext(), "hasil : " + hasil, Toast.LENGTH_SHORT).show();
+//                                break;
+//                        }
+//
+//                    }
+//                }
+//            }
+//        });
+//
+//
+//        if (mListener != null)
+//        {
+//            mListener.onFragmentInteraction("Frame Corner");
+//        }
+
+//        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
 
         imgNotfound = view.findViewById(R.id.fragment_newframe_notfound);
 
@@ -136,6 +278,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
         btnFilter = view.findViewById(R.id.fragment_newframe_btnfilter);
         btnSort = view.findViewById(R.id.fragment_newframe_btnsort);
+
+        linear_flashsale = view.findViewById(R.id.fragment_newframe_linearSale);
+        countdown_flashsale = view.findViewById(R.id.fragment_newframe_countdown);
 
         btnFilter.setBootstrapBrand(new BlackStyle(getContext()));
         btnSort.setBootstrapBrand(new BlackStyle(getContext()));
@@ -153,19 +298,19 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
         adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
                 new RecyclerViewOnClickListener() {
-            @Override
-            public void onItemClick(View view, int pos, String id) {
+                    @Override
+                    public void onItemClick(View view, int pos, String id) {
 //                Toasty.success(getContext(), itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
 //                Intent intent = new Intent(getActivity(), DetailProductActivity.class);
 //                intent.putExtra("id_lensa", itemBestProduct.get(pos).getProduct_id());
 //                startActivity(intent);
 
-                if (ACTIVITY_TAG.equals("main"))
-                {
-                    Toasty.warning(getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                        if (ACTIVITY_TAG.equals("main"))
+                        {
+                            Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
 //                    DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString("product_id", itemBestProduct.get(pos).getProduct_id());
@@ -176,12 +321,12 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 //                            .addToBackStack(null)
 //                            .commit();
 
-                    Intent intent = new Intent(getContext(), DetailProductActivity.class);
-                    intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
-                    startActivity(intent);
-                }
-            }
-        }, ACTIVITY_TAG);
+                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+                            intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
+                            startActivity(intent);
+                        }
+                    }
+                }, ACTIVITY_TAG);
 
         recyclerView.setAdapter(adapter_framefragment_bestproduct);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
@@ -191,6 +336,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         limit = 8;
 
         showData(from.toString(), limit.toString());
+        getDurationSale();
         hasil = (from + limit);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -246,15 +392,16 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         {
             mListener.onFragmentInteraction("Frame Corner");
         }
-
-        return view;
     }
 
     private void getData()
     {
         Bundle bundle = getArguments();
 
-        ACTIVITY_TAG = bundle.getString("activity");
+        if (bundle != null)
+        {
+            ACTIVITY_TAG = bundle.getString("activity");
+        }
     }
 
     @Override
@@ -291,244 +438,248 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
     private void dialogSorting()
     {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+        if(getActivity() != null){
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
-        List<String> allSort = Arrays.asList("Title (A-Z)", "Title (Z-A)", "Price (Low-High)", "Price (High-Low)");
-        listSortBy.clear();
-        listSortBy.addAll(allSort);
+            List<String> allSort = Arrays.asList("Title (A-Z)", "Title (Z-A)", "Price (Low-High)", "Price (High-Low)");
+            listSortBy.clear();
+            listSortBy.addAll(allSort);
 
-        //Toasty.info(getContext(), "Position " + pos, Toast.LENGTH_SHORT).show();
+            //Toasty.info(getContext(), "Position " + pos, Toast.LENGTH_SHORT).show();
 
-        //ArrayAdapter<String> itemAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listSortBy);
-        adapter_sortbyframe = new Adapter_sortbyframe(getContext(), listSortBy, pos);
+            //ArrayAdapter<String> itemAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listSortBy);
+            adapter_sortbyframe = new Adapter_sortbyframe(getContext(), listSortBy, pos);
 
-        dialog.setContentView(R.layout.dialog_sort);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setCancelable(true);
-        //lwindow.copyFrom(dialog.getWindow().getAttributes());
-        final ListView lvSortBy = dialog.findViewById(R.id.dialog_sort_listview);
-        lvSortBy.setAdapter(adapter_sortbyframe);
+            dialog.setContentView(R.layout.dialog_sort);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setCancelable(true);
+            //lwindow.copyFrom(dialog.getWindow().getAttributes());
+            final ListView lvSortBy = dialog.findViewById(R.id.dialog_sort_listview);
+            lvSortBy.setAdapter(adapter_sortbyframe);
 
-        lvSortBy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String chooser = listSortBy.get(i);
-                itemBestProduct.clear();
-                from  = 0;
-                limit = 8;
+            lvSortBy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String chooser = listSortBy.get(i);
+                    itemBestProduct.clear();
+                    from  = 0;
+                    limit = 8;
 
-                if (chooseBrand == null)
-                {
-                    if (chooser.contains("Title (A-Z)") || chooser.contentEquals("Title (A-Z)") || chooser.equals("Title (A-Z)"))
+                    if (chooseBrand == null)
                     {
-                        showDataByGroup(from.toString(), limit.toString(), "item.`item_code` ASC");
-                        hasil = (from + limit);
-                        pos = 1;
+                        if (chooser.contains("Title (A-Z)") || chooser.contentEquals("Title (A-Z)") || chooser.equals("Title (A-Z)"))
+                        {
+                            showDataByGroup(from.toString(), limit.toString(), "item.`item_code` ASC");
+                            hasil = (from + limit);
+                            pos = 1;
+                        }
+                        else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
+                        {
+                            showDataByGroup(from.toString(), limit.toString(), "item.`item_code` DESC");
+                            hasil = (from + limit);
+                            pos = 2;
+                        }
+                        else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
+                                chooser.equals("Price (Low-High)"))
+                        {
+                            showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` ASC");
+                            hasil = (from + limit);
+                            pos = 3;
+                        }
+                        else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
+                                chooser.equals("Price (High-Low)"))
+                        {
+                            showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` DESC");
+                            hasil = (from + limit);
+                            pos = 4;
+                        }
                     }
-                    else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
+                    else
                     {
-                        showDataByGroup(from.toString(), limit.toString(), "item.`item_code` DESC");
-                        hasil = (from + limit);
-                        pos = 2;
+                        if (chooser.contains("Title (A-Z)") || chooser.contentEquals("Title (A-Z)") || chooser.equals("Title (A-Z)"))
+                        {
+                            //showDataByGroup(from.toString(), limit.toString(), "item.`item_code` ASC");
+                            sortCondition = "item.`item_code` ASC";
+                            showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+                                    from.toString(), limit.toString());
+                            hasil = (from + limit);
+                            pos = 5;
+                        }
+                        else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
+                        {
+                            //showDataByGroup(from.toString(), limit.toString(), "item.`item_code` DESC");
+                            sortCondition = "item.`item_code` DESC";
+                            showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+                                    from.toString(), limit.toString());
+                            hasil = (from + limit);
+                            pos = 5;
+                        }
+                        else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
+                                chooser.equals("Price (Low-High)"))
+                        {
+                            //showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` ASC");
+                            sortCondition = "price.`price_list_item` ASC";
+                            showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+                                    from.toString(), limit.toString());
+                            hasil = (from + limit);
+                            pos = 5;
+                        }
+                        else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
+                                chooser.equals("Price (High-Low)"))
+                        {
+                            //showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` DESC");
+                            sortCondition = "price.`price_list_item` DESC";
+                            showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+                                    from.toString(), limit.toString());
+                            hasil = (from + limit);
+                            pos = 5;
+                        }
                     }
-                    else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
-                            chooser.equals("Price (Low-High)"))
-                    {
-                        showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` ASC");
-                        hasil = (from + limit);
-                        pos = 3;
-                    }
-                    else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
-                            chooser.equals("Price (High-Low)"))
-                    {
-                        showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` DESC");
-                        hasil = (from + limit);
-                        pos = 4;
-                    }
+
+                    dialog.dismiss();
                 }
-                else
-                {
-                    if (chooser.contains("Title (A-Z)") || chooser.contentEquals("Title (A-Z)") || chooser.equals("Title (A-Z)"))
-                    {
-                        //showDataByGroup(from.toString(), limit.toString(), "item.`item_code` ASC");
-                        sortCondition = "item.`item_code` ASC";
-                        showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-                                from.toString(), limit.toString());
-                        hasil = (from + limit);
-                        pos = 5;
-                    }
-                    else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
-                    {
-                        //showDataByGroup(from.toString(), limit.toString(), "item.`item_code` DESC");
-                        sortCondition = "item.`item_code` DESC";
-                        showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-                                from.toString(), limit.toString());
-                        hasil = (from + limit);
-                        pos = 5;
-                    }
-                    else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
-                            chooser.equals("Price (Low-High)"))
-                    {
-                        //showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` ASC");
-                        sortCondition = "price.`price_list_item` ASC";
-                        showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-                                from.toString(), limit.toString());
-                        hasil = (from + limit);
-                        pos = 5;
-                    }
-                    else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
-                            chooser.equals("Price (High-Low)"))
-                    {
-                        //showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` DESC");
-                        sortCondition = "price.`price_list_item` DESC";
-                        showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-                                from.toString(), limit.toString());
-                        hasil = (from + limit);
-                        pos = 5;
-                    }
-                }
+            });
 
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+            dialog.show();
+        }
     }
 
     private void openDialogFilter()
     {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_filter);
+        if(getActivity() != null){
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_filter);
 
-        showColor();
-        showBrand();
+            showColor();
+            showBrand();
 
-        recyclerColor = dialog.findViewById(R.id.dialog_filter_recyclerColor);
-        recyclerBrand = dialog.findViewById(R.id.dialog_filter_recyclerBrand);
-        //rangePrice    = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_rangebar);
-        rangePrice    = dialog.findViewById(R.id.dialog_filter_rangebar);
+            recyclerColor = dialog.findViewById(R.id.dialog_filter_recyclerColor);
+            recyclerBrand = dialog.findViewById(R.id.dialog_filter_recyclerBrand);
+            //rangePrice    = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_rangebar);
+            rangePrice    = dialog.findViewById(R.id.dialog_filter_rangebar);
 //        txtRangeMin   = dialog.findViewById(R.id.dialog_filter_txtrangemin);
-        txtRangeMax   = dialog.findViewById(R.id.dialog_filter_txtrangemax);
-        btnClear      = dialog.findViewById(R.id.dialog_filter_btnClear);
-        btnApply      = dialog.findViewById(R.id.dialog_filter_btnApply);
+            txtRangeMax   = dialog.findViewById(R.id.dialog_filter_txtrangemax);
+            btnClear      = dialog.findViewById(R.id.dialog_filter_btnClear);
+            btnApply      = dialog.findViewById(R.id.dialog_filter_btnApply);
 
-        recyclerColor.setLayoutManager(new GridLayoutManager(getContext(), 6));
-        adapter_colorfilter = new Adapter_colorfilter(getContext(), dataColor, customAdapterFrameColor, chooseColor);
-        recyclerColor.setAdapter(adapter_colorfilter);
+            recyclerColor.setLayoutManager(new GridLayoutManager(getContext(), 6));
+            adapter_colorfilter = new Adapter_colorfilter(getContext(), dataColor, customAdapterFrameColor, chooseColor);
+            recyclerColor.setAdapter(adapter_colorfilter);
 
-        recyclerBrand.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
-        recyclerBrand.setAdapter(adapter_brandfilter);
+            recyclerBrand.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
+            recyclerBrand.setAdapter(adapter_brandfilter);
 
 //        listBrand.clear();
 //        listColor.clear();
 
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Clear to default
-                valueMin = "0";
-                valueMax = "7000000";
+            btnApply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Clear to default
+                    valueMin = "0";
+                    valueMax = "7000000";
 
-                chooseBrand = null;
+                    chooseBrand = null;
 
-                Log.d("RESETTER", "BACK TO DEFAULT");
+                    Log.d("RESETTER", "BACK TO DEFAULT");
 
-                itemBestProduct.clear();
+                    itemBestProduct.clear();
 
-                valueMax = removeRupiah(txtRangeMax.getText().toString());
+                    valueMax = removeRupiah(txtRangeMax.getText().toString());
 
-                Object[] allBrand = listBrand.toArray();
-                Object[] allColor = listColor.toArray();
+                    Object[] allBrand = listBrand.toArray();
+                    Object[] allColor = listColor.toArray();
 
-                //Toasty.info(getContext(), "Pos " + Arrays.toString(allBrand), Toast.LENGTH_SHORT).show();
+                    //Toasty.info(getContext(), "Pos " + Arrays.toString(allBrand), Toast.LENGTH_SHORT).show();
 
-                filterPrice = "AND price.`price_list_item` BETWEEN " + 0 + " AND " + valueMax;
-                if (filterBrand != null)
-                {
+                    filterPrice = "AND price.`price_list_item` BETWEEN " + 0 + " AND " + valueMax;
+                    if (filterBrand != null)
+                    {
 //                    chooseBrand = Arrays.toString(allBrand).replace('[', ' ').replace(']', ' ').trim();
 //                    filterBrand = "AND category.`id` IN ( " + chooseBrand + ")";
 
 //                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
 //                    Log.d("READ THIS : ", filterPrice + " " + filterBrand);
-                    chooseBrand = filterBrand.replace("AND category.`id` IN (", "").replace(")","");
-                    Log.d("READ THIS : Baca nih ", chooseBrand);
-                }
-                else
-                {
-                    filterBrand = "";
-                }
+                        chooseBrand = filterBrand.replace("AND category.`id` IN (", "").replace(")","");
+                        Log.d("READ THIS : Baca nih ", chooseBrand);
+                    }
+                    else
+                    {
+                        filterBrand = "";
+                    }
 
-                if (filterColor != null)
-                {
+                    if (filterColor != null)
+                    {
 //                    chooseColor = Arrays.toString(allColor).replace('[', ' ').replace(']', ' ').trim();
 //                    filterColor = "AND item.`color_type` IN (" + chooseColor + ")";
 
 //                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
 //                    Log.d("READ THIS : ", filterPrice + " " + filterBrand + " " + filterColor);
 
-                    chooseColor = filterColor.replace("AND item.`color_type` IN (", "").replace(")","");
-                    Log.d("READ THIS : Baca juga ", chooseColor);
-                }
-                else
-                {
-                    filterColor = "";
+                        chooseColor = filterColor.replace("AND item.`color_type` IN (", "").replace(")","");
+                        Log.d("READ THIS : Baca juga ", chooseColor);
+                    }
+                    else
+                    {
+                        filterColor = "";
 //                    chooseColor = "";
+                    }
+
+                    from = 0;
+                    limit = 8;
+
+                    sortCondition = "item.`item_code` ASC";
+                    showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
+                            from.toString(), limit.toString());
+                    pos = 5;
+                    hasil = (from + limit);
+
+                    dialog.dismiss();
                 }
+            });
 
-                from = 0;
-                limit = 8;
+            btnClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    valueMin = "0";
+                    valueMax = "7000000";
 
-                sortCondition = "item.`item_code` ASC";
-                showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-                        from.toString(), limit.toString());
-                pos = 5;
-                hasil = (from + limit);
+                    chooseBrand = null;
+                    chooseColor = null;
 
-                dialog.dismiss();
-            }
-        });
+                    dialog.dismiss();
+                }
+            });
 
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                valueMin = "0";
-                valueMax = "7000000";
-
-                chooseBrand = null;
-                chooseColor = null;
-
-                dialog.dismiss();
-            }
-        });
-
-        txtRangeMax.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
-                {
+            txtRangeMax.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
+                    {
 //                    String rangeMin = removeRupiah(txtRangeMin.getText().toString());
 //                    String rangeMax = removeRupiah(txtRangeMax.getText().toString());
 
 //                    valueMin = removeRupiah(txtRangeMin.getText().toString());
-                    valueMax = removeRupiah(txtRangeMax.getText().toString());
+                        valueMax = removeRupiah(txtRangeMax.getText().toString());
 
 //                    rangePrice.setMinStartValue(Float.valueOf(valueMin)).setMaxStartValue(Float.valueOf(valueMax)).apply();
 
-                    rangePrice.setMax(Integer.valueOf(valueMax));
-                    txtRangeMax.setText("Rp " + valueMax);
+                        rangePrice.setMax(Integer.valueOf(valueMax));
+                        txtRangeMax.setText("Rp " + valueMax);
+                    }
+
+                    return false;
                 }
+            });
 
-                return false;
-            }
-        });
-
-        selectRangePrice();
-        dialog.show();
+            selectRangePrice();
+            dialog.show();
+        }
     }
 
 //    private void dialogFilter()
@@ -763,7 +914,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -775,8 +927,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private void showDataByGroup(final String start, final String until, final String condition)
@@ -828,7 +980,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -841,8 +994,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private void showDataByFilter(final String sortby, final String condition, final String start, final String limit)
@@ -917,7 +1070,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -931,8 +1085,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private void showDataByPrice(final String start, final String until, final String condition)
@@ -984,7 +1138,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -997,8 +1152,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private String removeRupiah(String price)
@@ -1045,12 +1200,13 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private void showBrand()
@@ -1084,12 +1240,13 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
     }
 
     private void showScrollByFilter(final String sortby, final String condition, final String start, final String limit)
@@ -1139,7 +1296,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 //                    BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(getActivity());
 //                    snackBarMessage.showErrorMessage("No more data found");
 
-                    Snackbar snackbar = Snackbar.make(getView(), "No more data found", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, "No more data found", Snackbar.LENGTH_LONG);
 
                     snackbar.show();
                 }
@@ -1147,7 +1304,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -1161,8 +1319,65 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-//        AppController.getInstance().addToRequestQueue(request);
-        Volley.newRequestQueue(getContext()).add(request);
+        AppController.getInstance().addToRequestQueue(request);
+//        Volley.newRequestQueue(getContext()).add(request);
+    }
+
+    private void getDurationSale()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, GETACTIVESALE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        linear_flashsale.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        int durr = object.getInt("expired");
+
+                        linear_flashsale.setVisibility(View.GONE);
+
+                        countdown_flashsale.start(durr);
+                        countdown_flashsale.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+                            @Override
+                            public void onEnd(CountdownView cv) {
+                                linear_flashsale.setVisibility(View.GONE);
+
+                                Fragment frg = null;
+                                frg = getFragmentManager().findFragmentByTag("newframe");
+                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(frg);
+                                ft.attach(frg);
+                                ft.commit();
+
+                                RecyclerView.LayoutManager verticalGrid = new GridLayoutManager(getContext(), 2);
+                                recyclerView.setLayoutManager(verticalGrid);
+                                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
+                                recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                                showData(from.toString(), limit.toString());
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null || !error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Duration", error.getMessage());
+                }
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     CustomAdapterFrameBrand customAdapterFrameFragment = new CustomAdapterFrameBrand() {

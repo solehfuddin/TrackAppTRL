@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
@@ -42,7 +43,7 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
     public void onBindViewHolder(ViewHolder holder, int position) {
         ModelLensPartai data = item.get(position);
 
-        int discount = data.getProductDisc();
+        double discount = data.getProductDisc();
         int weight   = data.getProductWeight();
         int stock    = data.getProductStock();
 
@@ -57,6 +58,17 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
         holder.txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductDiscPrice())));
         holder.txtPriceDisc.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         holder.txtPriceDisc.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductPrice())));
+        holder.txtTitleFlashSale.setText(data.getProductTitleSale());
+        holder.txtDiscFlashSale.setText("Rp. -" + CurencyFormat(String.valueOf(data.getProductDiscPriceSale())));
+
+        if (data.getProductDiscSale() > 0)
+        {
+            holder.layoutFlashSale.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.layoutFlashSale.setVisibility(View.GONE);
+        }
 
         if (stock < 0)
         {
@@ -110,7 +122,7 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
         }
 
         Double money = Double.valueOf(Rp);
-        String strFormat ="#,###";
+        String strFormat ="#,###.#";
         DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
         return df.format(money);
     }
@@ -118,7 +130,8 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgItem, btnMinus, btnPlus;
         UniversalFontTextView txtId, txtName, txtSph, txtCyl, txtAdd, txtQty, txtSide, txtPrice, txtDisc, txtNotFound,
-                txtStockKurang, txtPriceDisc, btnRemove, lblQty;
+                txtStockKurang, txtPriceDisc, txtTitleFlashSale, txtDiscFlashSale, btnRemove, lblQty;
+        LinearLayout layoutFlashSale;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -139,6 +152,9 @@ public class Adapter_add_partai extends RecyclerView.Adapter<Adapter_add_partai.
             txtPriceDisc= itemView.findViewById(R.id.item_partaiproduct_txtPriceDisc);
             txtNotFound = itemView.findViewById(R.id.item_partaiproduct_lblItemNotFound);
             txtStockKurang = itemView.findViewById(R.id.item_partaiproduct_lblStockKurang);
+            txtTitleFlashSale = itemView.findViewById(R.id.item_partaiproduct_txtTitleDiscFlashSale);
+            txtDiscFlashSale = itemView.findViewById(R.id.item_partaiproduct_txtPriceDiscFlashSale);
+            layoutFlashSale = itemView.findViewById(R.id.item_partaiproduct_layoutFlashSale);
             btnRemove   = itemView.findViewById(R.id.item_partaiproduct_btnRemove);
 
             btnRemove.setOnClickListener(this);

@@ -16,6 +16,7 @@ import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_loan_saldo);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btnNext = findViewById(R.id.form_paymentloan_saldo_btnNext);
         btnPrev = findViewById(R.id.form_paymentloan_saldo_btnBack);

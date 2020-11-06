@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:scale_base_width="400"
-                app:scale_base_height="280"
+                app:scale_base_height="310"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp">
@@ -53,7 +53,7 @@
                     android:background="@android:color/white"
                     android:choiceMode="singleChoice"
                     android:listSelector="@drawable/list_row_selector"
-                    app:scale_height="260"
+                    app:scale_height="290"
                     app:scale_width="400" />
             </com.ssomai.android.scalablelayout.ScalableLayout>
 

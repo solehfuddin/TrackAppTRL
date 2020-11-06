@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 
 public class FanpageActivity extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class FanpageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fanpage);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

@@ -287,14 +287,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:gravity="left|center_vertical"
+                    android:gravity="right|center_vertical"
                     android:maxLines="1"
                     android:textSize="11dp"
                     android:text="Rp. 310.519.900"
                     android:visibility="visible"
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="110"
-                    app:scale_left="250"
+                    app:scale_left="275"
                     app:scale_width="110"
                     app:scale_height="30"
                     app:scale_textsize="14"/>
@@ -325,12 +325,67 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/item_partaiproduct_layoutFlashSale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorRed"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="visible">
+
+            <com.ssomai.android.scalablelayout.ScalableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:scale_base_width="400"
+                app:scale_base_height="30">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtTitleDiscFlashSale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:textSize="11dp"
+                    android:text="Gebyar Diskon"
+                    android:textColor="@android:color/white"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_left="8"
+                    app:scale_width="250"
+                    app:scale_height="30"
+                    app:scale_textsize="14"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_partaiproduct_txtPriceDiscFlashSale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="right|center_vertical"
+                    android:maxLines="1"
+                    android:textSize="11dp"
+                    android:text="Rp. 310.519.900"
+                    android:textColor="@android:color/white"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_left="285"
+                    app:scale_width="110"
+                    app:scale_height="30"
+                    app:scale_textsize="14"/>
+
+            </com.ssomai.android.scalablelayout.ScalableLayout>
+        </LinearLayout>
+
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="3dp"
             android:background="@color/colorContent" />
 
         <RelativeLayout

@@ -109,4 +109,26 @@
         android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <RelativeLayout
+        android:id="@+id/appbarmain_view_prize"
+        android:layout_width="200dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="530dp"
+        android:layout_marginRight="5dp"
+        android:visibility="invisible"
+        android:layout_gravity="right">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/samplesale"/>
+
+        <ImageView
+            android:id="@+id/appbarmain_close_prize"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="@string/about_1_title"
+            android:src="@drawable/close"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

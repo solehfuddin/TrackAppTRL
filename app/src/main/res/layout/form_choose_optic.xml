@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:focusableInTouchMode="true">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/account"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/form_chooseoptic_txtsearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/neutral"
+            android:hint="Search optic name"
+            android:inputType="textPersonName"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="41dp"
+            app:met_hideUnderline="true"/>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_chooseoptic_btnsearch"
+            android:layout_width="25dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentRight="true"
+            app:rv_type="rectangle"
+            app:rv_rippleDuration="100">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search"
+                android:background="@color/colorToolbar"/>
+
+        </com.andexert.library.RippleView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:weightSum="10">
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_chooseoptic_ripplebtnprev"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            app:rv_type="rectangle"
+            app:rv_rippleDuration="100">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/form_chooseoptic_btnprev"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                app:bootstrapBrand="success"
+                app:bootstrapSize="md"
+                app:bootstrapText="&lt;" />
+        </com.andexert.library.RippleView>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_chooseoptic_ripplebtnnext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            app:rv_type="rectangle"
+            app:rv_rippleDuration="100">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/form_chooseoptic_btnnext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                app:bootstrapBrand="success"
+                app:bootstrapSize="md"
+                app:bootstrapText="&gt;" />
+
+        </com.andexert.library.RippleView>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/form_chooseoptic_txtCounter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.4"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:text="Data count"
+            android:textColor="#333b3e"
+            android:textSize="15sp"
+            app:customFont="RobotoMedium.ttf"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/form_chooseoptic_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/form_chooseoptic_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="30dp"
+            android:listSelector="@drawable/list_row_selector"
+            android:choiceMode="singleChoice"/>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_chooseoptic_ripplebtnselect"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            app:rv_type="rectangle"
+            app:rv_rippleDuration="100">
+            <Button
+                android:id="@+id/form_chooseoptic_btnselect"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorToolbar"
+                android:textColor="@color/neutral"
+                android:text="Selected"
+                android:textSize="14sp" />
+        </com.andexert.library.RippleView>
+
+    </RelativeLayout>
+
+</LinearLayout>

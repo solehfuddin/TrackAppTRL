@@ -13,10 +13,6 @@ import com.sofudev.trackapptrl.R;
 
 import java.util.List;
 
-/**
- * Created by sholeh on 09/07/2018.
- */
-
 public class Adapter_track_orderview extends RecyclerView.Adapter<Adapter_track_orderview.AdapterOrderviewHolder>{
     private Context context;
     private List<Data_track_order> list;

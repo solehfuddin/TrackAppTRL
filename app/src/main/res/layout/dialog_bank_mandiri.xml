@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ssomai.android.scalablelayout.ScalableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:scale_base_width="400"
+    app:scale_base_height="390"
+    android:minWidth="400dp"
+    android:minHeight="200dp">
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pembayaran Melalui Bank MANDIRI"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_top="10"
+        app:scale_textsize="21"
+        app:scale_width="400" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo_mandiri"
+        app:scale_top="45"
+        app:scale_width="95"
+        app:scale_height="40"/>
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="110"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Masukkan Nomor PIN"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="30"
+        app:scale_top="110"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="140"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilih Menu 'Tranfer'"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="30"
+        app:scale_top="140"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="170"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilih Menu 'Transfer ke rekening MANDIRI'"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="30"
+        app:scale_top="170"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="4."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="200"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Masukkan nomor rekening MANDIRI : 1250004821351 A/N Timur Raya Lestari PT"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="52"
+        app:scale_left="30"
+        app:scale_top="200"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="5."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="250"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Masukkan Nominal Pembayaran"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="22"
+        app:scale_left="30"
+        app:scale_top="250"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="6."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="280"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Akan muncul konfirmasi Nama dan jumlah transaksi. Tekan YA jika benar dan transaksi BERHASIL dilakukan"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="68"
+        app:scale_left="30"
+        app:scale_top="280"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="7."
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="23"
+        app:scale_left="10"
+        app:scale_top="350"
+        app:scale_textsize="18"
+        app:scale_width="15" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Struk/Bukti transaksi akan keluar"
+        android:textColor="@android:color/black"
+        app:customFont="DroidBold.ttf"
+        app:scale_height="22"
+        app:scale_left="30"
+        app:scale_top="350"
+        app:scale_textsize="18"
+        app:scale_width="370" />
+</com.ssomai.android.scalablelayout.ScalableLayout>

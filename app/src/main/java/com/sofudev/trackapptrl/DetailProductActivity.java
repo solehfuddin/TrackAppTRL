@@ -16,6 +16,7 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Fragment.DetailFrameFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
@@ -58,6 +59,8 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_product);
 
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
         btnBack     = findViewById(R.id.fragment_detailproduct_btnback);
         btnWishlist = findViewById(R.id.fragment_detailproduct_btnWishlist);
 
@@ -70,7 +73,7 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
         detailFrameFragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.detailproduct_fragment_container, detailFrameFragment);
+        fragmentTransaction.replace(R.id.detailproduct_fragment_container, detailFrameFragment, "detail");
         fragmentTransaction.commit();
 
         addCartHelper = AddCartHelper.getINSTANCE(getApplicationContext());

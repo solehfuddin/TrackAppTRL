@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormPaymentDeposit">
+
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:scale_base_height="150"
+        app:scale_base_width="400"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:id="@+id/scalableLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="145dp"
+            android:scaleType="centerCrop"
+            app:scale_width="400"
+            app:scale_height="150"
+            app:srcCompat="@drawable/bg_payment" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Waiting For Payment"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:customFont="DroidBold.ttf"
+            app:scale_top="15"
+            app:scale_left="10"
+            app:scale_height="30"
+            app:scale_textsize="25"
+            app:scale_width="300" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Number"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:customFont="DroidBold.ttf"
+            app:scale_top="90"
+            app:scale_left="10"
+            app:scale_height="24"
+            app:scale_textsize="16"
+            app:scale_width="300" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/form_paymentdepo_txtOrderNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OLAADMIN2112186"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:scale_top="112"
+            app:scale_left="10"
+            app:scale_height="24"
+            app:scale_textsize="18"
+            app:scale_width="300" />
+
+    </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.413"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scalableLayout"
+        android:id="@+id/scrollView2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:visibility="visible">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_base_height="165"
+                    app:scale_base_width="400">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expired Payment Session"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        app:scale_height="30"
+                        app:scale_textsize="20"
+                        app:scale_top="10"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="27dp"
+                        android:text="Please transfer before"
+                        android:textAlignment="center"
+                        app:scale_height="25"
+                        app:scale_textsize="16"
+                        app:scale_top="40"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_paymentdepo_txtTimer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23 : 59 : 58"
+                        app:customFont="UbuntuMedium.ttf"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_red_light"
+                        app:scale_height="70"
+                        app:scale_textsize="40"
+                        app:scale_top="60"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="    Hour          Minute         Second"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_red_light"
+                        app:scale_height="30"
+                        app:scale_textsize="14"
+                        app:scale_top="110"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_paymentdepo_txtDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="02 Desember 2018 At 23:59"
+                        app:customFont="UbuntuMedium.ttf"
+                        android:textAlignment="center"
+                        app:scale_height="23"
+                        app:scale_textsize="16"
+                        app:scale_top="140"
+                        app:scale_width="400"
+                        tools:ignore="MissingPrefix" />
+
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_base_height="180"
+                    app:scale_base_width="400"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="214dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Deposit Payment"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="24"
+                        app:scale_left="120"
+                        app:scale_textsize="19"
+                        app:scale_top="15"
+                        app:scale_width="170" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Deposit"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="20"
+                        app:scale_left="20"
+                        app:scale_textsize="17"
+                        app:scale_top="53"
+                        app:scale_width="70" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_paymentdepo_txtDeposit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rp 33.000,00"
+                        android:textColor="@color/colorContent"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="24"
+                        app:scale_left="115"
+                        app:scale_textsize="18"
+                        app:scale_top="51"
+                        app:scale_width="250" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Bill"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="20"
+                        app:scale_left="20"
+                        app:scale_textsize="17"
+                        app:scale_top="83"
+                        app:scale_width="70" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_paymentdepo_txtAmountBill"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rp 33.000,00"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="24"
+                        app:scale_left="115"
+                        app:scale_textsize="18"
+                        app:scale_top="81"
+                        app:scale_width="250" />
+
+                    <Button
+                        android:id="@+id/form_paymentdepo_btn_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dot_dark_screen4"
+                        android:text="Pay with deposit"
+                        android:textColor="@android:color/white"
+                        app:scale_textsize="18"
+                        app:scale_height="45"
+                        app:scale_width="360"
+                        app:scale_left="20"
+                        app:scale_top="115"/>
+
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="40dp"
+                android:visibility="gone"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    app:scale_base_height="30"
+                    app:scale_base_width="400">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Payment Guide"
+                        android:textColor="@color/colorContent"
+                        app:customFont="DroidBold.ttf"
+                        app:scale_height="20"
+                        app:scale_left="10"
+                        app:scale_textsize="17"
+                        app:scale_width="300" />
+
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+
+                <ListView
+                    android:id="@+id/form_paymentcc_listtransfer"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/form_paymentdepo_btn_cancel"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="Cancel Order"
+        android:textSize="17sp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_orange_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

@@ -19,6 +19,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUC
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_DESC;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_DISC;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_DISCPRICE;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_DISCPRICESALE;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_DISCSALE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_ID;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_IMG;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_NEWDISCPRICE;
@@ -28,6 +30,7 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUC
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_SIDE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_SPH;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_STOCK;
+import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_TITLESALE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.PRODUCT_WEIGHT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.TABLE_LENSPARTAI;
 
@@ -92,12 +95,15 @@ public class LensPartaiHelper {
                 lensPartai.setProductSide(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_SIDE)));
                 lensPartai.setProductQty(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_QTY)));
                 lensPartai.setProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_PRICE)));
-                lensPartai.setProductDisc(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISC)));
-                lensPartai.setProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
-                lensPartai.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
-                lensPartai.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
+                lensPartai.setProductDisc(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISC)));
+                lensPartai.setProductDiscPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
+                lensPartai.setNewProductPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
+                lensPartai.setNewProductDiscPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
                 lensPartai.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
                 lensPartai.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
+                lensPartai.setProductTitleSale(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_TITLESALE)));
+                lensPartai.setProductDiscSale(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCSALE)));
+                lensPartai.setProductDiscPriceSale(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICESALE)));
                 lensPartai.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
 
                 arrayList.add(lensPartai);
@@ -128,12 +134,15 @@ public class LensPartaiHelper {
                 item.setProductSide(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_SIDE)));
                 item.setProductQty(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_QTY)));
                 item.setProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_PRICE)));
-                item.setProductDisc(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISC)));
-                item.setProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
-                item.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
-                item.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
+                item.setProductDisc(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISC)));
+                item.setProductDiscPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICE)));
+                item.setNewProductPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
+                item.setNewProductDiscPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
                 item.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
                 item.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
+                item.setProductTitleSale(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_TITLESALE)));
+                item.setProductDiscSale(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_DISCSALE)));
+                item.setProductDiscPriceSale(cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_DISCPRICESALE)));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
             }
 
@@ -161,6 +170,9 @@ public class LensPartaiHelper {
         args.put(PRODUCT_NEWDISCPRICE, lensPartai.getNewProductDiscPrice());
         args.put(PRODUCT_STOCK, lensPartai.getProductStock());
         args.put(PRODUCT_WEIGHT, lensPartai.getProductWeight());
+        args.put(PRODUCT_TITLESALE, lensPartai.getProductTitleSale());
+        args.put(PRODUCT_DISCSALE, lensPartai.getProductDiscSale());
+        args.put(PRODUCT_DISCPRICESALE, lensPartai.getProductDiscPriceSale());
         args.put(PRODUCT_IMG, lensPartai.getProductImage());
 
         return database.insert(DATABASE_TABLE, null, args);
@@ -176,21 +188,41 @@ public class LensPartaiHelper {
         return output;
     }
 
-    public int countTotalPrice()
+    public double countTotalPrice()
     {
         Cursor cursor = database.rawQuery("select sum(product_newprice) as total_price from " + DATABASE_TABLE, null);
         cursor.moveToFirst();
-        int output = cursor.getInt(0);
+        double output = cursor.getDouble(0);
         cursor.close();
 
         return output;
     }
 
-    public int countTotalDiscPrice()
+    public double countTotalDiscPrice()
     {
         Cursor cursor = database.rawQuery("select sum(product_newdiscprice) as total_discprice from " + DATABASE_TABLE, null);
         cursor.moveToFirst();
-        int output = cursor.getInt(0);
+        double output = cursor.getDouble(0);
+        cursor.close();
+
+        return output;
+    }
+
+    public double countTotalPriceSale()
+    {
+        Cursor cursor = database.rawQuery("select sum(product_discpricesale) as total_discprice from " + DATABASE_TABLE, null);
+        cursor.moveToFirst();
+        double output = cursor.getDouble(0);
+        cursor.close();
+
+        return output;
+    }
+
+    public double countTest()
+    {
+        Cursor cursor = database.rawQuery("SELECT sum(product_test) as total_test from " + DATABASE_TABLE + ";", null);
+        cursor.moveToFirst();
+        double output = cursor.getDouble(0);
         cursor.close();
 
         return output;
@@ -210,6 +242,15 @@ public class LensPartaiHelper {
         arg.put(PRODUCT_DISC, modelLensPartai.getProductDisc());
         arg.put(PRODUCT_DISCPRICE, modelLensPartai.getProductDiscPrice());
         arg.put(PRODUCT_NEWDISCPRICE, modelLensPartai.getNewProductDiscPrice());
+        return database.update(DATABASE_TABLE, arg, PRODUCT_ID + "= '" + modelLensPartai.getProductId() + "'", null);
+    }
+
+    public int updateLensPartaiDiscSale(ModelLensPartai modelLensPartai)
+    {
+        ContentValues arg = new ContentValues();
+        arg.put(PRODUCT_DISC, modelLensPartai.getProductDisc());
+        arg.put(PRODUCT_DISCSALE, modelLensPartai.getProductDiscSale());
+        arg.put(PRODUCT_DISCPRICESALE, modelLensPartai.getProductDiscPriceSale());
         return database.update(DATABASE_TABLE, arg, PRODUCT_ID + "= '" + modelLensPartai.getProductId() + "'", null);
     }
 

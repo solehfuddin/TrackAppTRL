@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_new1"
+    tools:context="com.sofudev.trackapptrl.Form.DetailDepositActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBottom_toTopOf="@+id/activity_detaildeposit_btntopup"
+        app:layout_constraintVertical_bias="0.0">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="170dp"
+                android:background="@drawable/bg1"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/linearLayout2"
+                app:layout_constraintHorizontal_bias="0.0">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/activity_detailbalance_btndepositback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_back_black"
+                        android:layout_margin="10dp"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Deposit Balance"
+                        android:layout_gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp"
+                        android:layout_marginRight="45dp"
+                        app:customFont="DroidBold.ttf"/>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="IDR"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorContent"
+                        android:layout_marginRight="3dp"
+                        android:layout_toLeftOf="@+id/activity_detailbalance_txtdepositnominal"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/activity_detailbalance_txtdepositnominal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1.500.000.000"
+                        android:textSize="30sp"
+                        android:textColor="@color/black"
+                        android:layout_centerHorizontal="true"
+                        app:customFont="UbuntuMedium.ttf"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="123dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="7dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/linearLayout2"
+                app:layout_constraintRight_toRightOf="@+id/linearLayout2"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/cardView3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="173dp"
+                        android:layout_height="43dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/logo_trl3"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enjoy payment with deposit support by Timur Raya for mobile transaction"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorContent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="center"
+                        app:customFont="MavenPro-Regular.ttf"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_margin="10dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView3"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Recent Transaction"
+                        android:layout_gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="17sp"
+                        android:layout_margin="5dp"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/activity_detaildeposit_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/activity_detaildeposit_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="10dp"
+                        android:text="More Recent"
+                        android:textAlignment="center"
+                        android:textColor="@color/dot_dark_screen3"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                    <ImageView
+                        android:id="@+id/activity_detaildeposit_imgLensnotfound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/notfound"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView4"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pending Transaction"
+                        android:layout_gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="17sp"
+                        android:layout_margin="5dp"
+                        app:customFont="UbuntuMedium.ttf"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/activity_detailpending_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/activity_detailpending_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="10dp"
+                        android:text="More Recent"
+                        android:textAlignment="center"
+                        android:textColor="@color/dot_dark_screen3"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                    <ImageView
+                        android:id="@+id/activity_detailpending_imgLensnotfound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/notfound"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/cardView6"
+                android:layout_width="0dp"
+                android:layout_height="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView5"
+                android:layout_marginEnd="10dp">
+
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/activity_detaildeposit_btntopup"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Topup Saldo"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:background="@color/colorFirst"
+        android:textAllCaps="true"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

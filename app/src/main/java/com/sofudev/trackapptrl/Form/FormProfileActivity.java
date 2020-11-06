@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import com.egistli.droidimagepicker.ImagePickerError;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
@@ -62,7 +64,7 @@ import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import es.dmoral.toasty.Toasty;
 
-public class FormProfileActivity extends AppCompatActivity implements ImagePickerDelegate{
+public class FormProfileActivity extends AppCompatActivity{
     Config config = new Config();
 
     private String DETAILURL   = config.Ip_address + config.profile_user_detail;
@@ -90,6 +92,7 @@ public class FormProfileActivity extends AppCompatActivity implements ImagePicke
     private MCrypt mCrypt;
     private ACProgressFlower loading;
     private ImagePicker imagePicker;
+    private com.mvc.imagepicker.ImagePicker imgPicker;
     private LovelyCustomDialog lovelyCustomDialog;
     private LayoutInflater layoutInflater;
     private View view;
@@ -98,6 +101,10 @@ public class FormProfileActivity extends AppCompatActivity implements ImagePicke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_profile);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
+        com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
 
         btn_back        = (ImageButton) findViewById(R.id.form_profile_btnback);
         txt_profile     = (UniversalFontTextView) findViewById(R.id.form_profile_txtusername);
@@ -135,54 +142,64 @@ public class FormProfileActivity extends AppCompatActivity implements ImagePicke
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (imagePicker != null && imagePicker.handleActivityResult(requestCode, resultCode, data))
-        {
-            //informationImage("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                    //DefaultBootstrapBrand.WARNING);
+//        if (imagePicker != null && imagePicker.handleActivityResult(requestCode, resultCode, data))
+//        {
+//            //informationImage("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                    //DefaultBootstrapBrand.WARNING);
+//
+//            //Toasty.warning(getApplicationContext(), "Image operation was cancel", Toast.LENGTH_SHORT, true).show();
+//            Toasty.info(getApplicationContext(), "Profile has been updated", Toast.LENGTH_SHORT, true).show();
+//        }
 
-            //Toasty.warning(getApplicationContext(), "Image operation was cancel", Toast.LENGTH_SHORT, true).show();
-            Toasty.info(getApplicationContext(), "Profile has been updated", Toast.LENGTH_SHORT, true).show();
+        if(data!=null)
+        {
+            Bitmap bitmap = com.mvc.imagepicker.ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
+            img_uri = getImageUrl(this, bitmap);
+
+            filename = getPath(img_uri);
+            img_profile.setImageBitmap(bitmap);
+            changeImgProfile(filename);
         }
     }
 
-    @Override
-    public void imagePickerDidCancel(com.egistli.droidimagepicker.ImagePicker imagePicker) {
+//    @Override
+//    public void imagePickerDidCancel(com.egistli.droidimagepicker.ImagePicker imagePicker) {
+//
+//    }
 
-    }
+//    @Override
+//    public void imagePickerDidSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, Bitmap bitmap) {
+//        showLoading();
+//
+//        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+//        NetworkInfo ni = cm.getActiveNetworkInfo();
+//
+//        img_uri = getImageUrl(getApplicationContext(), bitmap);
+//        //Toast.makeText(getApplicationContext(), img_uri.toString(), Toast.LENGTH_SHORT).show();
+//        filename = getPath(img_uri);
+//        img_profile.setImageBitmap(bitmap);
+//        changeImgProfile(filename);
+//        loading.dismiss();
+//
+//        //dashboard.getUserDetailDB(txt_profile.getText().toString());
+//        //dash.img_profile.setImageBitmap(bitmap);
+//    }
 
-    @Override
-    public void imagePickerDidSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, Bitmap bitmap) {
-        showLoading();
-
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-
-        img_uri = getImageUrl(getApplicationContext(), bitmap);
-        //Toast.makeText(getApplicationContext(), img_uri.toString(), Toast.LENGTH_SHORT).show();
-        filename = getPath(img_uri);
-        img_profile.setImageBitmap(bitmap);
-        changeImgProfile(filename);
-        loading.dismiss();
-
-        //dashboard.getUserDetailDB(txt_profile.getText().toString());
-        //dash.img_profile.setImageBitmap(bitmap);
-    }
-
-    @Override
-    public void imagePickerDidFailToSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, ImagePickerError error) {
-        Toasty.error(getApplicationContext(), "Error operation when select image", Toast.LENGTH_SHORT, true).show();
-    }
-
-    @Override
-    public boolean imagePickerShouldCrop(com.egistli.droidimagepicker.ImagePicker imagePicker) {
-        return true;
-    }
-
-    @Override
-    public void imagePickerSetUpCropDetail(com.egistli.droidimagepicker.ImagePicker imagePicker, Crop crop) {
-        crop.asSquare();
-        crop.withMaxSize(480, 480);
-    }
+//    @Override
+//    public void imagePickerDidFailToSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, ImagePickerError error) {
+//        Toasty.error(getApplicationContext(), "Error operation when select image", Toast.LENGTH_SHORT, true).show();
+//    }
+//
+//    @Override
+//    public boolean imagePickerShouldCrop(com.egistli.droidimagepicker.ImagePicker imagePicker) {
+//        return true;
+//    }
+//
+//    @Override
+//    public void imagePickerSetUpCropDetail(com.egistli.droidimagepicker.ImagePicker imagePicker, Crop crop) {
+//        crop.asSquare();
+//        crop.withMaxSize(480, 480);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -421,19 +438,26 @@ public class FormProfileActivity extends AppCompatActivity implements ImagePicke
 
     private void imageChooser()
     {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         btn_changeimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
-                imagePicker.prompt();
+//                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
+//                imagePicker.prompt();
+//                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
+                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
             }
         });
 
         img_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
-                imagePicker.prompt();
+//                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
+//                imagePicker.prompt();
+//                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
+                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
             }
         });
     }

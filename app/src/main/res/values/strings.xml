@@ -66,4 +66,41 @@
         <item>Nikon</item>
         <item>Oriental</item>
     </array>
+
+    <array name="type_frame_array">
+        <item>Nikon</item>
+        <item>Oriental</item>
+        <item>Leinz</item>
+        <item>Tweens</item>
+        <item>Fusion</item>
+        <item>Borelli</item>
+        <item>Moe</item>
+        <item>Horien</item>
+    </array>
+
+    <array name="type_sp_array">
+        <item>Lensa Satuan</item>
+        <item>Lensa Partai</item>
+        <item>Frame</item>
+    </array>
+
+    <array name="payment_sp_array">
+        <item>Cash</item>
+        <item>Cicilan</item>
+    </array>
+
+    <array name="month_array">
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maret</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Agustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Desember</item>
+    </array>
 </resources>

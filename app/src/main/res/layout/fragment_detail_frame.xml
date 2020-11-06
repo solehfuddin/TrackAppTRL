@@ -100,6 +100,55 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <LinearLayout
+                            android:id="@+id/fragment_detailproduct_linearSale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="15dp">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorToolbar"
+                                android:paddingBottom="1dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="1dp"
+                                android:text="Flash Sale"
+                                android:textColor="@color/neutral"
+                                android:textSize="20sp"
+                                app:customFont="TradeGothicCondensed.ttf" />
+
+                            <cn.iwgang.countdownview.CountdownView
+                                android:id="@+id/fragment_detailproduct_countdown"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                app:isHideTimeBackground="false"
+                                app:timeBgColor="@color/colorToolbar"
+                                app:timeBgRadius="2dp"
+                                app:isShowDay="false"
+                                app:isShowHour="true"
+                                app:isShowMinute="true"
+                                app:isShowSecond="true"
+                                app:isShowMillisecond="false"
+                                app:timeTextColor="@color/white"
+                                app:timeTextSize="18sp"
+                                app:isTimeTextBold="true"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:background="@color/colorToolbar"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                             android:id="@+id/fragment_detailproduct_txtLenscode"
                             android:layout_width="match_parent"

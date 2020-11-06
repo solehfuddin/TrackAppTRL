@@ -38,6 +38,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_track_orderview;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_track_order;
 import com.sofudev.trackapptrl.Info.InfoOrderHistoryActivity;
@@ -97,6 +98,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_track_order);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btn_back        = (ImageButton) findViewById(R.id.form_trackorder_btnback);
         btn_filter      = (ImageButton) findViewById(R.id.form_trackorder_btnfilter);
@@ -184,8 +187,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         });
     }
 
-    private void showDialogTrack()
-    {
+    private void showDialogTrack() {
         final UniversalFontTextView txt_jobNumber,  txt_sphR, txt_cylR, txt_addR, txt_sphL, txt_cylL, txt_addL;
         final AdvancedTextView txt_lensName, txt_reference, txt_tinting, txt_orderStatus, txt_dateStatus;
         final BootstrapLabel btn_lblfacet;
@@ -250,14 +252,22 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         ripple_btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
+                showLoading();
+
                 Intent intent = new Intent(FormTrackOrderActivity.this, InfoOrderHistoryActivity.class);
                 intent.putExtra("order_number", order_number);
+                intent.putExtra("is_sp", 0);
                 startActivity(intent);
-
-                dialog.dismiss();
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loading.hide();
     }
 
     private void OpenFilter()

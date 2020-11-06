@@ -8,39 +8,68 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!--
       <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     -->
+    <!-- android:authorities="${applicationId}.easyphotopicker.fileprovider" -->
     <application
         android:name=".App.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <!--<activity-->
-            <!--android:name=".IntroActivity"-->
-            <!--android:screenOrientation="portrait">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="com.sofudev.trackapptrl.fileprovider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true"-->
+            <!--tools:replace="android:authorities">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/filepaths"-->
+                <!--tools:replace="android:resource" />-->
+        <!--</provider>-->
+        <!-- <activity -->
+        <!-- android:usesCleartextTraffic = "true" -->
+        <!-- android:name=".IntroActivity" -->
+        <!-- android:screenOrientation="portrait"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+        <provider
+            android:name="com.nj.imagepicker.provider.ImageProvider"
+            android:authorities="${applicationId}.com.nj.imagepicker.fileprovider"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".IntroActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,23 +141,33 @@
         <activity android:name=".Form.CheckBalanceActivity" />
         <activity android:name=".Form.DetailBalanceActivity" />
 
-        <service android:name=".service.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".service.GenerateIdFire">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
+        <!-- <service android:name=".service.MyFirebaseMessagingService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+        <!-- <service android:name=".service.GenerateIdFire"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
 
         <activity android:name=".Form.FormBatchOrderActivity" />
         <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
         <activity android:name=".Form.FormOrderDetailPartaiActivity" />
         <activity android:name=".Form.SearchProductActivity" />
         <activity android:name=".DetailProductActivity" />
-        <activity android:name=".ReportSalesActivity"></activity>
+        <activity android:name=".ReportSalesActivity" />
+        <activity android:name=".Form.FormOrderSpActivity" />
+        <activity android:name=".Form.FormSpFrameActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Form.FormTrackingSpActivity" />
+        <activity android:name=".LoggerActivity" />
+        <activity android:name=".OnHandActivity" />
+        <activity android:name=".Form.DetailDepositActivity" />
+        <activity android:name=".Form.FilterDepositActivity" />
+        <activity android:name=".Form.FormPaymentDeposit" />
+        <activity android:name=".TestCamActivity"></activity>
     </application>
 
 </manifest>

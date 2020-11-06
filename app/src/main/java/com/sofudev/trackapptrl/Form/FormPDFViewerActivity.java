@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
 import es.dmoral.toasty.Toasty;
@@ -27,6 +28,8 @@ public class FormPDFViewerActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_pdfviewer);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         Bundle bundle = getIntent().getExtras();
         String link = bundle.getString("data");

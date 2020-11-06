@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.android.volley.Request;
@@ -19,10 +17,11 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Adapter.Adapter_detailhistory_partai;
+import com.sofudev.trackapptrl.Adapter.Adapter_item_orderdetail;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
-import com.sofudev.trackapptrl.Data.Data_detailhistory_partai;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.Data.Data_item_orderdetail;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONArray;
@@ -37,48 +36,46 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import es.dmoral.toasty.Toasty;
-
 public class FormOrderDetailPartaiActivity extends AppCompatActivity {
 
     Config config = new Config();
-    String URLITEM = config.Ip_address + config.orderpartai_show_detailitem;
-    String URLSHIP = config.Ip_address + config.orderpartai_show_detailship;
+    String URLHEADER = config.Ip_address + config.orderpartai_detail_header;
+    String URLITEM   = config.Ip_address + config.orderpartai_detail_item;
 
     ImageView btnBack;
-    UniversalFontTextView txtOrderNumber, txtShipName, txtShipCity, txtShipProvince, txtShipAmount;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    CardView cardShip;
+    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtStatus, txtEkspedisi, txtService, txtNomorOrder;
     RippleView btnDownload;
+    RecyclerView recyclerViewItem;
 
-    String orderNumber;
+    String orderNumber, titleSale;
 
-    Adapter_detailhistory_partai adapter_detailhistory_partai;
-    List<Data_detailhistory_partai> itemPartai = new ArrayList<>();
+    List<Data_item_orderdetail> listItem = new ArrayList<>();
+    Adapter_item_orderdetail adapter_item_orderdetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_order_detail_partai);
 
-        btnBack = findViewById(R.id.activity_orderdetail_partai_btnback);
-        txtOrderNumber = findViewById(R.id.activity_orderdetail_partai_txtorder);
-        txtShipName = findViewById(R.id.activity_orderdetail_partai_txtshipname);
-        txtShipCity = findViewById(R.id.activity_orderdetail_partai_txtshipcity);
-        txtShipProvince = findViewById(R.id.activity_orderdetail_partai_txtshipprovince);
-        txtShipAmount = findViewById(R.id.activity_orderdetail_partai_txtshipprice);
-        cardShip = findViewById(R.id.activity_orderdetail_partai_cardShip);
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
-        recyclerView = findViewById(R.id.activity_orderdetail_partai_recyclerview);
+        btnBack         = findViewById(R.id.activity_orderdetail_partai_btnback);
+        txtTanggal      = findViewById(R.id.activity_orderdetail_partai_txt_tanggal);
+        txtNamaOptik    = findViewById(R.id.activity_orderdetail_partai_txt_optik);
+        txtHarga        = findViewById(R.id.activity_orderdetail_partai_txt_harga);
+        txtStatus       = findViewById(R.id.activity_orderdetail_partai_txt_status);
+        txtEkspedisi    = findViewById(R.id.activity_orderdetail_partai_txt_ekspedisi);
+        txtService      = findViewById(R.id.activity_orderdetail_partai_txt_service);
+        txtNomorOrder   = findViewById(R.id.activity_orderdetail_partai_txt_nomororder);
+        recyclerViewItem= findViewById(R.id.activity_orderdetail_partai_recyclerItem);
+
         btnDownload = findViewById(R.id.activity_orderdetail_partai_btnDownloadPdf);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        adapter_item_orderdetail = new Adapter_item_orderdetail(this, listItem);
 
-        adapter_detailhistory_partai = new Adapter_detailhistory_partai(this, itemPartai);
-
-        recyclerView.setAdapter(adapter_detailhistory_partai);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerViewItem.setLayoutManager(layoutManager);
+        recyclerViewItem.setNestedScrollingEnabled(false);
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +100,15 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         orderNumber = bundle.getString("key");
 
-        txtOrderNumber.setText(orderNumber);
+        getHeader(orderNumber);
 
-        getItem(orderNumber);
-        getShip(orderNumber);
+        try {
+            Thread.sleep(1000);
+
+            getItem(orderNumber);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String CurencyFormat(String Rp){
@@ -121,39 +123,40 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         return df.format(money);
     }
 
-    private void getItem(final String id)
+    private void getHeader(final String order_number)
     {
-        itemPartai.clear();
-
-        StringRequest request = new StringRequest(Request.Method.POST, URLITEM, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, URLHEADER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
+                    JSONObject object = new JSONObject(response);
 
-                    for(int i = 0; i < jsonArray.length(); i++)
+                    String harga = "Rp. " + CurencyFormat(String.valueOf(object.getString("total_harga")));
+                    String nomor = "No order #" + object.getString("order_number");
+
+                    String kurir = object.getString("ekspedisi");
+                    String service = object.getString("servis");
+                    titleSale = object.getString("flash_note");
+
+                    Log.d("Header Partai", titleSale);
+
+                    if (kurir.equals("null"))
                     {
-                        JSONObject object = jsonArray.getJSONObject(i);
-
-                        String itemCode     = object.getString("itemCode");
-                        String itemSide     = object.getString("itemSide");
-                        int itemPrice       = object.getInt("itemPrice");
-                        int itemDiscount    = object.getInt("itemDiscount");
-                        int itemQty         = object.getInt("itemQty");
-                        int itemTotal       = object.getInt("itemTotal");
-
-                        Data_detailhistory_partai data_partai = new Data_detailhistory_partai();
-                        data_partai.setItemCode(itemCode);
-                        data_partai.setItemSide(itemSide);
-                        data_partai.setPrice(itemPrice);
-                        data_partai.setDisc(itemDiscount);
-                        data_partai.setQty(itemQty);
-                        data_partai.setAmount(itemTotal);
-
-                        itemPartai.add(data_partai);
+                        kurir = "-";
                     }
 
-                    adapter_detailhistory_partai.notifyDataSetChanged();
+                    if (service.equals("null"))
+                    {
+                        service = "-";
+                    }
+
+                    txtNomorOrder.setText(nomor);
+                    txtTanggal.setText(object.getString("tanggal_order"));
+                    txtHarga.setText(harga);
+                    txtNamaOptik.setText(object.getString("nama_optik"));
+                    txtEkspedisi.setText(kurir);
+                    txtService.setText(service);
+                    txtStatus.setText(object.getString("status_bayar"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -161,13 +164,16 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Partai Header", error.getMessage());
+                }
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("order_number", id);
+                hashMap.put("order_number", order_number);
                 return hashMap;
             }
         };
@@ -175,47 +181,40 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void getShip(final String id)
+    private void getItem(final String order_number)
     {
-        StringRequest request = new StringRequest(Request.Method.POST, URLSHIP, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, URLITEM, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject object = new JSONObject(response);
+                    JSONArray jsonArray = new JSONArray(response);
 
-                    if (object.names().get(0).equals("Error"))
+                    for (int i = 0; i < jsonArray.length(); i++)
                     {
-                        cardShip.setVisibility(View.GONE);
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String note = titleSale;
+
+                        Log.d("ITEM PARTAI", note);
+
+                        Data_item_orderdetail data = new Data_item_orderdetail();
+                        data.setNo(object.getInt("no"));
+                        data.setItem_code(object.getString("item_code"));
+                        data.setDeskripsi(object.getString("deskripsi"));
+                        data.setJumlah(object.getInt("jumlah"));
+                        data.setHarga(object.getInt("harga"));
+                        data.setDiskon(object.getDouble("diskon"));
+                        data.setDiskonFlashSale(object.getInt("diskon_sale"));
+                        data.setTinting(object.getInt("tinting"));
+                        data.setTotalAll(object.getInt("total_all"));
+                        data.setTitleFlashSale(note);
+                        data.setCategory(3);
+
+                        listItem.add(data);
                     }
-                    else
-                    {
-                        String shipName = object.getString("shippingName");
-                        String shipPrice= object.getString("shippingPrice");
-                        String shipCity = object.getString("shippingCity");
-                        String shipProvince = object.getString("shippingProvince");
 
-                        Log.d("Info ShipName", shipName);
-
-                        if (shipName.contains("null") || shipName.equals("null") || shipName.contentEquals("null")
-                                || shipPrice.isEmpty())
-                        {
-//                            Toasty.error(getApplicationContext(), shipName, Toast.LENGTH_SHORT).show();
-
-                            cardShip.setVisibility(View.GONE);
-                        }
-                        else
-                        {
-                            cardShip.setVisibility(View.VISIBLE);
-                        }
-
-//                        cardShip.setVisibility(View.VISIBLE);
-                        shipPrice = "Rp. " + CurencyFormat(shipPrice);
-
-                        txtShipName.setText(shipName);
-                        txtShipAmount.setText(shipPrice);
-                        txtShipProvince.setText(shipProvince);
-                        txtShipCity.setText(shipCity);
-                    }
+                    adapter_item_orderdetail.notifyDataSetChanged();
+                    recyclerViewItem.setAdapter(adapter_item_orderdetail);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -223,13 +222,16 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Item Frame", error.getMessage());
+                }
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("order_number", id);
+                hashMap.put("order_number", order_number);
                 return hashMap;
             }
         };

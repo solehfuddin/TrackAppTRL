@@ -36,6 +36,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_optic;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
 import com.sofudev.trackapptrl.R;
@@ -69,6 +70,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     String SHOWINFOPAYMENTVA    = config.Ip_address + config.order_history_showInfoPaymentVA;
     String SHOWINFOPAYMENTCC    = config.Ip_address + config.order_history_showInfoPaymentCC;
     String SHOWINFOPAYMENTLOAN  = config.Ip_address + config.order_history_showInfoPaymentLoan;
+    String URLSHOWPAYMENTDEPO   = config.Ip_address + config.order_history_showInfoPaymentDepo;
     String CHECKSTATUS          = config.payment_check_status;
     String UPDATESTATUS         = config.Ip_address + config.payment_method_updateStatus;
 
@@ -99,6 +101,8 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_order_history);
         showLoader();
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         img_back        = (ImageView) findViewById(R.id.activity_orderhistory_btn_back);
         img_daterange   = (ImageView) findViewById(R.id.activity_orderhistory_btn_daterange);
@@ -159,7 +163,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         }
 
         Double money = Double.valueOf(Rp);
-        String strFormat ="#,###";
+        String strFormat ="#,###.#";
         DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
         return df.format(money);
     }
@@ -1668,6 +1672,55 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void showInfoPaymentDeposit(final String transNumber)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWPAYMENTDEPO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String expDate = jsonObject.getString("expDate");
+                    String duration= jsonObject.getString("duration");
+                    String amount  = jsonObject.getString("grandTotal");
+
+                    if (Integer.parseInt(duration) < 0)
+                    {
+                        Toasty.error(getApplicationContext(), "Payment session has expired", Toast.LENGTH_SHORT).show();
+
+                        cancelPayment(transNumber);
+                    }
+                    else {
+                        Intent intent = new Intent(FormOrderHistoryActivity.this, FormPaymentDeposit.class);
+                        intent.putExtra("orderNumber", transNumber);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("duration", duration);
+                        intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("transnumber", transNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
     @Override
     public void onItemClick(View view, int pos, String id, String status, String paymentType) {
         if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending") ||
@@ -1852,6 +1905,11 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                             || paymentInfo.contains("loanKS"))
                     {
                         showInfoPaymentLoan(transnumber);
+                    }
+                    else if (paymentInfo.contentEquals("deposit") || paymentInfo.equals("deposit")
+                            || paymentInfo.contains("deposit"))
+                    {
+                        showInfoPaymentDeposit(transnumber);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

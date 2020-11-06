@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.android.volley.Request;
@@ -18,10 +17,11 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Adapter.Adapter_detailhistory_frame;
+import com.sofudev.trackapptrl.Adapter.Adapter_item_orderdetail;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
-import com.sofudev.trackapptrl.Data.Data_detailhistory_frame;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.Data.Data_item_orderdetail;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONArray;
@@ -36,44 +36,43 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import es.dmoral.toasty.Toasty;
-
 public class FormOrderDetailFrameActivity extends AppCompatActivity {
 
     Config config = new Config();
-    String URLLINEITEM = config.Ip_address + config.frame_getlineitem_frame;
-    String URLLINESHIP = config.Ip_address + config.frame_getlineship_frame;
+    String URLHEADER = config.Ip_address + config.frame_getheader_frame;
+    String URLITEM   = config.Ip_address + config.frame_getitem_frame;
 
     ImageView btnBack;
-    UniversalFontTextView txtOrderNumber, txtShipName, txtShipCity, txtShipProvince, txtShipPrice;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager recycleManager;
+    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtStatus, txtEkspedisi, txtService, txtOrderNumber;
     RippleView btnDownloadPdf;
-    CardView cardShip;
+    RecyclerView recyclerViewItem;
 
-    Adapter_detailhistory_frame adapter_detailhistory_frame;
-    List<Data_detailhistory_frame> itemLine = new ArrayList<>();
-    String orderNumber;
+    String orderNumber, titleNote;
+    List<Data_item_orderdetail> listItem = new ArrayList<>();
+    Adapter_item_orderdetail adapter_item_orderdetail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_order_detail_frame);
 
-        btnBack = findViewById(R.id.activity_orderdetail_frame_btnback);
-        txtOrderNumber = findViewById(R.id.activity_orderdetail_frame_txtorder);
-        recyclerView = findViewById(R.id.activity_orderdetail_frame_recyclerview);
-        btnDownloadPdf = findViewById(R.id.activity_orderdetail_frame_btnDownloadPdf);
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
-        txtShipName = findViewById(R.id.activity_orderdetail_frame_txtshipname);
-        txtShipCity = findViewById(R.id.activity_orderdetail_frame_txtshipcity);
-        txtShipProvince = findViewById(R.id.activity_orderdetail_frame_txtshipprovince);
-        txtShipPrice    = findViewById(R.id.activity_orderdetail_frame_txtshipprice);
-        cardShip        = findViewById(R.id.activity_orderdetail_frame_cardShip);
+        btnBack         = findViewById(R.id.activity_orderdetail_frame_btnback);
+        btnDownloadPdf  = findViewById(R.id.activity_orderdetail_frame_btnDownloadPdf);
+        txtTanggal      = findViewById(R.id.activity_orderdetail_frame_txt_tanggal);
+        txtNamaOptik    = findViewById(R.id.activity_orderdetail_frame_txt_optik);
+        txtHarga        = findViewById(R.id.activity_orderdetail_frame_txt_harga);
+        txtStatus       = findViewById(R.id.activity_orderdetail_frame_txt_status);
+        txtEkspedisi    = findViewById(R.id.activity_orderdetail_frame_txt_ekspedisi);
+        txtService      = findViewById(R.id.activity_orderdetail_frame_txt_service);
+        txtOrderNumber  = findViewById(R.id.activity_orderdetail_frame_txt_nomororder);
+        recyclerViewItem= findViewById(R.id.activity_orderdetail_frame_recyclerItem);
 
-        recycleManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(recycleManager);
+        adapter_item_orderdetail = new Adapter_item_orderdetail(this, listItem);
 
-        adapter_detailhistory_frame = new Adapter_detailhistory_frame(this, itemLine);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerViewItem.setLayoutManager(layoutManager);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,11 +97,116 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         orderNumber = bundle.getString("key");
 
-        txtOrderNumber.setText(orderNumber);
+        getHeader(orderNumber);
+        try {
+            Thread.sleep(1000);
 
-        getLine(orderNumber);
+            getItem(orderNumber);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-        getShipInfo(orderNumber);
+    private void getHeader(final String order_number)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLHEADER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String harga = "Rp. " + CurencyFormat(String.valueOf(object.getString("total_harga")));
+                    String nomor = "No order #" + object.getString("order_number");
+
+                    titleNote = object.getString("flash_note");
+
+                    Log.d("FRAME HEADER", titleNote);
+
+                    txtOrderNumber.setText(nomor);
+                    txtTanggal.setText(object.getString("tanggal_order"));
+                    txtHarga.setText(harga);
+                    txtNamaOptik.setText(object.getString("nama_optik"));
+                    txtEkspedisi.setText(object.getString("ekspedisi"));
+                    txtService.setText(object.getString("servis"));
+                    txtStatus.setText(object.getString("status_bayar"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Header Frame", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("transnumber", order_number);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getItem(final String order_number)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLITEM, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String note = titleNote;
+                        Log.d("FRAME DETAIL", note);
+
+                        Data_item_orderdetail data = new Data_item_orderdetail();
+                        data.setNo(object.getInt("no"));
+                        data.setItem_code(object.getString("item_code"));
+                        data.setDeskripsi(object.getString("deskripsi"));
+                        data.setJumlah(object.getInt("jumlah"));
+                        data.setHarga(object.getInt("harga"));
+                        data.setDiskon(object.getDouble("diskon"));
+                        data.setTinting(object.getInt("tinting"));
+                        data.setTotalAll(object.getInt("total_all"));
+                        data.setTitleFlashSale(note);
+                        data.setCategory(2);
+
+                        listItem.add(data);
+                    }
+
+                    adapter_item_orderdetail.notifyDataSetChanged();
+                    recyclerViewItem.setAdapter(adapter_item_orderdetail);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Item Frame", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("transnumber", order_number);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private String CurencyFormat(String Rp){
@@ -115,106 +219,5 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         String strFormat ="#,###";
         DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
         return df.format(money);
-    }
-
-    private void getLine(final String id)
-    {
-        itemLine.clear();
-        StringRequest request = new StringRequest(Request.Method.POST, URLLINEITEM, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for (int i = 0; i < jsonArray.length(); i++)
-                    {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                        String itemCode = jsonObject.getString("itemcode");
-                        int itemPrice   = jsonObject.getInt("itemprice");
-                        int itemDisc    = jsonObject.getInt("itemdiscount");
-                        int itemQty     = jsonObject.getInt("itemqty");
-                        int itemTotal   = jsonObject.getInt("itemTotal");
-
-                        Data_detailhistory_frame item = new Data_detailhistory_frame();
-                        item.setItemCode(itemCode);
-                        item.setPrice(itemPrice);
-                        item.setDisc(itemDisc);
-                        item.setQty(itemQty);
-                        item.setAmount(itemTotal);
-
-                        itemLine.add(item);
-                    }
-
-                    adapter_detailhistory_frame.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter_detailhistory_frame);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("transnumber", id);
-                return hashMap;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(request);
-    }
-
-    private void getShipInfo(final String id)
-    {
-        StringRequest request = new StringRequest(Request.Method.POST, URLLINESHIP, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    if (jsonObject.names().get(0).equals("Error"))
-                    {
-                        cardShip.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        String itemShipName     = jsonObject.getString("shippingName");
-                        String itemShipPrice    = jsonObject.getString("shippingPrice");
-                        String itemShipCity     = jsonObject.getString("shippingCity");
-                        String itemShipProvince = jsonObject.getString("shippingProvince");
-//                    String itemShipIcon     = jsonObject.getString("shippingIcon");
-
-                        cardShip.setVisibility(View.VISIBLE);
-                        itemShipPrice = "Rp. " + CurencyFormat(itemShipPrice);
-
-                        txtShipName.setText(itemShipName);
-                        txtShipPrice.setText(itemShipPrice);
-                        txtShipCity.setText(itemShipCity);
-                        txtShipProvince.setText(itemShipProvince);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("transnumber", id);
-                return hashMap;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(request);
     }
 }

@@ -17,6 +17,10 @@ public class LensPartaiContract {
     public static final String PRODUCT_NEWPRICE     = "product_newprice";
     public static final String PRODUCT_NEWDISCPRICE = "product_newdiscprice";
     public static final String PRODUCT_STOCK        = "product_stock";
+    public static final String PRODUCT_DISCPRICESALE= "product_discpricesale";
+    public static final String PRODUCT_DISCSALE     = "product_discountsale";
+    public static final String PRODUCT_TITLESALE    = "product_titlesale";
     public static final String PRODUCT_WEIGHT       = "product_weight";
     public static final String PRODUCT_IMG          = "product_image";
+    public static final String PRODUCT_TEST         = "product_test";
 }

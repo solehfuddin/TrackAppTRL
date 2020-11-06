@@ -6,15 +6,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -30,6 +35,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_colordetail;
 import com.sofudev.trackapptrl.Adapter.Adapter_slider_product;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_color_filter;
@@ -58,6 +64,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.iwgang.countdownview.CountdownView;
 import es.dmoral.toasty.Toasty;
 
 public class DetailFrameFragment extends Fragment {
@@ -68,18 +75,23 @@ public class DetailFrameFragment extends Fragment {
     String URLDETAILPRODUCT = config.Ip_address + config.frame_showdetail_product;
     String URLDETAILCOLOR   = config.Ip_address + config.frame_showdetail_color;
     String HOTSALEURL       = config.Ip_address + config.dashboard_hot_sale;
+    String GETACTIVESALE_URL = config.Ip_address + config.flashsale_getActiveSale;
 
     ViewPager pagerImage;
     RippleView btnCart;
 
     UniversalFontTextView txtLenscode, txtDiscPrice, txtRealPrice, txtDisc, txtBrand, txtAvailability, txtDescription;
     RecyclerView recyColor, recyAnotherProduct;
+    LinearLayout linear_flashsale;
+    CountdownView countdown_flashsale;
+
 
     private static int currentPage = 0, frameId;
     private static int NUM_PAGES = 0;
     String frameName, frameSku, frameImage, framePrice, frameDisc, frameDiscPrice, frameAvailibilty,
-            frameBrand, frameColor, frameQty, frameWeight;
+            frameBrand, frameColor, frameQty, frameWeight, value, from;
 
+    View view;
     LinearLayoutManager horizontal_manager;
     List<String> allImg = new ArrayList<>();
     List<Data_color_filter> allColor = new ArrayList<>();
@@ -97,25 +109,166 @@ public class DetailFrameFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        badgeCounter = (OnBadgeCounter) context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        badgeCounter = null;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detail_frame, container, false);
+        return view = inflater.inflate(R.layout.fragment_detail_frame, container, false);
 
-        final String from     = getArguments().getString("from");
-        String value = getArguments().getString("product_id");
+//        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
+//
+//        final String from     = getArguments().getString("from");
+//        value = getArguments().getString("product_id");
+//        //Toasty.info(getContext(), value, Toast.LENGTH_SHORT).show();
+//
+//        pagerImage  = view.findViewById(R.id.fragment_detailproduct_imgProduct);
+//        btnCart     = view.findViewById(R.id.fragment_detailproduct_btnCart);
+//
+//        txtLenscode = view.findViewById(R.id.fragment_detailproduct_txtLenscode);
+//        txtDiscPrice= view.findViewById(R.id.fragment_detailproduct_txtDiscPrice);
+//        txtRealPrice= view.findViewById(R.id.fragment_detailproduct_txtRealPrice);
+//        txtDisc     = view.findViewById(R.id.fragment_detailproduct_txtDisc);
+//        txtBrand    = view.findViewById(R.id.fragment_detailproduct_txtBrandName);
+//        txtAvailability = view.findViewById(R.id.fragment_detailproduct_txtAvailability);
+//        txtDescription = view.findViewById(R.id.fragment_detailproduct_txtDescription);
+//        recyColor   = view.findViewById(R.id.fragment_detailproduct_recyclerColor);
+//        recyAnotherProduct = view.findViewById(R.id.fragment_detailproduct_recyclerAnother);
+//        linear_flashsale = view.findViewById(R.id.fragment_detailproduct_linearSale);
+//        countdown_flashsale = view.findViewById(R.id.fragment_detailproduct_countdown);
+//
+//        showProductDetail(value);
+//        showHotsale();
+//        getDurationSale();
+//
+//        adapter_slider_product = new Adapter_slider_product(allImg, getContext());
+//        adapter_colordetail = new Adapter_colordetail(allColor, getContext());
+//        pagerImage.setAdapter(adapter_slider_product);
+//
+//        recyColor.setLayoutManager(new GridLayoutManager(getContext(), 3));
+//        recyColor.setAdapter(adapter_colordetail);
+//
+//        horizontal_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        recyAnotherProduct.setLayoutManager(horizontal_manager);
+//        recyAnotherProduct.setHasFixedSize(true);
+//
+//        NUM_PAGES = allImg.size();
+//
+//        addCartHelper = AddCartHelper.getINSTANCE(getContext());
+//        recentViewHelper = RecentViewHelper.getINSTANCE(getContext());
+//        recentViewHelper.open();
+//
+//        final Handler handler = new Handler();
+//        final Runnable Update = new Runnable() {
+//            public void run() {
+//                if (currentPage == NUM_PAGES) {
+//                    currentPage = 0;
+//                }
+//
+//                pagerImage.setCurrentItem(currentPage++, true);
+//            }
+//        };
+//        Timer swipeTimer = new Timer();
+//        swipeTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                handler.post(Update);
+//            }
+//        }, 5000, 5000);
+//
+//        adapter_hotsale_product = new Adapter_another_product(getContext(), list_hotsale,
+//                new RecyclerViewOnClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int pos, String id) {
+////                        Intent intent = new Intent(getContext(), DetailProductActivity.class);
+////                        intent.putExtra("id_lensa", list_hotsale.get(pos).getProduct_id());
+////                        startActivity(intent);
+//
+//                        if (from.contentEquals("0"))
+//                        {
+//                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("from", "0");
+//                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+//                            detailFrameFragment.setArguments(bundle);
+//
+//                            getActivity().getSupportFragmentManager().beginTransaction()
+//                                    .remove(detailFrameFragment)
+//                                    .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
+//                                    .addToBackStack(null)
+//                                    .commit();
+//                        }
+//                        else
+//                        {
+//                            DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("from", "1");
+//                            bundle.putString("product_id", list_hotsale.get(pos).getProduct_id());
+//                            detailFrameFragment.setArguments(bundle);
+//
+//                            getActivity().getSupportFragmentManager().beginTransaction()
+//                                    .remove(detailFrameFragment)
+//                                    .replace(R.id.detailproduct_fragment_container, detailFrameFragment)
+//                                    .addToBackStack(null)
+//                                    .commit();
+//                        }
+//                    }
+//                });
+//
+//        recyAnotherProduct.setAdapter(adapter_hotsale_product);
+//
+//
+//        btnCart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addCartHelper.open();
+//
+//                ModelAddCart item = new ModelAddCart();
+//                item.setProductId(frameId);
+//                item.setProductName(frameName);
+//                item.setProductCode(frameSku);
+//                item.setProductQty(1);
+//                item.setProductPrice(Integer.valueOf(removeRupiah(framePrice)));
+//                item.setProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
+//                item.setProductDisc(Integer.valueOf(removeDiskon(frameDisc)));
+//                item.setNewProductPrice(Integer.valueOf(removeRupiah(framePrice)));
+//                item.setNewProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
+//                item.setProductStock(Integer.valueOf(frameQty));
+//                item.setProductWeight(Integer.valueOf(frameWeight));
+//                item.setProductImage(frameImage);
+//
+//                long status = addCartHelper.insertAddCart(item);
+//
+//                if (status > 0)
+//                {
+//                    Toasty.success(getContext(), "Item has been added to cart", Toast.LENGTH_SHORT).show();
+//
+////                    Intent intent = new Intent(getContext(), AddCartProductActivity.class);
+////                    startActivity(intent);
+//                }
+//
+//                int count = addCartHelper.countAddCart();
+//                if (badgeCounter != null)
+//                {
+//                    badgeCounter.countCartlist(count);
+//                }
+//            }
+//        });
+
+//        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
+
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            from = getArguments().getString("from");
+            value = getArguments().getString("product_id");
+        }
+
         //Toasty.info(getContext(), value, Toast.LENGTH_SHORT).show();
 
         pagerImage  = view.findViewById(R.id.fragment_detailproduct_imgProduct);
@@ -130,9 +283,12 @@ public class DetailFrameFragment extends Fragment {
         txtDescription = view.findViewById(R.id.fragment_detailproduct_txtDescription);
         recyColor   = view.findViewById(R.id.fragment_detailproduct_recyclerColor);
         recyAnotherProduct = view.findViewById(R.id.fragment_detailproduct_recyclerAnother);
+        linear_flashsale = view.findViewById(R.id.fragment_detailproduct_linearSale);
+        countdown_flashsale = view.findViewById(R.id.fragment_detailproduct_countdown);
 
         showProductDetail(value);
         showHotsale();
+        getDurationSale();
 
         adapter_slider_product = new Adapter_slider_product(allImg, getContext());
         adapter_colordetail = new Adapter_colordetail(allColor, getContext());
@@ -234,7 +390,7 @@ public class DetailFrameFragment extends Fragment {
 
                 if (status > 0)
                 {
-                    Toasty.success(getContext(), "Item has been added to cart", Toast.LENGTH_SHORT).show();
+                    Toasty.success(view.getContext(), "Item has been added to cart", Toast.LENGTH_SHORT).show();
 
 //                    Intent intent = new Intent(getContext(), AddCartProductActivity.class);
 //                    startActivity(intent);
@@ -247,8 +403,18 @@ public class DetailFrameFragment extends Fragment {
                 }
             }
         });
+    }
 
-        return view;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        badgeCounter = (OnBadgeCounter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        badgeCounter = null;
     }
 
     private void insertRecentSearch(Data_recent_view item)
@@ -351,7 +517,8 @@ public class DetailFrameFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -398,7 +565,8 @@ public class DetailFrameFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
 
                 Data_color_filter item = new Data_color_filter();
                 item.setColorId(0);
@@ -462,12 +630,14 @@ public class DetailFrameFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
         stringRequest.setShouldCache(false);
-        Volley.newRequestQueue(getContext()).add(stringRequest);
+//        Volley.newRequestQueue(getContext()).add(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
     private String CurencyFormat(String Rp){
@@ -496,5 +666,64 @@ public class DetailFrameFragment extends Fragment {
         output = diskon.replace("%", "").trim();
 
         return output;
+    }
+
+    private void getDurationSale()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, GETACTIVESALE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        linear_flashsale.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        int durr = object.getInt("expired");
+
+                        linear_flashsale.setVisibility(View.VISIBLE);
+
+                        countdown_flashsale.start(durr);
+                        countdown_flashsale.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+                            @Override
+                            public void onEnd(CountdownView cv) {
+                                linear_flashsale.setVisibility(View.GONE);
+
+                                Fragment frg = null;
+                                frg = getFragmentManager().findFragmentByTag("detail");
+                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(frg);
+                                ft.attach(frg);
+                                ft.commit();
+
+                                recyColor.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
+                                horizontal_manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                                recyAnotherProduct.setLayoutManager(horizontal_manager);
+                                recyAnotherProduct.setHasFixedSize(true);
+
+                                showProductDetail(value);
+                                showHotsale();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null || !error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Duration", error.getMessage());
+                }
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

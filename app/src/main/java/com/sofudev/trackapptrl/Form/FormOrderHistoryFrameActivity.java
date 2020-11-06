@@ -30,6 +30,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_frame;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
 import com.sofudev.trackapptrl.R;
 
@@ -59,6 +60,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
     String URLSHOWPAYMENTQR = config.Ip_address + config.frame_showpayment_qr;
     String URLSHOWPAYMENTVA = config.Ip_address + config.frame_showpayment_va;
     String URLSHOWPAYMENTCC = config.Ip_address + config.frame_showpayment_cc;
+    String URLSHOWPAYMENTDEPO = config.Ip_address + config.frame_showpayment_deposit;
     String SHOWINFOPAYMENTLOAN  = config.Ip_address + config.frame_showpayment_loan;
     String CHECKSTATUS          = config.payment_check_status;
     String UPDATESTATUS         = config.Ip_address + config.payment_method_updateStatus;
@@ -86,6 +88,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_order_history_frame);
         showLoader();
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btnBack = findViewById(R.id.activity_orderhistory_frame_btnBack);
         btnOption = findViewById(R.id.activity_orderhistory_frame_btnDaterange);
@@ -699,6 +703,11 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
                     {
                         showInfoPaymentLoan(transnumber);
                     }
+                    else if (paymentInfo.contentEquals("deposit") || paymentInfo.equals("deposit")
+                            || paymentInfo.contains("deposit"))
+                    {
+                        showInfoPaymentDeposit(transnumber);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -917,6 +926,55 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("transnumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showInfoPaymentDeposit(final String transNumber)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWPAYMENTDEPO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String expDate = jsonObject.getString("expDate");
+                    String duration= jsonObject.getString("duration");
+                    String amount  = jsonObject.getString("grandTotal");
+
+                    if (Integer.parseInt(duration) < 0)
+                    {
+                        Toasty.error(getApplicationContext(), "Payment session has expired", Toast.LENGTH_SHORT).show();
+
+                        cancelPayment(transNumber);
+                    }
+                    else {
+                        Intent intent = new Intent(FormOrderHistoryFrameActivity.this, FormPaymentDeposit.class);
+                        intent.putExtra("orderNumber", transNumber);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("duration", duration);
+                        intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("transnumber", transNumber);
                 return hashMap;
             }
         };

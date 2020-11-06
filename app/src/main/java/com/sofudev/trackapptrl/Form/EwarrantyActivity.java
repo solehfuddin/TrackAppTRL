@@ -23,6 +23,7 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.sofudev.trackapptrl.Adapter.Adapter_ewarranty;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_ewarranty;
 import com.sofudev.trackapptrl.R;
 
@@ -57,6 +58,8 @@ public class EwarrantyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ewarranty);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btnBack = findViewById(R.id.activity_ewarranty_btnBack);
         txtNama = findViewById(R.id.activity_ewarranty_txtname);

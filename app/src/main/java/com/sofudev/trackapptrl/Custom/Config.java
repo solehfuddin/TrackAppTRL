@@ -3,10 +3,11 @@ package com.sofudev.trackapptrl.Custom;
 public class Config {
     /* Area Ip */
     //Production Server
-    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+//    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
     //Development Server
-    //public String Ip_address = "http://180.250.96.154/trl-dev/";
-    //public String Ip_address = "http://192.168.44.143/"; /* Localhost */
+    public String Ip_address = "http://180.250.96.154/trl-dev/";
+//    public String Ip_address = "http://192.168.44.21/trl-dev/";
+//    public String Ip_address = "http://192.168.44.143/trl-webs/"; /* Localhost */
 
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
@@ -40,10 +41,13 @@ public class Config {
 
     /* Area UAC*/
     public String uac_filter_user       = "index.php/android_uac/customerUACFilter/5/";
-    public String uac_detail_user       = "index.php/android_uac/userUACDetail";
-    public String uac_update_user       = "index.php/android_uac/UpdateUACData";
+    /*public String uac_detail_user       = "index.php/android_uac/userUACDetail";*/
+    public String uac_detail_user       = "index.php/android_uac/userUACDetailNew";
+    /*public String uac_update_user       = "index.php/android_uac/UpdateUACData";*/
+    public String uac_update_user       = "index.php/android_uac/UpdateUACDataNew";
     public String uac_update_password   = "index.php/android_uac/UpdateUACPass";
-    public String uac_add_user          = "index.php/android_uac/InsertUACData";
+    /*public String uac_add_user          = "index.php/android_uac/InsertUACData";*/
+    public String uac_add_user          = "index.php/android_uac/InsertUACDataNew";
 
     /* Area TrackOrder */
     public String track_order_optic     = "index.php/Android_checkorder/getOrderByOpticname/8/";
@@ -57,6 +61,8 @@ public class Config {
 
     /* Area Info Order History */
     public String info_order_history    = "index.php/Android_checkorder/getOrderHistoryByStatus";
+    public String info_order_historypos = "index.php/Android_checkorder/getOrderHistoryByPos";
+    public String info_order_historyjob = "index.php/Android_checkorder/getOrderHistoryByJob";
 
     /* Area Order Lens*/
     /*public String orderlens_show_lenstypebyid     = "trl-webs/index.php/Android_lensorder/showlenstypeById";
@@ -105,6 +111,8 @@ public class Config {
     /* Area Frame */
     public String frame_bestproduct_showAllData   = "index.php/Android_frameproduct/apiFrameWithLimit";
     public String frame_filterby_group            = "index.php/Android_frameproduct/apiFrameWithGroup";
+    public String frame_filterby_category         = "index.php/Android_Frameproduct/apiFrameWithCategory";
+    public String frame_filterby_keyword          = "index.php/Android_Frameproduct/apiFrameWithSearch";
     public String frame_filterby_price            = "index.php/Android_frameproduct/apiFrameWithPrice";
     public String frame_filterwith_sort           = "index.php/Android_frameproduct/apiFrameWithFilter";
     public String frame_showcolor_filter          = "index.php/android_frameproduct/showColorList";
@@ -122,11 +130,14 @@ public class Config {
     public String frame_getframe_byrange          = "index.php/Android_orderhistoryframe/getAllFrameByRange";
     public String frame_getlineitem_frame         = "index.php/Android_orderhistoryframe/getDetailFrame";
     public String frame_getlineship_frame         = "index.php/Android_orderhistoryframe/getDetailFrameShipping";
+    public String frame_getheader_frame           = "index.php/Android_orderhistoryframe/getDetailFrameHeader";
+    public String frame_getitem_frame             = "index.php/Android_orderhistoryframe/getDetailFrameItem";
     public String frame_checkpayment_ornot        = "index.php/Android_orderhistoryframe/checkPaymentOrNot";
     public String frame_showpayment_qr            = "index.php/Android_orderhistoryframe/showInfoPaymentQR";
     public String frame_showpayment_va            = "index.php/Android_orderhistoryframe/showInfoPaymentVA";
     public String frame_showpayment_cc            = "index.php/Android_orderhistoryframe/showInfoPaymentCC";
     public String frame_showpayment_loan          = "index.php/Android_orderhistoryframe/showInfoPaymentLoan";
+    public String frame_showpayment_deposit       = "index.php/Android_orderhistoryframe/showInfoPaymentDeposit";
 
     /* Area Price Rx dan Stock*/
     public String price_rx_getinfolens            = "index.php/Android_pricerx/paymentGetInfoLens";
@@ -164,6 +175,7 @@ public class Config {
     public String lens_summary_countTempOrder     = "index.php/Android_lenssummary/countTemp";
     public String lens_summary_sumWeightOrder     = "index.php/Android_lenssummary/sumWeight";
     public String lens_summary_deleteTempOrder    = "index.php/Android_lenssummary/deleteTemp";
+    public String lens_summary_getDiscSale        = "index.php/Android_lenssummary/getDiscFlashSale";
 
     /* Area Order History */
     public String order_history_getPhoneNumber      = "index.php/Android_orderhistory/getPhoneNumber";
@@ -176,6 +188,7 @@ public class Config {
     public String order_history_showInfoPaymentVA   = "index.php/Android_orderhistory/showInfoPaymentVA";
     public String order_history_showInfoPaymentCC   = "index.php/Android_orderhistory/showInfoPaymentCC";
     public String order_history_showInfoPaymentLoan = "index.php/Android_orderhistory/showInfoPaymentLoan";
+    public String order_history_showInfoPaymentDepo = "index.php/Android_orderhistory/showInfoPaymentDeposit";
 
     /* Area VIEW PDF */
     public String view_pdf_showAllData            = "index.php/Android_viewpdf/showData";
@@ -188,15 +201,18 @@ public class Config {
     public String payment_insert_billingCC        = "index.php/Android_payment/postBillingCC";
     public String payment_insert_billingKP        = "index.php/Android_payment/postBillingKP";
     public String payment_insert_billingLOAN      = "index.php/Android_payment/postBillingLOAN";
+    public String payment_insert_billingDeposit   = "index.php/Android_payment/postBillingDeposit";
     public String payment_show_expiredDurationQR  = "index.php/Android_payment/showPaymentSessionQR";
     public String payment_show_expiredDurationVA  = "index.php/Android_payment/showPaymentSessionVA";
     public String payment_show_expiredDurationCC  = "index.php/Android_payment/showPaymentSessionCC";
     public String payment_show_expiredDurationKP  = "index.php/Android_payment/showPaymentSessionKP";
     public String payment_show_expiredDurationLOAN= "index.php/Android_payment/showPaymentSessionLOAN";
-//    public String payment_method_postBilling      = "http://ortu.izikita.net/soleh/callPACPayment.php";
+    public String payment_show_expiredDurationDeposit = "index.php/Android_payment/showPaymentSessionDeposit";
+//    public String payment_method_postBilling      = "http://timurrayalab.com/devapi/callPACPayment.php";
     public String payment_method_postBilling      = "http://www.timurrayalab.com/webapi/callPACPayment.php";
 //    public String payment_method_creditCard       = "http://ortu.izikita.net/soleh/testingccnew.php";
     public String payment_method_creditCard       = "http://www.timurrayalab.com/webapi/testingccnew.php";
+    public String payment_method_deposit          = "index.php/Android_payment/payWithDeposit";
     public String payment_method_autoMoveOrder    = "index.php/Android_payment/moveSuccessOrder1";
     public String payment_method_updateStatus     = "index.php/Android_payment/moveSuccessOrder1";
     public String payment_method_cancelBilling    = "index.php/Android_payment/cancelpayment/";
@@ -211,7 +227,7 @@ public class Config {
 //    public String payment_check_status            = "http://ortu.izikita.net/soleh/cek_inquiry.php";
     public String payment_check_status            = "http://www.timurrayalab.com/webapi/cek_inquiry.php";
     public String payment_update_loanbprks        = "index.php/Android_payment/updateSaldoLoan";
-    public String payment_update_token            = "index.php/Android_payment/updateToken";
+//    public String payment_update_token            = "index.php/Android_payment/updateToken";
 
     /* AREA WARRANTY */
     public String ewarranty_getListWarranty       = "index.php/Android_warranty/getListWarranty";
@@ -229,6 +245,7 @@ public class Config {
     public String show_cyl                        = "index.php/Android_lensstock/showPowerCyl";
     public String show_add                        = "index.php/Android_lensstock/showPowerAdd";
     public String show_price                      = "index.php/Android_lensstock/showPrice";
+    public String show_price_sp                   = "index.php/Android_apisppartai/showPrice";
     public String update_stock_lens_partai        = "index.php/Android_lensstock/updateStockLens";
 
     /* AREA LENS STOCK PARTAI */
@@ -244,6 +261,9 @@ public class Config {
     public String orderpartai_showpayment_va      = "index.php/Android_orderhistorypartai/showInfoPaymentVA";
     public String orderpartai_showpayment_cc      = "index.php/Android_orderhistorypartai/showInfoPaymentCC";
     public String orderpartai_showpayment_loan    = "index.php/Android_orderhistorypartai/showInfoPaymentLoan";
+    public String orderpartai_showpayment_deposit = "index.php/Android_orderhistorypartai/showInfoPaymentDeposit";
+    public String orderpartai_detail_header       = "index.php/Android_orderhistorypartai/getDetailPartaiHeader";
+    public String orderpartai_detail_item         = "index.php/Android_orderhistorypartai/getDetailPartaiItem";
 
     /* AREA INTEGRASI LENS DENGAN WEB ECOMMERCE*/
     public String orderlens_insert_lensorder      = "index.php/Android_lensorder_web/insertLensorder";
@@ -262,4 +282,60 @@ public class Config {
     public String lenshistory_getOrderByRange     = "index.php/Android_orderhistory/getOrderByDate";
     public String lenshistory_checkpayment_ornot  = "index.php/Android_orderhistory/checkPaymentOrNot";
     public String lenshistory_chooselens          = "index.php/Android_orderhistory/chooseOrderLens";
+    public String lenshistory_chooselensheader    = "index.php/Android_orderhistory/chooseOrderLensHeader";
+    public String lenshistory_chooselensitem      = "index.php/Android_orderhistory/chooseOrderLensItem";
+
+    /* AREA INTEGRASI DENGAN APLIKASI SP */
+    public String ordersp_get_spId                = "index.php/Android_apisp/getSpId";
+    public String ordersp_get_spIdFrame           = "index.php/Android_apisp/getSpIdFrame";
+    public String ordersp_get_opticInfo           = "index.php/Android_apisp/getOpticInfo";
+    public String ordersp_insert_spHeader         = "index.php/Android_apisp/insertSp";
+    public String ordersp_insert_samTemp          = "index.php/Android_apisp/insertSamTemp";
+    public String ordersp_insert_trxHeader        = "index.php/Android_apisp/insertTrxHeader";
+    public String ordersp_update_photo            = "index.php/Android_apisp/updatePhoto";
+    public String ordersp_autosent_photo          = "index.php/Android_apisp/uploadPhoto";
+    public String ordersp_get_spHeader            = "index.php/Android_apisp/getSpHeader";
+    public String ordersp_get_listSp              = "index.php/Android_apisp/getSp/8/";
+    public String ordersp_get_listSpByOptic       = "index.php/Android_apisp/getSpByOptic/8/";
+    public String ordersp_get_searchSp            = "index.php/Android_apisp/getSpSearch/8/";
+    public String ordersp_get_searchSpByOptic     = "index.php/Android_apisp/getSpSearchByOptic/8/";
+    public String ordersp_get_rangeSp             = "index.php/Android_apisp/getSpRange/8/";
+    public String ordersp_get_rangeSpByOptic      = "index.php/Android_apisp/getSpRangeByOptic/8/";
+    public String ordersp_get_statusSp            = "index.php/Android_apisp/getLastStatus";
+    public String ordersp_get_detailSp            = "index.php/Android_apisp/trackingSp";
+    public String ordersp_get_inv                 = "index.php/Android_apisp/getInv";
+    public String ordersp_insert_duration         = "index.php/Android_apisp/insertDuration";
+
+    /* AREA FLASH SALE */
+    public String flashsale_getActiveSale         = "index.php/Android_flashsale/getActiveSale";
+    public String flashsale_getImagePromo         = "index.php/Android_flashsale/gambarPromo";
+
+    /* AREA MEMBER FLAG */
+    public String memberflag_getStatus            = "index.php/Android_memberflag/getStatus";
+
+    /* AREA LOG FLAG */
+    public String inser_logger                    = "index.php/Android_logger/createLog";
+
+    /* AREA ON HAND */
+    public String masteronhand_getitemname        = "index.php/Android_masteronhand/getItemname";
+    public String masteronhand_getbyorgid         = "index.php/Android_masteronhand/getOnHandByOrgid";
+    public String masteronhand_getbysorting       = "index.php/Android_masteronhand/getOnHandBySorting";
+    public String masteronhand_getbyqty           = "index.php/Android_masteronhand/getOnHandByQty";
+    public String masteronhand_getsuggestion      = "index.php/Android_masteronhand/searchSuggestion";
+    public String masteronhand_search             = "index.php/Android_masteronhand/searchOnHand";
+
+    /* AREA SP FRAME */
+    public String spframe_get_framebrand          = "index.php/Android_apispframe/getBrand";
+    public String spframe_get_byframe             = "index.php/Android_apispframe/getFrameByBrand";
+    public String spframe_get_searchframe         = "index.php/Android_apispframe/getFrameBySearch";
+    public String spframe_get_searchbarcode       = "index.php/Android_apispframe/getFrameByBarcode";
+    public String spframe_get_byitemid            = "index.php/Android_apispframe/getFrameByItemId";
+
+    /* AREA DEPOSIT */
+    public String depo_getsaldo                   = "index.php/Android_deposit/getSaldo";
+    public String depo_getrecentsaldo             = "index.php/Android_deposit/getRecentMutasi";
+    public String depo_getrecentpending           = "index.php/Android_deposit/getRecentPending";
+    public String depo_getfiltersaldo             = "index.php/Android_deposit/getMutasi";
+    public String depo_getfilterpending           = "index.php/Android_deposit/getPending";
+    public String depo_getfiltertotal             = "index.php/Android_deposit/getTotalByDate";
 }

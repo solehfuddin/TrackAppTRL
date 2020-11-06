@@ -29,7 +29,7 @@
                 android:id="@+id/activity_orderdetail_partai_txtorder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Order Number"
+                android:text="Detail Order"
                 android:gravity="center_vertical"
                 android:textAlignment="center"
                 android:textColor="#fff"
@@ -38,7 +38,7 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/activity_orderdetail_partai_toolbar">
@@ -48,52 +48,80 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="95dp"
-                android:src="@drawable/bumperbanner"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_orderdetail_partai_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
-
             <android.support.v7.widget.CardView
-                android:id="@+id/activity_orderdetail_partai_cardShip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="60dp">
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                android:id="@+id/cardView7">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
 
                     <com.ssomai.android.scalablelayout.ScalableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:scale_base_width="600"
-                        app:scale_base_height="250">
+                        app:scale_base_height="605">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-10dp"
+                            android:src="@drawable/bumperbanner"
+                            android:layout_gravity="center"
+                            app:scale_top="-220"
+                            app:scale_height="150"
+                            app:scale_width="600"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/hori_dash"
+                            app:scale_top="125"
+                            app:scale_left="10"
+                            app:scale_height="50"
+                            app:scale_width="580"
+                            />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Ship Name"
-                            android:textColor="@color/colorBlack"
+                            android:text="BUKTI PEMBAYARAN"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_top="-110"
+                            app:scale_height="40"
+                            app:scale_width="600"
+                            app:scale_textsize="33" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Pasien"
+                            android:visibility="gone"
+                            android:textColor="#757575"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="-90"
+                            app:scale_top="-45"
                             app:scale_height="40"
-                            app:scale_width="170"
+                            app:scale_width="110"
                             app:scale_textsize="25" />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
@@ -101,75 +129,30 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text=":"
-                            android:textColor="@color/colorBlack"
+                            android:visibility="gone"
+                            android:textColor="@color/colorContent"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="240"
-                            app:scale_top="-90"
+                            app:scale_left="150"
+                            app:scale_top="-45"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:id="@+id/activity_orderdetail_partai_txtshipname"
+                            android:id="@+id/activity_orderdetail_partai_txt_pasien"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Ship Name"
-                            android:textColor="@color/colorContent"
-                            android:textSize="18sp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="260"
-                            app:scale_top="-90"
-                            app:scale_height="40"
-                            app:scale_width="330"
-                            app:scale_textsize="25" />
-
-                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="Ship City"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="18sp"
-                            android:maxEms="30"
-                            app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="25"
-                            app:scale_top="-40"
-                            app:scale_height="40"
-                            app:scale_width="170"
-                            app:scale_textsize="25" />
-
-                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text=":"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="18sp"
-                            android:maxEms="30"
-                            app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="240"
-                            app:scale_top="-40"
-                            app:scale_height="40"
-                            app:scale_width="20"
-                            app:scale_textsize="25" />
-
-                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:id="@+id/activity_orderdetail_partai_txtshipcity"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="City hunter"
+                            android:text="Nama Pasien"
+                            android:visibility="gone"
                             android:textColor="@color/colorContent"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="260"
-                            app:scale_top="-40"
+                            app:scale_left="175"
+                            app:scale_top="-45"
                             app:scale_height="40"
                             app:scale_width="180"
                             app:scale_textsize="25" />
@@ -178,15 +161,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Ship Province"
-                            android:textColor="@color/colorBlack"
+                            android:text="Tanggal"
+                            android:textColor="#757575"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="10"
+                            app:scale_top="-45"
                             app:scale_height="40"
-                            app:scale_width="205"
+                            app:scale_width="110"
                             app:scale_textsize="25" />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
@@ -194,32 +177,266 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text=":"
-                            android:textColor="@color/colorBlack"
+                            android:textColor="@color/colorContent"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="240"
-                            app:scale_top="10"
+                            app:scale_left="150"
+                            app:scale_top="-45"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:id="@+id/activity_orderdetail_partai_txtshipprovince"
+                            android:id="@+id/activity_orderdetail_partai_txt_tanggal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Province"
+                            android:text="10 Okt 2018"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="-45"
+                            app:scale_height="40"
+                            app:scale_width="180"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Optik"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="5"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="5"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_optik"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Lens Description"
                             android:textColor="@color/colorContent"
                             android:textSize="18sp"
                             android:maxEms="30"
                             android:maxLines="1"
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_left="260"
-                            app:scale_top="10"
+                            app:scale_left="175"
+                            app:scale_top="5"
                             app:scale_height="40"
-                            app:scale_width="330"
+                            app:scale_width="405"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Harga"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="55"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="55"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_harga"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Rp 232.000"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            android:ellipsize="end"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="55"
+                            app:scale_height="40"
+                            app:scale_width="405"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Status"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="105"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="105"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Paid"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            android:ellipsize="end"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="105"
+                            app:scale_height="40"
+                            app:scale_width="405"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Kurir"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="160"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="160"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_ekspedisi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Rp 232.000"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            android:ellipsize="end"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="160"
+                            app:scale_height="40"
+                            app:scale_width="405"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Service"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="215"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="215"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_service"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Rp 232.000"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            android:ellipsize="end"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="215"
+                            app:scale_height="40"
+                            app:scale_width="405"
                             app:scale_textsize="25" />
 
                         <View
@@ -227,56 +444,54 @@
                             android:layout_height="1dp"
                             android:layout_margin="10dp"
                             android:background="@drawable/hori_dash"
-                            app:scale_top="165"
-                            app:scale_left="25"
-                            app:scale_height="10"
-                            app:scale_width="555" />
+                            app:scale_top="470"
+                            app:scale_left="10"
+                            app:scale_height="150"
+                            app:scale_width="580"
+                            />
 
-                        <LinearLayout
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_partai_txt_nomororder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="3"
-                            app:scale_left="25"
-                            app:scale_top="185"
-                            app:scale_height="55"
-                            app:scale_width="555"
-                            app:scale_textsize="18">
-
-                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="Ship Amount"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="15sp"
-                                android:layout_marginLeft="2dp"
-                                android:layout_weight="1"
-                                android:maxEms="30"
-                                app:customFont="UbuntuMedium.ttf" />
-
-                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                                android:id="@+id/activity_orderdetail_partai_txtshipprice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="right"
-                                android:text="Rp. 123.456.780"
-                                android:textColor="@color/colorRed"
-                                android:textSize="15sp"
-                                android:layout_marginLeft="2dp"
-                                android:layout_weight="2"
-                                android:maxEms="30"
-                                app:customFont="UbuntuMedium.ttf" />
-                        </LinearLayout>
-
+                            android:layout_gravity="center_vertical"
+                            android:text="No Pesanan #OLA16102018001"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_top="280"
+                            app:scale_height="40"
+                            app:scale_width="600"
+                            app:scale_textsize="26" />
                     </com.ssomai.android.scalablelayout.ScalableLayout>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Item Detail"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                android:maxEms="30"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_orderdetail_partai_recyclerItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="60dp"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,8 +2,25 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_partai_header {
     private String orderNumber, opticName, opticAddress, opticCity, phoneNumber, shippingName, opticProvince, payment_cashcarry,
-                    prodDivType, shippingService;
-    private int idParty, shippingId, shippingPrice, totalPrice;
+                    prodDivType, shippingService, flashNote, orderSp;
+    private int idParty, shippingId, shippingPrice;
+    private double totalPrice;
+
+    public String getOrderSp() {
+        return orderSp;
+    }
+
+    public void setOrderSp(String orderSp) {
+        this.orderSp = orderSp;
+    }
+
+    public String getFlashNote() {
+        return flashNote;
+    }
+
+    public void setFlashNote(String flashNote) {
+        this.flashNote = flashNote;
+    }
 
     public String getProdDivType() {
         return prodDivType;
@@ -109,11 +126,11 @@ public class Data_partai_header {
         this.shippingPrice = shippingPrice;
     }
 
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

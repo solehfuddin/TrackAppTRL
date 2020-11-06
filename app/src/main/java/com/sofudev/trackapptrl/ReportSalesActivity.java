@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -32,6 +33,8 @@ public class ReportSalesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_sales);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         pieChart = findViewById(R.id.report_sales_piechart);
         description.setText("Sample Pie Chart");

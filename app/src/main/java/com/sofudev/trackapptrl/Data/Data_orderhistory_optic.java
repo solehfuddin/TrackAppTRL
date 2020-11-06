@@ -1,11 +1,7 @@
 package com.sofudev.trackapptrl.Data;
 
-/**
- * Created by sholeh on 03/12/2018.
- */
-
 public class Data_orderhistory_optic {
-    String tanggalOrder, nomorOrder, totalBiaya, statusOrder, iconOrder, namaPasien, paymentType;
+    private String tanggalOrder, nomorOrder, totalBiaya, statusOrder, iconOrder, namaPasien, paymentType;
 
     public Data_orderhistory_optic() {
     }

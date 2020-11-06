@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sofudev.trackapptrl.Adapter.Adapter_wishlist;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.GridSpacingItemDecoration;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
@@ -45,6 +46,8 @@ public class WishlistProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist_product);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btnBack = findViewById(R.id.wishlist_product_btnback);
         btnStartShopping = findViewById(R.id.wishlist_product_btnStartShopping);

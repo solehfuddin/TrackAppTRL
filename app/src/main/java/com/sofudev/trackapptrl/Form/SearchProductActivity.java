@@ -28,6 +28,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_search_product;
 import com.sofudev.trackapptrl.Adapter.Adapter_searchnow;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_recent_view;
 import com.sofudev.trackapptrl.Data.Data_search_product;
@@ -78,6 +79,8 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_product);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         linearBefore = findViewById(R.id.search_product_containerBefore);
         linearAfter  = findViewById(R.id.search_product_containerAfter);

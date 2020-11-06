@@ -61,7 +61,7 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/activity_checkbalance_cardbprks"
+        android:id="@+id/activity_checkbalance_carddeposit"
         android:layout_width="0dp"
         android:layout_height="200dp"
         app:cardCornerRadius="5dp"
@@ -69,6 +69,89 @@
         app:cardUseCompatPadding="true"
         app:layout_constraintTop_toBottomOf="@+id/activity_orderdetail_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg1">
+
+            <!--<com.ssomai.android.scalablelayout.ScalableLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/bg1"-->
+            <!--app:scale_base_width="700dp"-->
+            <!--app:scale_base_height="500dp">-->
+            <!---->
+            <!--</com.ssomai.android.scalablelayout.ScalableLayout>-->
+
+            <ImageView
+                android:layout_width="145dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/logo_trl3"
+                android:layout_marginLeft="13dp"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/activity_checkbalance_txtdepositname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MUHAMAD FARID N."
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="right"
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="15dp"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorContent"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/activity_checkbalance_txtdepositnominal"
+                    app:customFont="UbuntuMedium.ttf"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/activity_checkbalance_txtdepositnominal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.500.000.000"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    app:customFont="UbuntuMedium.ttf"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/activity_checkbalance_cardbprks"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="7dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@+id/activity_checkbalance_carddeposit"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
         app:layout_constraintRight_toRightOf="parent"
@@ -142,4 +225,5 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
 </android.support.constraint.ConstraintLayout>

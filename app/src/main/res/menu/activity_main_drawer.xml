@@ -46,83 +46,30 @@
                 android:icon="@drawable/ic_lensa"
                 android:title="Lenses"
                 android:visible="false"/>
-                <!--
-                <item
-                    android:id="@+id/nav_lens1"
-                    android:title="Leinz"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_lens2"
-                    android:title="Nikon"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_lens3"
-                    android:title="Oriental"
-                    android:visible="false"/>
-                    -->
+
             <item
                 android:id="@+id/nav_frames"
                 android:icon="@drawable/ic_frame"
                 android:title="Frames"/>
-                <!--
-                <item
-                    android:id="@+id/nav_frame1"
-                    android:title="Bolon"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_frame2"
-                    android:title="Borelli"
-                    android:visible="false"/>
-                    -->
+
             <item
                 android:id="@+id/nav_instruments"
                 android:icon="@drawable/ic_instrument"
                 android:title="Instruments"
                 android:visible="false"/>
-                <!--
-                <item
-                    android:id="@+id/nav_instrument1"
-                    android:title="Keeler"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_instrument2"
-                    android:title="ACP"
-                    android:visible="false"/>
-                    -->
+
             <item
                 android:id="@+id/nav_opthalmic"
                 android:icon="@drawable/ic_ophtalmic"
                 android:title="Ophthalmic"
                 android:visible="false"/>
-                <!--
-                <item
-                    android:id="@+id/nav_opthalmic1"
-                    android:title="Inami"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_opthalmic2"
-                    android:title="Optical 2"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_opthalmic3"
-                    android:title="Optical 3"
-                    android:visible="false"/>
-                    -->
+
             <item
                 android:id="@+id/nav_contactlense"
                 android:icon="@drawable/ic_contactlens"
                 app:actionLayout="@layout/badge_soon"
                 android:title="Contact Lens"/>
-                <!--
-                <item
-                    android:id="@+id/nav_contactlens1"
-                    android:title="Gelflex"
-                    android:visible="false"/>
-                <item
-                    android:id="@+id/nav_contactlens2"
-                    android:title="Gelf"
-                    android:visible="false"/>
-                    -->
+
         </menu>
     </item>
     </group>

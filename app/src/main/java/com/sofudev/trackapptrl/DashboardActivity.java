@@ -63,12 +63,14 @@ import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.SmsListener;
 import com.sofudev.trackapptrl.Custom.SmsReceiver;
 import com.sofudev.trackapptrl.Form.AddCartProductActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
+import com.sofudev.trackapptrl.Form.DetailDepositActivity;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormBatchOrderActivity;
 import com.sofudev.trackapptrl.Form.FormFilterOpticnameActivity;
@@ -77,9 +79,12 @@ import com.sofudev.trackapptrl.Form.FormOrderHistoryActivity;
 import com.sofudev.trackapptrl.Form.FormOrderHistoryFrameActivity;
 import com.sofudev.trackapptrl.Form.FormOrderHistoryPartaiActivity;
 import com.sofudev.trackapptrl.Form.FormOrderLensActivity;
+import com.sofudev.trackapptrl.Form.FormOrderSpActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Form.FormProfileActivity;
+import com.sofudev.trackapptrl.Form.FormSpFrameActivity;
 import com.sofudev.trackapptrl.Form.FormTrackOrderActivity;
+import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.Form.FormUACActivity;
 import com.sofudev.trackapptrl.Form.SearchProductActivity;
 import com.sofudev.trackapptrl.Form.WishlistProductActivity;
@@ -101,6 +106,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -129,14 +136,15 @@ public class DashboardActivity extends AppCompatActivity
     private String verify_phone   = config.Ip_address + config.dashboard_verify_phone;
     private String upload_txtfile = config.Ip_address + config.dashboard_upload_txtphone;
     private String view_pdf_filter= config.Ip_address + config.view_pdf_showAllDataByFilter;
-    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
+    private String URLCHECKDEPOSIT= config.Ip_address + config.depo_getsaldo;
+//    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
     String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
     String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
     String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
     String URL_UPDATECITY    = config.Ip_address + config.spinner_shipment_updateCity;
 
     ImageView imgWishlist, imgCart;
-    TextView txt_title, txt_countwishlist, txt_countCart;
+    TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo;
     //UniversalFontTextView btn_orderframe, btn_orderbulk;
     ACProgressCustom loading;
     private DrawerLayout drawer;
@@ -153,12 +161,13 @@ public class DashboardActivity extends AppCompatActivity
     ArrayList<String> data_city     = new ArrayList<>();
 
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
-    Button btn_profile;
+    Button btn_profile, btn_topup;
     public BootstrapCircleThumbnail img_profile;
     TextView navdash_username, navdash_id;
     FabSpeedDial fab_about;
     Date dt_time;
     SimpleDateFormat sdf;
+    String nominal;
     int smsFlag = 0;
 
     WishlistHelper wishlistHelper;
@@ -168,6 +177,8 @@ public class DashboardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -187,7 +198,17 @@ public class DashboardActivity extends AppCompatActivity
         searchViews = (MaterialSearchView) findViewById(R.id.dashboard_search);
 
         toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                if (slideOffset != 0)
+                {
+                    invalidateOptionsMenu();
+                    getSaldoDepo(username);
+                }
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -217,6 +238,8 @@ public class DashboardActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         navdash_username = (TextView) header.findViewById(R.id.navdash_username);
         navdash_id       = (TextView) header.findViewById(R.id.navdash_id);
+        txt_saldo = header.findViewById(R.id.navdash_txtSisaSaldo);
+        btn_topup = header.findViewById(R.id.navdash_btntopup);
         btn_profile = (Button) header.findViewById(R.id.navdash_btnprofile);
         img_profile = (BootstrapCircleThumbnail) header.findViewById(R.id.navdash_imageProfile);
         //btn_orderframe = (UniversalFontTextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.nav_orderframe));
@@ -233,6 +256,17 @@ public class DashboardActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 openUpdateProfile();
+            }
+        });
+
+        btn_topup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, DetailDepositActivity.class);
+                intent.putExtra("nominal", nominal);
+                intent.putExtra("user_info", data1);
+                intent.putExtra("username", username);
+                startActivity(intent);
             }
         });
 
@@ -277,9 +311,9 @@ public class DashboardActivity extends AppCompatActivity
         int countCart = addCartHelper.countAddCart();
         txt_countCart.setText(" " + countCart + " ");
 
-        String token = FirebaseInstanceId.getInstance().getToken();
+//        String token = FirebaseInstanceId.getInstance().getToken();
         //Toasty.info(getApplicationContext(), token, Toast.LENGTH_LONG).show();
-        updateToken(token);
+//        updateToken(token);
     }
 
     @Override
@@ -291,45 +325,47 @@ public class DashboardActivity extends AppCompatActivity
 
         int countCart = addCartHelper.countAddCart();
         txt_countCart.setText(" " + countCart + " ");
+
+        getSaldoDepo(username);
     }
 
-    private void updateToken(final String token)
-    {
-        StringRequest request = new StringRequest(Request.Method.POST, URLTOKEN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-
-                    if (object.names().get(0).equals("success"))
-                    {
-                        Toasty.success(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toasty.warning(getApplicationContext(), "Failed update token", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("idparty", data1);
-                hashMap.put("token", token);
-                return hashMap;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(request);
-    }
+//    private void updateToken(final String token)
+//    {
+//        StringRequest request = new StringRequest(Request.Method.POST, URLTOKEN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//
+//                    if (object.names().get(0).equals("success"))
+//                    {
+//                        Toasty.success(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else
+//                    {
+//                        Toasty.warning(getApplicationContext(), "Failed update token", Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> hashMap = new HashMap<>();
+//                hashMap.put("idparty", data1);
+//                hashMap.put("token", token);
+//                return hashMap;
+//            }
+//        };
+//
+//        AppController.getInstance().addToRequestQueue(request);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -349,6 +385,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -441,6 +478,24 @@ public class DashboardActivity extends AppCompatActivity
                 menu.findItem(R.id.nav_orderbulk).setVisible(b);
                 menu.findItem(R.id.nav_orderhistorybulk).setVisible(b);
                 menu.findItem(R.id.nav_orderCheckBalance).setVisible(b);
+
+                if (level_user != null)
+                {
+                    if (Integer.parseInt(level_user) == 1)
+                    {
+                        menu.findItem(R.id.nav_orderOnHand).setVisible(b);
+                        menu.findItem(R.id.nav_orderSp).setVisible(b);
+                        menu.findItem(R.id.nav_trackingSp).setVisible(b);
+                    }
+                    else
+                    {
+                        menu.findItem(R.id.nav_trackingSp).setVisible(b);
+                    }
+                }
+//                else
+//                {
+//                    menu.findItem(R.id.nav_ordersp).setVisible(false);
+//                }
                 //menu.findItem(R.id.nav_orderhistory).setVisible(b);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -479,16 +534,25 @@ public class DashboardActivity extends AppCompatActivity
             }
             else if (id == R.id.nav_ordertrack)
             {
-                if (Integer.parseInt(level_user) == 0)
+                if (level_user != null)
                 {
-                    Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
-                    intent.putExtra("idparty", navdash_id.getText().toString());
-                    startActivity(intent);
+                    if (Integer.parseInt(level_user) == 0)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
-                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
+                    intent.putExtra("idparty", navdash_id.getText().toString());
                     startActivity(intent);
                 }
 
@@ -505,7 +569,48 @@ public class DashboardActivity extends AppCompatActivity
                 intent.putExtra("usernameInfo", username);
                 intent.putExtra("city", city);
                 intent.putExtra("flag", member_flag);
+                intent.putExtra("idSp", "0");
+                intent.putExtra("isSp", "0");
+                intent.putExtra("noHp", "0");
                 startActivity(intent);
+            }
+
+            else if (id == R.id.nav_orderOnHand)
+            {
+                Intent intent = new Intent(getApplicationContext(), OnHandActivity.class);
+                startActivity(intent);
+            }
+
+            else if (id == R.id.nav_orderSp)
+            {
+                Intent intent = new Intent(getApplicationContext(), FormOrderSpActivity.class);
+                intent.putExtra("idparty", navdash_id.getText().toString());
+                intent.putExtra("username", username);
+                startActivity(intent);
+
+//                Intent intent = new Intent(getApplicationContext(), FormSpFrameActivity.class);
+//                startActivity(intent);
+            }
+
+            else if (id == R.id.nav_trackingSp)
+            {
+                if (level_user != null) {
+                    if (Integer.parseInt(level_user) == 1) {
+                        Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
+                        intent.putExtra("username", username);
+                        intent.putExtra("level", 1);
+
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
+                        intent.putExtra("username", navdash_username.getText().toString());
+                        intent.putExtra("level", 0);
+
+                        startActivity(intent);
+                    }
+                }
             }
 
             else if (id == R.id.nav_orderbulk)
@@ -1024,10 +1129,14 @@ public class DashboardActivity extends AppCompatActivity
                         city = new String(mCrypt.decrypt(jsonObject.getString(cityInfo)));
                         member_flag = new String(mCrypt.decrypt(jsonObject.getString(memberFlag)));
 
+                        getSaldoDepo(username);
+
                         if (Integer.parseInt(level_user) == 0) {
                             hideMenu();
                         }
 
+                        image_user = image_user.replaceAll(" ", "%20");
+                        Log.d("IMG PROFILE", image_user);
                         Picasso.with(DashboardActivity.this).load(image_user).into(img_profile);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1687,7 +1796,7 @@ public class DashboardActivity extends AppCompatActivity
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //        fragmentTransaction.replace(R.id.appbar_dashboard_fragment_container, homeFragment);
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment);
+        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
         fragmentTransaction.commit();
     }
 
@@ -1697,7 +1806,7 @@ public class DashboardActivity extends AppCompatActivity
         bundle.putString("activity", "dashboard");
         newFrameFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment);
+        fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment, "newframe");
         fragmentTransaction.commit();
     }
 
@@ -1925,6 +2034,8 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("usernameInfo", username);
                         intent.putExtra("province_address", province_address);
                         intent.putExtra("city", city);
+                        intent.putExtra("idSp", "0");
+                        intent.putExtra("isSp", 0);
                         intent.putExtra("flag", member_flag);
                         startActivity(intent);
                     }
@@ -2227,6 +2338,8 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("usernameInfo", username);
                         intent.putExtra("province_address", province_address);
                         intent.putExtra("city", city);
+                        intent.putExtra("idSp", "0");
+                        intent.putExtra("isSp", 0);
                         intent.putExtra("flag", member_flag);
                         startActivity(intent);
                     }
@@ -2267,5 +2380,49 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(String title) {
         txt_title.setText(title);
+    }
+
+    private String CurencyFormat(String Rp){
+        if (Rp.contentEquals("0") | Rp.equals("0"))
+        {
+            return "0";
+        }
+
+        Double money = Double.valueOf(Rp);
+        String strFormat ="#,###";
+        DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
+        return df.format(money);
+    }
+
+    private void getSaldoDepo(final String shipNumber){
+        StringRequest request = new StringRequest(Request.Method.POST, URLCHECKDEPOSIT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    nominal = jsonObject.getString("sisa_saldo");
+                    String val = CurencyFormat(nominal);
+
+                    txt_saldo.setText("IDR " + val);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("ship_number", shipNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

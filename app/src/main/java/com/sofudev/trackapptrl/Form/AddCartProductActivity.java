@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_cart;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
@@ -35,6 +36,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_frame_header;
 import com.sofudev.trackapptrl.Data.Data_frame_item;
@@ -76,18 +78,23 @@ public class AddCartProductActivity extends AppCompatActivity {
     String URL_INSERTBILLVA = config.Ip_address + config.payment_insert_billingVA;
     String URL_INSERTBILLCC = config.Ip_address + config.payment_insert_billingCC;
     String URL_INSERTBILLLOAN = config.Ip_address + config.payment_insert_billingLOAN;
+    String URL_INSERTBILLDEPOSIT = config.Ip_address + config.payment_insert_billingDeposit;
     String URL_SHOWSESSIONPAYMENTQR = config.Ip_address + config.payment_show_expiredDurationQR;
     String URL_SHOWSESSIONPAYMENTVA = config.Ip_address + config.payment_show_expiredDurationVA;
     String URL_SHOWSESSIONPAYMENTCC = config.Ip_address + config.payment_show_expiredDurationCC;
     String URL_SHOWSESSIONPAYMENTLOAN = config.Ip_address + config.payment_show_expiredDurationLOAN;
+    String URL_SHOWSESSIONPAYMENTDEPOSIT = config.Ip_address + config.payment_show_expiredDurationDeposit;
+    String URL_GETMEMBERFLAG        = config.Ip_address + config.memberflag_getStatus;
+    String GETACTIVESALE_URL        = config.Ip_address + config.flashsale_getActiveSale;
 
     ImageView btn_back;
     ScrollView nestedDetail;
-    CardView cardView;
+    CardView cardView, cardViewNonPayment, cardViewPayment;
     ScalableLayout scalableCourier;
     LinearLayout linearLayout, linearPayment;
     RecyclerView recyclerView, recyclerCourier;
     UniversalFontTextView txtPrice, txtDisc, txtTitleShip, txtShipping, txtTotal, txtInfoShipping;
+    UniversalFontTextView txtPricePayment, txtDiscPayment, txtTitleShipPayment, txtShippingPayment, txtTotalPayment;
 //    Spinner spinShipment;
     Button btnContinueShop, btnContinue;
 
@@ -107,9 +114,9 @@ public class AddCartProductActivity extends AppCompatActivity {
     Data_frame_header dataFrameHeader;
     Data_frame_item dataFrameItem;
 
-    int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId;
+    int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId, flagPayment;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticFlag, opticAddress, shipmentPrice, shippingName,
-            shippingService, orderId, subcustId, subcustLocId, estimasi;
+            shippingService, orderId, subcustId, subcustLocId, estimasi, flashSaleInfo;
     String selectedItem, kodeBilling, duration, expDate;
 
     @Override
@@ -117,23 +124,32 @@ public class AddCartProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_cart_product);
 
+        UniversalFontComponents.init(this);
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
         btn_back = findViewById(R.id.addcart_product_btnback);
         nestedDetail = findViewById(R.id.addcart_product_nestedscroll);
         recyclerView = findViewById(R.id.addcart_product_recycler);
         recyclerCourier = findViewById(R.id.addcart_product_recyclerCourier);
         scalableCourier = findViewById(R.id.addcart_product_scalableCourier);
         txtPrice = findViewById(R.id.addcart_product_txtitemprice);
+        txtPricePayment = findViewById(R.id.addcart_product_txtitemprice_payment);
         txtDisc = findViewById(R.id.addcart_product_txtitemdisc);
+        txtDiscPayment = findViewById(R.id.addcart_product_txtitemdisc_payment);
         txtTitleShip = findViewById(R.id.addcart_product_txttitleship);
+        txtTitleShipPayment = findViewById(R.id.addcart_product_txttitleship_payment);
         txtShipping = findViewById(R.id.addcart_product_txtitemship);
+        txtShippingPayment = findViewById(R.id.addcart_product_txtitemship_payment);
         txtInfoShipping = findViewById(R.id.addcart_product_txtInfoShipping);
         txtTotal = findViewById(R.id.addcart_product_txttotalprice);
+        txtTotalPayment = findViewById(R.id.addcart_product_txttotalprice_payment);
         linearLayout = findViewById(R.id.addcart_product_linearLayout);
         linearPayment = findViewById(R.id.addcart_product_linearPayment);
         btnContinueShop = findViewById(R.id.addcart_product_btnContinueShopping);
         cardView = findViewById(R.id.addcart_product_cardview);
 //        spinShipment = findViewById(R.id.addcart_product_spinshipment);
-//        cardView = findViewById(R.id.addcart_product_cardsummary);
+        cardViewPayment    = findViewById(R.id.addcart_product_cardsummary_payment);
+        cardViewNonPayment = findViewById(R.id.addcart_product_cardsummary);
         btnContinue = findViewById(R.id.addcart_product_btncontinue);
 
         addCartHelper = AddCartHelper.getINSTANCE(getApplicationContext());
@@ -175,6 +191,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
         getIdOptic();
         generateId(opticUsername);
+        getActiveSale();
 
         totalPrice = addCartHelper.countTotalPrice();
         priceDisc = addCartHelper.countTotalDiscPrice();
@@ -182,9 +199,10 @@ public class AddCartProductActivity extends AppCompatActivity {
         totalDisc  = totalPrice - priceDisc;
 
         txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+        txtPricePayment.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
         txtDisc.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
+        txtDiscPayment.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
-        showCart();
 
 //        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -229,168 +247,160 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                Toasty.info(getApplicationContext(), opticId, Toast.LENGTH_SHORT).show();
-                int len = itemCart.size();
-                List<Boolean> sisanya = new ArrayList<>();
-
-                for (int i = 0; i < len; i++)
+                if (!opticId.equals("null,"))
                 {
-                    String item = itemCart.get(i).getProductName();
-                    int stock = itemCart.get(i).getProductStock();
-                    int qty   = itemCart.get(i).getProductQty();
-                    int sisa  = stock - qty;
-
-                    Log.d("Stock " + item, " Sisa = " + sisa);
-
-                    if (sisa < 0)
-                    {
-                        sisanya.add(i, false);
-                    }
-                    else
-                    {
-                        sisanya.add(i, true);
-                    }
-                }
-
-                boolean cek = sisanya.contains(false);
-
-                if (cek)
-                {
-                    Log.d("Information Cart", "Ada item yang minus");
-
-                    final Dialog dialog = new Dialog(AddCartProductActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
-
-                    dialog.setContentView(R.layout.dialog_warning);
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    lwindow.copyFrom(dialog.getWindow().getAttributes());
-                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
-
-                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                    imgClose.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    dialog.show();
-                    dialog.getWindow().setAttributes(lwindow);
-                }
-                else
-                {
-                    Log.d("Information Cart", "Aman lanjutkan");
-
-                    if (!opticId.equals("null,"))
-                    {
 //                    Toasty.info(getApplicationContext(), orderId, Toast.LENGTH_SHORT).show();
 
 //                    opticFlag = "0";
-                        if (opticFlag.equals("0"))
-                        {
+                    if (flagPayment == 0)
+                    {
 //                        Toasty.info(getApplicationContext(), "Pembayaran Non Tunai", Toast.LENGTH_SHORT).show();
-                            dataFrameHeader = new Data_frame_header();
-                            dataFrameHeader.setOrderId(orderId);
-                            dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                            dataFrameHeader.setShippingId(shippingId);
-                            dataFrameHeader.setShippingName(shippingName);
-                            dataFrameHeader.setShippingService(shippingService);
-                            dataFrameHeader.setOpticCity(opticCity);
-                            dataFrameHeader.setOpticProvince(opticProvince);
-                            dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
-                            dataFrameHeader.setTotalPrice(totalAllPrice);
-                            dataFrameHeader.setOpticName(opticName.replace(",", ""));
-                            dataFrameHeader.setOpticAddress(opticAddress);
-                            dataFrameHeader.setPaymentCashCarry("Non Payment Method");
+                        dataFrameHeader = new Data_frame_header();
+                        dataFrameHeader.setOrderId(orderId);
+                        dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                        dataFrameHeader.setShippingId(shippingId);
+                        dataFrameHeader.setShippingName("");
+                        dataFrameHeader.setShippingService("");
+                        dataFrameHeader.setOpticCity(opticCity);
+                        dataFrameHeader.setOpticProvince(opticProvince);
+                        dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
+                        dataFrameHeader.setTotalPrice(totalAllPrice);
+                        dataFrameHeader.setOpticName(opticName.replace(",", ""));
+                        dataFrameHeader.setOpticAddress(opticAddress);
+                        dataFrameHeader.setPaymentCashCarry("Non Payment Method");
 
-                            Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
-                            Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
-                            Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
-                            Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
-                            Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
-                            Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
-                            Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
-                            Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
-                            Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
-                            Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
-                            Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
-                            Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
+                        Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
+                        Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
+                        Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
+                        Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
+                        Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
+                        Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
+                        Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
+                        Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
+                        Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
+                        Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
+                        Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
+                        Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
+                        Log.d("Data Header", "Subcustid = " + subcustId);
+                        Log.d("Data Header", "Subcustlocid = " + subcustLocId);
 
-                            insertHeader(dataFrameHeader, subcustId, subcustLocId);
-                            insertNonPaymentStatus(orderId);
+                        insertHeader(dataFrameHeader, subcustId, subcustLocId, flashSaleInfo);
+                        insertNonPaymentStatus(orderId);
 
-                            for (int i = 0; i < itemCart.size(); i++)
-                            {
-                                dataFrameItem = new Data_frame_item();
-                                dataFrameItem.setOrderId(orderId);
-                                dataFrameItem.setLineNumber(i);
-                                dataFrameItem.setFrameId(itemCart.get(i).getProductId());
-                                dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
-                                dataFrameItem.setFrameName(itemCart.get(i).getProductName());
-                                dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
-                                dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
-                                dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
-                                dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+                        for (int i = 0; i < itemCart.size(); i++)
+                        {
+                            dataFrameItem = new Data_frame_item();
+                            dataFrameItem.setOrderId(orderId);
+                            dataFrameItem.setLineNumber(i);
+                            dataFrameItem.setFrameId(itemCart.get(i).getProductId());
+                            dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
+                            dataFrameItem.setFrameName(itemCart.get(i).getProductName());
+                            dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
+//                                dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
+                            dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductPrice());
+                            dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+                            dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
 
-                                insertLineItem(dataFrameItem);
-                            }
+                            insertLineItem(dataFrameItem);
+                        }
 
 //                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
-                            int trunc = addCartHelper.truncCart();
+                        int trunc = addCartHelper.truncCart();
 
-                            if (trunc > 0)
-                            {
+                        if (trunc > 0)
+                        {
 //                                Toasty.success(getApplicationContext(), "Success, Order telah diterima timur raya", Toast.LENGTH_SHORT).show();
 
-                                final Dialog dialog = new Dialog(AddCartProductActivity.this);
-                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+                            final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
-                                dialog.setContentView(R.layout.dialog_warning);
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                                lwindow.copyFrom(dialog.getWindow().getAttributes());
-                                lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+                            dialog.setContentView(R.layout.dialog_warning);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                                ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                                ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
-                                UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
-                                txtTitle.setText("Success, order anda telah diterima Timur Raya");
-                                imgIcon.setImageResource(R.drawable.success_outline);
-                                imgClose.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
+                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                            ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
+                            UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                            txtTitle.setText("Success, order anda telah diterima Timur Raya");
+                            imgIcon.setImageResource(R.drawable.success_outline);
+                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
 
-                                        addCartHelper.open();
-                                        int counter  = addCartHelper.countAddCart();
+                                    addCartHelper.open();
+                                    int counter  = addCartHelper.countAddCart();
 
-                                        Intent intent = new Intent();
-                                        intent.putExtra("counter", counter);
-                                        setResult(2, intent);
+                                    Intent intent = new Intent();
+                                    intent.putExtra("counter", counter);
+                                    setResult(2, intent);
 
-                                        finish();
-                                    }
-                                });
+                                    finish();
+                                }
+                            });
 
-                                dialog.show();
-                                dialog.getWindow().setAttributes(lwindow);
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lwindow);
+                        }
+                    }
+                    else
+                    {
+//                        Toasty.success(getApplicationContext(), "Pembayaran Tunai", Toast.LENGTH_SHORT).show();
+                        int len = itemCart.size();
+                        List<Boolean> sisanya = new ArrayList<>();
+
+                        for (int i = 0; i < len; i++)
+                        {
+                            String item = itemCart.get(i).getProductName();
+                            int stock = itemCart.get(i).getProductStock();
+                            int qty   = itemCart.get(i).getProductQty();
+                            int sisa  = stock - qty;
+
+                            Log.d("Stock " + item, " Sisa = " + stock);
+
+                            if (stock < 0)
+                            {
+                                sisanya.add(i, false);
                             }
+                            else
+                            {
+                                sisanya.add(i, true);
+                            }
+                        }
+
+                        boolean cek = sisanya.contains(false);
+
+                        if (cek)
+                        {
+                            Log.d("Information Cart", "Ada item yang minus");
+
+                            final Dialog dialog = new Dialog(AddCartProductActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                            dialog.setContentView(R.layout.dialog_warning);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lwindow);
                         }
                         else
                         {
-//                        Toasty.success(getApplicationContext(), "Pembayaran Tunai", Toast.LENGTH_SHORT).show();
-
-                            for (int j = 0; j < itemCart.size(); j++)
-                            {
-                                String item_id = String.valueOf(itemCart.get(j).getProductId());
-                                int stock = itemCart.get(j).getProductStock();
-                                int qty   = itemCart.get(j).getProductQty();
-                                int sisa  = stock - qty;
-
-                                potongStock(item_id, String.valueOf(sisa));
-                            }
+                            Log.d("Information Cart", "Aman lanjutkan");
 
                             final Dialog dialog = new Dialog(AddCartProductActivity.this);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -478,6 +488,17 @@ public class AddCartProductActivity extends AppCompatActivity {
 
                                         postBillingLoan(paymentType, grossAmount, orderNumber);
                                     }
+                                    else if (selectedItem.contentEquals("Deposit") || selectedItem.equals("Deposit") ||
+                                            selectedItem.contains("Deposit"))
+                                    {
+//                                        Toasty.info(getApplicationContext(), "Bayar Dengan Deposit", Toast.LENGTH_SHORT).show();
+
+//                                        String paymentType = "deposit";
+//                                        String grossAmount = String.valueOf(totalAllPrice);
+//                                        String orderNumber = orderId;
+
+                                        createBillingDeposit(orderId, "deposit");
+                                    }
 //                                else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
 //                                        selectedItem.contains("Kreditpro"))
 //                                {
@@ -490,64 +511,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                                     //loading.dismiss();
                                     dialog.dismiss();
 
-                                    dataFrameHeader = new Data_frame_header();
-                                    dataFrameHeader.setOrderId(orderId);
-                                    dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                                    dataFrameHeader.setShippingId(shippingId);
-                                    dataFrameHeader.setShippingName(shippingName);
-                                    dataFrameHeader.setShippingService(shippingService);
-                                    dataFrameHeader.setOpticCity(opticCity);
-                                    dataFrameHeader.setOpticProvince(opticProvince);
-                                    dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
-                                    dataFrameHeader.setTotalPrice(totalAllPrice);
-                                    dataFrameHeader.setOpticName(opticName.replace(",", ""));
-                                    dataFrameHeader.setOpticAddress(opticAddress);
-                                    dataFrameHeader.setPaymentCashCarry("Pending");
 
-                                    Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
-                                    Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
-                                    Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
-                                    Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
-                                    Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
-                                    Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
-                                    Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
-                                    Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
-                                    Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
-                                    Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
-                                    Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
-                                    Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
-
-                                    insertHeader(dataFrameHeader, subcustId, subcustLocId);
-
-                                    for (int i = 0; i < itemCart.size(); i++)
-                                    {
-                                        dataFrameItem = new Data_frame_item();
-                                        dataFrameItem.setOrderId(orderId);
-                                        dataFrameItem.setLineNumber(i);
-                                        dataFrameItem.setFrameId(itemCart.get(i).getProductId());
-                                        dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
-                                        dataFrameItem.setFrameName(itemCart.get(i).getProductName());
-                                        dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
-                                        dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
-                                        dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
-                                        dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
-
-                                        insertLineItem(dataFrameItem);
-                                    }
-
-                                    linearLayout.setVisibility(View.VISIBLE);
-                                    linearPayment.setVisibility(View.GONE);
-                                    nestedDetail.setVisibility(View.GONE);
-                                    cardView.setVisibility(View.GONE);
-
-                                    int trunc = addCartHelper.truncCart();
-
-                                    if (trunc > 0)
-                                    {
-//                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
-
-                                        Log.d("INFO FRAME", "Order telah dihapus");
-                                    }
                                 }
                             });
 
@@ -555,13 +519,12 @@ public class AddCartProductActivity extends AppCompatActivity {
                             dialog.getWindow().setAttributes(lwindow);
 
 //                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
-
                         }
                     }
-                    else
-                    {
-                        Toasty.error(getApplicationContext(), "Please login for order !", Toast.LENGTH_SHORT).show();
-                    }
+                }
+                else
+                {
+                    Toasty.error(getApplicationContext(), "Please login for order !", Toast.LENGTH_SHORT).show();
                 }
 //
 //                for (int j = 0; j < sisanya.size(); j++)
@@ -579,6 +542,80 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                }
             }
         });
+    }
+
+    private void autoInsertOrder() {
+        dataFrameHeader = new Data_frame_header();
+        dataFrameHeader.setOrderId(orderId);
+        dataFrameHeader.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+        dataFrameHeader.setShippingId(shippingId);
+        dataFrameHeader.setShippingName(shippingName);
+        dataFrameHeader.setShippingService(shippingService);
+        dataFrameHeader.setOpticCity(opticCity);
+        dataFrameHeader.setOpticProvince(opticProvince);
+        dataFrameHeader.setShippingPrice(Integer.parseInt(shipmentPrice));
+        dataFrameHeader.setTotalPrice(totalAllPrice);
+        dataFrameHeader.setOpticName(opticName.replace(",", ""));
+        dataFrameHeader.setOpticAddress(opticAddress);
+        dataFrameHeader.setPaymentCashCarry("Pending");
+
+        Log.d("Data Header", "OrderId = " + dataFrameHeader.getOrderId());
+        Log.d("Data Header", "IdParty = " + dataFrameHeader.getIdParty());
+        Log.d("Data Header", "ShippingId = " + dataFrameHeader.getShippingId());
+        Log.d("Data Header", "ShippingName = " + dataFrameHeader.getShippingName());
+        Log.d("Data Header", "ShippingService = " + dataFrameHeader.getShippingService());
+        Log.d("Data Header", "OpticCity = " + dataFrameHeader.getOpticCity());
+        Log.d("Data Header", "OpticProvince = " + dataFrameHeader.getOpticProvince());
+        Log.d("Data Header", "ShippingPrice = " + dataFrameHeader.getShippingPrice());
+        Log.d("Data Header", "TotalPrice = " + dataFrameHeader.getTotalPrice());
+        Log.d("Data Header", "OpticName = " + dataFrameHeader.getOpticName());
+        Log.d("Data Header", "OpticAddress = " + dataFrameHeader.getOpticAddress());
+        Log.d("Data Header", "CashCarry = " + dataFrameHeader.getPaymentCashCarry());
+        Log.d("Data Header", "Subcustid = " + subcustId);
+        Log.d("Data Header", "Subcustlocid = " + subcustLocId);
+
+        insertHeader(dataFrameHeader, subcustId, subcustLocId, flashSaleInfo);
+
+        for (int i = 0; i < itemCart.size(); i++)
+        {
+            dataFrameItem = new Data_frame_item();
+            dataFrameItem.setOrderId(orderId);
+            dataFrameItem.setLineNumber(i);
+            dataFrameItem.setFrameId(itemCart.get(i).getProductId());
+            dataFrameItem.setFrameCode(itemCart.get(i).getProductCode());
+            dataFrameItem.setFrameName(itemCart.get(i).getProductName());
+            dataFrameItem.setFrameQty(itemCart.get(i).getProductQty());
+//                                        dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
+            dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductPrice());
+            dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+            dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
+
+            insertLineItem(dataFrameItem);
+        }
+
+        for (int j = 0; j < itemCart.size(); j++)
+        {
+            String item_id = String.valueOf(itemCart.get(j).getProductId());
+            int stock = itemCart.get(j).getProductStock();
+            int qty   = itemCart.get(j).getProductQty();
+//                                int sisa  = stock - qty;
+
+            potongStock(item_id, String.valueOf(qty));
+        }
+
+        linearLayout.setVisibility(View.VISIBLE);
+        linearPayment.setVisibility(View.GONE);
+        nestedDetail.setVisibility(View.GONE);
+        cardView.setVisibility(View.GONE);
+
+        int trunc = addCartHelper.truncCart();
+
+        if (trunc > 0)
+        {
+//                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
+
+            Log.d("INFO FRAME", "Order telah dihapus");
+        }
     }
 
     private void showLoading() {
@@ -606,6 +643,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             opticFlag   = bundle.getString("flag");
 
             getOraId(opticId);
+            getPaymentOrNot(opticFlag);
         }
         opticId     = opticId + ",";
         opticName   = opticName + ",";
@@ -699,18 +737,23 @@ public class AddCartProductActivity extends AppCompatActivity {
         if (opticCity == null)
         {
             txtTitleShip.setVisibility(View.GONE);
+            txtTitleShipPayment.setVisibility(View.GONE);
             txtShipping.setVisibility(View.GONE);
+            txtShippingPayment.setVisibility(View.GONE);
 //            spinShipment.setVisibility(View.GONE);
 
             shipmentPrice = "0";
             totalAllPrice = priceDisc;
             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
         }
         else
         {
 //            getAllKurir(opticCity, opticProvince);
 
-            if (opticFlag.equals("0"))
+//            if (opticFlag.equals("0"))
+            Log.d("Flag Payment", "Flag value = " + flagPayment);
+            if (flagPayment == 0)
             {
                 scalableCourier.setVisibility(View.GONE);
                 txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
@@ -718,9 +761,11 @@ public class AddCartProductActivity extends AppCompatActivity {
                 shipmentPrice = "0";
                 totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
                 txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                txtShippingPayment.setText("Rp. " + CurencyFormat(shipmentPrice));
                 txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
             }
-            else
+            else if(flagPayment == 1)
             {
 //                txtInfoShipping.setText("Estimasi pengiriman order anda sekitar " + estimasi);
                 txtInfoShipping.setVisibility(View.GONE);
@@ -729,11 +774,15 @@ public class AddCartProductActivity extends AppCompatActivity {
             }
 
             txtTitleShip.setVisibility(View.VISIBLE);
+            txtTitleShipPayment.setVisibility(View.VISIBLE);
             txtShipping.setVisibility(View.VISIBLE);
+            txtShippingPayment.setVisibility(View.VISIBLE);
 //            spinShipment.setVisibility(View.VISIBLE);
         }
 
         itemCart = addCartHelper.getAllCart();
+        Log.d("Item Cart", itemCart.toString());
+
         adapterAddCart = new Adapter_add_cart(this, itemCart, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
@@ -773,18 +822,22 @@ public class AddCartProductActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                        txtPricePayment.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtDisc.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtDiscPayment.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
                             shipmentPrice = "0";
                             totalAllPrice = priceDisc;
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
                         else
                         {
                             totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
 
 //                        totalAllPrice = priceDisc - totalDisc + Integer.valueOf(shipmentPrice);
@@ -808,21 +861,25 @@ public class AddCartProductActivity extends AppCompatActivity {
                         int stock = modelAddCart.getProductStock();
                         int discprice = modelAddCart.getProductDiscPrice();
 
-                            qty = qty + 1;
-                            int newprice = price * qty;
-                            int newdiscprice = discprice * qty;
+                        qty = qty + 1;
+                        int newprice = price * qty;
+                        int newdiscprice = discprice * qty;
+
+                        if (flagPayment == 1)
+                        {
                             stock = stock - qty;
 
                             //Toasty.info(getApplicationContext(), String.valueOf(qty), Toast.LENGTH_SHORT).show();
 
-                            modelAddCart.setNewProductPrice(newprice);
-                            modelAddCart.setProductQty(qty);
-                            modelAddCart.setNewProductDiscPrice(newdiscprice);
                             modelAddCart.setProductStock(stock);
+                        }
 
-                            itemCart.set(pos, modelAddCart);
-                            addCartHelper.updateCartQty(modelAddCart);
-                            adapterAddCart.notifyDataSetChanged();
+                        modelAddCart.setNewProductPrice(newprice);
+                        modelAddCart.setProductQty(qty);
+                        modelAddCart.setNewProductDiscPrice(newdiscprice);
+                        itemCart.set(pos, modelAddCart);
+                        addCartHelper.updateCartQty(modelAddCart);
+                        adapterAddCart.notifyDataSetChanged();
 //                        recyclerView.setAdapter(adapterAddCart);
 
                         addCartHelper.open();
@@ -832,18 +889,22 @@ public class AddCartProductActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                        txtPricePayment.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtDisc.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtDiscPayment.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
                             shipmentPrice = "0";
                             totalAllPrice = priceDisc;
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
                         else
                         {
                             totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
 
 //                        totalAllPrice = priceDisc - totalDisc + Integer.valueOf(shipmentPrice);
@@ -864,9 +925,25 @@ public class AddCartProductActivity extends AppCompatActivity {
                         int mQty   = mModelAddCart.getProductQty();
                         int mDiscprice = mModelAddCart.getProductDiscPrice();
                         int mStock = mModelAddCart.getProductStock();
+//                        int tempStock = 0;
 
                         mQty = mQty - 1;
-                        mStock = mStock + mQty;
+
+                        if (flagPayment == 1)
+                        {
+                            if (mQty == 0)
+                            {
+                                mQty = mQty + 1;
+                            }
+
+                            mStock = mStock - mQty;
+                            Log.d("Informasi Stok", String.valueOf(mStock));
+                            mModelAddCart.setProductStock(mStock);
+
+                            itemCart.set(pos, mModelAddCart);
+                            addCartHelper.updateCartQty(mModelAddCart);
+                            adapterAddCart.notifyDataSetChanged();
+                        }
 
                         if (mQty == 0)
                         {
@@ -882,7 +959,6 @@ public class AddCartProductActivity extends AppCompatActivity {
                             mModelAddCart.setNewProductPrice(mNewPrice);
                             mModelAddCart.setProductQty(mQty);
                             mModelAddCart.setNewProductDiscPrice(mNewdiscprice);
-                            mModelAddCart.setProductStock(mStock);
 
                             itemCart.set(pos, mModelAddCart);
                             addCartHelper.updateCartQty(mModelAddCart);
@@ -897,18 +973,22 @@ public class AddCartProductActivity extends AppCompatActivity {
                         totalDisc  = totalPrice - priceDisc;
 
                         txtPrice.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+                        txtPricePayment.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
                         txtDisc.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+                        txtDiscPayment.setText("Rp. - " + CurencyFormat(String.valueOf(totalDisc)));
 
                         if (opticCity == null)
                         {
                             shipmentPrice = "0";
                             totalAllPrice = priceDisc;
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
                         else
                         {
                             totalAllPrice = priceDisc + Integer.valueOf(shipmentPrice);
                             txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                            txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
                         }
 
 //                        totalAllPrice = priceDisc - totalDisc + Integer.valueOf(shipmentPrice);
@@ -936,7 +1016,9 @@ public class AddCartProductActivity extends AppCompatActivity {
                 Log.d("Callback Price", "Shipment : " + shipmentPrice);
                 totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
                 txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                txtShippingPayment.setText("Rp. " + CurencyFormat(shipmentPrice));
                 txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
             }
         });
 
@@ -978,6 +1060,32 @@ public class AddCartProductActivity extends AppCompatActivity {
         return output;
     }
 
+    private void dialogError(){
+        final Dialog dialog = new Dialog(AddCartProductActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+        dialog.setContentView(R.layout.dialog_warning);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        lwindow.copyFrom(dialog.getWindow().getAttributes());
+        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+        ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+        imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        UniversalFontTextView txtInfo = dialog.findViewById(R.id.dialog_warning_txtInfo);
+        txtInfo.setText("Terjadi kesalahan silahkan coba kembali nanti");
+
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lwindow);
+    }
+
     private void generateId(final String username)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URL_GENID, new Response.Listener<String>() {
@@ -1011,7 +1119,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void insertHeader(final Data_frame_header item, final String subcustId, final String subcustLocId)
+    private void insertHeader(final Data_frame_header item, final String subcustid, final String subcustlocid, final String flashSale)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTHEADER, new Response.Listener<String>() {
             @Override
@@ -1048,8 +1156,9 @@ public class AddCartProductActivity extends AppCompatActivity {
                 hashMap.put("optic_name", item.getOpticName());
                 hashMap.put("optic_address", item.getOpticAddress());
                 hashMap.put("payment_cashcarry", item.getPaymentCashCarry());
-                hashMap.put("subcust_id", subcustId);
-                hashMap.put("subcust_loc_id", subcustLocId);
+                hashMap.put("subcust_id", subcustid);
+                hashMap.put("subcust_loc_id", subcustlocid);
+                hashMap.put("flashSaleInfo", flashSale);
 
                 return hashMap;
             }
@@ -1173,7 +1282,9 @@ public class AddCartProductActivity extends AppCompatActivity {
 
                     totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
                     txtShipping.setText("Rp. " + CurencyFormat(shipmentPrice));
+                    txtShippingPayment.setText("Rp. " + CurencyFormat(shipmentPrice));
                     txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+                    txtTotalPayment.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
 
                     adapterCourierService.notifyDataSetChanged();
                     recyclerCourier.setAdapter(adapterCourierService);
@@ -1264,6 +1375,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                     if (jsonObject.names().get(0).equals("success"))
                     {
                         //Toasty.info(getApplicationContext(), "Post Bill success", Toast.LENGTH_SHORT).show();
+                        autoInsertOrder();
                         showSessionPaymentQR(orderNumber);
                     }
                     else if (jsonObject.names().get(0).equals("invalid"))
@@ -1358,22 +1470,31 @@ public class AddCartProductActivity extends AppCompatActivity {
                     loading.hide();
                     JSONObject jsonObject = new JSONObject(response);
 
-                    String statusCode   = jsonObject.getString("responseCode");
-                    String description  = jsonObject.getString("responseDescription");
-
-                    if (statusCode.equals("00") || statusCode.contains("00") || statusCode.contentEquals("00"))
+                    if(jsonObject.length() > 0)
                     {
-                        kodeBilling = jsonObject.getString("virtualAccount");
-                        String paymentType = "bankTransfer";
+                        String statusCode   = jsonObject.getString("responseCode");
+                        String description  = jsonObject.getString("responseDescription");
 
-                        createBillingVA(orderId, paymentType, kodeBilling);
+                        if (statusCode.equals("00") || statusCode.contains("00") || statusCode.contentEquals("00"))
+                        {
+                            kodeBilling = jsonObject.getString("virtualAccount");
+                            String paymentType = "bankTransfer";
+
+                            createBillingVA(orderId, paymentType, kodeBilling);
+                        }
+                        else
+                        {
+                            Toasty.error(getApplicationContext(), description + " (" + statusCode + ")", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else
                     {
-                        Toasty.error(getApplicationContext(), description + " (" + statusCode + ")", Toast.LENGTH_SHORT).show();
+                        dialogError();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                    dialogError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -1406,7 +1527,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                     if (jsonObject.names().get(0).equals("success"))
                     {
                         //Toasty.info(getApplicationContext(), "Post Bill success", Toast.LENGTH_SHORT).show();
-
+                        autoInsertOrder();
                         showSessionPaymentVA(orderNumber);
                     }
                     else if (jsonObject.names().get(0).equals("invalid"))
@@ -1499,6 +1620,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                     if (jsonObject.names().get(0).equals("success"))
                     {
                         //Call ShowSessionPayment
+                        autoInsertOrder();
                         showSessionPaymentCC(orderNumber);
                     }
                     else if (jsonObject.names().get(0).equals("invalid"))
@@ -1636,6 +1758,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                     if (jsonObject.names().get(0).equals("success"))
                     {
 //                        Toasty.info(getApplicationContext(), "Post Bill success", Toast.LENGTH_SHORT).show();
+                        autoInsertOrder();
                         showSessionPaymentLoan(order);
                     }
                     else if (jsonObject.names().get(0).equals("invalid"))
@@ -1719,8 +1842,99 @@ public class AddCartProductActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-    private void getOraId(final String idParty)
+    private void createBillingDeposit(final String orderNumber, final String paymentType)
     {
+        showLoading();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLDEPOSIT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    loading.hide();
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        //Call ShowSessionPayment
+                        autoInsertOrder();
+                        showSessionPaymentDeposit(orderNumber);
+                    }
+                    else if (jsonObject.names().get(0).equals("invalid"))
+                    {
+                        Toasty.warning(getApplicationContext(), "Data harus diisi", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap <String, String> hashMap = new HashMap<>();
+                hashMap.put("ordernumber", orderNumber);
+                hashMap.put("payment_type", paymentType);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showSessionPaymentDeposit(final String orderNumber)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_SHOWSESSIONPAYMENTDEPOSIT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String amount = String.valueOf(totalAllPrice);
+                    duration = jsonObject.getString("dur");
+                    expDate  = jsonObject.getString("exp_date");
+
+                    if (duration != null)
+                    {
+                        Intent intent = new Intent(AddCartProductActivity.this, FormPaymentDeposit.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("duration", duration);
+                        intent.putExtra("expDate", expDate);
+
+                        intent.putExtra("username", opticUsername);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Toasty.warning(getApplicationContext(), "Please, Try Again !", Toast.LENGTH_SHORT).show();
+                    }
+
+//                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap <String, String> hashMap = new HashMap<>();
+                hashMap.put("order_number", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void getOraId(final String idParty) {
         StringRequest request = new StringRequest(Request.Method.POST, URL_GETORAID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1729,6 +1943,16 @@ public class AddCartProductActivity extends AppCompatActivity {
 
                     subcustId = object.getString("subcust_id");
                     subcustLocId = object.getString("subcust_loc_id");
+
+                    if (subcustId.equals("null"))
+                    {
+                        subcustId = "0";
+                    }
+
+                    if (subcustLocId.equals("null"))
+                    {
+                        subcustLocId = "0";
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1749,6 +1973,94 @@ public class AddCartProductActivity extends AppCompatActivity {
                 return hashMap;
             }
         };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getPaymentOrNot(final String id)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETMEMBERFLAG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        Log.d("Status Payment", "Data Not Found");
+                    }
+                    else
+                    {
+                        flagPayment = object.getInt("order_frame");
+
+                        if (flagPayment == 1)
+                        {
+                            Log.d("Status Payment", "With Payment");
+                            cardViewPayment.setVisibility(View.VISIBLE);
+                            cardViewNonPayment.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            Log.d("Status Payment", "Non Payment");
+                            cardViewPayment.setVisibility(View.GONE);
+                            cardViewNonPayment.setVisibility(View.VISIBLE);
+                        }
+
+                        showCart();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Status", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id", id);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getActiveSale()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, GETACTIVESALE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error"))
+                    {
+                        flashSaleInfo = "";
+                    }
+                    else
+                    {
+                        flashSaleInfo = object.getString("title");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null || !error.getMessage().isEmpty())
+                {
+                    Log.d("Error Get Duration", error.getMessage());
+                }
+            }
+        });
 
         AppController.getInstance().addToRequestQueue(request);
     }

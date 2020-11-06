@@ -3,7 +3,16 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_lensorderweb_item {
     private String orderNumber, itemId, itemCode, description, rl, discountName;
-    private int qty, unitStandardPrice, unitStandardWeight, discount, totalWeight, tintingPrice, amount;
+    private int qty, unitStandardPrice, unitStandardWeight, discountSale, totalWeight, tintingPrice, amount;
+    private double discount;
+
+    public int getDiscountSale() {
+        return discountSale;
+    }
+
+    public void setDiscountSale(int discountSale) {
+        this.discountSale = discountSale;
+    }
 
     public String getOrderNumber() {
         return orderNumber;
@@ -77,11 +86,11 @@ public class Data_lensorderweb_item {
         this.unitStandardWeight = unitStandardWeight;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 

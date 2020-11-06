@@ -1,9 +1,5 @@
 package com.sofudev.trackapptrl.Data;
 
-/**
- * Created by Fuddins on 14/11/2017.
- */
-
 public class Data_track_order {
     private String order_number, order_entrydate, order_custname, order_reference, order_status, order_statusdate,
                    order_statustime, order_opticname, order_lenscode, order_sphr, order_cylr, order_addr, order_sphl,

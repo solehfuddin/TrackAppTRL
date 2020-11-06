@@ -50,6 +50,7 @@ import com.android.volley.toolbox.Volley;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Util.AESencUtil;
@@ -107,6 +108,8 @@ public class FormPaymentKreditpro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_kreditpro);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         showLoading();
 

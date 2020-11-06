@@ -38,6 +38,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.VersionChecker;
@@ -113,6 +115,8 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
     private NavigationView navigationView;
     TextView txt_title, txt_countwishlist, txt_countcart;
+    RelativeLayout rl_viewprize;
+    ImageView img_closeprize;
     ACProgressCustom loading;
     LovelyCustomDialog dialog;
     private DrawerLayout drawer;
@@ -137,6 +141,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+
         TypefaceProvider.registerDefaultIconSets();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -148,6 +154,15 @@ public class MainActivity extends AppCompatActivity
         searchView = (MaterialSearchView) findViewById(R.id.main_search);
         txt_countwishlist = findViewById(R.id.main_badge_wishlist);
         txt_countcart = findViewById(R.id.main_badge_cart);
+        rl_viewprize = findViewById(R.id.appbarmain_view_prize);
+        img_closeprize = findViewById(R.id.appbarmain_close_prize);
+
+//        img_closeprize.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                rl_viewprize.setVisibility(View.GONE);
+//            }
+//        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -910,7 +925,7 @@ public class MainActivity extends AppCompatActivity
         bundle.putString("activity", "main");
         homeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment);
+        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
         fragmentTransaction.commit();
     }
 
@@ -920,7 +935,7 @@ public class MainActivity extends AppCompatActivity
         bundle.putString("activity", "main");
         newFrameFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment);
+        fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment, "newframe");
         fragmentTransaction.commit();
     }
 

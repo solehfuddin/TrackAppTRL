@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="83dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp"
+    android:layout_marginBottom="5dp">
+
+    <LinearLayout
+        android:id="@+id/recycler_onhand_linearselect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/border_black">
+
+        <LinearLayout
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:text="ItemCode"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                app:customFont="UbuntuRegular.ttf" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemDisc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_onhand_txtItemWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mcdonald IOL Implantation Forceps, Titanium , Overall Length 100 Mm, 3.9 Inches,  Angled Curved Jaws"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="MavenPro-Regular.ttf"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:id="@+id/recycler_onhand_imgSelect"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:src="@drawable/check"
+                android:visibility="gone"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/recycler_onhand_cardCounter"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="5dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/recycler_onhand_txtCounter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorRed"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="3000"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:customFont="UbuntuRegular.ttf" />
+
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

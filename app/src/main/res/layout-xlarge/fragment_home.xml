@@ -1,14 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="56dp"
     tools:context="com.sofudev.trackapptrl.Fragment.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,23 +19,135 @@
             <ss.com.bannerslider.views.BannerSlider
                 android:id="@+id/fragment_home_headerslider"
                 android:layout_width="match_parent"
-                android:layout_height="265dp"
+                android:layout_height="170dp"
+                app:animateIndicators="true"
+                app:defaultBanner="1"
+                app:defaultIndicators="circle"
+                app:emptyView="@drawable/notfound"
                 app:interval="5000"
                 app:loopSlides="true"
-                app:defaultIndicators="circle"
-                app:defaultBanner="1"
-                app:animateIndicators="true"
                 app:selected_slideIndicator="@color/colorToolbar"
-                app:unselected_slideIndicator="@color/neutral"
-                app:emptyView="@drawable/notfound"
-                />
+                app:unselected_slideIndicator="@color/neutral" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginTop="10dp"
                 android:background="@color/neutral"
-                android:layout_marginTop="30dp">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fragment_home_linearSale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorToolbar"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="1dp"
+                        android:text="Flash Sale"
+                        android:textColor="@color/neutral"
+                        android:textSize="20sp"
+                        android:layout_marginRight="-7dp"
+                        app:customFont="TradeGothicCondensed.ttf" />
+
+                    <cn.iwgang.countdownview.CountdownView
+                        android:id="@+id/fragment_home_countdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:paddingLeft="7dp"
+                        android:paddingRight="7dp"
+                        app:isHideTimeBackground="false"
+                        app:timeBgColor="@color/colorToolbar"
+                        app:timeBgRadius="2dp"
+                        app:isShowHour="true"
+                        app:isShowMinute="true"
+                        app:isShowSecond="true"
+                        app:isShowMillisecond="false"
+                        app:suffixDay="Hari"
+                        app:timeTextColor="@color/white"
+                        app:timeTextSize="18sp"
+                        app:isTimeTextBold="true"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/colorToolbar"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_home_recyclerflashsale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/neutral"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fragment_home_linearhotsale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorRed"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="1dp"
+                        android:text="Hot Sale"
+                        android:textColor="@color/neutral"
+                        android:textSize="19sp"
+                        app:customFont="TradeGothicCondensed.ttf" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/colorRed"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_home_recyclercategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                android:background="@color/neutral"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -44,94 +158,46 @@
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="1dp"
+                        android:background="@color/colorPrimary"
                         android:paddingBottom="1dp"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:text="Hot Sale"
-                        android:background="@color/colorRed"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="1dp"
+                        android:text="Available Brand"
                         android:textColor="@color/neutral"
-                        android:textSize="39sp"
+                        android:textSize="19sp"
                         app:customFont="TradeGothicCondensed.ttf" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:orientation="vertical"
                         android:layout_gravity="center_vertical"
-                        android:background="@color/colorRed"/>
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/colorPrimary"
+                        android:orientation="vertical" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:orientation="vertical">-->
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/fragment_home_recyclercategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="25dp"
-                        android:paddingLeft="25dp"
-                        android:paddingRight="25dp"
-                        android:clipToPadding="false"/>
-                </LinearLayout>
-            </LinearLayout>
+                <!---->
+                <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/neutral">
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_home_recyclerproducts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
+                    android:clipToPadding="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:scrollbars="vertical" />
 
-                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="1dp"
-                        android:paddingBottom="1dp"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:text="Available Brand"
-                        android:textColor="@color/neutral"
-                        android:background="@color/colorPrimary"
-                        android:textSize="39sp"
-                        app:customFont="TradeGothicCondensed.ttf" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:orientation="vertical"
-                        android:background="@color/colorPrimary"
-                        android:layout_gravity="center_vertical"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/fragment_home_recyclerproducts"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:paddingLeft="25dp"
-                        android:paddingRight="25dp"
-                        android:clipToPadding="false"
-                        android:scrollbars="vertical" />
-                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

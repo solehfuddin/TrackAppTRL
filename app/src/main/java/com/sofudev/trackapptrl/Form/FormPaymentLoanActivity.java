@@ -28,6 +28,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
 
@@ -71,6 +72,8 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_loan);
         showLoading();
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btnBack         = findViewById(R.id.form_paymentloan_btn_back);
         txtOrderNumber  = findViewById(R.id.form_paymentloan_txtOrderNumber);

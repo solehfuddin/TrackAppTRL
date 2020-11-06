@@ -46,6 +46,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomSpinner;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
 import com.ssomai.android.scalablelayout.ScalableLayout;
@@ -91,6 +92,8 @@ public class FormPaymentCC extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_cc);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         BASE_URL    = "http://www.timurrayalab.com/";
 //        CLIENT_KEY  = "SB-Mid-client-WeC58FxcSR3DiAlh";

@@ -37,6 +37,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_uac;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_uac;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
@@ -75,7 +76,7 @@ public class FormUACActivity extends AppCompatActivity {
     View view;
     ListView listView_auc;
     TextView lbl_errorusername, lbl_errorcustomer, lbl_erroremail;
-    BootstrapEditText txt_uac, txt_username, txt_customer, txt_email;
+    BootstrapEditText txt_uac, txt_username, txt_customer, txt_email, txt_flag;
     UniversalFontTextView txt_counter;
     RelativeLayout rl_uac;
     ImageView imageView_uac;
@@ -83,7 +84,7 @@ public class FormUACActivity extends AppCompatActivity {
     SwitchButton sw_status, sw_level;
     FloatingActionButton fab_add;
 
-    String username, customer, email, status, level;
+    String username, customer, email, status, level, flag;
 
     View progressLoading, progressInfo;
     Integer req_start = 0, last_item, total_row, item;
@@ -93,6 +94,8 @@ public class FormUACActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_uac);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.form_uac_toolbar);
         toolbar.setTitle("User Management");
@@ -440,6 +443,7 @@ public class FormUACActivity extends AppCompatActivity {
                 String data3 = "email";
                 String data4 = "status";
                 String data5 = "level";
+                String data6 = "flag";
 
                 try {
                     String detail_username = MCrypt.bytesToHex(mCrypt.encrypt(data1));
@@ -447,6 +451,7 @@ public class FormUACActivity extends AppCompatActivity {
                     String detail_email    = MCrypt.bytesToHex(mCrypt.encrypt(data3));
                     String detail_status   = MCrypt.bytesToHex(mCrypt.encrypt(data4));
                     String detail_level    = MCrypt.bytesToHex(mCrypt.encrypt(data5));
+                    String detail_flag     = MCrypt.bytesToHex(mCrypt.encrypt(data6));
 
                     try {
                         JSONArray jsonArray = new JSONArray(response);
@@ -467,6 +472,7 @@ public class FormUACActivity extends AppCompatActivity {
                             txt_username = (BootstrapEditText) view.findViewById(R.id.form_uac_txtusername);
                             txt_customer = (BootstrapEditText) view.findViewById(R.id.form_uac_txtcustomer);
                             txt_email    = (BootstrapEditText) view.findViewById(R.id.form_uac_txtemail);
+                            txt_flag     = (BootstrapEditText) view.findViewById(R.id.form_uac_txtflag);
                             sw_status    = (SwitchButton) view.findViewById(R.id.form_uac_swtstatus);
                             sw_level     = (SwitchButton) view.findViewById(R.id.form_uac_swtlevel);
                             btn_submit   = (BootstrapButton) view.findViewById(R.id.form_uac_btnsubmit);
@@ -481,10 +487,12 @@ public class FormUACActivity extends AppCompatActivity {
                             String data_email    = new String(mCrypt.decrypt(jsonObject.getString(detail_email)));
                             String data_status   = new String(mCrypt.decrypt(jsonObject.getString(detail_status)));
                             String data_level    = new String(mCrypt.decrypt(jsonObject.getString(detail_level)));
+                            String data_flag     = new String(mCrypt.decrypt(jsonObject.getString(detail_flag)));
 
                             txt_username.setText(data_username);
                             txt_customer.setText(data_customer);
                             txt_email.setText(data_email);
+                            txt_flag.setText(data_flag);
 
                             txt_username.setFocusable(false);
                             txt_username.setClickable(false);
@@ -582,6 +590,7 @@ public class FormUACActivity extends AppCompatActivity {
                                     username = txt_username.getText().toString();
                                     customer = txt_customer.getText().toString();
                                     email    = txt_email.getText().toString();
+                                    flag     = txt_flag.getText().toString();
                                     if (sw_status.isChecked()) {
                                         status = "A";
                                     }
@@ -674,6 +683,7 @@ public class FormUACActivity extends AppCompatActivity {
                 hashMap.put("status", status);
                 hashMap.put("level", level);
                 hashMap.put("email", email);
+                hashMap.put("flag", flag);
                 return hashMap;
             }
         };
@@ -742,6 +752,7 @@ public class FormUACActivity extends AppCompatActivity {
                 txt_username = (BootstrapEditText) view.findViewById(R.id.form_uac_txtusername);
                 txt_customer = (BootstrapEditText) view.findViewById(R.id.form_uac_txtcustomer);
                 txt_email    = (BootstrapEditText) view.findViewById(R.id.form_uac_txtemail);
+                txt_flag     = (BootstrapEditText) view.findViewById(R.id.form_uac_txtflag);
                 sw_status    = (SwitchButton) view.findViewById(R.id.form_uac_swtstatus);
                 sw_level     = (SwitchButton) view.findViewById(R.id.form_uac_swtlevel);
                 btn_submit   = (BootstrapButton) view.findViewById(R.id.form_uac_btnsubmit);
@@ -852,6 +863,7 @@ public class FormUACActivity extends AppCompatActivity {
                         String dt_username = txt_username.getText().toString();
                         String dt_customer = txt_customer.getText().toString();
                         String dt_email    = txt_email.getText().toString().trim();
+                        String dt_flag     = txt_flag.getText().toString();
 
                         String dt_status;
                         if (sw_status.isChecked())
@@ -907,7 +919,8 @@ public class FormUACActivity extends AppCompatActivity {
                         //Submit new user
                         else {
                             //lovelyCustomDialog.dismiss();
-                            addNewUAC(dt_username, dt_customer, dt_status, dt_level, dt_email);
+                            //addNewUAC(dt_username, dt_customer, dt_status, dt_level, dt_email);
+                            addNewUAC(dt_username, dt_customer, dt_status, dt_level, dt_email, dt_flag);
                         }
                     }
                 });
@@ -917,7 +930,8 @@ public class FormUACActivity extends AppCompatActivity {
         });
     }
 
-    private void addNewUAC(final String dt_username, final String dt_customer, final String dt_status, final String dt_level, final String dt_email) {
+    private void addNewUAC(final String dt_username, final String dt_customer, final String dt_status,
+                           final String dt_level, final String dt_email, final String dt_flag) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ADDUACURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -953,6 +967,7 @@ public class FormUACActivity extends AppCompatActivity {
                 hashMap.put("email", dt_email);
                 hashMap.put("status", dt_status);
                 hashMap.put("level", dt_level);
+                hashMap.put("flag", dt_flag);
                 return hashMap;
             }
         };

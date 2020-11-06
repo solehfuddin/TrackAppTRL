@@ -16,10 +16,6 @@ import com.sofudev.trackapptrl.Custom.Config;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by sholeh on 6/25/2019.
- */
-
 public class GenerateIdFire extends FirebaseInstanceIdService {
     private static final String TAG   = GenerateIdFire.class.getSimpleName();
     private static final String TOPIC = "trl";

@@ -15,6 +15,7 @@ import com.android.volley.request.StringRequest;
 import com.github.premnirmal.textcounter.CounterView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
 
@@ -43,6 +44,8 @@ public class FormOrderDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_order_dashboard);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         btn_back = (RippleView) findViewById(R.id.form_orderdashboard_ripplebtnback);
         lbl_draf = (CounterView) findViewById(R.id.form_orderdashboard_lbldraft);
