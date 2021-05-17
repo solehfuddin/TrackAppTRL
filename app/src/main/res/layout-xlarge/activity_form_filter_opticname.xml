@@ -37,7 +37,7 @@
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Track Order Optic"
+                android:text="Select Optic"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="28sp"

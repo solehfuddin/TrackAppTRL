@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:wheel="http://schemas.android.com/tools"
+    android:minWidth="390dp"
+    android:minHeight="230dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1.0">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/dialog_chooseframe_rpfilter"
+                    android:layout_width="40dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+                    <ImageButton
+                        android:id="@+id/form_onhand_btnfilter"
+                        android:layout_width="40dp"
+                        android:layout_height="38dp"
+                        android:src="@drawable/ic_filter"
+                        android:background="@color/colorFirst"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true" />
+                </com.andexert.library.RippleView>
+
+                <EditText
+                    android:id="@+id/dialog_chooseframe_txtSearch"
+                    android:layout_weight="0.70"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:background="@color/neutral"
+                    android:hint=" Search item ..."
+                    android:textSize="16sp"
+                    android:textAllCaps="true"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/form_onhand_rpfilter"
+                    android:layout_centerHorizontal="true" />
+
+                <ImageView
+                    android:id="@+id/dialog_chooseframe_btnClear"
+                    android:layout_weight="0.11"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_search_black"/>
+
+                <ImageView
+                    android:id="@+id/dialog_chooseframe_btnScan"
+                    android:layout_weight="0.11"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_scan_black"/>
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/dialog_chooseframe_rpSort"
+                    android:layout_weight="0.08"
+                    android:layout_width="10dp"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center_vertical"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+                    <ImageButton
+                        android:id="@+id/dialog_chooseframe_imgSort"
+                        android:layout_width="35dp"
+                        android:layout_height="33dp"
+                        android:src="@drawable/ic_sort_white"
+                        android:background="@color/colorFirst"/>
+                </com.andexert.library.RippleView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/dialog_chooseframe_rlItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <com.pnikosis.materialishprogress.ProgressWheel
+                android:id="@+id/dialog_chooseframe_progressBar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                wheel:matProg_barColor="@color/colorPrimary"
+                wheel:matProg_progressIndeterminate="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
+
+            <include
+                android:id="@+id/dialog_chooseframe_progressLayout"
+                android:visibility="visible"
+                layout="@layout/custom_progress_layout"/>
+
+            <TextView
+                android:id="@+id/dialog_chooseframe_txtcounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="counter"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:layout_centerHorizontal="true"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dialog_chooseframe_recyclerItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/dialog_chooseframe_txtcounter"
+                android:background="@android:color/white"/>
+
+            <ImageView
+                android:id="@+id/dialog_chooseframe_imgNotfound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/notfound"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
+            <!--android:listSelector="@drawable/list_row_selector"-->
+            <!--android:choiceMode="singleChoice"/>-->
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/dialog_chooseframe_btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:bootstrapBrand="warning"
+        app:bootstrapSize="lg"
+        app:bootstrapText="Tambahkan"/>
+</RelativeLayout>

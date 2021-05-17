@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
@@ -17,7 +17,7 @@
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:background="@color/colorFirst"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/dialog_powerstock_txtTitle"
@@ -66,4 +66,4 @@
             app:bootstrapText="Choose"/>
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

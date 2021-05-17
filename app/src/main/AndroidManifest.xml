@@ -3,68 +3,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sofudev.trackapptrl">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!--
-      <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    -->
-    <!-- android:authorities="${applicationId}.easyphotopicker.fileprovider" -->
     <application
         android:name=".App.AppController"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:hardwareAccelerated="true"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup">
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="com.sofudev.trackapptrl.fileprovider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true"-->
-            <!--tools:replace="android:authorities">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/filepaths"-->
-                <!--tools:replace="android:resource" />-->
-        <!--</provider>-->
+        tools:replace="android:allowBackup"
+        tools:targetApi="q">
+        <activity android:name=".FrameProductActivity"></activity>
+        <activity android:name=".Form.DetailDeliveryTrackingActivity" />
+        <activity android:name=".Form.FormDeliveryTrackingActivity" /> <!-- <provider -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:authorities="com.sofudev.trackapptrl.fileprovider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true" -->
+        <!-- tools:replace="android:authorities"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/filepaths" -->
+        <!-- tools:replace="android:resource" /> -->
+        <!-- </provider> -->
         <!-- <activity -->
         <!-- android:usesCleartextTraffic = "true" -->
         <!-- android:name=".IntroActivity" -->
         <!-- android:screenOrientation="portrait"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-        <provider
-            android:name="com.nj.imagepicker.provider.ImageProvider"
-            android:authorities="${applicationId}.com.nj.imagepicker.fileprovider"
-            tools:replace="android:authorities">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
         <activity
             android:name=".IntroActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /> <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -114,13 +90,6 @@
             android:name=".Form.FormOrderLensActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".Form.FormOrderDashboardActivity" />
-
-        <receiver android:name=".Custom.SmsReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".Form.FormPDFViewerActivity" />
         <activity android:name=".Form.FormLensSummaryActivity" />
         <activity android:name=".Form.FormOrderHistoryActivity" />
@@ -140,8 +109,9 @@
         <activity android:name=".Form.EwarrantyActivity" />
         <activity android:name=".Form.CheckBalanceActivity" />
         <activity android:name=".Form.DetailBalanceActivity" />
-
-        <!-- <service android:name=".service.MyFirebaseMessagingService"> -->
+        <activity android:name=".Form.FormBatchOrderActivity" />
+        <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
+        <activity android:name=".Form.FormOrderDetailPartaiActivity" /> <!-- <service android:name=".service.MyFirebaseMessagingService"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
         <!-- </intent-filter> -->
@@ -151,23 +121,46 @@
         <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
         <!-- </intent-filter> -->
         <!-- </service> -->
-
-        <activity android:name=".Form.FormBatchOrderActivity" />
-        <activity android:name=".Form.FormOrderHistoryPartaiActivity" />
-        <activity android:name=".Form.FormOrderDetailPartaiActivity" />
         <activity android:name=".Form.SearchProductActivity" />
         <activity android:name=".DetailProductActivity" />
         <activity android:name=".ReportSalesActivity" />
         <activity android:name=".Form.FormOrderSpActivity" />
-        <activity android:name=".Form.FormSpFrameActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Form.FormSpFrameActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Form.FormTrackingSpActivity" />
         <activity android:name=".LoggerActivity" />
         <activity android:name=".OnHandActivity" />
         <activity android:name=".Form.DetailDepositActivity" />
         <activity android:name=".Form.FilterDepositActivity" />
         <activity android:name=".Form.FormPaymentDeposit" />
-        <activity android:name=".TestCamActivity"></activity>
+        <activity android:name=".TestCamActivity" />
+        <activity android:name=".Form.EstatementActivity" />
+
+        <provider
+            android:name="com.nj.imagepicker.provider.ImageProvider"
+            android:authorities="${applicationId}.com.nj.imagepicker.fileprovider"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <receiver android:name=".Custom.SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

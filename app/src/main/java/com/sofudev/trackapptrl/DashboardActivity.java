@@ -1,6 +1,5 @@
 package com.sofudev.trackapptrl;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,12 +9,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -26,12 +27,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -40,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,24 +59,27 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.jkb.vcedittext.VerificationAction;
 import com.jkb.vcedittext.VerificationCodeEditText;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Adapter.Adapter_banner_custom;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.Custom.LoginSession;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
-import com.sofudev.trackapptrl.Custom.SmsListener;
 import com.sofudev.trackapptrl.Custom.SmsReceiver;
+import com.sofudev.trackapptrl.Decoration.MyBanner;
 import com.sofudev.trackapptrl.Form.AddCartProductActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
 import com.sofudev.trackapptrl.Form.DetailDepositActivity;
+import com.sofudev.trackapptrl.Form.EstatementActivity;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormBatchOrderActivity;
+import com.sofudev.trackapptrl.Form.FormDeliveryTrackingActivity;
 import com.sofudev.trackapptrl.Form.FormFilterOpticnameActivity;
 import com.sofudev.trackapptrl.Form.FormOrderDashboardActivity;
 import com.sofudev.trackapptrl.Form.FormOrderHistoryActivity;
@@ -82,20 +89,24 @@ import com.sofudev.trackapptrl.Form.FormOrderLensActivity;
 import com.sofudev.trackapptrl.Form.FormOrderSpActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Form.FormProfileActivity;
-import com.sofudev.trackapptrl.Form.FormSpFrameActivity;
 import com.sofudev.trackapptrl.Form.FormTrackOrderActivity;
 import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.Form.FormUACActivity;
 import com.sofudev.trackapptrl.Form.SearchProductActivity;
 import com.sofudev.trackapptrl.Form.WishlistProductActivity;
+import com.sofudev.trackapptrl.Fragment.BalanceFragment;
+import com.sofudev.trackapptrl.Fragment.BannerFragment;
+import com.sofudev.trackapptrl.Fragment.CategoryFragment;
+import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
+import com.sofudev.trackapptrl.Fragment.SpecialProductFragment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.CustomTypefaceSpan;
-import com.sofudev.trackapptrl.Util.PermissionSettings;
 import com.squareup.picasso.Picasso;
+import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -113,6 +124,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -126,6 +138,7 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnBadgeCounter, OnFragmentInteractionListener {
     //PermissionSettings permission;
     Config config = new Config();
+    private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     private String userDetail_URL = config.Ip_address + config.dashboard_user_detail;
     private String logout_URL     = config.Ip_address + config.dashboard_update_offline;
@@ -167,11 +180,19 @@ public class DashboardActivity extends AppCompatActivity
     FabSpeedDial fab_about;
     Date dt_time;
     SimpleDateFormat sdf;
-    String nominal;
+    String nominal, sActive, sPast;
+    int sTotal;
     int smsFlag = 0;
+    LoginSession session;
 
     WishlistHelper wishlistHelper;
     AddCartHelper addCartHelper;
+
+//    private Adapter_banner_custom mAdapter;
+//
+//    private MyBanner bannerSlider;
+//    private WormDotsIndicator myDots;
+//    private LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +217,10 @@ public class DashboardActivity extends AppCompatActivity
         txt_countCart = findViewById(R.id.appbardashboard_badge_cart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         searchViews = (MaterialSearchView) findViewById(R.id.dashboard_search);
+        session = new LoginSession(getApplicationContext());
+//        bannerSlider = findViewById(R.id.layout_custom_mybanner);
+//        myDots       = findViewById(R.id.layout_custom_mydots);
+//        mLinearLayout = findViewById(R.id.layout_custom_pagesContainer);
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -280,6 +305,11 @@ public class DashboardActivity extends AppCompatActivity
         getUserDetailDB(data1);
 
         homeProduk();
+//        showBanner();
+//        showBalance();
+//        showCategory();
+//        showSpesialProduk();
+//        setupSlider();
 
         dt_time = new Date();
 
@@ -316,6 +346,21 @@ public class DashboardActivity extends AppCompatActivity
 //        updateToken(token);
     }
 
+//    private void setupSlider() {
+//        bannerSlider.setDurationScroll(800);
+//        List<Fragment> fragments = new ArrayList<>();
+//
+//        //link image
+//        fragments.add(CustomHomeFragment.newInstance("https://ecs7.tokopedia.net/img/banner/2020/4/19/85531617/85531617_17b56894-2608-4509-a4f4-ad86aa5d3b62.jpg"));
+//        fragments.add(CustomHomeFragment.newInstance("https://ecs7.tokopedia.net/img/banner/2020/4/19/85531617/85531617_7da28e4c-a14f-4c10-8fec-845578f7d748.jpg"));
+//        fragments.add(CustomHomeFragment.newInstance("https://ecs7.tokopedia.net/img/banner/2020/4/18/85531617/85531617_87a351f9-b040-4d90-99f4-3f3e846cd7ef.jpg"));
+//        fragments.add(CustomHomeFragment.newInstance("https://ecs7.tokopedia.net/img/banner/2020/4/20/85531617/85531617_03e76141-3faf-45b3-8bcd-fc0962836db3.jpg"));
+//
+//        mAdapter = new Adapter_banner_custom(getSupportFragmentManager(), fragments);
+//        bannerSlider.setAdapter(mAdapter);
+//        myDots.setViewPager(bannerSlider);
+//    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -327,6 +372,44 @@ public class DashboardActivity extends AppCompatActivity
         txt_countCart.setText(" " + countCart + " ");
 
         getSaldoDepo(username);
+    }
+
+    private void countData(final String username)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLDELIVERYCOUNTER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    Log.d("Output", response);
+
+                    sActive = "Active ("+ jsonObject.getInt("countactive") +")";
+                    sPast = "Past (" + jsonObject.getInt("countpast") +")";
+                    sTotal = jsonObject.getInt("countactive") + jsonObject.getInt("countpast");
+
+                    Log.d("Active", sActive);
+                    Log.d("Past", sPast);
+                    Log.d("Total", String.valueOf(sTotal));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("optic", username);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
 //    private void updateToken(final String token)
@@ -464,6 +547,10 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
             homeProduk();
+//            showBanner();
+//            showBalance();
+//            showCategory();
+//            showSpesialProduk();
         }
         else if (id == R.id.nav_order)
         {
@@ -474,6 +561,7 @@ public class DashboardActivity extends AppCompatActivity
                 menu.findItem(R.id.nav_orderhistoryFrame).setVisible(b);
                 menu.findItem(R.id.nav_orderhistory).setVisible(b);
                 menu.findItem(R.id.nav_ordertrack).setVisible(b);
+                menu.findItem(R.id.nav_deliverytrack).setVisible(b);
                 menu.findItem(R.id.nav_orderlens).setVisible(b);
                 menu.findItem(R.id.nav_orderbulk).setVisible(b);
                 menu.findItem(R.id.nav_orderhistorybulk).setVisible(b);
@@ -546,6 +634,7 @@ public class DashboardActivity extends AppCompatActivity
                     {
                         //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "OTRACK");
                         startActivity(intent);
                     }
                 }
@@ -557,6 +646,39 @@ public class DashboardActivity extends AppCompatActivity
                 }
 
                 drawer.closeDrawers();
+                return true;
+            }
+            else if (id == R.id.nav_deliverytrack)
+            {
+                if (level_user != null)
+                {
+                    if (Integer.parseInt(level_user) == 0)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
+                        intent.putExtra("username", navdash_username.getText().toString());
+                        intent.putExtra("activetitle", sActive);
+                        intent.putExtra("pasttitle", sPast);
+                        intent.putExtra("totalprocess", String.valueOf(sTotal));
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "DELIVTRACK");
+                        startActivity(intent);
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
+                    intent.putExtra("username", navdash_username.getText().toString());
+                    intent.putExtra("activetitle", sActive);
+                    intent.putExtra("pasttitle", sPast);
+                    intent.putExtra("totalprocess", String.valueOf(sTotal));
+                    startActivity(intent);
+                }
+
                 return true;
             }
 
@@ -762,6 +884,34 @@ public class DashboardActivity extends AppCompatActivity
         else if (id == R.id.nav_ewarranty) {
             Intent intent = new Intent(getApplicationContext(), EwarrantyActivity.class);
             startActivity(intent);
+
+            return true;
+        }
+        else if (id == R.id.nav_estatement) {
+            if (level_user != null)
+            {
+                if (Integer.parseInt(level_user) == 0)
+                {
+                    Intent intent = new Intent(getApplicationContext(), EstatementActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("opticname", navdash_username.getText().toString());
+                    startActivity(intent);
+                }
+                else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "ESTMENT");
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(getApplicationContext(), EstatementActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("opticname", navdash_username.getText().toString());
+                startActivity(intent);
+            }
 
             return true;
         }
@@ -978,7 +1128,13 @@ public class DashboardActivity extends AppCompatActivity
             public void onClick(View v) {
                 finish();
                 dialog.dismiss();
-                updateLogoutInfo(data1);
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    session.RemoveLoginSession();
+                }else
+                {
+                    updateLogoutInfo(data1);
+                }
             }
         });
         dialog.setNegativeButton("Cancel", new View.OnClickListener() {
@@ -1133,6 +1289,7 @@ public class DashboardActivity extends AppCompatActivity
 
                         if (Integer.parseInt(level_user) == 0) {
                             hideMenu();
+                            countData(navdash_username.getText().toString());
                         }
 
                         image_user = image_user.replaceAll(" ", "%20");
@@ -1788,6 +1945,18 @@ public class DashboardActivity extends AppCompatActivity
         finish();
     }
 
+//    private void homeProduk() {
+//        HomeFragment homeFragment = new HomeFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("activity", "dashboard");
+//        homeFragment.setArguments(bundle);
+//
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+////        fragmentTransaction.replace(R.id.appbar_dashboard_fragment_container, homeFragment);
+//        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
+//        fragmentTransaction.commit();
+//    }
+
     private void homeProduk() {
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
@@ -1799,6 +1968,37 @@ public class DashboardActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
         fragmentTransaction.commit();
     }
+
+//    private void showBanner() {
+//        BannerFragment bannerFragment = new BannerFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbardashboard_header, bannerFragment, "home");
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showBalance() {
+//        BalanceFragment balanceFragment = new BalanceFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbardashboard_balance, balanceFragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showCategory() {
+//        CategoryFragment categoryFragment = new CategoryFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbardashboard_category, categoryFragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showSpesialProduk() {
+//        SpecialProductFragment fragment = new SpecialProductFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("activity", "dashboard");
+//        fragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbardashboard_special_product, fragment);
+//        fragmentTransaction.commit();
+//    }
 
     private void frameProduk() {
         NewFrameFragment newFrameFragment = new NewFrameFragment();

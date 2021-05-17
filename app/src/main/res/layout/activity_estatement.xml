@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.sofudev.trackapptrl.Form.EstatementActivity">
+
+    <!-- Area header toolbar -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/frameLayout2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_ordersp_ripplebtnback"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/form_estatement_btnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorPrimary"
+                    android:contentDescription="Image back"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+            </com.andexert.library.RippleView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="E-Statement"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                app:customFont="DroidBold.ttf" />
+            <com.andexert.library.RippleView
+                android:id="@+id/form_estatement_ripplebtnmore"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <ImageButton
+                    android:id="@+id/form_estatement_btnmore"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:src="@drawable/ic_more_white"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="Upload Order"/>
+            </com.andexert.library.RippleView>
+        </RelativeLayout>
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter Tanggal"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:textColor="@color/colorContent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/form_estatement_lineardate"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearsummary"
+                android:background="@color/white"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.425">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_estatement_txtTanggalAwal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="24 Nov 2020"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".14"
+                    android:background="@color/dot_dark_screen2">
+
+                    <ImageView
+                        android:id="@+id/form_estatement_imgcalendar"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:contentDescription="@string/about_1_title"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_date_white"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.005"
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/strok"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.425">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_estatement_txtTanggalAkhir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="24 Nov 2020"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        app:customFont="UbuntuMedium.ttf"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_estatement_linearsummary"
+                android:layout_width="0dp"
+                android:layout_height="135dp"
+                android:visibility="gone"
+                android:background="@drawable/custom_corner"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_estatement_txtopticname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Optic Name"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorHint"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="35dp"
+                    android:background="@drawable/round_statement"
+                    android:padding="4dp"
+                    android:text="View Detail"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    app:layout_constraintBottom_toTopOf="@+id/form_estatement_txtsummarynote"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtopticname" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/universalFontTextView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="IDR"
+                    android:textColor="@color/colorContent"
+                    android:textSize="12sp"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:layout_constraintEnd_toStartOf="@+id/form_estatement_txtsummarycontent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtopticname" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_estatement_txtsummarycontent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintBottom_toTopOf="@+id/form_estatement_txtsummarynote"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintHorizontal_bias="0.55"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtopticname" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_estatement_txtsummarytitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Total Summary"
+                    android:visibility="gone"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    android:textSize="18sp"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintHorizontal_bias="0.55"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtsummarycontent" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_estatement_txtsummarynote"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/colorStm"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="* Jumlah diatas adalah nilai total statement yang belum dilunasi dari tahun sebelumnya"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    android:textSize="11sp"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    tl:layout_constraintGuide_begin="270dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/form_estatement_linearselect"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_lineardate"
+                android:background="@drawable/custom_corner"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.845"
+                    android:focusableInTouchMode="true">
+
+                    <EditText
+                        android:id="@+id/form_estatement_edInvoice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:textSize="16sp"
+                        android:hint="201413620"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.005"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/strok"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".15">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:contentDescription="@string/about_1_title"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_search_black"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select an Invoice"
+                android:background="@color/neutral"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_lineardate"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:id="@+id/txtMonAwal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:id="@+id/txtYearAwal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintLeft_toRightOf="@+id/txtMonAwal"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect" />
+
+            <TextView
+                android:id="@+id/txtMonAkhir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintLeft_toRightOf="@+id/txtYearAwal"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect" />
+
+            <TextView
+                android:id="@+id/txtYearAkhir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintLeft_toRightOf="@+id/txtMonAkhir"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect" />
+
+            <com.dueeeke.tablayout.SlidingTabLayout
+                android:id="@+id/form_estatement_slidinglayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/dot_dark_screen2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/form_estatement_rplfilter"
+                app:layout_constraintTop_toBottomOf="@+id/cardView8"
+                android:visibility="gone"
+                tl:tl_divider_color="@color/dot_dark_screen2"
+                tl:tl_divider_padding="13dp"
+                tl:tl_divider_width="1dp"
+                tl:tl_indicator_color="@color/neutral"
+                tl:tl_indicator_height="2dp"
+                tl:tl_indicator_width_equal_title="true"
+                tl:tl_tab_padding="12dp"
+                tl:tl_tab_space_equal="false"
+                tl:tl_textSelectColor="@color/neutral"
+                tl:tl_textUnselectedColor="@color/gray"
+                tl:tl_underline_color="@color/dot_dark_screen2"
+                tl:tl_underline_height="1dp" />
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_estatement_rplexport"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="0dp"
+                android:background="@color/dot_dark_screen2"
+                app:layout_constraintBottom_toTopOf="@+id/form_estatement_viewpager"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_lineardate">
+
+                <ImageView
+                    android:id="@+id/form_estatement_btnexport"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_export_white" />
+
+            </com.andexert.library.RippleView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:background="@color/dot_dark_screen2"
+                android:orientation="horizontal"
+                app:layout_constraintRight_toLeftOf="@+id/form_estatement_rplfilter"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_lineardate"
+                app:layout_constraintLeft_toRightOf="@+id/form_estatement_rplexport"
+                android:layout_marginLeft="0dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_estatement_txtTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="24 Nov 2020"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/neutral"
+                    android:textSize="16sp"
+                    app:customFont="UbuntuMedium.ttf" />
+            </LinearLayout>
+
+            <com.andexert.library.RippleView
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_lineardate"
+                android:background="@color/dot_dark_screen2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/form_estatement_viewpager"
+                android:id="@+id/form_estatement_rplfilter">
+
+                <ImageView
+                    android:id="@+id/form_estatement_btnfilter"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_filter"
+                    android:layout_centerInParent="true"/>
+
+            </com.andexert.library.RippleView>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/form_estatement_viewpager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/neutral"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect"
+                app:layout_constraintVertical_bias="0.0">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight=".15"
+                            android:paddingLeft="4dp"
+                            android:text="Total"
+                            android:textColor="@color/colorContent"
+                            android:textSize="14sp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".68">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="10dp"
+                                android:text="Rp 200.000.000"
+                                android:textColor="@color/colorContent"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".17">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="8dp"
+                                android:contentDescription="@string/about_1_title"
+                                android:src="@drawable/ic_cloud_computing" />
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="28dp"
+                                android:text="Export"
+                                android:textColor="@color/colorContent"
+                                android:textSize="11sp" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <com.dueeeke.tablayout.SlidingTabLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/dot_dark_screen2"
+                        tl:tl_divider_color="@color/dot_dark_screen2"
+                        tl:tl_divider_padding="13dp"
+                        tl:tl_divider_width="1dp"
+                        tl:tl_indicator_color="@color/neutral"
+                        tl:tl_indicator_height="2dp"
+                        tl:tl_indicator_width_equal_title="true"
+                        tl:tl_tab_padding="20dp"
+                        tl:tl_tab_space_equal="false"
+                        tl:tl_textSelectColor="@color/neutral"
+                        tl:tl_textUnselectedColor="@color/gray"
+                        tl:tl_underline_color="@color/dot_dark_screen2"
+                        tl:tl_underline_height="1dp" />
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/form_estatement_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/neutral"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_marginLeft="50dp"-->
+                <!--android:layout_marginRight="50dp"-->
+                <!--android:layout_marginTop="25dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:cardElevation="3dp"-->
+                <!--app:cardBackgroundColor="@color/neutral"-->
+                <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                <!--app:layout_constraintRight_toRightOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/form_estatement_linearselect"-->
+                <!--android:layout_marginStart="50dp"-->
+                <!--android:layout_marginEnd="50dp">-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:weightSum="1">-->
+
+                    <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight=".15"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:text="Total"-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:textColor="@color/colorContent"-->
+                        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/frameLayout2"-->
+                        <!--android:layout_marginStart="10dp" />-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight=".68">-->
+
+                        <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Rp 200.000.000"-->
+                            <!--android:textStyle="bold"-->
+                            <!--android:textSize="22sp"-->
+                            <!--android:textColor="@color/colorContent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:layout_marginStart="10dp" />-->
+                    <!--</RelativeLayout>-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight=".17">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="20dp"-->
+                            <!--android:layout_height="20dp"-->
+                            <!--android:layout_centerHorizontal="true"-->
+                            <!--android:layout_marginTop="8dp"-->
+                            <!--android:src="@drawable/ic_cloud_computing"-->
+                            <!--android:contentDescription="@string/about_1_title"/>-->
+
+                        <!--<com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Export"-->
+                            <!--android:textSize="11sp"-->
+                            <!--android:layout_marginTop="28dp"-->
+                            <!--android:textColor="@color/colorContent"-->
+                            <!--android:layout_centerHorizontal="true"/>-->
+                    <!--</RelativeLayout>-->
+
+                <!--</LinearLayout>-->
+
+            <!--</android.support.v7.widget.CardView>-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>

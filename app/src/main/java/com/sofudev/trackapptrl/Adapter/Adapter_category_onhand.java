@@ -61,7 +61,7 @@ public class Adapter_category_onhand extends BaseAdapter {
         String power = itemOnHand.get(position).getItemName();
         txtPower.setText(power);
 
-        if (power.equals(pos))
+        if (power.contains(pos))
         {
             txtPower.setTextColor(Color.parseColor("#358bff"));
             imgCheck.setVisibility(View.VISIBLE);

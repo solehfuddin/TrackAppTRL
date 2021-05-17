@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+        <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
+            android:id="@+id/listview_uac_thumbnail"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentLeft="true"
+            app:bootstrapBrand="danger"
+            app:hasBorder="false"
+            />
+
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/listview_uac_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Customer Name"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@+id/listview_uac_thumbnail"
+        android:layout_toEndOf="@+id/listview_uac_thumbnail"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        app:customFont="TitilliumSemiBold.ttf" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/listview_uac_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/listview_uac_thumbnail"
+        android:layout_toEndOf="@+id/listview_uac_thumbnail"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_below="@+id/listview_uac_title"
+        app:bootstrapSize="xs"
+        app:bootstrapBrand="success"
+        app:bootstrapText="Active"/>
+
+    <TextView
+        android:id="@+id/listview_uac_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Data username"
+        android:layout_alignBaseline="@+id/listview_uac_status"
+        android:layout_alignBottom="@+id/listview_uac_status"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

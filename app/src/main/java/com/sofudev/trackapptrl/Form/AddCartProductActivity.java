@@ -3,12 +3,12 @@ package com.sofudev.trackapptrl.Form;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.LongDef;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.LongDef;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -33,7 +32,6 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_cart;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
-import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
@@ -45,7 +43,6 @@ import com.sofudev.trackapptrl.Data.Data_spin_shipment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.R;
-import com.squareup.picasso.Picasso;
 import com.ssomai.android.scalablelayout.ScalableLayout;
 
 import org.json.JSONArray;
@@ -542,6 +539,19 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+//        addCartHelper.open();
+        int counter  = addCartHelper.countAddCart();
+
+        Intent intent = new Intent();
+        intent.putExtra("counter", counter);
+        setResult(2, intent);
+
+        finish();
     }
 
     private void autoInsertOrder() {

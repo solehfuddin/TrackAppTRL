@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/deliverytracking" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtawb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="3dp"
+        android:text="@string/awb_number"
+        android:textColor="@color/colorContent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtcourier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/shipping_name"
+        android:textSize="14sp"
+        app:customFont="RobotoRegular.ttf"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_txtawb" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottom_dialog_deliverytrack_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/border_custom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorHint"
+                android:orientation="horizontal">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/inv_number"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:customFont="RobotoRegular.ttf" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/bottom_dialog_deliverytrack_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/bottom_dialog_deliverytrack_imgnotfound"
+                        android:layout_width="match_parent"
+                        android:layout_height="115dp"
+                        android:src="@drawable/notfound"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/bottom_dialog_deliverytrack_imgpicked"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview"
+        app:srcCompat="@drawable/picked" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtpicked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/picked"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintStart_toEndOf="@+id/bottom_dialog_deliverytrack_imgpicked"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview" />
+
+    <ImageView
+        android:id="@+id/bottom_dialog_deliverytrack_imgtransit"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview"
+        app:srcCompat="@drawable/transit" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txttransit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/in_transit"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintStart_toEndOf="@+id/bottom_dialog_deliverytrack_imgtransit"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview" />
+
+    <ImageView
+        android:id="@+id/bottom_dialog_deliverytrack_imgdelivered"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_dialog_deliverytrack_txtdelivered"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview"
+        app:srcCompat="@drawable/delivered_disabled" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtdelivered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/delivered"
+        android:textColor="@color/colorDisable"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_cardview" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/deliveryman"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_view"
+        tools:ignore="ContentDescription" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtmessname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/messenger_name"
+        android:textColor="@color/colorContent"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_view" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottom_dialog_deliverytrack_txtmessid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="3dp"
+        android:text="@string/messenger_id"
+        android:textSize="14sp"
+        app:customFont="RobotoRegular.ttf"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_txtmessname" />
+
+    <View
+        android:id="@+id/bottom_dialog_deliverytrack_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorHint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_imgtransit" />
+
+    <com.andexert.library.RippleView
+        android:id="@+id/bottom_dialog_deliverytrack_btndetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:rv_rippleDuration="600"
+        app:rv_type="rectangle"
+        app:rv_color="@color/colorHint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/border_custom"
+            android:text="@string/detail_tracking"
+            android:textColor="@color/colorHint" />
+    </com.andexert.library.RippleView>
+
+    <ProgressBar
+        android:id="@+id/bottom_dialog_deliverytrack_progressheader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="3dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/bottom_dialog_deliverytrack_progresscontent"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="19dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

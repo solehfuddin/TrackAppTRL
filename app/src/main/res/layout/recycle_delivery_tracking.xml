@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.github.vipulasri.timelineview.TimelineView
+            android:id="@+id/recy_deliverytrack_timeline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lineStyle="dash"
+            app:lineStyleDashGap="2.2dp"
+            app:lineStyleDashLength="5dp"
+            app:lineWidth="2dp"
+            app:marker="@drawable/checkgreen"
+            app:markerSize="23dp"
+            app:startLineColor="@color/colorDisable"
+            app:endLineColor="@color/colorDisable"/>
+    </LinearLayout>
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/recy_deliverytrack_txtdesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="17dp"
+        android:text="@string/description_delivery_tracking"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/recy_deliverytrack_txtdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8.5dp"
+        android:layout_marginBottom="21dp"
+        android:text="@string/date_info"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/recy_deliverytrack_txtdesc"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/recy_deliverytrack_txtdesc"
+        android:src="@drawable/time"
+        tools:ignore="VectorDrawableCompat"
+        android:contentDescription="@string/app_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

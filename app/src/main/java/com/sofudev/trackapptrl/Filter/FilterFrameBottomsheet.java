@@ -2,9 +2,9 @@ package com.sofudev.trackapptrl.Filter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,8 +14,7 @@ import com.android.volley.toolbox.Volley;
 //import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 //import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -25,8 +24,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.sofudev.trackapptrl.Adapter.Adapter_brandfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_colorfilter;
 import com.sofudev.trackapptrl.Custom.Config;
-import com.sofudev.trackapptrl.Custom.CustomAdapterFrameBrand;
-import com.sofudev.trackapptrl.Custom.CustomAdapterFrameColor;
 import com.sofudev.trackapptrl.Data.Data_brand_filter;
 import com.sofudev.trackapptrl.Data.Data_color_filter;
 import com.sofudev.trackapptrl.R;

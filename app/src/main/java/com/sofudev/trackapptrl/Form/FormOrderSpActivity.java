@@ -17,11 +17,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -52,6 +52,7 @@ import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.nj.imagepicker.ImagePicker;
 import com.nj.imagepicker.listener.ImageMultiResultListener;
 import com.nj.imagepicker.result.ImageResult;
@@ -67,8 +68,6 @@ import com.sofudev.trackapptrl.Data.Data_spheader;
 import android.Manifest;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
-import com.sofudev.trackapptrl.TestCamActivity;
-import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,7 +92,6 @@ import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import es.dmoral.toasty.Toasty;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
 
 
@@ -106,26 +104,29 @@ public class FormOrderSpActivity extends AppCompatActivity {
     String URL_INSERTSAMTEMP  = config.Ip_address + config.ordersp_insert_samTemp;
     String URL_INSERTTRXHEADER= config.Ip_address + config.ordersp_insert_trxHeader;
     String URL_UPDATEPHOTO    = config.Ip_address + config.ordersp_update_photo;
+    String URL_UPDATESIGNED   = config.Ip_address + config.ordersp_update_digitalsigned;
 
     Calendar calendar = Calendar.getInstance();
 
 //    BetterSpinner spinMulaiCicilan;
     ACProgressFlower loading;
-    Spinner spinPilihPembayaran, spinTipeSp, spinMulaiCicilan;
+    Spinner spinCicilan, spinPilihPembayaran, spinTipeSp, spinMulaiCicilan;
     BootstrapEditText txtNomorSp, txtNamaOptik, txtKotaOptik, txtAlamatOptik, txtDiskon, txtJumlahDp,
-            txtCicilan, txtAlamatPengiriman;
+            txtCicilan, txtAlamatPengiriman, txtShipNumber;
     RippleView btnChooseOptik, btnSave, btnBack;
     LinearLayout linearTitleCicilan, linearContentCicilan;
     ImageView imgPhoto;
     TextView txtImgLoc;
-    Button btnTakePicture;
+    SignaturePad digitalSignature;
+    Button btnTakePicture, btnClearSign;
 
     Data_spheader dataHeader;
-    String username, status, province, idOptic, opticUsername, idpartySales, mobilenumber, filename, imgpath, fname;
+    String username, status, province, idOptic, opticUsername, idpartySales, mobilenumber, filename, imgpath, fname, filesigned,
+    signedpath;
     String cicilanVal;
-    boolean isTipeSp, isMulaiBayar, isPilihOptik, isImage;
+    boolean isDigitalSigned, isMulaiBayar, isPilihOptik, isImage;
     MCrypt mCrypt;
-    Uri img_uri;
+    Uri img_uri, signed_uri;
 
     public static final int RequestPermissionCode  = 1 ;
     BroadcastReceiver broadcastReceiver;
@@ -137,9 +138,11 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
+        spinCicilan = findViewById(R.id.form_ordersp_spinCicilan);
         spinTipeSp = findViewById(R.id.form_ordersp_spinTipeSp);
         spinPilihPembayaran = findViewById(R.id.form_ordersp_txtPembayaran);
         spinMulaiCicilan = findViewById(R.id.form_ordersp_spinMulaiCicilan);
+        txtShipNumber = findViewById(R.id.form_ordersp_txtShipNumber);
         txtNomorSp = findViewById(R.id.form_ordersp_txtNomorSp);
         txtNamaOptik = findViewById(R.id.form_ordersp_txtNamaOptik);
         txtKotaOptik = findViewById(R.id.form_ordersp_txtKotaOptik);
@@ -148,10 +151,12 @@ public class FormOrderSpActivity extends AppCompatActivity {
         txtDiskon = findViewById(R.id.form_ordersp_txtDiskon);
         txtCicilan = findViewById(R.id.form_ordersp_txtCicilan);
         txtAlamatPengiriman = findViewById(R.id.form_ordersp_txtAlamatPengiriman);
+        digitalSignature = findViewById(R.id.form_ordersp_imgdigitalsign);
         btnChooseOptik = findViewById(R.id.form_ordersp_btnChooser);
         btnSave = findViewById(R.id.form_ordersp_ripplebtnsave);
         btnBack = findViewById(R.id.form_ordersp_ripplebtnback);
         btnTakePicture = findViewById(R.id.form_ordersp_btnPicture);
+        btnClearSign = findViewById(R.id.form_ordersp_btndigitalsign);
         imgPhoto = findViewById(R.id.form_ordersp_imgPhoto);
         txtImgLoc = findViewById(R.id.form_ordersp_imglocation);
         linearTitleCicilan = findViewById(R.id.form_ordersp_linearTitleCicilan);
@@ -204,16 +209,35 @@ public class FormOrderSpActivity extends AppCompatActivity {
         loading.show();
     }
 
+    private static Bitmap convertToPng(Bitmap bitmap){
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] src = baos.toByteArray();
+            return BitmapFactory.decodeByteArray(src, 0, src.length);
+        }finally {
+            if(baos != null){
+                try {
+                    baos.close();
+                } catch (IOException e) {
+                    Log.e("Error convert", "ByteArrayOutputStream was not closed");
+                }
+            }
+        }
+    }
+
     private void autoLoad()
     {
         dataHeader = new Data_spheader();
 
-//        showLoading();
+        showLoading();
 
         txtNomorSp.setEnabled(false);
         txtNamaOptik.setEnabled(false);
         txtKotaOptik.setEnabled(false);
         txtAlamatOptik.setEnabled(false);
+        txtShipNumber.setEnabled(false);
 //        linearTitleCicilan.setVisibility(View.GONE);
 //        linearContentCicilan.setVisibility(View.GONE);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -236,9 +260,33 @@ public class FormOrderSpActivity extends AppCompatActivity {
         chooseTypeSp();
         choosePaymentSp();
         chooseStartInstallment();
+        chooseDurasiCicil();
 
         setCurrency(txtJumlahDp);
         setDecimal(txtDiskon);
+
+        digitalSignature.setOnSignedListener(new SignaturePad.OnSignedListener() {
+            @Override
+            public void onStartSigning() {
+
+            }
+
+            @Override
+            public void onSigned() {
+                isDigitalSigned = true;
+                Bitmap bitmap = convertToPng(digitalSignature.getSignatureBitmap());
+                signed_uri = getImageUrl(getApplicationContext(), bitmap);
+                filesigned = getPath(signed_uri);
+
+                String[] delimit = filesigned.split("/");
+                signedpath  = delimit[delimit.length - 1];
+            }
+
+            @Override
+            public void onClear() {
+                isDigitalSigned = false;
+            }
+        });
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,6 +369,13 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         }*/
                     }
                 }).show(getSupportFragmentManager());
+            }
+        });
+
+        btnClearSign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                digitalSignature.clear();
             }
         });
     }
@@ -433,7 +488,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //                spinTipeSp.setText(selectedItem);
 //                spinTipeSp.setError(null);
 
-//                showLoading();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String otherDate = sdf.format(calendar.getTime());
 
@@ -504,6 +558,14 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void chooseDurasiCicil()
+    {
+//        final int [] durasi = getResources().getIntArray(R.array.durasi_cicilan);
+        final String [] durasi = new String[] {"1", "2", "3"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spin_framemodel_item, durasi);
+        spinCicilan.setAdapter(adapter);
     }
 
     private void setDecimal(final BootstrapEditText edt) {
@@ -602,7 +664,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
     }
 
     private void getIdSp(final String date) {
-        showLoading();
+//        showLoading();
         StringRequest request = new StringRequest(Request.Method.POST, URL_GETIDSP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1206,11 +1268,13 @@ public class FormOrderSpActivity extends AppCompatActivity {
                                 txtNamaOptik.setError(null);
                                 txtAlamatOptik.setError(null);
                                 txtKotaOptik.setError(null);
+                                txtShipNumber.setError(null);
 
                                 idOptic = idparty;
                                 txtNamaOptik.setText(obj.getString("custName"));
                                 txtKotaOptik.setText(obj.getString("city"));
                                 txtAlamatOptik.setText(obj.getString("address"));
+                                txtShipNumber.setText(obj.getString("username"));
                                 province = obj.getString("province");
                                 opticUsername = obj.getString("username");
                             }
@@ -1248,8 +1312,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 updatePhoto(dataHeader, URL_UPDATEPHOTO);
+                updateSigned();
 
 //                if (spinTipeSp.getText().toString().matches("-- Pilih SP --"))
 //                {
@@ -1271,6 +1335,11 @@ public class FormOrderSpActivity extends AppCompatActivity {
                 else
                 {
                     isImage = true;
+                }
+
+                if (!isDigitalSigned)
+                {
+                    Toasty.warning(getApplicationContext(), "Harap isi tanda tangan digital", Toast.LENGTH_SHORT).show();
                 }
 
                 if (spinPilihPembayaran.getSelectedItem().toString().matches("Cicilan"))
@@ -1317,11 +1386,12 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     txtCicilan.setText("1");
                 }
 
-                if (isMulaiBayar && isPilihOptik && isImage)
+                if (isMulaiBayar && isPilihOptik && isImage && isDigitalSigned)
                 {
                     dataHeader.setNoSp(txtNomorSp.getText().toString());
                     dataHeader.setTypeSp(spinTipeSp.getSelectedItem().toString());
                     dataHeader.setSales(username);
+                    dataHeader.setShipNumber(txtShipNumber.getText().toString());
                     dataHeader.setCustName(txtNamaOptik.getText().toString());
                     dataHeader.setAddress(txtAlamatOptik.getText().toString());
                     dataHeader.setCity(txtKotaOptik.getText().toString());
@@ -1329,7 +1399,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     dataHeader.setDp(txtJumlahDp.length() > 0 ? Integer.valueOf(txtJumlahDp.getText().toString().replace(".","")) : 0);
                     dataHeader.setDisc(txtDiskon.length() > 0 ? txtDiskon.getText().toString() : "0");
                     dataHeader.setCondition(spinPilihPembayaran.getSelectedItem().toString());
-                    dataHeader.setInstallment(txtCicilan.getText().toString());
+//                    dataHeader.setInstallment(txtCicilan.getText().toString());
+                    dataHeader.setInstallment(spinCicilan.getSelectedItem().toString());
                     dataHeader.setStartInstallment(cicilanVal);
                     dataHeader.setShipAddress(txtAlamatPengiriman.getText().toString());
                     dataHeader.setStatus("");
@@ -1349,6 +1420,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_nosp", txtNomorSp.getText().toString());
                         intent.putExtra("header_tipesp", spinTipeSp.getSelectedItem().toString());
                         intent.putExtra("header_sales", username);
+                        intent.putExtra("header_shipnumber", txtShipNumber.getText().toString());
                         intent.putExtra("header_custname", txtNamaOptik.getText().toString());
                         intent.putExtra("header_address", txtAlamatOptik.getText().toString());
                         intent.putExtra("header_city", txtKotaOptik.getText().toString());
@@ -1356,11 +1428,13 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_dp", dataHeader.getDp());
                         intent.putExtra("header_disc", dataHeader.getDisc());
                         intent.putExtra("header_condition", spinPilihPembayaran.getSelectedItem().toString());
-                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+//                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+                        intent.putExtra("header_installment", spinCicilan.getSelectedItem().toString());
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
                         intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_signedpath", signedpath);
                         startActivity(intent);
                     }
                     else if (spinTipeSp.getSelectedItem().toString().equals("Lensa Partai"))
@@ -1381,6 +1455,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_nosp", txtNomorSp.getText().toString());
                         intent.putExtra("header_tipesp", spinTipeSp.getSelectedItem().toString());
                         intent.putExtra("header_sales", username);
+                        intent.putExtra("header_shipnumber", txtShipNumber.getText().toString());
                         intent.putExtra("header_custname", txtNamaOptik.getText().toString());
                         intent.putExtra("header_address", txtAlamatOptik.getText().toString());
                         intent.putExtra("header_city", txtKotaOptik.getText().toString());
@@ -1388,11 +1463,13 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_dp", dataHeader.getDp());
                         intent.putExtra("header_disc", dataHeader.getDisc());
                         intent.putExtra("header_condition", spinPilihPembayaran.getSelectedItem().toString());
-                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+//                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+                        intent.putExtra("header_installment", spinCicilan.getSelectedItem().toString());
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
                         intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_signedpath", signedpath);
                         startActivity(intent);
                     }
                     else if (spinTipeSp.getSelectedItem().toString().equals("Frame"))
@@ -1409,6 +1486,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_nosp", txtNomorSp.getText().toString());
                         intent.putExtra("header_tipesp", spinTipeSp.getSelectedItem().toString());
                         intent.putExtra("header_sales", username);
+                        intent.putExtra("header_shipnumber", txtShipNumber.getText().toString());
                         intent.putExtra("header_custname", txtNamaOptik.getText().toString());
                         intent.putExtra("header_address", txtAlamatOptik.getText().toString());
                         intent.putExtra("header_city", txtKotaOptik.getText().toString());
@@ -1416,11 +1494,14 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_dp", dataHeader.getDp());
                         intent.putExtra("header_disc", dataHeader.getDisc());
                         intent.putExtra("header_condition", spinPilihPembayaran.getSelectedItem().toString());
-                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+//                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+                        intent.putExtra("header_installment", spinCicilan.getSelectedItem().toString());
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
                         intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_signedpath", signedpath);
+
                         startActivity(intent);
                     }
 
@@ -1626,20 +1707,67 @@ public class FormOrderSpActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null)
-                {
-                    Log.d("ERROR INSERT SP", error.getMessage());
-                }
-                else
-                {
-                    Toasty.error(getApplicationContext(), "SP Number Redundant", Toast.LENGTH_SHORT).show();
-                }
+//                if (error.getMessage() != null)
+//                {
+//                    Log.d("ERROR INSERT SP", error.getMessage());
+//                }
+//                else
+//                {
+//                    Toasty.error(getApplicationContext(), "SP Number Redundant", Toast.LENGTH_SHORT).show();
+//                }
+
+                error.printStackTrace();
             }
         });
 
-        smr.addStringParam("no_sp", item.getNoSp());
-        smr.addStringParam("sales", username);
+//        smr.addStringParam("no_sp", item.getNoSp());
+//        smr.addStringParam("sales", username);
         smr.addFile("image", filename);
+
+        AppController.getInstance().addToRequestQueue(smr);
+    }
+
+    private void updateSigned() {
+        SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, URL_UPDATESIGNED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error") || object.names().get(0).equals("invalid"))
+                    {
+                        Toasty.error(getApplicationContext(), "Data failed save", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (object.names().get(0).equals("info")) {
+                        Toasty.warning(getApplicationContext(), "Tanda tangan digital sudah pernah diupload", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+//                        Toasty.success(getApplicationContext(), "Return image : " + object.getString("path"), Toast.LENGTH_SHORT).show();
+                        Log.d("Return image : ", object.getString("path"));
+//                        imgpath = object.getString("path");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                if (error.getMessage() != null)
+//                {
+//                    Log.d("ERROR INSERT SP", error.getMessage());
+//                }
+//                else
+//                {
+//                    Toasty.error(getApplicationContext(), "SP Number Redundant", Toast.LENGTH_SHORT).show();
+//                }
+
+                error.printStackTrace();
+            }
+        });
+
+        smr.addFile("image", filesigned);
 
         AppController.getInstance().addToRequestQueue(smr);
     }

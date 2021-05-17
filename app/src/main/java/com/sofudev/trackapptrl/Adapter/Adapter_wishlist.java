@@ -1,20 +1,16 @@
 package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
-import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
-import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
-import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelWishlist;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;
@@ -23,8 +19,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
-
-import es.dmoral.toasty.Toasty;
 
 public class Adapter_wishlist extends RecyclerView.Adapter<Adapter_wishlist.ViewHolder> {
     private Context context;

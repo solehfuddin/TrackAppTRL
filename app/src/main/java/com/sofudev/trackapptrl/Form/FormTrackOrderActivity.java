@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -67,6 +68,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     private String CHECK_CUSTNAME   = config.Ip_address + config.track_order_custname;
     private String CHECK_REFERENCE  = config.Ip_address + config.track_order_reference;
     private String CHECK_BYDATE     = config.Ip_address + config.track_order_daterange;
+    private String GET_FRAME_BRAND  = config.Ip_address + config.track_order_getFrame;
+    private String GET_FRAME_TYPE   = config.Ip_address + config.track_order_getType;
 
     Button btn_filterdate;
     ImageButton btn_back, btn_search, btn_filter;
@@ -78,6 +81,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     MCrypt mCrypt;
     Calendar calendar;
     ACProgressFlower loading;
+    LinearLayout linear_frameBrand;
+    AdvancedTextView txt_frameBrand;
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recyclerLayoutManager;
@@ -89,7 +94,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
 
     long lastClick = 0;
     Integer req_start = 0, total_row, total_item, total_filter, day, month, year;
-    String id_data, customer_name, start_date, end_date;
+    String id_data, customer_name, start_date, end_date, frame_brand_dt, frame_type_dt;
 
     String order_number, order_lensname, order_sphr, order_cylr, order_addr, order_sphl, order_cyll, order_addl,
             order_reference, order_tinting, order_facettrl, order_status, order_statusdate;
@@ -147,7 +152,24 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 order_status        = list.get(pos).getOrder_status();
                 order_statusdate    = list.get(pos).getOrder_statusdate() + " " + list.get(pos).getOrder_statustime();
 
-                showDialogTrack();
+                if (order_facettrl.equals("G"))
+                {
+                    getFrameBrand(order_number);
+
+                    try {
+                        Thread.sleep(150);
+                        getFrameType(order_number);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                try {
+                    Thread.sleep(400);
+                    showDialogTrack();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //Toast.makeText(getApplicationContext(), id + " " + order_number, Toast.LENGTH_SHORT).show();
             }
         });
@@ -212,8 +234,11 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         btn_lblfacet    = (BootstrapLabel) dialog.findViewById(R.id.form_dialogtrack_btnfacet);
         txt_orderStatus = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtorderstatus);
         txt_dateStatus  = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtdatestatus);
+        txt_frameBrand  = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtframebrand);
+        linear_frameBrand = (LinearLayout) dialog.findViewById(R.id.form_dialogtrack_linearframebrand);
 
         ripple_btnDetail= (RippleView) dialog.findViewById(R.id.form_dialogtrack_rippleBtnDetail);
+        Button btn_Detail      = (Button) dialog.findViewById(R.id.form_dialogtrack_btnDetail);
 
         txt_jobNumber.setText("Job Number #" + order_number);
         txt_lensName.setText(order_lensname);
@@ -224,6 +249,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         txt_cylL.setText(order_cyll);
         txt_addL.setText(order_addl);
         txt_reference.setText(order_reference);
+        linear_frameBrand.setVisibility(View.GONE);
+//        getFrameBrand(order_number);
 
         txt_orderStatus.setText(order_status);
         txt_dateStatus.setText(order_statusdate);
@@ -237,7 +264,6 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             txt_tinting.setText("");
         }
 
-
         if (order_facettrl.equals("F") | order_facettrl.equals("N"))
         {
             btn_lblfacet.setText("NON FACET");
@@ -248,6 +274,19 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             btn_lblfacet.setText("FACET TIMUR RAYA");
             btn_lblfacet.setBootstrapBrand(DefaultBootstrapBrand.DANGER);
         }
+
+        if (order_status.equals("IMPT"))
+        {
+            ripple_btnDetail.setEnabled(false);
+            btn_Detail.setBackgroundColor(Color.parseColor("#dedede"));
+            btn_Detail.setTextColor(Color.parseColor("#58595e"));
+        }
+//        else
+//        {
+//            ripple_btnDetail.setEnabled(true);
+//            btn_Detail.setBackgroundColor(Color.parseColor("#ff33b5e5"));
+//            btn_Detail.setTextColor(Color.parseColor("#fff"));
+//        }
 
         ripple_btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,6 +307,121 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loading.hide();
+    }
+
+    private void getFrameBrand(final String jobNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, GET_FRAME_BRAND, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("invalid"))
+                    {
+                        frame_brand_dt = "";
+                    }
+                    else
+                    {
+                        String receive_by = object.getString("receive_by");
+                        String receive_at = object.getString("receive_at");
+                        String merk_frame = object.getString("merk_frame");
+
+                        frame_brand_dt = merk_frame + " (Diterima " + receive_by + ")";
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("job", jobNumber);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getFrameType(final String jobNumber){
+        StringRequest request = new StringRequest(Request.Method.POST, GET_FRAME_TYPE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("invalid"))
+                    {
+                        frame_type_dt = "";
+                    }
+                    else
+                    {
+                        String edgeType = object.getString("edge_type");
+
+                        switch (edgeType){
+                            case "1":
+                                frame_type_dt = "FULL";
+                                break;
+                            case "2":
+                                frame_type_dt = "BOR";
+                                break;
+                            case "3":
+                                frame_type_dt = "NYLON";
+                                break;
+                            default:
+                                frame_type_dt = "-";
+                                break;
+                        }
+
+                        linear_frameBrand.setVisibility(View.VISIBLE);
+                        if (!frame_brand_dt.isEmpty())
+                        {
+                            if (frame_type_dt.equals("-"))
+                            {
+                                frame_type_dt = frame_brand_dt;
+                            }
+                            else
+                            {
+                                frame_type_dt = frame_type_dt + " - " + frame_brand_dt;
+                            }
+                        }
+                        else
+                        {
+                            if (frame_type_dt.equals("-"))
+                            {
+                                frame_type_dt = "-";
+
+                            }
+                        }
+
+                        txt_frameBrand.setText(frame_type_dt);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("job", jobNumber);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void OpenFilter()

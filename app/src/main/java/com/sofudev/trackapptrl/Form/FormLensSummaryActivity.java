@@ -2,21 +2,19 @@ package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.LongDef;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.LongDef;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,12 +26,10 @@ import com.android.volley.toolbox.Volley;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
-import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
-import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.Data.Data_lensorderweb;
 import com.sofudev.trackapptrl.Data.Data_lensorderweb_item;
 import com.sofudev.trackapptrl.Data.Data_paymentmethod;
@@ -109,8 +105,9 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     ListView listPayment;
     CardView cardPayment;
     LinearLayout linearFlashSale;
-    String headerNoSp, headerTipeSp, headerSales, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
-            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage;
+    String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
+            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage,
+            headerSignedPath;
     String orderNumber, opticUsername, hargaLensa, deskripsiLensa, diskonLensa, facetLensa, tintingLensa, totalPrice,
             tempTotal, cityOptic, provinceOptic ,itemWeight, lensCategory, date1, date2, addTemp, flagShipping, patientName, idParty,
             shippingMethod, kodeBilling, duration, expDate, ownerPhone, memberFlag, opticName, opticAddress, phoneNumber,
@@ -1839,6 +1836,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             headerNoSp       = bundle.getString("headerNoSp");
             headerTipeSp     = bundle.getString("headerTipeSp");
             headerSales      = bundle.getString("headerSales");
+            headerShipNumber = bundle.getString("headerShipNumber");
             headerCustName   = bundle.getString("headerCustName");
             headerAddress    = bundle.getString("headerAddress");
             headerCity       = bundle.getString("headerCity");
@@ -1852,10 +1850,12 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             headerStatus     = bundle.getString("headerStatus");
             headerStatus     = "";
             headerImage      = bundle.getString("headerImage");
+            headerSignedPath = bundle.getString("headerSignedPath");
 
             Log.d("headerNoSp", headerNoSp);
             Log.d("headerTipeSp", headerTipeSp);
             Log.d("headerSales", headerSales);
+            Log.d("headerShipNumber", headerShipNumber);
             Log.d("headerCustName", headerCustName);
             Log.d("headerAddress", headerAddress);
             Log.d("headerCity", headerCity);
@@ -1868,10 +1868,12 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             Log.d("headerShippingAddress", headerShippingAddress);
             Log.d("headerStatus", headerStatus);
             Log.d("headerImage", headerImage);
+            Log.d("headerSignedPath", headerSignedPath);
 
             dataSpHeader.setNoSp(headerNoSp);
             dataSpHeader.setTypeSp(headerTipeSp);
             dataSpHeader.setSales(headerSales);
+            dataSpHeader.setShipNumber(headerShipNumber);
             dataSpHeader.setCustName(headerCustName);
             dataSpHeader.setAddress(headerAddress);
             dataSpHeader.setCity(headerCity);
@@ -1884,6 +1886,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             dataSpHeader.setShipAddress(headerShippingAddress);
             dataSpHeader.setPhoto(headerImage);
             dataSpHeader.setStatus(headerStatus);
+            dataSpHeader.setSignedPath(headerSignedPath);
         }
 
         Double g   = bundle.getDouble("total_price");
@@ -3430,6 +3433,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 hashMap.put("no_sp", item.getNoSp());
                 hashMap.put("type_sp", item.getTypeSp());
                 hashMap.put("sales", item.getSales());
+                hashMap.put("shipnumber", item.getShipNumber());
                 hashMap.put("customer_name", item.getCustName());
                 hashMap.put("address", item.getAddress());
                 hashMap.put("city", item.getCity());
@@ -3440,9 +3444,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 hashMap.put("installment", item.getInstallment());
                 hashMap.put("start_installment", item.getStartInstallment());
                 hashMap.put("shipping_address", item.getShipAddress());
-                hashMap.put("photo", "http://180.250.96.154/trl-dev/assets/images/ordersp/" + item.getPhoto());
+                hashMap.put("photo", config.Ip_address + "assets/images/ordersp/" + item.getPhoto());
                 hashMap.put("path", item.getPhoto());
                 hashMap.put("status", item.getStatus());
+                hashMap.put("signedurl", config.Ip_address + "assets/images/signedsp/" + item.getSignedPath());
+                hashMap.put("signedpath", item.getSignedPath());
                 return hashMap;
             }
         };

@@ -1,7 +1,7 @@
 package com.sofudev.trackapptrl.Custom;
 
 import android.content.Context;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.sofudev.trackapptrl.R;

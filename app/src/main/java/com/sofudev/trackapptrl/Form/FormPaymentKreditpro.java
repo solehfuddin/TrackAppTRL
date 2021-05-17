@@ -16,10 +16,10 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,15 +53,12 @@ import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
-import com.sofudev.trackapptrl.Util.AESencUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,13 +69,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
 import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
-
-import static com.sofudev.trackapptrl.Util.AESencUtil.encrypt;
 
 public class FormPaymentKreditpro extends AppCompatActivity {
 

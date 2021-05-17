@@ -3,8 +3,9 @@ package com.sofudev.trackapptrl.Form;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     Config config = new Config();
     String URLSHOWALLOPTIC      = config.Ip_address + config.filter_optic_showall;
     String URLSHOWOPTICBYNAME   = config.Ip_address + config.filter_optic_showbyname;
+    private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     List<Data_opticname> data_opticnames = new ArrayList<>();
     Adapter_filter_optic adapter_filter_optic;
@@ -66,7 +68,8 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
     MCrypt mCrypt;
 
-    String idparty;
+    String idparty, condition, sActive, sPast, opticName;
+    int sTotal;
     Integer req_start = 0, totalrow, lastitem, item;
     long lastclick = 0;
 
@@ -97,6 +100,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 .inflate(R.layout.footer_progress, null, false);
         mCrypt      = new MCrypt();
 
+        getUsernameData();
         disableSelect();
         disableNext();
         disablePrev();
@@ -109,6 +113,15 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
         data_opticnames.clear();
         showAllOptic(req_start);
+    }
+
+    private void getUsernameData()
+    {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+        {
+            condition = bundle.getString("cond");
+        }
     }
 
     private void backToDashboard()
@@ -260,8 +273,23 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idparty = data_opticnames.get(position).getUsername();
-                //Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
+
+                if (condition.equals("ESTMENT"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    opticName = data_opticnames.get(position).getCustname();
+//                    Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
+                }
+                else if (condition.equals("DELIVTRACK"))
+                {
+                    idparty = data_opticnames.get(position).getCustname();
+                    countData(data_opticnames.get(position).getCustname());
+                }
+                else
+                {
+                    idparty = data_opticnames.get(position).getUsername();
+//                    Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
+                }
 
                 if (idparty.isEmpty())
                 {
@@ -275,14 +303,71 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
         });
     }
 
+    private void countData(final String username)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLDELIVERYCOUNTER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    Log.d("Output", response);
+
+                    sActive = "Active ("+ jsonObject.getInt("countactive") +")";
+                    sPast = "Past (" + jsonObject.getInt("countpast") +")";
+                    sTotal = jsonObject.getInt("countactive") + jsonObject.getInt("countpast");
+
+                    Log.d("Active", sActive);
+                    Log.d("Past", sPast);
+                    Log.d("Total", String.valueOf(sTotal));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("optic", username);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void openTrackOrder()
     {
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
-                intent.putExtra("idparty", idparty);
-                startActivity(intent);
+                if (condition.equals("OTRACK"))
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
+                    intent.putExtra("idparty", idparty);
+                    startActivity(intent);
+                }
+                else if (condition.equals("ESTMENT"))
+                {
+                    Intent intent = new Intent(getApplicationContext(), EstatementActivity.class);
+                    intent.putExtra("username", idparty);
+                    intent.putExtra("opticname", opticName);
+                    startActivity(intent);
+                }
+                else if (condition.equals("DELIVTRACK"))
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
+                    intent.putExtra("username", idparty);
+                    intent.putExtra("activetitle", sActive);
+                    intent.putExtra("pasttitle", sPast);
+                    intent.putExtra("totalprocess", String.valueOf(sTotal));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -358,6 +443,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 listView.removeHeaderView(progress);
+                String info  = "idparty";
                 String info1 = "username";
                 String info2 = "custname";
                 String info3 = "status";
@@ -365,6 +451,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 int start, until;
 
                 try {
+                    String encrypt_info  = MCrypt.bytesToHex(mCrypt.encrypt(info));
                     String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
                     String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
                     String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
@@ -377,6 +464,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                         {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                            String id       = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info)));
                             String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
                             String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
                             String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
@@ -391,6 +479,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             txt_counter.setText(counter);
 
                             data = new Data_opticname();
+                            data.setIdParty(id);
                             data.setUsername(username);
                             data.setCustname(custname);
                             data.setStatus(status);
@@ -439,6 +528,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 listView.removeHeaderView(progress);
                 rl_optic.removeView(imgView_opticname);
+                String info6 = "idparty";
                 String info1 = "username";
                 String info2 = "custname";
                 String info3 = "status";
@@ -452,6 +542,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
                     String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
                     String encrypt_info5 = MCrypt.bytesToHex(mCrypt.encrypt(info5));
+                    String encrypt_info6 = MCrypt.bytesToHex(mCrypt.encrypt(info6));
 
                     try {
                         JSONArray jsonArray = new JSONArray(response);
@@ -474,8 +565,10 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                                 String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
                                 String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
                                 String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+                                String id       = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info6)));
 
                                 data            = new Data_opticname();
+                                data.setIdParty(id);
                                 data.setUsername(username);
                                 data.setCustname(custname);
                                 data.setStatus(status);

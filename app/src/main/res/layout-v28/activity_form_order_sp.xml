@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.sofudev.trackapptrl.Form.FormOrderSpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <!-- Area header toolbar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorPrimary">
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_ordersp_ripplebtnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="100">
+                    <ImageButton
+                        android:id="@+id/form_ordersp_btnback"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:src="@drawable/ic_arrow_back"
+                        android:background="@color/colorPrimary"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="Image back"/>
+                </com.andexert.library.RippleView>
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Surat Pesanan"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:layout_centerInParent="true"
+                    app:customFont="DroidBold.ttf" />
+                <!--<com.andexert.library.RippleView-->
+                    <!--android:id="@+id/form_lensorder_ripplebtndone"-->
+                    <!--android:layout_width="45dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--app:rv_type="rectangle"-->
+                    <!--app:rv_rippleDuration="100">-->
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/form_lensorder_btndone"-->
+                        <!--android:layout_width="45dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:paddingRight="10dp"-->
+                        <!--android:paddingLeft="10dp"-->
+                        <!--android:src="@drawable/ic_cloud_upload"-->
+                        <!--android:background="@color/colorPrimary"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:contentDescription="Upload Order"/>-->
+                <!--</com.andexert.library.RippleView>-->
+            </RelativeLayout>
+        </FrameLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="50dp">
+
+                <!-- Area Order Detail -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_ordersp_rippleorderdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration="150"
+                            app:rv_type="rectangle">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorToolbar"
+                                android:orientation="horizontal">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:padding="8dp"
+                                    android:text="Silahkan isi form pesanan"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_ordersp_expandlayoutorderdetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500"
+                            app:el_expanded="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:orientation="horizontal"
+                                    android:focusableInTouchMode="false"
+                                    android:weightSum="1.0">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_weight=".5"
+                                        android:padding="5dp"
+                                        android:text="Nomor SP"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".5"
+                                        android:padding="5dp"
+                                        android:text="Tipe Sp"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0">
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_ordersp_txtNomorSp"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".5"
+                                        android:hint="ex : 17238897"
+                                        android:inputType="textCapCharacters"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textColorHint="@color/colorContent"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md"
+                                        app:roundedCorners="true" />
+
+                                    <Spinner
+                                        android:id="@+id/form_ordersp_spinTipeSp"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="-- Pilih SP --"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="14sp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginRight="10dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:background="@color/bootstrap_brand_info" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginLeft="5dp"
+                                        android:padding="5dp"
+                                        android:text="Pilih Optik"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="3">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtNamaOptik"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="2.92"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:hint="Nama Optik"
+                                            android:textAlignment="center"
+                                            android:inputType="phone"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.andexert.library.RippleView
+                                            android:id="@+id/form_ordersp_btnChooser"
+                                            android:layout_width="27dp"
+                                            android:layout_height="27dp"
+                                            android:layout_marginTop="2dp"
+                                            app:rv_type="simpleRipple"
+                                            app:rv_rippleDuration="100">
+
+                                            <ImageView
+                                                android:id="@+id/form_order_imgChooser"
+                                                android:layout_width="26dp"
+                                                android:layout_height="26dp"
+                                                android:src="@drawable/ic_arrow_drop_down"
+                                                android:background="@color/bootstrap_brand_info"/>
+                                        </com.andexert.library.RippleView>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:weightSum="2">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="1"
+                                            android:padding="5dp"
+                                            android:text="Ship Number"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="1"
+                                            android:padding="5dp"
+                                            android:text="Kota Optik"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:weightSum="2"
+                                        android:orientation="horizontal">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtShipNumber"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="5dp"
+                                            android:textAlignment="center"
+                                            android:inputType="phone"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtKotaOptik"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="5dp"
+                                            android:hint="Jakarta"
+                                            android:textAlignment="center"
+                                            android:inputType="phone"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </LinearLayout>
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:padding="5dp"
+                                        android:text="Alamat Optik"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_ordersp_txtAlamatOptik"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_marginTop="5dp"
+                                        android:inputType="textMultiLine"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="5dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_weight=".4"
+                                            android:padding="5dp"
+                                            android:text="Pembayaran"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight=".35"
+                                            android:padding="5dp"
+                                            android:text="Jumlah Bayar / DP"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight=".25"
+                                            android:padding="5dp"
+                                            android:text="Discount"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="5dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <Spinner
+                                            android:id="@+id/form_ordersp_txtPembayaran"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".39"
+                                            android:layout_centerHorizontal="true"
+                                            android:text="-- Pilih --"
+                                            android:textAlignment="center"
+                                            android:textColor="@android:color/white"
+                                            android:textSize="14sp"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:paddingTop="3dp"
+                                            android:paddingBottom="3dp"
+                                            android:background="@color/bootstrap_brand_info" />
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtJumlahDp"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight=".35"
+                                            android:hint="1.000.000"
+                                            android:inputType="numberSigned"
+                                            android:padding="5dp"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtDiskon"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="3dp"
+                                            android:layout_weight=".18"
+                                            android:hint="10"
+                                            android:inputType="numberDecimal"
+                                            android:padding="5dp"
+                                            android:maxLength="5"
+                                            android:textAlignment="center"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight=".05"
+                                            android:textAlignment="center"
+                                            android:text="%"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="13sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/form_ordersp_linearTitleCicilan"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_weight=".4"
+                                        android:padding="5dp"
+                                        android:text="Durasi Cicilan"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".6"
+                                        android:padding="5dp"
+                                        android:text="Mulai Bayar"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/form_ordersp_linearContentCicilan"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="1.0">
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_ordersp_txtCicilan"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".13"
+                                        android:hint="2"
+                                        android:visibility="gone"
+                                        android:maxLength="2"
+                                        android:textAlignment="center"
+                                        android:inputType="numberSigned"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        android:textColorHint="@color/colorContent"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md"
+                                        app:roundedCorners="true" />
+
+                                    <Spinner
+                                        android:id="@+id/form_ordersp_spinCicilan"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".13"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="1"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="14sp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginRight="10dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:background="@color/bootstrap_brand_info" />
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_weight=".23"
+                                        android:padding="5dp"
+                                        android:text="Bulan"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <!--<com.weiwangcn.betterspinner.library.BetterSpinner-->
+                                    <!--android:id="@+id/form_ordersp_spinMulaiCicilan"-->
+                                    <!--android:layout_width="0dp"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_weight=".635"-->
+                                    <!--android:layout_centerHorizontal="true"-->
+                                    <!--android:text="&#45;&#45; Pilih Bulan &#45;&#45;"-->
+                                    <!--android:textAlignment="center"-->
+                                    <!--android:textColor="@android:color/white"-->
+                                    <!--android:textSize="14sp"-->
+                                    <!--android:layout_marginLeft="15dp"-->
+                                    <!--android:layout_marginRight="10dp"-->
+                                    <!--android:paddingTop="3dp"-->
+                                    <!--android:paddingBottom="3dp"-->
+                                    <!--android:background="@color/bootstrap_brand_info" />-->
+
+                                    <Spinner
+                                        android:id="@+id/form_ordersp_spinMulaiCicilan"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".635"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="-- Pilih Bulan --"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="14sp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginRight="10dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:background="@color/bootstrap_brand_info" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp">
+
+                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:layout_marginRight="5dp"
+                                        android:padding="5dp"
+                                        android:text="Alamat Pengiriman"
+                                        android:textColor="@color/colorContent"
+                                        android:textSize="12sp"
+                                        app:customFont="UbuntuMedium.ttf" />
+
+                                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                                        android:id="@+id/form_ordersp_txtAlamatPengiriman"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_marginTop="5dp"
+                                        android:inputType="textMultiLine"
+                                        android:padding="5dp"
+                                        android:textColor="@color/colorHint"
+                                        app:bootstrapBrand="info"
+                                        app:bootstrapSize="md" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Area Order Item -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_ordersp_rippleorderitem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration="150"
+                            app:rv_type="rectangle">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorRed"
+                                android:orientation="horizontal">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:padding="8dp"
+                                    android:text="Silahkan upload dokumen"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_ordersp_expandlayoutorderitem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500"
+                            app:el_expanded="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/form_ordersp_imgPhoto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="400dp"
+                                    android:contentDescription="@string/app_name"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginTop="10dp"/>
+
+                                <TextView
+                                    android:id="@+id/form_ordersp_imglocation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Button
+                                    android:id="@+id/form_ordersp_btnPicture"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="25dp"
+                                    android:text="Ambil Gambar"
+                                    android:background="@color/colorEnd"
+                                    android:textColor="@color/white"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:layout_gravity="right"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:textSize="11sp"/>
+
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Area Digital Signature -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_ordersp_rippledigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration="150"
+                            app:rv_type="rectangle">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorHint"
+                                android:orientation="horizontal">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:padding="8dp"
+                                    android:text="Persetujuan dokumen"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_ordersp_expandlayoutdigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500"
+                            app:el_expanded="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:text="* Isi tanda tangan digital"
+                                    android:layout_margin="15dp"
+                                    android:textColor="@color/dot_dark_screen1"
+                                    android:textSize="12sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+
+                                <com.github.gcacace.signaturepad.views.SignaturePad
+                                    android:id="@+id/form_ordersp_imgdigitalsign"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="150dp"
+                                    android:contentDescription="@string/app_name"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:background="@drawable/border_custom"
+                                    app:penColor="@color/colorContent"
+                                    app:penMinWidth="2dp"
+                                    app:penMaxWidth="5dp"/>
+
+                                <TextView
+                                    android:id="@+id/form_ordersp_txtdigitalsign"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="gone"/>
+
+                                <Button
+                                    android:id="@+id/form_ordersp_btndigitalsign"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="25dp"
+                                    android:text="Hapus"
+                                    android:background="@color/bg_screen1"
+                                    android:textColor="@color/white"
+                                    android:textAllCaps="false"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:layout_gravity="right"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:textSize="11sp"/>
+
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+        <!-- Area Footer -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bootstrap_brand_warning"
+        android:visibility="visible">
+
+        <com.andexert.library.RippleView
+            android:id="@+id/form_ordersp_ripplebtnsave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:rv_type="simpleRipple"
+            app:rv_rippleDuration="150"
+            app:rv_color="@color/bootstrap_brand_warning">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Buat SP"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                app:customFont="RobotoMedium.ttf" />
+        </com.andexert.library.RippleView>
+    </LinearLayout>
+</RelativeLayout>

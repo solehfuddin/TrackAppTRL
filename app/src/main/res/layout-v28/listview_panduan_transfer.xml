@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_height="50"
+            app:scale_base_width="400">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/bank"
+                app:scale_top="5"
+                app:scale_width="35"
+                app:scale_height="35"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/listview_panduantransfer_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="3dp"
+                app:scale_width="310"
+                app:scale_height="40"
+                app:scale_textsize="17.9"
+                app:scale_left="50"
+                app:scale_top="7"
+                android:padding="5dp"
+                android:text="ATM Bersama"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="8dp"
+                app:scale_left="370"
+                app:scale_width="30"
+                app:scale_height="30"
+                app:scale_top="8.5"
+                android:src="@drawable/ic_navigate_next_gray"/>
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

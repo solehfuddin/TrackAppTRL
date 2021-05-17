@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/form_estatement_txtopticname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Optic Name"
+        android:textAlignment="center"
+        android:textColor="@color/dot_dark_screen2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/universalFontTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="4dp"
+        android:text="IDR"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:customFont="UbuntuMedium.ttf"
+        app:layout_constraintEnd_toStartOf="@+id/form_estatement_txtsummarycontent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtopticname" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/form_estatement_txtsummarycontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtopticname" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/form_estatement_txtsummarytitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Total Summary"
+        android:textAlignment="center"
+        android:textColor="@color/colorContent"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtsummarycontent" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/form_estatement_txtsummarynote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorStm"
+        android:paddingLeft="8dp"
+        android:paddingTop="5dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="5dp"
+        android:text="* Jumlah diatas adalah nilai total statement yang belum dilunasi dari tahun sebelumnya"
+        android:textAlignment="center"
+        android:textColor="@color/colorContent"
+        android:textSize="12sp"
+        app:customFont="RobotoMedium.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtsummarytitle" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottom_dialog_deliverytrack_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_estatement_txtsummarynote"
+        app:layout_constraintVertical_bias="0.0"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/border_estatement">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dot_dark_screen2"
+                android:orientation="horizontal">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/detail_summary"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:customFont="RobotoRegular.ttf" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/bottom_dialog_estatement_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" />
+
+                    <ImageView
+                        android:id="@+id/bottom_dialog_estatement_imgnotfound"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/notfound"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

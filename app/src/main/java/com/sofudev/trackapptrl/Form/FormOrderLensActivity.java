@@ -10,8 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -46,7 +46,6 @@ import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
-import com.isapanah.awesomespinner.AwesomeSpinner;
 import com.jkb.vcedittext.VerificationAction;
 import com.jkb.vcedittext.VerificationCodeEditText;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -147,8 +146,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
     ExpandableLayout expandableLayout_orderdetail, expandableLayout_framedetail, expandableLayout_facetdetail,
                     expandableLayout_refraksidetail;
 
-    String headerNoSp, headerTipeSp, headerSales, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
-            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage;
+    String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
+            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage,
+            headerSignedPath;
     String emailaddress, mobilenumber, userinfo, pin_number ,coating, mobNumber;
     String filename, id_lensa, desc_lensa, file;
     String allData, dateTime, opticId, opticName, dateOnly, timeOnly, todayDate, opticProvince, opticUsername, opticCity,
@@ -554,6 +554,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 headerNoSp       = bundle.getString("header_nosp");
                 headerTipeSp     = bundle.getString("header_tipesp");
                 headerSales      = bundle.getString("header_sales");
+                headerShipNumber = bundle.getString("header_shipnumber");
                 headerCustName   = bundle.getString("header_custname");
                 headerAddress    = bundle.getString("header_address");
                 headerCity       = bundle.getString("header_city");
@@ -566,10 +567,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 headerShippingAddress  = bundle.getString("header_shippingaddress");
                 headerStatus     = bundle.getString("header_status");
                 headerImage      = bundle.getString("header_image");
+                headerSignedPath = bundle.getString("header_signedpath");
 
                 Log.d("headerNoSp", headerNoSp);
                 Log.d("headerTipeSp", headerTipeSp);
                 Log.d("headerSales", headerSales);
+                Log.d("headerShipNumber", headerShipNumber);
                 Log.d("headerCustName", headerCustName);
                 Log.d("headerAddress", headerAddress);
                 Log.d("headerCity", headerCity);
@@ -582,6 +585,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 Log.d("headerShippingAddress", headerShippingAddress);
                 Log.d("headerStatus", headerStatus);
                 Log.d("headerImage", headerImage);
+                Log.d("headerSignedPath", headerSignedPath);
             }
 
             countOrderTemp(opticUsername,todayDate);
@@ -7296,6 +7300,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerNoSp", headerNoSp);
                             intent.putExtra("headerTipeSp", headerTipeSp);
                             intent.putExtra("headerSales", headerSales);
+                            intent.putExtra("headerShipNumber", headerShipNumber);
                             intent.putExtra("headerCustName", headerCustName);
                             intent.putExtra("headerAddress", headerAddress);
                             intent.putExtra("headerCity", headerCity);
@@ -7308,6 +7313,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerShippingAddress", headerShippingAddress);
                             intent.putExtra("headerStatus", headerStatus);
                             intent.putExtra("headerImage", headerImage);
+                            intent.putExtra("headerSignedPath", headerSignedPath);
 
                             intent.putExtra("sphR", txt_sphr.getText().toString());
                             intent.putExtra("sphL", txt_sphl.getText().toString());
@@ -7482,6 +7488,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerNoSp", headerNoSp);
                             intent.putExtra("headerTipeSp", headerTipeSp);
                             intent.putExtra("headerSales", headerSales);
+                            intent.putExtra("headerShipNumber", headerShipNumber);
                             intent.putExtra("headerCustName", headerCustName);
                             intent.putExtra("headerAddress", headerAddress);
                             intent.putExtra("headerCity", headerCity);
@@ -7494,6 +7501,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerShippingAddress", headerShippingAddress);
                             intent.putExtra("headerStatus", headerStatus);
                             intent.putExtra("headerImage", headerImage);
+                            intent.putExtra("headerSignedPath", headerSignedPath);
 
                             intent.putExtra("sphR", txt_sphr.getText().toString());
                             intent.putExtra("sphL", txt_sphl.getText().toString());
@@ -7816,6 +7824,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerNoSp", headerNoSp);
                             intent.putExtra("headerTipeSp", headerTipeSp);
                             intent.putExtra("headerSales", headerSales);
+                            intent.putExtra("headerShipNumber", headerShipNumber);
                             intent.putExtra("headerCustName", headerCustName);
                             intent.putExtra("headerAddress", headerAddress);
                             intent.putExtra("headerCity", headerCity);
@@ -7828,7 +7837,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerShippingAddress", headerShippingAddress);
                             intent.putExtra("headerStatus", headerStatus);
                             intent.putExtra("headerImage", headerImage);
-
+                            intent.putExtra("headerSignedPath", headerSignedPath);
 
                             intent.putExtra("sphR", txt_sphr.getText().toString());
                             intent.putExtra("sphL", txt_sphl.getText().toString());
@@ -8004,6 +8013,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerNoSp", headerNoSp);
                             intent.putExtra("headerTipeSp", headerTipeSp);
                             intent.putExtra("headerSales", headerSales);
+                            intent.putExtra("headerShipNumber", headerShipNumber);
                             intent.putExtra("headerCustName", headerCustName);
                             intent.putExtra("headerAddress", headerAddress);
                             intent.putExtra("headerCity", headerCity);
@@ -8016,7 +8026,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("headerShippingAddress", headerShippingAddress);
                             intent.putExtra("headerStatus", headerStatus);
                             intent.putExtra("headerImage", headerImage);
-
+                            intent.putExtra("headerSignedPath", headerSignedPath);
 
                             intent.putExtra("sphR", txt_sphr.getText().toString());
                             intent.putExtra("sphL", txt_sphl.getText().toString());

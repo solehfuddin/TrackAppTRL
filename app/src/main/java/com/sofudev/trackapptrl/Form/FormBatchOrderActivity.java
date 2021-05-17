@@ -3,11 +3,11 @@ package com.sofudev.trackapptrl.Form;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -37,7 +36,6 @@ import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.Adapter.Adapter_power_add;
 import com.sofudev.trackapptrl.Adapter.Adapter_power_cyl;
 import com.sofudev.trackapptrl.Adapter.Adapter_power_sph;
-import com.sofudev.trackapptrl.Adapter.Adapter_spinner_shipment;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
@@ -142,8 +140,9 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String id_lensa, desc_lensa, power_sph, power_cyl, power_add;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, opticFlag, shipmentPrice,
             shippingName, shippingService, orderId, phone, orgName, idSp;
-    String headerNoSp, headerTipeSp, headerSales, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
-            headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage;
+    String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia,
+            headerDisc, headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus,
+            headerImage, headerSignedPath;
     String sphpos = null, cylpos = null, addpos = null;
     String selectedItem, kodeBilling, duration, expDate, prodAttrVal, flashsaleNote;
     int shippingId, availableStock, flagPayment, flagDiscSale, headerDp,
@@ -264,6 +263,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         dataSpHeader.setNoSp(headerNoSp);
                         dataSpHeader.setTypeSp(headerTipeSp);
                         dataSpHeader.setSales(headerSales);
+                        dataSpHeader.setShipNumber(headerShipNumber);
                         dataSpHeader.setCustName(headerCustName);
                         dataSpHeader.setAddress(headerAddress);
                         dataSpHeader.setCity(headerCity);
@@ -276,6 +276,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                         dataSpHeader.setShipAddress(headerShippingAddress);
                         dataSpHeader.setPhoto(headerImage);
                         dataSpHeader.setStatus(headerStatus);
+                        dataSpHeader.setSignedPath(headerSignedPath);
 
                         insertSpHeader(dataSpHeader);
                         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
@@ -1342,6 +1343,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 headerNoSp  = bundle.getString("header_nosp");
                 headerTipeSp= bundle.getString("header_tipesp");
                 headerSales = bundle.getString("header_sales");
+                headerShipNumber = bundle.getString("header_shipnumber");
                 headerCustName = bundle.getString("header_custname");
                 headerAddress  = bundle.getString("header_address");
                 headerCity     = bundle.getString("header_city");
@@ -1354,6 +1356,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 headerShippingAddress = bundle.getString("header_shippingaddress");
                 headerStatus   = bundle.getString("header_status");
                 headerImage    = bundle.getString("header_image");
+                headerSignedPath = bundle.getString("header_signedpath");
             }
 
             getPaymentOrNot(opticFlag);
@@ -3696,6 +3699,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 hashMap.put("no_sp", item.getNoSp());
                 hashMap.put("type_sp", item.getTypeSp());
                 hashMap.put("sales", item.getSales());
+                hashMap.put("shipnumber", item.getShipNumber());
                 hashMap.put("customer_name", item.getCustName());
                 hashMap.put("address", item.getAddress());
                 hashMap.put("city", item.getCity());
@@ -3706,9 +3710,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 hashMap.put("installment", item.getInstallment());
                 hashMap.put("start_installment", item.getStartInstallment());
                 hashMap.put("shipping_address", item.getShipAddress());
-                hashMap.put("photo", "http://180.250.96.154/trl-dev/assets/images/ordersp/" + item.getPhoto());
+                hashMap.put("photo", config.Ip_address + "assets/images/ordersp/" + item.getPhoto());
                 hashMap.put("path", item.getPhoto());
                 hashMap.put("status", item.getStatus());
+                hashMap.put("signedurl", config.Ip_address + "assets/images/signedsp/" + item.getSignedPath());
+                hashMap.put("signedpath", item.getSignedPath());
                 return hashMap;
             }
         };

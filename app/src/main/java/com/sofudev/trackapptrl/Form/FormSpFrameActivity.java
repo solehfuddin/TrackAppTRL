@@ -1,23 +1,17 @@
 package com.sofudev.trackapptrl.Form;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -27,8 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,9 +43,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_framesp;
-import com.sofudev.trackapptrl.Adapter.Adapter_category_onhand;
 import com.sofudev.trackapptrl.Adapter.Adapter_frame_brand;
 import com.sofudev.trackapptrl.Adapter.Adapter_framesp;
 import com.sofudev.trackapptrl.Adapter.Adapter_framesp_qty;
@@ -61,9 +51,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_sorting_onhand;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
-import com.sofudev.trackapptrl.Custom.GridSpacingItemDecoration;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
-import com.sofudev.trackapptrl.Data.Data_categoryonhand;
 import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
 import com.sofudev.trackapptrl.Data.Data_frame_brand;
 import com.sofudev.trackapptrl.Data.Data_frame_header;
@@ -72,9 +60,7 @@ import com.sofudev.trackapptrl.Data.Data_sortingonhand;
 import com.sofudev.trackapptrl.Data.Data_spheader;
 import com.sofudev.trackapptrl.LocalDb.Db.AddFrameSpHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelFrameSp;
-import com.sofudev.trackapptrl.OnHandActivity;
 import com.sofudev.trackapptrl.R;
-import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,9 +76,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
-import viethoa.com.snackbar.BottomSnackBarMessage;
-
-import static com.midtrans.sdk.corekit.utilities.Utils.dpToPx;
 
 public class FormSpFrameActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = FormSpFrameActivity.class.getSimpleName();
@@ -151,7 +134,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String headerNoSp;
     String headerTipeSp;
     String headerSales;
-    String headerCustName;
+    String headerShipNumber, headerCustName;
     String headerAddress;
     String headerCity;
     String headerOrderVia;
@@ -161,7 +144,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String headerStartInstallment;
     String headerShippingAddress;
     String headerStatus;
-    String headerImage;
+    String headerImage, headerSignedPath;
     Boolean check, isBarcode, isClear;
     IntentResult scanningResult;
 
@@ -283,6 +266,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             headerNoSp  = bundle.getString("header_nosp");
             headerTipeSp= bundle.getString("header_tipesp");
             headerSales = bundle.getString("header_sales");
+            headerShipNumber = bundle.getString("header_shipnumber");
             headerCustName = bundle.getString("header_custname");
             headerAddress  = bundle.getString("header_address");
             headerCity     = bundle.getString("header_city");
@@ -295,6 +279,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             headerShippingAddress = bundle.getString("header_shippingaddress");
             headerStatus   = bundle.getString("header_status");
             headerImage    = bundle.getString("header_image");
+            headerSignedPath = bundle.getString("header_signedpath");
 
 //            getSp();
             getOraId(opticId);
@@ -407,6 +392,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dataSpHeader.setNoSp(headerNoSp);
         dataSpHeader.setTypeSp(headerTipeSp);
         dataSpHeader.setSales(headerSales);
+        dataSpHeader.setShipNumber(headerShipNumber);
         dataSpHeader.setCustName(headerCustName);
         dataSpHeader.setAddress(headerAddress);
         dataSpHeader.setCity(headerCity);
@@ -419,9 +405,13 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dataSpHeader.setShipAddress(headerShippingAddress);
         dataSpHeader.setPhoto(headerImage);
         dataSpHeader.setStatus(headerStatus);
+        dataSpHeader.setSignedPath(headerSignedPath);
+
+        Log.d("Photo Path : ", headerImage);
+        Log.d("Signed Path : ", headerSignedPath);
 
         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
+//        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
         insertSpHeader(dataSpHeader);
 
         Toasty.success(getApplicationContext(), "Data Berhasil disimpan", Toast.LENGTH_SHORT).show();
@@ -2354,6 +2344,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("no_sp", item.getNoSp());
                 hashMap.put("type_sp", item.getTypeSp());
                 hashMap.put("sales", item.getSales());
+                hashMap.put("shipnumber", item.getShipNumber());
                 hashMap.put("customer_name", item.getCustName());
                 hashMap.put("address", item.getAddress());
                 hashMap.put("city", item.getCity());
@@ -2364,9 +2355,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("installment", item.getInstallment());
                 hashMap.put("start_installment", item.getStartInstallment());
                 hashMap.put("shipping_address", item.getShipAddress());
-                hashMap.put("photo", "http://180.250.96.154/trl-dev/assets/images/ordersp/" + item.getPhoto());
+                hashMap.put("photo", config.Ip_address + "assets/images/ordersp/" + item.getPhoto());
                 hashMap.put("path", item.getPhoto());
                 hashMap.put("status", item.getStatus());
+                hashMap.put("signedurl", config.Ip_address + "assets/images/signedsp/" + item.getSignedPath());
+                hashMap.put("signedpath", item.getSignedPath());
                 return hashMap;
             }
         };
@@ -2488,22 +2481,20 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             //we have a result
             scanContent = scanningResult.getContents();
 
-            if (scanContent != null)
-            {
+            if (scanContent != null) {
 //                showDialogFrame();
                 txtTmp.setText(scanContent);
                 txtSearch.setText(txtTmp.getText());
-            }
-            else
-            {
+            } else {
                 getItemByBrand(addpos, itemSortDesc);
             }
-        }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT);
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
 
             getItemByBrand(addpos, itemSortDesc);
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

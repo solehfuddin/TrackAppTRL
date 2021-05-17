@@ -1,0 +1,294 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral"
+    tools:context="com.sofudev.trackapptrl.Fragment.EstatementItemFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="6dp">
+
+        <LinearLayout
+            android:id="@+id/fragment_estatement_item_linearfilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Subtotal"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    tools:ignore="RtlCompat" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="IDR"
+                        android:textColor="@color/colorContent"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                    <ProgressBar
+                        android:id="@+id/fragment_estatement_item_progresssubtotal"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:backgroundTint="@color/white"
+                        android:progressTint="@color/colorFirst"
+                        android:visibility="visible"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/fragment_estatement_item_txtsubtotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="3.567.000"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:customFont="UbuntuMedium.ttf"
+                        tools:ignore="RtlCompat" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1.2dp"
+                android:layout_height="match_parent"
+                android:background="@color/strok" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Total"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    tools:ignore="RtlCompat" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="IDR"
+                        android:textColor="@color/colorContent"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                    <ProgressBar
+                        android:id="@+id/fragment_estatement_item_progresstotal"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:backgroundTint="@color/white"
+                        android:progressTint="@color/colorFirst"
+                        android:visibility="visible"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/fragment_estatement_item_txttotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="5.967.000"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:customFont="UbuntuMedium.ttf"
+                        tools:ignore="RtlCompat" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_estatement_item_linearall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Total"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:customFont="UbuntuMedium.ttf"
+                    tools:ignore="RtlCompat" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="IDR"
+                        android:textColor="@color/colorContent"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:customFont="UbuntuMedium.ttf" />
+
+                    <ProgressBar
+                        android:id="@+id/fragment_estatement_item_progresstotalall"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:backgroundTint="@color/white"
+                        android:progressTint="@color/colorFirst"
+                        android:visibility="visible"/>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/fragment_estatement_item_txttotalall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="5.967.000"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:customFont="UbuntuMedium.ttf"
+                        tools:ignore="RtlCompat" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1.2dp"
+            android:background="@color/strok" />
+    </LinearLayout>
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_estatement_item_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+        android:id="@+id/fragment_estatement_item_shimmer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="1.0"
+        app:shimmer_demo_child_count="10"
+        app:shimmer_demo_angle="20"
+        android:visibility="visible"
+        app:shimmer_demo_layout="@layout/layout_demo_estatement_item"/>
+
+    <ImageView
+        android:id="@+id/fragment_estatement_item_imgLensnotfound"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/about_1_title"
+        android:src="@drawable/notfound"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        <!--app:shimmer_demo_layout="@layout/layout_demo_estatement_item"-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

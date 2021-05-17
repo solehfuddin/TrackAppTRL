@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:maxWidth="390dp"
     android:minWidth="340dp"
@@ -30,6 +30,15 @@
         android:id="@+id/dialog_sort_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/dialog_sort_imgLensnotfound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/about_1_title"
+        android:src="@drawable/notfound"
+        android:visibility="gone"/>
 
 </LinearLayout>

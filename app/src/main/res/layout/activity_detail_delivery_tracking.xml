@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Form.DetailDeliveryTrackingActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_tracksp_ripplebtnback"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/form_tracksp_btnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_tracksp_ripplebtnfilter"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/form_tracksp_btnfilter"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_filter" />
+            </com.andexert.library.RippleView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Delivery Status"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                app:customFont="DroidBold.ttf" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bggray"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout3">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/detail_deliverytrack_txttitletrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="18dp"
+                android:text="@string/tracking_details"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:customFont="RobotoMedium.ttf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_txttitletrack">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/bottom_dialog_deliverytrack_view"
+                        android:layout_width="0dp"
+                        android:layout_height="0.55dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/colorDisable"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                        android:id="@+id/detail_deliverytrack_shimmer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_view"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:shimmer_demo_layout="@layout/layout_demo_detail_deliverytrack"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/detail_deliverytrack_recyclerview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_deliverytrack_view"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/nomor_resi"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:customFont="RobotoMedium.ttf"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/detail_deliverytrack_txtawbnumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/awb"
+                        android:textSize="16sp"
+                        app:customFont="RobotoMedium.ttf"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/detail_deliverytrack_txttitlereceive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="18dp"
+                android:text="@string/receiver_details"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:customFont="RobotoMedium.ttf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView9" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detail_deliverytrack_cardreceive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_txttitlereceive"
+                app:layout_constraintVertical_bias="0.0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:contentDescription="@string/app_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/user_delivery" />
+
+                    <ProgressBar
+                        android:id="@+id/detail_deliverytrack_progressrcby"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="32dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/detail_deliverytrack_progressrcdate"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="19dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_progressrcby" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/detail_deliverytrack_txtphone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="3dp"
+                        android:text="@string/consignee_phone"
+                        app:customFont="RobotoRegular.ttf"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_txtaddress" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/received_date"
+                        android:textColor="@color/black"
+                        app:customFont="RobotoMedium.ttf"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_txtphone" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/detail_deliverytrack_txtdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="24dp"
+                        android:text="@string/date_receive"
+                        app:customFont="RobotoRegular.ttf"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/textView11"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/detail_deliverytrack_txtname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/received_by"
+                        android:textColor="@color/black"
+                        app:customFont="RobotoMedium.ttf"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/detail_deliverytrack_txtaddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="3dp"
+                        android:maxLines="2"
+                        android:text="@string/consignee_address"
+                        app:customFont="RobotoRegular.ttf"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/detail_deliverytrack_txtname" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                android:id="@+id/detail_deliverytrack_progressreceive"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

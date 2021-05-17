@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="3dp"
+    android:minWidth="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/dialog_subcategory_header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorFirst"
+            android:orientation="vertical">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/dialog_subcategory_txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:padding="5dp"
+                android:text="@string/pilih_subcategory"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:gravity="center"
+                app:customFont="UbuntuMedium.ttf" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/dialog_subcategory_search"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:focusableInTouchMode="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_below="@+id/dialog_subcategory_header">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/dialog_subcategory_txtsearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/neutral"
+                android:hint="@string/search_sub_category"
+                android:inputType="textPersonName"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                app:met_hideUnderline="true"/>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/dialog_subcategory_ripplebtnsearch"
+                android:layout_width="25dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_alignParentEnd="true"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search"
+                    android:background="@color/colorToolbar"
+                    android:contentDescription="@string/app_name" />
+
+            </com.andexert.library.RippleView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_subcategory_linear"
+            android:layout_width="match_parent"
+            android:layout_height="325dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/dialog_subcategory_search">
+
+            <ListView
+                android:id="@+id/dialog_subcategory_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:listSelector="@drawable/list_row_selector"
+                android:choiceMode="singleChoice"/>
+        </LinearLayout>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/dialog_subcategory_btnsave"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/dialog_subcategory_linear"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="lg"
+            app:bootstrapText="Choose"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

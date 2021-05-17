@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="3dp"
+    android:minWidth="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/dialog_masteronhand_txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorFirst"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/filter_data"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="19sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/dialog_masteronhand_search"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_below="@+id/dialog_masteronhand_txtTitle">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/dialog_masteronhand_ripplebtnsearch"
+                android:layout_width="25dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="16dp"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="24dp"
+                    android:background="@color/colorToolbar"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_search" />
+
+            </com.andexert.library.RippleView>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/dialog_masteronhand_txtsearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@color/neutral"
+                android:hint="@string/search_sub_category"
+                android:inputType="textPersonName"
+                app:met_hideUnderline="true" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_masteronhand_linear"
+            android:layout_width="match_parent"
+            android:layout_height="325dp"
+            android:layout_below="@+id/dialog_masteronhand_search"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ListView
+                android:id="@+id/dialog_masteronhand_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:choiceMode="singleChoice"
+                android:listSelector="@drawable/list_row_selector" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/dialog_masteronhand_btnsave"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/dialog_masteronhand_linear"
+            android:text="@string/choose"
+            android:background="@color/colorToolbar"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="18dp"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

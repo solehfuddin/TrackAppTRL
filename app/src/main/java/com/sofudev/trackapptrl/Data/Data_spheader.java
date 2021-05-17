@@ -2,9 +2,17 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_spheader {
     private String noSp, typeSp, sales, custName, address, city, orderVia, condition, installment, startInstallment,
-            shipAddress, photo, status, disc;
+            shipAddress, photo, status, disc, signedPath, shipNumber;
     private int dp;
     private double grandTotal;
+
+    public String getShipNumber() {
+        return shipNumber;
+    }
+
+    public void setShipNumber(String shipNumber) {
+        this.shipNumber = shipNumber;
+    }
 
     public String getNoSp() {
         return noSp;
@@ -132,5 +140,13 @@ public class Data_spheader {
 
     public void setGrandTotal(double grandTotal) {
         this.grandTotal = grandTotal;
+    }
+
+    public String getSignedPath() {
+        return signedPath;
+    }
+
+    public void setSignedPath(String signedPath) {
+        this.signedPath = signedPath;
     }
 }

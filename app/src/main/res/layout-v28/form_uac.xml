@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="Username"
+        android:textSize="20sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"/>
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/form_uac_txtusername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:hint="User account"
+        android:textColorHint="@color/bootstrap_gray_light"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="lg"/>
+
+    <TextView
+        android:id="@+id/form_uac_errorUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter username"
+        android:layout_marginRight="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:textColor="@color/bootstrap_brand_danger"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:textSize="20sp"
+        android:text="Customer Name"
+        android:textColor="#000"/>
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/form_uac_txtcustomer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:hint="Customer"
+        android:textColorHint="@color/bootstrap_gray_light"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="lg"/>
+
+    <TextView
+        android:id="@+id/form_uac_errorCustomer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter customer name"
+        android:layout_marginRight="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:textColor="@color/bootstrap_brand_danger"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="3dp"
+        android:text="Email Address"
+        android:textSize="20sp"
+        android:textColor="#000"/>
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/form_uac_txtemail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:hint="Email"
+        android:textColorHint="@color/bootstrap_gray_light"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="lg"/>
+
+    <TextView
+        android:id="@+id/form_uac_errorEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter valid email"
+        android:layout_marginRight="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:textColor="@color/bootstrap_brand_danger"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="3dp"
+            android:text="Account status"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/form_uac_swtstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"
+            app:kswTextOff="Inactive"
+            app:kswTextOn="Active"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="Account access"
+            android:textColor="#000"
+            android:layout_centerVertical="true"
+            android:textSize="20sp" />
+
+        <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/form_uac_swtlevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"
+            app:kswTextOff="User"
+            app:kswTextOn="Admin"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="Account Flag"
+            android:textColor="#000"
+            android:layout_centerVertical="true"
+            android:textSize="20sp" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/form_uac_txtflag"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp">
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/form_uac_btnreset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="md"
+            app:bootstrapText="Reset Password"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/form_uac_btnsubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            app:bootstrapBrand="warning"
+            app:bootstrapSize="md"
+            app:bootstrapText="Submit"/>
+    </RelativeLayout>
+
+</LinearLayout>

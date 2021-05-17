@@ -5,6 +5,9 @@
     <color name="colorSecondary">#323232</color>
     <!--<color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>-->
+   <!-- <color name="colorPrimary">#3D84C6</color>
+    <color name="colorPrimaryDark">#3D84C6</color>
+    <color name="colorSecondary">#418DC8</color> -->
     <color name="colorAccent">#FF4081</color>
     <color name="colorTeks">#de002b</color>
     <color name="colorRed">#f90606</color>
@@ -25,6 +28,12 @@
     <color name="custom_disabled_edge">#bb33bbaa</color>
     <color name="strok">#e4e5ea</color>
     <color name="colordevider">#f1f2f4</color>
+    <color name="colorEstatement">#DFEAFB</color>
+    <color name="colorDisable">#b4b3b3</color>
+    <color name="bggray">#F9F9FB</color>
+    <color name="colorIjo">#51B8D1</color>
+    <color name="colorInv">#E8FDF7</color>
+    <color name="colorStm">#bcece6</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>

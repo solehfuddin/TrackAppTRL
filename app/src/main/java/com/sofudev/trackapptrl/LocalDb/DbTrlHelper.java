@@ -29,7 +29,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract.TABLE_WI
 public class DbTrlHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "dbtrl";
-    private static final int DATABASE_VERSION = 3;
+    // Last DB Version = 3 (17-03-2021)
+    private static final int DATABASE_VERSION = 4;
 
     private static final String CREATE_TBL_WISHLIST = String.format("CREATE TABLE %s"
                     + " (%s INTEGER PRIMARY KEY," +
@@ -192,27 +193,27 @@ public class DbTrlHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        if (i < 3)
+        if (i < 4)
         {
             //Update sql version fix
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_WISHLIST);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_ADDCART);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_FRAMESP);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_LENSPARTAI);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_LENSSATUAN);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_RECENT_SEARCH);
-            sqLiteDatabase.execSQL("DROP TABLE " + TABLE_RECENT_VIEW);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WISHLIST);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDCART);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FRAMESP);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSPARTAI);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSSATUAN);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_SEARCH);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_VIEW);
 //            sqLiteDatabase.execSQL(DATABASE_ALTER_TBL_LENSPARTAI_2);
         }
         else
         {
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_WISHLIST);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_ADDCART);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_FRAMESP);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_LENSPARTAI);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_LENSSATUAN);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_SEARCH);
-            sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + TABLE_RECENT_VIEW);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WISHLIST);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDCART);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FRAMESP);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSPARTAI);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSSATUAN);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_SEARCH);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_VIEW);
         }
 
         onCreate(sqLiteDatabase);

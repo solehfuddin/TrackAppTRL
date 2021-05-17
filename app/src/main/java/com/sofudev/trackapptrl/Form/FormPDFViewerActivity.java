@@ -1,23 +1,23 @@
 package com.sofudev.trackapptrl.Form;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.webkit.WebViewClient;
 
 import com.andexert.library.RippleView;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
-
-import es.dmoral.toasty.Toasty;
-import es.voghdev.pdfviewpager.library.RemotePDFViewPager;
-import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter;
-import es.voghdev.pdfviewpager.library.remote.DownloadFile;
 
 public class FormPDFViewerActivity extends AppCompatActivity{
 
@@ -43,6 +43,95 @@ public class FormPDFViewerActivity extends AppCompatActivity{
         WebView webView = (WebView) findViewById(R.id.form_pdfviewer_webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(link);
+        webView.setWebViewClient(new WebViewClient() {
+
+        });
+
+        webView.setWebViewClient(new WebViewClient() {
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+                try {
+                    webView.stopLoading();
+                } catch (Exception e) {
+                    Log.e("Error : ", e.getMessage());
+                }
+
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                }
+
+                webView.loadUrl("about:blank");
+                AlertDialog alertDialog = new AlertDialog.Builder(FormPDFViewerActivity.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Check your internet connection and try again.");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                alertDialog.show();
+                super.onReceivedError(webView, errorCode, description, failingUrl);
+            }
+
+            @TargetApi(android.os.Build.VERSION_CODES.M)
+            @Override
+            public void onReceivedError(WebView webView, WebResourceRequest req, WebResourceError rerr) {
+                // Redirect to deprecated method, so you can use it in all SDK versions
+                super.onReceivedError(webView, req, rerr);
+
+                try {
+                    webView.stopLoading();
+                } catch (Exception e) {
+                    Log.e("Error : ", e.getMessage());
+                }
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                }
+
+                webView.loadUrl("about:blank");
+                AlertDialog alertDialog = new AlertDialog.Builder(FormPDFViewerActivity.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Check your internet connection and try again.");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                alertDialog.show();
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView webView, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(webView, request, errorResponse);
+
+                try {
+                    webView.stopLoading();
+                } catch (Exception e) {
+                    Log.e("Error : ", e.getMessage());
+                }
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                }
+
+                webView.loadUrl("about:blank");
+                AlertDialog alertDialog = new AlertDialog.Builder(FormPDFViewerActivity.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage("Check your internet connection and try again.");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override

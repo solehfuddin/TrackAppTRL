@@ -3,26 +3,29 @@ package com.sofudev.trackapptrl;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.HideReturnsTransformationMethod;
@@ -38,6 +41,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,26 +59,37 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
+import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Adapter.Adapter_banner_custom;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.Custom.LoginSession;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.VersionChecker;
 import com.sofudev.trackapptrl.Custom.WSCallerVersionListener;
-import com.sofudev.trackapptrl.Form.AddCartProductActivity;
+import com.sofudev.trackapptrl.Decoration.MyBanner;
+import com.sofudev.trackapptrl.Decoration.SliderIndicator;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
-import com.sofudev.trackapptrl.Form.WishlistProductActivity;
+import com.sofudev.trackapptrl.Fragment.BalanceFragment;
+import com.sofudev.trackapptrl.Fragment.BannerFragment;
+import com.sofudev.trackapptrl.Fragment.CategoryFragment;
+import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
+import com.sofudev.trackapptrl.Fragment.PromoBannerFragment;
+import com.sofudev.trackapptrl.Fragment.SpecialProductFragment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.PermissionSettings;
+import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.zfdang.devicemodeltomarketingname.DeviceMarketingName;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,14 +97,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+import ss.com.bannerslider.banners.Banner;
+import ss.com.bannerslider.banners.RemoteBanner;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, WSCallerVersionListener,
@@ -100,8 +119,10 @@ public class MainActivity extends AppCompatActivity
     public static final String VALUE_COUNTWISHLIST= "VALUEWISHLIST";
 
     SharedPreferences preferences;
+    LoginSession session;
 
     Config config = new Config();
+    String BANNER_URL = config.Ip_address + config.dashboard_banner_slide;
 
     private String LoginURL = config.Ip_address + config.login_apps;
     private String UpdateIsOnlineURL = config.Ip_address + config.login_update_isOnline;
@@ -119,6 +140,7 @@ public class MainActivity extends AppCompatActivity
     ImageView img_closeprize;
     ACProgressCustom loading;
     LovelyCustomDialog dialog;
+    Dialog dialogCustom;
     private DrawerLayout drawer;
     private MaterialSearchView searchView;
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
@@ -139,6 +161,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
         setContentView(R.layout.activity_main);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
@@ -156,6 +179,7 @@ public class MainActivity extends AppCompatActivity
         txt_countcart = findViewById(R.id.main_badge_cart);
         rl_viewprize = findViewById(R.id.appbarmain_view_prize);
         img_closeprize = findViewById(R.id.appbarmain_close_prize);
+        session = new LoginSession(getApplicationContext());
 
 //        img_closeprize.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -229,6 +253,12 @@ public class MainActivity extends AppCompatActivity
         datetime = sdf.format(calendar.getTime());
 
         homeProduk();
+//        showBanner();
+//        showBalance();
+//        showCategory();
+//        showSpesialProduk();
+//        showPromoBanner();
+//        setupSlider();
 
         imgWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,6 +301,45 @@ public class MainActivity extends AppCompatActivity
         txt_countwishlist.setText(" " + counter + " ");
         txt_countcart.setText(" " + countcart + " ");
         //frameProduk();
+    }
+
+    public void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
+    {
+        ImageView img_status;
+        UniversalFontTextView txt_information, txt_message;
+        final BootstrapButton btn_ok;
+
+        if(getApplicationContext() != null){
+            final Dialog dialog = new Dialog(getApplicationContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.info_status);
+            dialog.setCancelable(false);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            img_status      = (ImageView) dialog.findViewById(R.id.info_status_imageview);
+            txt_information = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtInformation);
+            txt_message     = (UniversalFontTextView) dialog.findViewById(R.id.info_status_txtMessage);
+            btn_ok          = (BootstrapButton) dialog.findViewById(R.id.info_status_btnOk);
+
+            img_status.setImageResource(resource);
+            txt_information.setText(info);
+            txt_message.setText(message);
+            btn_ok.setBootstrapBrand(defaultcolorbtn);
+
+            showLoading();
+
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //showProduct();
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
     }
 
     @Override
@@ -320,11 +389,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -339,8 +403,35 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             homeProduk();
+//            showBanner();
+//            showBalance();
+//            showCategory();
+//            showSpesialProduk();
+//            showPromoBanner();
         } else if (id == R.id.nav_login) {
-            readTemp();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
+                //showDialogLoginCustom();
+                HashMap<String, String> user = session.getLoginSession();
+                String username = user.get(LoginSession.UsernameKey);
+                String idparty  = user.get(LoginSession.IdPartyKey);
+
+                if (username != null && idparty != null) {
+                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("idparty", idparty);
+
+                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+                    finish();
+                    startActivity(intent);
+                }
+                else {
+                    showDialogLogin();
+                }
+            }
+            else {
+                readTemp();
+            }
         } else if (id == R.id.nav_pricelist)
         {
             try {
@@ -629,6 +720,63 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
+    private void showDialogLoginCustom()
+    {
+        dialogCustom = new Dialog(this);
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.form_login, null);
+        dialogCustom.setContentView(dialogView);
+
+        txt_user = (BootstrapEditText) dialogCustom.findViewById(R.id.login_txt_user);
+        txt_pass = (BootstrapEditText) dialogCustom.findViewById(R.id.login_txt_pass);
+        cb_pass  = (UniversalFontCheckBox) dialogCustom.findViewById(R.id.login_cb_password);
+
+        showPass();
+
+//        dialogCustom.setListener(R.id.login_btn_login, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final String user = txt_user.getText().toString();
+//                final String pass = txt_pass.getText().toString();
+//
+//                if (user.isEmpty()) {
+//                    txt_user.setError("Username is required");
+//                }
+//                else if (pass.isEmpty()) {
+//                    txt_pass.setError("Password is required");
+//                }
+//                else {
+//                    loginApp(user, pass);
+//                }
+//            }
+//        });
+//        dialogCustom.setListener(R.id.login_fb, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), FanpageActivity.class);
+//                intent.putExtra("data", "https://www.facebook.com/");
+//                startActivity(intent);
+//            }
+//        });
+//        dialogCustom.setListener(R.id.login_tw, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), FanpageActivity.class);
+//                intent.putExtra("data", "https://twitter.com/");
+//                startActivity(intent);
+//            }
+//        });
+//        dialogCustom.setListener(R.id.login_ig, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), FanpageActivity.class);
+//                intent.putExtra("data", "https://www.instagram.com/trlinfo");
+//                startActivity(intent);
+//            }
+//        });
+        dialogCustom.show();
+    }
+
     public void createTemp(String msg)
     {
         FileOutputStream fileOutputStream;
@@ -669,6 +817,13 @@ public class MainActivity extends AppCompatActivity
 
             if (!file.exists())
             {
+//                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                    //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
+//                    showDialogLoginCustom();
+//                }
+//                else {
+//                    showDialogLogin();
+//                }
                 showDialogLogin();
             }
             else
@@ -692,6 +847,13 @@ public class MainActivity extends AppCompatActivity
 
                 if (readTxt.equals("0"))
                 {
+//                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                        //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
+//                        showDialogLoginCustom();
+//                    }
+//                    else {
+//                        showDialogLogin();
+//                    }
                     showDialogLogin();
                 }
                 else
@@ -763,8 +925,14 @@ public class MainActivity extends AppCompatActivity
                             intent.putExtra("idparty", id);
 
                             //Create temp login
-                            String msg = "1," + id + "," + user + "," + datetime + "," + deviceInfo;
-                            createTemp(msg);
+                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                session.AddLoginSession(user, id);
+                            }
+                            else {
+                                //readTemp();
+                                String msg = "1," + id + "," + user + "," + datetime + "," + deviceInfo;
+                                createTemp(msg);
+                            }
 
                             //Update has login in database
                             updateIsLogin(id);
@@ -926,8 +1094,47 @@ public class MainActivity extends AppCompatActivity
         homeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
+//        fragmentTransaction.replace(R.id.appbarmain_fragment_myproduct, homeFragment, "home");
         fragmentTransaction.commit();
     }
+
+//    private void showBanner() {
+//        BannerFragment bannerFragment = new BannerFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_header, bannerFragment, "home");
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showBalance() {
+//        BalanceFragment balanceFragment = new BalanceFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_balance, balanceFragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showCategory() {
+//        CategoryFragment categoryFragment = new CategoryFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_category, categoryFragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showSpesialProduk() {
+//        SpecialProductFragment fragment = new SpecialProductFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("activity", "main");
+//        fragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_special_product, fragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void showPromoBanner() {
+//        PromoBannerFragment fragment = new PromoBannerFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_promo_banner, fragment);
+//        fragmentTransaction.commit();
+//    }
 
     private void frameProduk() {
         NewFrameFragment newFrameFragment = new NewFrameFragment();

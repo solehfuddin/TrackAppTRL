@@ -1,11 +1,10 @@
 package com.sofudev.trackapptrl.Adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,8 +18,6 @@ import com.sofudev.trackapptrl.R;
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.List;
-
-import es.dmoral.toasty.Toasty;
 
 public class Adapter_track_order extends RecyclerView.Adapter<Adapter_track_order.ViewHolder>{
 

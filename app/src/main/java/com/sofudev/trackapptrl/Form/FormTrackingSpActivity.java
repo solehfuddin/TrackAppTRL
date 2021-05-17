@@ -7,10 +7,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -398,6 +398,16 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
 //        getInvNumber(noSp);
         getInv(noSp);
 
+        txt_invoice.setTextColor(Color.parseColor("#0275d8"));
+        txt_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/PrintReceipt/invdetail/"
+                        + txt_invoice.getText().toString()));
+                startActivity(openBrowser);
+            }
+        });
+
         ripple_btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -417,12 +427,15 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
             public void onClick(View v) {
                 if (tipe.equals("FRAME") || tipe.equals("Frame"))
                 {
-                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://timurrayalab.com/trl-dev/index.php/PrintReceipt/spFrame/" + noSp));
+//                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://timurrayalab.com/trl-dev/index.php/PrintReceipt/spFrame/" + noSp));
+                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/PrintReceipt/spFrame/" + noSp));
                     startActivity(openBrowser);
                 }
                 else
                 {
-                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://timurrayalab.com/trl-dev/index.php/PrintReceipt/spLensa/" + noSp));
+
+//                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://timurrayalab.com/trl-dev/index.php/PrintReceipt/spLensa/" + noSp));
+                    Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/PrintReceipt/spLensa/" + noSp));
                     startActivity(openBrowser);
                 }
             }

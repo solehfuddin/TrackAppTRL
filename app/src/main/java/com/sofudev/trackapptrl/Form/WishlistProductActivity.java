@@ -1,11 +1,11 @@
 package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,13 +18,10 @@ import com.sofudev.trackapptrl.Custom.GridSpacingItemDecoration;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
-import com.sofudev.trackapptrl.LocalDb.DbTrlHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelWishlist;
-import com.sofudev.trackapptrl.MainActivity;
 import com.sofudev.trackapptrl.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -90,6 +87,18 @@ public class WishlistProductActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        int counter  = wishlistHelper.countWishlist();
+
+        Intent intent = new Intent();
+        intent.putExtra("counter", counter);
+        setResult(1, intent);
+
+        finish();
     }
 
     private void showWishlist()

@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.Form.FormSpFrameActivity">
+
+    <LinearLayout
+        android:id="@+id/form_spframe_layoutheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/addcart_product_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:contentInsetLeft="10dp"
+            android:contentInsetRight="10dp"
+            android:contentInsetStart="10dp"
+            app:contentInsetLeft="10dp"
+            app:contentInsetRight="10dp"
+            app:contentInsetStart="10dp">
+
+            <ImageView
+                android:id="@+id/form_spframe_btnback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:visibility="invisible"
+                android:padding="5dp">
+
+                <com.varunest.sparkbutton.SparkButton
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="right"
+                    android:padding="0.5dp"
+                    app:sparkbutton_activeImage="@drawable/ic_favorite_white"
+                    app:sparkbutton_animationSpeed="1.5"
+                    app:sparkbutton_iconSize="25dp"
+                    app:sparkbutton_inActiveImage="@drawable/ic_favorite_border_white"
+                    app:sparkbutton_primaryColor="@color/colorEnd"
+                    app:sparkbutton_secondaryColor="@color/white" />
+            </FrameLayout>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingTop="-1dp"
+                android:paddingBottom="1dp"
+                android:paddingRight="10dp"
+                android:text="Order SP Frame"
+                android:gravity="center"
+                android:textColor="@color/neutral"
+                android:textSize="19sp"
+                app:customFont="MavenPro-Regular.ttf" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusableInTouchMode="true"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1.0"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <RelativeLayout
+                    android:layout_weight="1.0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <EditText
+                            android:id="@+id/form_spframe_txtBarcode"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.98"
+                            android:layout_height="32dp"
+                            android:textSize="12sp"
+                            android:focusable="true"
+                            android:hint="Masukkan kode barcode"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="3dp"/>
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_spframe_btnframe"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginTop="3dp"
+                            app:rv_type="simpleRipple"
+                            app:rv_rippleDuration="100">
+
+                            <ImageView
+                                android:id="@+id/form_spframe_imgframe"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:background="@color/bootstrap_brand_info"/>
+                        </com.andexert.library.RippleView>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/form_spframe_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_below="@+id/form_spframe_layoutheader">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/form_spframe_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/form_spframe_cardsummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:visibility="visible"
+                android:layout_below="@+id/form_spframe_recyclerview"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    app:scale_base_height="230"
+                    app:scale_base_width="400">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="PRICE SUMMARY"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="30"
+                        app:scale_textsize="18"
+                        app:scale_top="5"
+                        app:scale_width="400" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Items"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="16"
+                        app:scale_top="50"
+                        app:scale_width="190" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txtitemprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="RP. 123.456.789"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="200"
+                        app:scale_textsize="15"
+                        app:scale_top="50"
+                        app:scale_width="190" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Discount"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="16"
+                        app:scale_top="80"
+                        app:scale_width="190" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txtitemdisc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="RP. 0"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="200"
+                        app:scale_textsize="15"
+                        app:scale_top="80"
+                        app:scale_width="190" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txttitleship"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Shipping"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="16"
+                        app:scale_top="110"
+                        app:scale_width="70" />
+
+                    <Spinner
+                        android:id="@+id/form_spframe_spinshipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="end"
+                        android:textColor="@android:color/white"
+                        android:textSize="25sp"
+                        app:scale_height="30"
+                        app:scale_left="70"
+                        app:scale_textsize="16"
+                        app:scale_top="103"
+                        app:scale_width="220" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txtitemship"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="RP. 123.456.789"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="30"
+                        app:scale_left="278"
+                        app:scale_textsize="15"
+                        app:scale_top="110"
+                        app:scale_width="110" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txtInfoShipping"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:visibility="visible"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorRed"
+                        android:text="Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya"
+                        android:textSize="18sp"
+                        app:customFont="MavenPro-Regular.ttf"
+                        app:scale_height="40"
+                        app:scale_left="10"
+                        app:scale_textsize="16"
+                        app:scale_top="138"
+                        app:scale_width="375" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="368dp"
+                        android:layout_height="1dp"
+                        android:background="@color/colorContent"
+                        app:scale_height="2"
+                        app:scale_left="10"
+                        app:scale_top="188"
+                        app:scale_width="380"
+                        tools:ignore="MissingPrefix" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Total Price"
+                        android:textSize="18sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="30"
+                        app:scale_left="10"
+                        app:scale_textsize="17"
+                        app:scale_top="197"
+                        app:scale_width="190" />
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_spframe_txttotalprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="RP. 123.456.789"
+                        android:textSize="18sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="30"
+                        app:scale_left="200"
+                        app:scale_textsize="17"
+                        app:scale_top="197"
+                        app:scale_width="190" />
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/form_spframe_linearPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/form_spframe_cardsummary"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="55dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <com.ssomai.android.scalablelayout.ScalableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:scale_base_height="90"
+                    app:scale_base_width="400">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="EASY AND SECURE PAYMENTS"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        app:customFont="UbuntuMedium.ttf"
+                        app:scale_height="50"
+                        app:scale_left="15"
+                        app:scale_textsize="18"
+                        app:scale_top="15"
+                        app:scale_width="400" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:scale_height="40"
+                        app:scale_left="15"
+                        app:scale_textsize="18"
+                        app:scale_top="40"
+                        app:scale_width="40"
+                        android:src="@drawable/master" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:scale_height="40"
+                        app:scale_left="70"
+                        app:scale_textsize="18"
+                        app:scale_top="40"
+                        app:scale_width="40"
+                        app:srcCompat="@drawable/visa" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="30dp"
+                        app:scale_height="40"
+                        app:scale_left="125"
+                        app:scale_textsize="18"
+                        app:scale_top="40"
+                        app:scale_width="85"
+                        app:srcCompat="@drawable/bprks" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="30dp"
+                        app:scale_height="40"
+                        app:scale_left="225"
+                        app:scale_textsize="18"
+                        app:scale_top="40"
+                        app:scale_width="85"
+                        app:srcCompat="@drawable/kreditpro" />
+                </com.ssomai.android.scalablelayout.ScalableLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/form_spframe_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:text="Your box is empty now !!!"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            app:customFont="UbuntuMedium.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Add some item to your box before they"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="are out of stock !"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/box" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/form_spframe_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        app:cardElevation="4dp">
+
+        <TextView
+            android:id="@+id/form_spframe_txttmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="temp"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/form_spframe_btncontinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/holo_orange_dark"
+            android:text="Submit"
+            android:textColor="@android:color/white" />
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

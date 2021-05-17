@@ -2,8 +2,8 @@ package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,8 @@ import android.widget.ImageView;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
-import com.sofudev.trackapptrl.LocalDb.Model.ModelAddCart;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelFrameSp;
 import com.sofudev.trackapptrl.R;
-import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

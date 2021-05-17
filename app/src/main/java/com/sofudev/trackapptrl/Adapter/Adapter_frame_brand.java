@@ -2,8 +2,8 @@ package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_frame_brand;
 import com.sofudev.trackapptrl.R;
 

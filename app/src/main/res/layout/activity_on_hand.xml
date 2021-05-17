@@ -31,6 +31,7 @@
                     android:background="@color/colorPrimary"
                     android:layout_centerVertical="true"/>
             </com.andexert.library.RippleView>
+
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,6 +41,24 @@
                 android:textSize="20sp"
                 android:layout_centerInParent="true"
                 app:customFont="DroidBold.ttf" />
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_onhand_ripplebtnFilter"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <ImageButton
+                    android:id="@+id/form_onhand_btnFilter"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:src="@drawable/ic_more_white"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"/>
+            </com.andexert.library.RippleView>
         </RelativeLayout>
     </FrameLayout>
 
@@ -47,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/form_tracksp_cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,7 +167,7 @@
                 </com.andexert.library.RippleView>
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <RelativeLayout
             android:id="@+id/form_tracksp_relativelayout"
@@ -159,7 +178,7 @@
             android:paddingRight="10dp"
             android:layout_below="@id/form_tracksp_cards">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/form_tracksp_rl_tool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,18 +187,22 @@
 
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                     android:id="@+id/form_onhand_txtCounter"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Data count"
-                    android:textAlignment="center"
                     android:layout_gravity="center"
-                    android:gravity="right"
+                    android:gravity="center_horizontal"
+                    android:text="Data count"
                     android:textColor="#333b3e"
                     android:textSize="15sp"
-                    app:customFont="RobotoMedium.ttf"/>
-            </LinearLayout>
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.v7.widget.RecyclerView
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/form_onhand_recycleview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

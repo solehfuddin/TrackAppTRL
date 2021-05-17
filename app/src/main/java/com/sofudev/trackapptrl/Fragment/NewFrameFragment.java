@@ -6,17 +6,17 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -37,17 +37,14 @@ import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 //import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 //import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 //import com.orhanobut.dialogplus.DialogPlus;
 //import com.orhanobut.dialogplus.ViewHolder;
 //import com.orhanobut.dialogplus.DialogPlus;
 //import com.orhanobut.dialogplus.ViewHolder;
-import com.google.gson.annotations.SerializedName;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.sofudev.trackapptrl.Adapter.Adapter_brandfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_colorfilter;
@@ -72,7 +69,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -388,10 +384,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         });
 
 
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction("Frame Corner");
-        }
+//        if (mListener != null)
+//        {
+//            mListener.onFragmentInteraction("Frame Corner");
+//        }
     }
 
     private void getData()
@@ -407,13 +403,13 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mListener = (OnFragmentInteractionListener) context;
+//        mListener = (OnFragmentInteractionListener) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
     @Override

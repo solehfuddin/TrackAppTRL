@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+        android:id="@+id/layout_custom_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layout_custom_mybanner"
+        app:shimmer_demo_angle="20"
+        app:shimmer_demo_child_count="10"
+        app:shimmer_demo_layout="@layout/layout_demo_banner"
+        app:shimmer_demo_layout_manager_type="linear_horizontal" />
+
+    <com.sofudev.trackapptrl.Decoration.MyBanner
+        android:id="@+id/layout_custom_mybanner"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+        android:id="@+id/layout_custom_mydots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:dotsColor="@color/colorIjo"
+        app:dotsCornerRadius="8dp"
+        app:dotsSize="12dp"
+        app:dotsSpacing="4dp"
+        app:dotsStrokeColor="@color/dot_dark_screen2"
+        app:dotsStrokeWidth="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_custom_mybanner" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_custom_mybanner">
+
+        <LinearLayout
+            android:id="@+id/layout_custom_pagesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal" />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

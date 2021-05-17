@@ -1,30 +1,20 @@
 package com.sofudev.trackapptrl.Info;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.cache.DiskBasedCache;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.HttpClientStack;
-import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.HurlStack;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_order_history;
 import com.sofudev.trackapptrl.Adapter.Adapter_sp_history;
@@ -32,7 +22,6 @@ import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Data.Data_order_history;
 import com.sofudev.trackapptrl.Data.Data_sp_history;
-import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.Executor;

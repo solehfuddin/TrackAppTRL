@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FrameProductActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_detail_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:contentInsetStart="10dp"
+        android:contentInsetLeft="10dp"
+        android:contentInsetRight="10dp"
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetLeft="10dp"
+        app:contentInsetRight="10dp"
+        app:contentInsetStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:visibility="invisible"
+            android:padding="5dp"
+            tools:ignore="RtlHardcoded">
+
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/fragment_detailproduct_btnWishlist"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="right"
+                android:padding="0.5dp"
+                app:sparkbutton_activeImage="@drawable/ic_favorite_white"
+                app:sparkbutton_animationSpeed="1.5"
+                app:sparkbutton_iconSize="25dp"
+                app:sparkbutton_inActiveImage="@drawable/ic_favorite_border_white"
+                app:sparkbutton_primaryColor="@color/colorEnd"
+                app:sparkbutton_secondaryColor="@color/white" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/frame_product_btnback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="@string/app_name"
+            tools:ignore="RtlHardcoded" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingTop="-1dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="1dp"
+            android:text="@string/all_frame"
+            android:textColor="@color/neutral"
+            android:textSize="19sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/frame_product_framelayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail_product"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

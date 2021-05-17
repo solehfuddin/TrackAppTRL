@@ -1,72 +1,15 @@
 <resources>
-    <string name="app_name">TRL Apps</string>
-    <string name="title_activity_welcome">Home Screen</string>
-    <string name="next">NEXT</string>
-    <string name="back">BACK</string>
-    <string name="start">GOT IT</string>
-
-    <string name="office_address">Rawa Kepiting No 4, Kawasan Industri Pulogadung, Jakarta 13920</string>
-    <string name="slide_1_title">Hello Food!</string>
-    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
-
-    <string name="slide_2_title">Movie Tickets</string>
-    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
-
-    <string name="slide_3_title">Great Discounts</string>
-    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
-
-    <string name="slide_4_title">World Travel</string>
-    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
-
-    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
-    <string name="play_again">Play Again</string>
-    <string name="title_activity_main">MainActivity</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="about_1_title">OUR COMPANY AT A GLANCE</string>
-    <string name="content_1_para1">Established in 1968, PT Timur Raya Lestari has now become one of the largest distributors of vision care and medical eye care products in Indonesia providing various selections of products, which we strictly select from only world-class manufacturers/ suppliers with proven track record.</string>
-    <string name="content_1_para2">Suported by hundreds of skillful and competent employees we strive to provide the best services which cater to customers needs. Currently we have dedicated sales force team and 3 branches as our customers points of contract supported by 8 stockist in several major cities around Indonesia.</string>
-    <string name="content_1_para3">In 1997, PT Timur Raya Lestari became the first spectacles lens processing company in Indonesia who received quality management system certification of ISO 9002-1994. In 2005 we obtained ISO 9001-2000 certification, which was then upgraded to ISO 9001-2008 since February 2010.</string>
-    <string name="content_1_para4">Until today, we also have been supported by our own spectacle lens processing laboratory. Thanks to our loyal suppliers as their strong partnerships are what have made our products well known for having high quality standard, on top of the innovative and continuosly improved services being offered.</string>
-
-    <string name="about_vision">Our Vision:</string>
-    <string name="content_vision">To help people in the world to see better and be better seen, in a way that honors God</string>
-
-    <string name="about_mission">Mission:</string>
-    <string name="content_mission_1">Wholesaler: To be an innovative and low cost solution provider</string>
-    <string name="content_mission_2">Retail: To be presbyopia expert</string>
-
-    <string name="about_motto">Motto:</string>
-    <string name="content_motto">Partner in Eye Care Business</string>
-
-    <string name="about_2_title">ORDER SERVICES</string>
-    <string name="content_2_para1">For spectacle lens processing, we are one of the few companies in Indonesia that uses a fully integrated Online Ordering system connecting us to the suppliers and customers, which provides information on order status and inventory data. This way we speed up our product delivery service.</string>
-
-    <string name="about_3_title">AFTER SALES SERVICES</string>
-    <string name="content_3_para1">Best customer experience is true to the core of our customer service. PT Timur Raya Lestari does the extra mile for our customers by providing comprehensive and regular training sessions conducted by our competent consultants equipped with technical expertise in eye care and ophthalmic equipment.</string>
-    <string name="content_3_para2">Our after sales team consists of more than 15 people with 22 hunting telephone lines facility ready to receive complaint and provide first level support to fix minor problem in every equipment that we sell. We also provide second level support to fix major problem or malfunction of the machine.</string>
-    <string name="title_activity_dashboard">DashboardActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <array name="frame_model_array">
         <item>Full</item>
         <item>Bor</item>
         <item>Nylon</item>
     </array>
-
     <array name="type_lensa_array">
         <item>Leinz</item>
         <item>Moe</item>
         <item>Nikon</item>
         <item>Oriental</item>
     </array>
-
     <array name="type_frame_array">
         <item>Nikon</item>
         <item>Oriental</item>
@@ -77,18 +20,20 @@
         <item>Moe</item>
         <item>Horien</item>
     </array>
-
     <array name="type_sp_array">
         <item>Lensa Satuan</item>
         <item>Lensa Partai</item>
         <item>Frame</item>
     </array>
-
     <array name="payment_sp_array">
         <item>Cash</item>
         <item>Cicilan</item>
     </array>
-
+    <array name="durasi_cicilan">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </array>
     <array name="month_array">
         <item>Januari</item>
         <item>Februari</item>
@@ -103,4 +48,122 @@
         <item>November</item>
         <item>Desember</item>
     </array>
+    <string name="app_name">TRL Apps</string>
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="back">BACK</string>
+
+    <string name="start">GOT IT</string>
+    <string name="dateFormat" translatable="false">EE, dd MMM</string>
+    <string name="timeFormat" translatable="false">EE, dd MMM HH:mm</string>
+
+    <string name="period" translatable="false">%1$s – %2$s</string>
+    <string name="titleDateStatement" translatable="false">dd-MM-yyyy</string>
+
+    <string name="customDateStatement" translatable="false">MM-yyyy</string>
+    <string name="office_address">Rawa Kepiting No 4, Kawasan Industri Pulogadung, Jakarta 13920</string>
+
+    <string name="slide_1_title">Hello Food!</string>
+    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
+
+    <string name="slide_2_title">Movie Tickets</string>
+    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+    <string name="slide_3_title">Great Discounts</string>
+
+    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+    <string name="slide_4_title">World Travel</string>
+
+    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="about_1_title">OUR COMPANY AT A GLANCE</string>
+
+    <string name="content_1_para1">Established in 1968, PT Timur Raya Lestari has now become one of the largest distributors of vision care and medical eye care products in Indonesia providing various selections of products, which we strictly select from only world-class manufacturers/ suppliers with proven track record.</string>
+    <string name="content_1_para2">Suported by hundreds of skillful and competent employees we strive to provide the best services which cater to customers needs. Currently we have dedicated sales force team and 3 branches as our customers points of contract supported by 8 stockist in several major cities around Indonesia.</string>
+    <string name="content_1_para3">In 1997, PT Timur Raya Lestari became the first spectacles lens processing company in Indonesia who received quality management system certification of ISO 9002-1994. In 2005 we obtained ISO 9001-2000 certification, which was then upgraded to ISO 9001-2008 since February 2010.</string>
+
+    <string name="content_1_para4">Until today, we also have been supported by our own spectacle lens processing laboratory. Thanks to our loyal suppliers as their strong partnerships are what have made our products well known for having high quality standard, on top of the innovative and continuosly improved services being offered.</string>
+    <string name="about_vision">Our Vision:</string>
+
+    <string name="content_vision">To help people in the world to see better and be better seen, in a way that honors God</string>
+    <string name="about_mission">Mission:</string>
+
+    <string name="content_mission_1">Wholesaler: To be an innovative and low cost solution provider</string>
+    <string name="content_mission_2">Retail: To be presbyopia expert</string>
+    <string name="about_motto">Motto:</string>
+    <string name="content_motto">Partner in Eye Care Business</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="about_2_title">ORDER SERVICES</string>
+
+    <string name="content_2_para1">For spectacle lens processing, we are one of the few companies in Indonesia that uses a fully integrated Online Ordering system connecting us to the suppliers and customers, which provides information on order status and inventory data. This way we speed up our product delivery service.</string>
+
+    <string name="about_3_title">AFTER SALES SERVICES</string>
+
+    <string name="content_3_para1">Best customer experience is true to the core of our customer service. PT Timur Raya Lestari does the extra mile for our customers by providing comprehensive and regular training sessions conducted by our competent consultants equipped with technical expertise in eye care and ophthalmic equipment.</string>
+
+    <string name="content_3_para2">Our after sales team consists of more than 15 people with 22 hunting telephone lines facility ready to receive complaint and provide first level support to fix minor problem in every equipment that we sell. We also provide second level support to fix major problem or malfunction of the machine.</string>
+
+    <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="awb_number">Awb Number</string>
+    <string name="shipping_name">Shipping Name</string>
+    <string name="picked">Picked</string>
+    <string name="in_transit">In transit</string>
+    <string name="delivered">Delivered</string>
+    <string name="messenger_name">Messenger Name</string>
+    <string name="messenger_id">Messenger Id</string>
+    <string name="detail_tracking">Detail Tracking</string>
+    <string name="_0">0</string>
+    <string name="track_order">Track Order</string>
+    <string name="awb">Awb</string>
+    <string name="tracking_details">Tracking Details</string>
+    <string name="receiver_details">Receiver Details</string>
+    <string name="received_by">Received By</string>
+    <string name="consignee_name">Consignee Name</string>
+    <string name="consignee_address">Consignee Address</string>
+    <string name="consignee_phone">Consignee Phone</string>
+    <string name="received_date">Received Date</string>
+    <string name="date_receive">Date receive</string>
+    <string name="nomor_resi">Nomor Resi</string>
+    <string name="description_delivery_tracking">Description delivery tracking</string>
+    <string name="date_info">Date Info</string>
+    <string name="lens_order">Lens Order</string>
+    <string name="stock_order">Stock Order</string>
+    <string name="sp_order">SP Order</string>
+    <string name="master_onhand">On Hand</string>
+    <string name="order_track">Order Track</string>
+    <string name="ship_track">Delivery Track</string>
+    <string name="more">More</string>
+    <string name="sp_track">SP Track</string>
+    <string name="deposit">TRL Deposit</string>
+    <string name="bprks">Bprks Loan</string>
+    <string name="special_product">SPECIAL PRODUCT</string>
+    <string name="more_custom"><![CDATA[MORE >]]></string>
+    <string name="_10">-10%</string>
+    <string name="nikon">Nikon</string>
+    <string name="product_name">Product Name</string>
+    <string name="stok_tersedia">Stok Tersedia</string>
+    <string name="price">Price</string>
+    <string name="product_id">Product Id</string>
+    <string name="see_more">SEE MORE</string>
+    <string name="all_frame">ALL FRAME</string>
+    <string name="inv_number">Inv Number :</string>
+    <string name="pilih_power">Pilih Power</string>
+    <string name="search_sub_category">Search sub category</string>
+    <string name="filter_by_category">Filter By Category</string>
+    <string name="filter_by_subcategory">Filter By Subcategory</string>
+    <string name="filter_data">Filter Data</string>
+    <string name="filter">Filter</string>
+    <string name="choose">Choose</string>
+    <string name="category">Category</string>
+    <string name="pilih_subcategory">Pilih Subcategory</string>
+    <string name="detail_summary">Detail Summary</string>
 </resources>

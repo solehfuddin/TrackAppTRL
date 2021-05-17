@@ -2,7 +2,7 @@ package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,6 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
-import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;

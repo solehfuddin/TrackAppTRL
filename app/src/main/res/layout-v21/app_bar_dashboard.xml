@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sofudev.trackapptrl.DashboardActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1.0">
+
+                <TextView
+                    android:id="@+id/appbardashboard_txt_titleheader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".99"
+                    android:layout_margin="10dp"
+                    android:text="Home"
+                    android:textColor="@android:color/white"
+                    android:textSize="22dp" />
+
+                <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/relative_layout_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/appbardashboard_btn_wishlist"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="10.5dp"
+                        android:src="@drawable/ic_favorite_white"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/appbardashboard_badge_wishlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/relative_layout_item_count"
+                    android:background="@android:drawable/ic_notification_overlay"
+                    android:text=" 0 "
+                    android:textColor="#FFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/relative_layout_item_count1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/appbardashboard_btn_addcart"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10.5dp"
+                            android:src="@drawable/ic_cart_white"/>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/appbardashboard_badge_cart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/relative_layout_item_count1"
+                        android:background="@android:drawable/ic_notification_overlay"
+                        android:text=" 0 "
+                        android:textColor="#FFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/dashboard_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bggray"
+        android:layout_marginTop="56dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/appbarmain_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </LinearLayout>
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/appbardashboard_header"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="210dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/appbardashboard_balance"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="-10dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_header"/>-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/appbardashboard_category"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_balance"/>-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/appbardashboard_special_product"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_category" />-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/appbarmain_fragment_container"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:visibility="visible"-->
+<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/appbardashboard_header" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

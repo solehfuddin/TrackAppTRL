@@ -67,7 +67,7 @@
             </RelativeLayout>
         </FrameLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -81,11 +81,13 @@
                 android:paddingBottom="50dp">
 
                 <!-- Area Order Detail -->
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="3dp"
                     app:cardCornerRadius="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     app:cardUseCompatPadding="true"
                     android:visibility="visible">
 
@@ -275,34 +277,78 @@
                                     android:layout_marginTop="5dp"
                                     android:orientation="vertical">
 
-                                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
-                                        android:layout_marginRight="5dp"
-                                        android:padding="5dp"
-                                        android:text="Kota Optik"
-                                        android:textColor="@color/colorContent"
-                                        android:textSize="12sp"
-                                        app:customFont="UbuntuMedium.ttf" />
+                                        android:orientation="horizontal"
+                                        android:weightSum="2">
 
-                                    <com.beardedhen.androidbootstrap.BootstrapEditText
-                                        android:id="@+id/form_ordersp_txtKotaOptik"
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="1"
+                                            android:padding="5dp"
+                                            android:text="Ship Number"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_weight="1"
+                                            android:padding="5dp"
+                                            android:text="Kota Optik"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="2.92"
-                                        android:layout_marginLeft="10dp"
-                                        android:layout_marginRight="10dp"
-                                        android:layout_marginBottom="5dp"
-                                        android:hint="Jakarta"
-                                        android:textAlignment="center"
-                                        android:inputType="phone"
-                                        android:padding="5dp"
-                                        android:textColor="@color/colorHint"
-                                        android:textColorHint="@color/colorContent"
-                                        app:bootstrapBrand="info"
-                                        app:bootstrapSize="md"
-                                        app:roundedCorners="true" />
+                                        android:weightSum="2"
+                                        android:orientation="horizontal">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtShipNumber"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="5dp"
+                                            android:textAlignment="center"
+                                            android:inputType="phone"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtKotaOptik"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="5dp"
+                                            android:hint="Jakarta"
+                                            android:textAlignment="center"
+                                            android:inputType="phone"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+                                    </LinearLayout>
 
                                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                                         android:layout_width="match_parent"
@@ -502,11 +548,28 @@
                                         android:textAlignment="center"
                                         android:inputType="numberSigned"
                                         android:padding="5dp"
+                                        android:visibility="gone"
                                         android:textColor="@color/colorHint"
                                         android:textColorHint="@color/colorContent"
                                         app:bootstrapBrand="info"
                                         app:bootstrapSize="md"
                                         app:roundedCorners="true" />
+
+                                    <Spinner
+                                        android:id="@+id/form_ordersp_spinCicilan"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".13"
+                                        android:layout_centerHorizontal="true"
+                                        android:text="1"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="14sp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginRight="10dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:background="@color/bootstrap_brand_info" />
 
                                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                                         android:layout_width="0dp"
@@ -587,10 +650,10 @@
                             </LinearLayout>
                         </net.cachapa.expandablelayout.ExpandableLayout>
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <!-- Area Order Item -->
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="3dp"
@@ -675,10 +738,114 @@
                             </LinearLayout>
                         </net.cachapa.expandablelayout.ExpandableLayout>
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Area Digital Signature -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_ordersp_rippledigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration="150"
+                            app:rv_type="rectangle">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorHint"
+                                android:orientation="horizontal">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:padding="8dp"
+                                    android:text="Persetujuan dokumen"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/form_ordersp_expandlayoutdigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500"
+                            app:el_expanded="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:text="* Isi tanda tangan digital"
+                                    android:layout_margin="15dp"
+                                    android:textColor="@color/dot_dark_screen1"
+                                    android:textSize="12sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+
+                                <com.github.gcacace.signaturepad.views.SignaturePad
+                                    android:id="@+id/form_ordersp_imgdigitalsign"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="150dp"
+                                    android:contentDescription="@string/app_name"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:background="@drawable/border_custom"
+                                    app:penColor="@color/colorContent"
+                                    app:penMinWidth="2dp"
+                                    app:penMaxWidth="5dp"/>
+
+                                <TextView
+                                    android:id="@+id/form_ordersp_txtdigitalsign"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="gone"/>
+
+                                <Button
+                                    android:id="@+id/form_ordersp_btndigitalsign"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="25dp"
+                                    android:text="Hapus"
+                                    android:background="@color/bg_screen1"
+                                    android:textColor="@color/white"
+                                    android:textAllCaps="false"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:layout_gravity="right"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:textSize="11sp"/>
+
+                            </LinearLayout>
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
         <!-- Area Footer -->

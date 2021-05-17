@@ -3,11 +3,22 @@ package com.sofudev.trackapptrl.Custom;
 public class Config {
     /* Area Ip */
     //Production Server
-//    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+    public String Ip_21express = "http://180.250.96.154/trl_ds_exp/";
+    public String Ip_tiki    = "http://180.250.96.154/trl_tiki/";
+
     //Development Server
-    public String Ip_address = "http://180.250.96.154/trl-dev/";
+//    public String Ip_address = "http://180.250.96.154/trl-dev/";
 //    public String Ip_address = "http://192.168.44.21/trl-dev/";
 //    public String Ip_address = "http://192.168.44.143/trl-webs/"; /* Localhost */
+
+    public String Username21 = "TIMURRAYALESTARI";
+    public String Password21 = "606c0c0e3cb22";
+    public String ClientId   = "ebf4b72c9ec86e51e5827ab352cc1aa9";
+    public String ClientSecret = "1b8fc7a3a55de16ee21904d2d84cfb66";
+
+    public String UsernameTiki = "TIMURRAYA";
+    public String PasswordTiki = "RAYALES785";
 
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
@@ -31,6 +42,7 @@ public class Config {
     public String dashboard_upload_txtphone= "index.php/android_dashboard/uploadVerifyphoneTxt";
     public String dashboard_search_product = "index.php/android_dashboard/searchProduct";
     public String dashboard_search_producttitle = "index.php/android_dashboard/searchProductTitle";
+    public String dashboard_getpromo_banner= "index.php/Android_dashboard/getPromoBanner";
 
     /* Area Profile */
     public String profile_user_detail       = "index.php/android_profile/userProfileDetail";
@@ -54,6 +66,8 @@ public class Config {
     public String track_order_custname  = "index.php/Android_checkorder/getOrderByCustname/8/";
     public String track_order_reference = "index.php/Android_checkorder/getOrderByReference/8/";
     public String track_order_daterange = "index.php/Android_checkorder/getOrderByRange/8/";
+    public String track_order_getFrame  = "index.php/Android_checkorder/getFrameBrand";
+    public String track_order_getType   = "index.php/Android_checkorder/getFrameType";
 
     /* Area Filter Optic Name*/
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
@@ -293,6 +307,7 @@ public class Config {
     public String ordersp_insert_samTemp          = "index.php/Android_apisp/insertSamTemp";
     public String ordersp_insert_trxHeader        = "index.php/Android_apisp/insertTrxHeader";
     public String ordersp_update_photo            = "index.php/Android_apisp/updatePhoto";
+    public String ordersp_update_digitalsigned    = "index.php/Android_apisp/updateSigned";
     public String ordersp_autosent_photo          = "index.php/Android_apisp/uploadPhoto";
     public String ordersp_get_spHeader            = "index.php/Android_apisp/getSpHeader";
     public String ordersp_get_listSp              = "index.php/Android_apisp/getSp/8/";
@@ -323,6 +338,8 @@ public class Config {
     public String masteronhand_getbyqty           = "index.php/Android_masteronhand/getOnHandByQty";
     public String masteronhand_getsuggestion      = "index.php/Android_masteronhand/searchSuggestion";
     public String masteronhand_search             = "index.php/Android_masteronhand/searchOnHand";
+    public String masteronhand_gettranslation     = "index.php/Android_masteronhand/getCategoryTranslasi";
+    public String masteronhand_getbytranslation   = "index.php/Android_masteronhand/getOnHandByTranslasi";
 
     /* AREA SP FRAME */
     public String spframe_get_framebrand          = "index.php/Android_apispframe/getBrand";
@@ -338,4 +355,25 @@ public class Config {
     public String depo_getfiltersaldo             = "index.php/Android_deposit/getMutasi";
     public String depo_getfilterpending           = "index.php/Android_deposit/getPending";
     public String depo_getfiltertotal             = "index.php/Android_deposit/getTotalByDate";
+
+    /* AREA ESTATEMENT */
+    public String estatement_getdata              = "index.php/Android_estatement/showStatement";
+    public String estatement_getcategory          = "index.php/Android_estatement/showCategory";
+    public String estatement_getsummarylast       = "index.php/Android_estatement/getTotalSummaryLast";
+    public String estatement_getdetailsummary     = "index.php/Android_estatement/getDetailSummaryLast";
+
+    /* AREA DELIVERY TRACK */
+    public String deliverytrack_bydate            = "index.php/Android_deliverytrack/showDataByDate";
+    public String deliverytrack_counter           = "index.php/Android_deliverytrack/countData";
+    public String deliverytrack_byawbnumber       = "index.php/Android_deliverytrack/showDataByAwb";
+
+    /* AREA TRACKING 21 EXPRESS */
+    public String generate21_token                = "index.php/Texp/req_access_token";
+    public String getstatus21_info                = "index.php/Texp/get_info_status";
+    public String receive21_info                  = "index.php/Texp/get_received_status";
+
+    /* AREA TIKI */
+    public String generatetiki_token              = "index.php/Texp/req_access_token";
+    public String getconnote_info                 = "index.php/Texp/connote_info";
+    public String getconnote_status               = "index.php/Texp/connote_history";
 }

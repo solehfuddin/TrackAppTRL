@@ -1,7 +1,7 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_categoryonhand {
-    private String orgId, itemName;
+    private String orgId, itemName, desc;
 
     public String getOrgId() {
         return orgId;
@@ -17,5 +17,13 @@ public class Data_categoryonhand {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }
