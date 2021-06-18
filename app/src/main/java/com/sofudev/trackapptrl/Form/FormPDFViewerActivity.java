@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.Form;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 
@@ -24,6 +25,7 @@ public class FormPDFViewerActivity extends AppCompatActivity{
     RippleView btn_back;
     UniversalFontTextView txt_title;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class FormPDFViewerActivity extends AppCompatActivity{
 
         WebView webView = (WebView) findViewById(R.id.form_pdfviewer_webview);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
         webView.loadUrl(link);
         webView.setWebViewClient(new WebViewClient() {
 

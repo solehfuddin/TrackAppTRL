@@ -1441,7 +1441,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     {
 //                        Toasty.info(getApplicationContext(), "Form Lensa Partai", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+//                        Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), FormLensaPartaiActivity.class);
 
                         intent.putExtra("idparty", idOptic);
                         intent.putExtra("opticname", txtNamaOptik.getText().toString());

@@ -130,6 +130,8 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
             username = bundle.getString("username");
             tmpOpticname = bundle.getString("opticname");
             getSummary(username);
+
+
 //            getDetailSummary(username);
 //            Toasty.info(getApplicationContext(), username, Toast.LENGTH_SHORT).show();
         }
@@ -498,7 +500,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
 
                     if (jsonObject.names().get(0).equals("invalid"))
                     {
-                        Toasty.info(getApplicationContext(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+//                        Toasty.info(getApplicationContext(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                         opticname = tmpOpticname;
                         totalsummary = "0";
                     }

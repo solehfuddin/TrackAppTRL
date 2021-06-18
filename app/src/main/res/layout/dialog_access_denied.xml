@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="135dp"
+                android:layout_marginLeft="35dp"
+                android:src="@drawable/prohibition"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="15dp">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:padding="8dp"
+                android:text="Mohon maaf akun anda tidak diberikan izin untuk mengakses layanan ini."
+                android:textAlignment="center"
+                android:textColor="@color/colorContent"
+                android:textSize="14sp"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/dialog_accessdenied_btnsave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:layout_gravity="center_horizontal"
+                app:bootstrapBrand="danger"
+                app:bootstrapSize="md"
+                app:bootstrapText="Close"
+                app:roundedCorners="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

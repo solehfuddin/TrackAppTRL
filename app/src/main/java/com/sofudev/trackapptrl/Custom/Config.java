@@ -23,6 +23,10 @@ public class Config {
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
     public String login_update_isOnline = "index.php/android_main/updateInfoLogin";
+    public String get_sic_code = "index.php/Android_Main/getSicCode";
+    public String set_sic_code = "index.php/Android_Main/setSicCode";
+    public String verify_siccode = "index.php/Android_Main/verifySicCode";
+    public String status_user  = "index.php/Android_Main/cekStatusUser";
 
     /* Area Dashboard*/
     public String dashboard_user_detail = "index.php/android_dashboard/userDetail";
@@ -308,6 +312,7 @@ public class Config {
     public String ordersp_insert_trxHeader        = "index.php/Android_apisp/insertTrxHeader";
     public String ordersp_update_photo            = "index.php/Android_apisp/updatePhoto";
     public String ordersp_update_digitalsigned    = "index.php/Android_apisp/updateSigned";
+    public String ordersp_update_excel            = "index.php/Android_apisp/updateExcel";
     public String ordersp_autosent_photo          = "index.php/Android_apisp/uploadPhoto";
     public String ordersp_get_spHeader            = "index.php/Android_apisp/getSpHeader";
     public String ordersp_get_listSp              = "index.php/Android_apisp/getSp/8/";
