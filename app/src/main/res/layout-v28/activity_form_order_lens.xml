@@ -51,6 +51,7 @@
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
+                    android:visibility="gone"
                     app:rv_type="rectangle"
                     app:rv_rippleDuration="100">
                     <ImageButton

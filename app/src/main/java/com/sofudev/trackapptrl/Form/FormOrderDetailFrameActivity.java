@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
     String URLITEM   = config.Ip_address + config.frame_getitem_frame;
 
     ImageView btnBack;
-    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtStatus, txtEkspedisi, txtService, txtOrderNumber;
+    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtInfo, txtStatus, txtEkspedisi, txtService, txtOrderNumber;
     RippleView btnDownloadPdf;
     RecyclerView recyclerViewItem;
 
@@ -64,6 +65,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         txtNamaOptik    = findViewById(R.id.activity_orderdetail_frame_txt_optik);
         txtHarga        = findViewById(R.id.activity_orderdetail_frame_txt_harga);
         txtStatus       = findViewById(R.id.activity_orderdetail_frame_txt_status);
+        txtInfo         = findViewById(R.id.activity_orderdetail_frame_txt_info);
         txtEkspedisi    = findViewById(R.id.activity_orderdetail_frame_txt_ekspedisi);
         txtService      = findViewById(R.id.activity_orderdetail_frame_txt_service);
         txtOrderNumber  = findViewById(R.id.activity_orderdetail_frame_txt_nomororder);
@@ -117,6 +119,34 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
 
                     String harga = "Rp. " + CurencyFormat(String.valueOf(object.getString("total_harga")));
                     String nomor = "No order #" + object.getString("order_number");
+
+                    String nonpay = object.getString("keterangan");
+
+                    switch (nonpay)
+                    {
+                        case "0":
+                            nonpay = "Awaiting Approval";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#ff9100"));
+                            break;
+
+                        case "1":
+                            nonpay = "Approved";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#45ac2d"));
+                            break;
+
+                        case "2":
+                            nonpay = "Rejected";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#f90606"));
+                            break;
+
+                        default:
+                            nonpay = "";
+                            txtInfo.setText(nonpay);
+                            break;
+                    }
 
                     titleNote = object.getString("flash_note");
 

@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
     String URLITEM   = config.Ip_address + config.orderpartai_detail_item;
 
     ImageView btnBack;
-    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtStatus, txtEkspedisi, txtService, txtNomorOrder;
+    UniversalFontTextView txtTanggal, txtNamaOptik, txtHarga, txtInfo, txtStatus, txtEkspedisi, txtService, txtNomorOrder;
     RippleView btnDownload;
     RecyclerView recyclerViewItem;
 
@@ -64,6 +65,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         txtNamaOptik    = findViewById(R.id.activity_orderdetail_partai_txt_optik);
         txtHarga        = findViewById(R.id.activity_orderdetail_partai_txt_harga);
         txtStatus       = findViewById(R.id.activity_orderdetail_partai_txt_status);
+        txtInfo         = findViewById(R.id.activity_orderdetail_partai_txt_info);
         txtEkspedisi    = findViewById(R.id.activity_orderdetail_partai_txt_ekspedisi);
         txtService      = findViewById(R.id.activity_orderdetail_partai_txt_service);
         txtNomorOrder   = findViewById(R.id.activity_orderdetail_partai_txt_nomororder);
@@ -133,6 +135,34 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
 
                     String harga = "Rp. " + CurencyFormat(String.valueOf(object.getString("total_harga")));
                     String nomor = "No order #" + object.getString("order_number");
+
+                    String nonpay = object.getString("keterangan");
+
+                    switch (nonpay)
+                    {
+                        case "0":
+                            nonpay = "Awaiting Approval";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#ff9100"));
+                            break;
+
+                        case "1":
+                            nonpay = "Approved";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#45ac2d"));
+                            break;
+
+                        case "2":
+                            nonpay = "Rejected";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#f90606"));
+                            break;
+
+                        default:
+                            nonpay = "";
+                            txtInfo.setText(nonpay);
+                            break;
+                    }
 
                     String kurir = object.getString("ekspedisi");
                     String service = object.getString("servis");

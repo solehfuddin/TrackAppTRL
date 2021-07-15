@@ -138,7 +138,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     protected void onRestart() {
         super.onRestart();
 //        showDataByDate();
-        historyLensByDate();
+//        historyLensByDate();
     }
 
     private void showLoader() {

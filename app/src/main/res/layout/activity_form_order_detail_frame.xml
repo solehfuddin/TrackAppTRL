@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:scale_base_width="600"
-                        app:scale_base_height="605">
+                        app:scale_base_height="625">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                             android:layout_marginTop="-10dp"
                             android:src="@drawable/bumperbanner"
                             android:layout_gravity="center"
-                            app:scale_top="-220"
+                            app:scale_top="-250"
                             app:scale_height="150"
                             app:scale_width="600"/>
 
@@ -87,7 +87,7 @@
                             android:layout_height="1dp"
                             android:layout_margin="10dp"
                             android:background="@drawable/hori_dash"
-                            app:scale_top="125"
+                            app:scale_top="100"
                             app:scale_left="10"
                             app:scale_height="50"
                             app:scale_width="580"
@@ -103,7 +103,7 @@
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_top="-110"
+                            app:scale_top="-150"
                             app:scale_height="40"
                             app:scale_width="600"
                             app:scale_textsize="33" />
@@ -167,7 +167,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="-45"
+                            app:scale_top="-85"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -182,7 +182,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="-45"
+                            app:scale_top="-85"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -198,7 +198,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="-45"
+                            app:scale_top="-85"
                             app:scale_height="40"
                             app:scale_width="180"
                             app:scale_textsize="25" />
@@ -213,7 +213,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="5"
+                            app:scale_top="-30"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -228,7 +228,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="5"
+                            app:scale_top="-30"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -246,7 +246,7 @@
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="5"
+                            app:scale_top="-30"
                             app:scale_height="40"
                             app:scale_width="405"
                             app:scale_textsize="25" />
@@ -261,7 +261,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="55"
+                            app:scale_top="25"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -276,7 +276,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="55"
+                            app:scale_top="25"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -293,7 +293,7 @@
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="55"
+                            app:scale_top="25"
                             app:scale_height="40"
                             app:scale_width="405"
                             app:scale_textsize="25" />
@@ -308,7 +308,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="105"
+                            app:scale_top="80"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -323,7 +323,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="105"
+                            app:scale_top="80"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -340,7 +340,7 @@
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="105"
+                            app:scale_top="80"
                             app:scale_height="40"
                             app:scale_width="405"
                             app:scale_textsize="25" />
@@ -349,13 +349,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Kurir"
+                            android:text="Ket"
                             android:textColor="#757575"
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="160"
+                            app:scale_top="130"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -370,7 +370,54 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="160"
+                            app:scale_top="130"
+                            app:scale_height="40"
+                            app:scale_width="20"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_orderdetail_frame_txt_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Approved"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            android:ellipsize="end"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="175"
+                            app:scale_top="130"
+                            app:scale_height="40"
+                            app:scale_width="405"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Kurir"
+                            android:textColor="#757575"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="25"
+                            app:scale_top="180"
+                            app:scale_height="40"
+                            app:scale_width="110"
+                            app:scale_textsize="25" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/colorContent"
+                            android:textSize="18sp"
+                            android:maxEms="30"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="150"
+                            app:scale_top="180"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -387,7 +434,7 @@
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="160"
+                            app:scale_top="180"
                             app:scale_height="40"
                             app:scale_width="405"
                             app:scale_textsize="25" />
@@ -402,7 +449,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="25"
-                            app:scale_top="215"
+                            app:scale_top="230"
                             app:scale_height="40"
                             app:scale_width="110"
                             app:scale_textsize="25" />
@@ -417,7 +464,7 @@
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="150"
-                            app:scale_top="215"
+                            app:scale_top="230"
                             app:scale_height="40"
                             app:scale_width="20"
                             app:scale_textsize="25" />
@@ -434,7 +481,7 @@
                             android:ellipsize="end"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="175"
-                            app:scale_top="215"
+                            app:scale_top="230"
                             app:scale_height="40"
                             app:scale_width="405"
                             app:scale_textsize="25" />
@@ -444,7 +491,7 @@
                             android:layout_height="1dp"
                             android:layout_margin="10dp"
                             android:background="@drawable/hori_dash"
-                            app:scale_top="470"
+                            app:scale_top="505"
                             app:scale_left="10"
                             app:scale_height="150"
                             app:scale_width="580"
@@ -461,7 +508,7 @@
                             android:textSize="18sp"
                             android:maxEms="30"
                             app:customFont="UbuntuMedium.ttf"
-                            app:scale_top="280"
+                            app:scale_top="300"
                             app:scale_height="40"
                             app:scale_width="600"
                             app:scale_textsize="26" />

@@ -19,9 +19,9 @@ android {
         applicationId "com.sofudev.trackapptrl"
 //        minSdkVersion 21
         minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 37
-        versionName "1.36"
+        targetSdkVersion 30
+        versionCode 39
+        versionName "1.38"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }

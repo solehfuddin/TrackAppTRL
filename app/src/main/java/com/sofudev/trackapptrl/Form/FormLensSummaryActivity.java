@@ -407,7 +407,14 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         cyll = "";
                     }
 
-                    if (corridor.equals("None") || corridor.contains("None"))
+                    if (corridor != null)
+                    {
+                        if (corridor.equals("None") || corridor.contains("None"))
+                        {
+                            corridor = "";
+                        }
+                    }
+                    else
                     {
                         corridor = "";
                     }
@@ -670,10 +677,18 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         addL = "0";
                     }
 
-                    if (corridor.equals("None") || corridor.contains("None"))
+                    if (corridor != null)
+                    {
+                        if (corridor.equals("None") || corridor.contains("None"))
+                        {
+                            corridor = "";
+                        }
+                    }
+                    else
                     {
                         corridor = "";
                     }
+
 
                     if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
                             || frameModel.equals("-- Model --"))

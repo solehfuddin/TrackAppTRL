@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Form;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ import es.dmoral.toasty.Toasty;
 public class FormOrderDetailActivity extends AppCompatActivity {
     Config config = new Config();
     UniversalFontTextView txtPasien, txtTanggal, txtOptik, txtHarga, txtStatus, txtNomorOrder, txtDownload,
-                    txtEkspedisi, txtService;
+                   txtInfo, txtEkspedisi, txtService;
     RippleView btnDownload;
     ImageView btnBack;
     RecyclerView recyclerViewItem;
@@ -64,6 +65,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
         txtOptik    = (UniversalFontTextView) findViewById(R.id.activity_orderdetail_txt_optik);
         txtHarga    = (UniversalFontTextView) findViewById(R.id.activity_orderdetail_txt_harga);
         txtStatus   = (UniversalFontTextView) findViewById(R.id.activity_orderdetail_txt_status);
+        txtInfo     = findViewById(R.id.activity_orderdetail_txt_info);
         txtEkspedisi= findViewById(R.id.activity_orderdetail_txt_ekspedisi);
         txtService  = findViewById(R.id.activity_orderdetail_txt_service);
         txtNomorOrder = (UniversalFontTextView) findViewById(R.id.activity_orderdetail_txt_nomororder);
@@ -122,6 +124,33 @@ public class FormOrderDetailActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     String nomor = "No Order #";
+                    String nonpay = jsonObject.getString("keterangan");
+
+                    switch (nonpay)
+                    {
+                        case "0":
+                            nonpay = "Awaiting Approval";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#ff9100"));
+                            break;
+
+                        case "1":
+                            nonpay = "Approved";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#45ac2d"));
+                            break;
+
+                        case "2":
+                            nonpay = "Rejected";
+                            txtInfo.setText(nonpay);
+                            txtInfo.setTextColor(Color.parseColor("#f90606"));
+                            break;
+
+                        default:
+                            nonpay = "";
+                            txtInfo.setText(nonpay);
+                            break;
+                    }
 
 //                    txtPasien.setText(jsonObject.getString("nama_pasien"));
                     txtTanggal.setText(jsonObject.getString("tanggal_order"));

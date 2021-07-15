@@ -1413,6 +1413,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("province", province);
                         intent.putExtra("usernameInfo", opticUsername);
                         intent.putExtra("city", txtKotaOptik.getText().toString());
+                        intent.putExtra("level", "1");
                         intent.putExtra("flag", "0");
                         intent.putExtra("idSp", dataHeader.getNoSp());
                         intent.putExtra("isSp", "1");

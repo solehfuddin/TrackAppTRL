@@ -76,6 +76,7 @@ public class Config {
     /* Area Filter Optic Name*/
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
     public String filter_optic_showbyname   = "index.php/Android_filteroptic/showOpticByFilter/8/";
+    public String filter_optic_getbyshipnumber = "index.php/Android_Filteroptic/showOpticByShipname";
 
     /* Area Info Order History */
     public String info_order_history    = "index.php/Android_checkorder/getOrderHistoryByStatus";

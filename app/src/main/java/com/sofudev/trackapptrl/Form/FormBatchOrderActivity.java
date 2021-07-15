@@ -222,142 +222,204 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 //lensPartaiHelper.truncLensPartai();
                 if (flagPayment == 0)
                 {
-                    Data_partai_header data_header = new Data_partai_header();
-                    data_header.setOrderNumber(orderId);
-                    data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
-                    data_header.setOpticName(opticName.replace(",", ""));
-                    data_header.setOpticAddress(opticAddress);
-                    data_header.setOpticCity(opticCity);
-                    data_header.setPhoneNumber(phone);
-                    data_header.setProdDivType(orgName);
-                    data_header.setShippingId(shippingId);
-                    data_header.setShippingName(shippingName);
-                    data_header.setOpticProvince(opticProvince);
-                    data_header.setShippingService(shippingService);
-                    data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
-                    data_header.setTotalPrice(totalAllPrice);
-                    data_header.setPayment_cashcarry("Non Payment Method");
-                    data_header.setFlashNote(flashsaleNote);
-                    data_header.setOrderSp(String.valueOf(isSp));
-
-                    Log.d("Header Partai", "OrderNumber = " + data_header.getOrderNumber());
-                    Log.d("Header Partai", "IdParty = " + data_header.getIdParty());
-                    Log.d("Header Partai", "OpticName = " + data_header.getOpticName());
-                    Log.d("Header Partai", "OpticAddress = " + data_header.getOpticAddress());
-                    Log.d("Header Partai", "OpticCity = " + data_header.getOpticCity());
-                    Log.d("Header Partai", "Phone = " + data_header.getPhoneNumber());
-                    Log.d("Header Partai", "OrgName = " + data_header.getProdDivType());
-                    Log.d("Header Partai", "ShippingId = " + data_header.getShippingId());
-                    Log.d("Header Partai", "ShippingName = " + data_header.getShippingName());
-                    Log.d("Header Partai", "Province = " + data_header.getOpticProvince());
-                    Log.d("Header Partai", "Service = " + data_header.getShippingService());
-                    Log.d("Header Partai", "ShipPrice = " + data_header.getShippingPrice());
-                    Log.d("Header Partai", "TotalPrice  = " + data_header.getTotalPrice());
-                    Log.d("Header Partai", "CashCarry = " + data_header.getPayment_cashcarry());
-                    Log.d("Header Partai", "Flash Note = " + data_header.getFlashNote());
-
-                    insertHeader(data_header);
-
-                    if (isSp == 1)
+                    if (totalAllPrice > 0)
                     {
-                        dataSpHeader.setNoSp(headerNoSp);
-                        dataSpHeader.setTypeSp(headerTipeSp);
-                        dataSpHeader.setSales(headerSales);
-                        dataSpHeader.setShipNumber(headerShipNumber);
-                        dataSpHeader.setCustName(headerCustName);
-                        dataSpHeader.setAddress(headerAddress);
-                        dataSpHeader.setCity(headerCity);
-                        dataSpHeader.setOrderVia(headerOrderVia);
-                        dataSpHeader.setDp(headerDp);
-                        dataSpHeader.setDisc(headerDisc);
-                        dataSpHeader.setCondition(headerCondition);
-                        dataSpHeader.setInstallment(headerInstallment);
-                        dataSpHeader.setStartInstallment(headerStartInstallment);
-                        dataSpHeader.setShipAddress(headerShippingAddress);
-                        dataSpHeader.setPhoto(headerImage);
-                        dataSpHeader.setStatus(headerStatus);
-                        dataSpHeader.setSignedPath(headerSignedPath);
+                        int len = item_partai.size();
+                        List<Boolean> sisanya = new ArrayList<>();
 
-                        insertSpHeader(dataSpHeader);
-                        insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-                        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
-
-                        for (int i = 0; i < item_partai.size(); i++)
+                        for (int i = 0; i < len; i++)
                         {
-                            Data_partai_item data_item = new Data_partai_item();
-                            data_item.setOrderNumber(orderId);
-                            data_item.setItemId(item_partai.get(i).getProductId());
-                            data_item.setItemCode(item_partai.get(i).getProductCode());
-                            data_item.setDescription(item_partai.get(i).getProductDesc());
-                            data_item.setSide(item_partai.get(i).getProductSide());
-                            data_item.setQty(item_partai.get(i).getProductQty());
-                            data_item.setPrice(item_partai.get(i).getProductPrice());
-                            data_item.setDiscount_name("");
-                            data_item.setDiscount(item_partai.get(i).getProductDisc());
-                            Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
-                            data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
-                            data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
+                            String item = item_partai.get(i).getProductDesc();
+                            int stock = item_partai.get(i).getProductStock();
+                            int qty   = item_partai.get(i).getProductQty();
+                            int sisa  = stock - qty;
 
-//                            insertItem(data_item);
-                            insertItemDurr(data_item);
+                            Log.d("Stock " + item, " Sisa = " + stock);
+
+                            if (stock < 1)
+                            {
+                                sisanya.add(i, false);
+                            }
+                            else
+                            {
+                                sisanya.add(i, true);
+                            }
                         }
-                    }
 
-                    for (int i = 0; i < item_partai.size(); i++)
-                    {
-                        Data_partai_item data_item = new Data_partai_item();
-                        data_item.setOrderNumber(orderId);
-                        data_item.setItemId(item_partai.get(i).getProductId());
-                        data_item.setItemCode(item_partai.get(i).getProductCode());
-                        data_item.setDescription(item_partai.get(i).getProductDesc());
-                        data_item.setSide(item_partai.get(i).getProductSide());
-                        data_item.setQty(item_partai.get(i).getProductQty());
-                        data_item.setPrice(item_partai.get(i).getProductPrice());
-                        data_item.setDiscount_name("");
-                        data_item.setDiscount(item_partai.get(i).getProductDisc());
-                        Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
-                        data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
-                        data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
+                        boolean cek = sisanya.contains(false);
 
-                        insertItem(data_item);
-                    }
+                        if (cek)
+                        {
+//                            Toasty.warning(getApplicationContext(), "Ada item yang minus", Toast.LENGTH_SHORT).show();
 
-                    insertNonPayment(orderId);
+                            Log.d("Information Cart", "Ada item yang minus");
 
-//                        Toasty.info(getApplicationContext(), "Congratulation, Order has been success", Toast.LENGTH_SHORT).show();
+                            final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
-                    final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+                            dialog.setContentView(R.layout.dialog_warning);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                    dialog.setContentView(R.layout.dialog_warning);
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    lwindow.copyFrom(dialog.getWindow().getAttributes());
-                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                    ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
-                    UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
-                    txtTitle.setText("Success, order anda telah diterima Timur Raya");
-                    imgIcon.setImageResource(R.drawable.success_outline);
-                    imgClose.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lwindow);
+                        }
+                        else
+                        {
+//                            Toasty.info(getApplicationContext(), "Aman kirim", Toast.LENGTH_SHORT).show();
+                            Data_partai_header data_header = new Data_partai_header();
+                            data_header.setOrderNumber(orderId);
+                            data_header.setIdParty(Integer.parseInt(opticId.replace(",", "")));
+                            data_header.setOpticName(opticName.replace(",", ""));
+                            data_header.setOpticAddress(opticAddress);
+                            data_header.setOpticCity(opticCity);
+                            data_header.setPhoneNumber(phone);
+                            data_header.setProdDivType(orgName);
+                            data_header.setShippingId(shippingId);
+                            data_header.setShippingName(shippingName);
+                            data_header.setOpticProvince(opticProvince);
+                            data_header.setShippingService(shippingService);
+                            data_header.setShippingPrice(Integer.valueOf(shipmentPrice));
+                            data_header.setTotalPrice(totalAllPrice);
+                            data_header.setPayment_cashcarry("Non Payment Method");
+                            data_header.setFlashNote(flashsaleNote);
+                            data_header.setOrderSp(String.valueOf(isSp));
+
+                            Log.d("Header Partai", "OrderNumber = " + data_header.getOrderNumber());
+                            Log.d("Header Partai", "IdParty = " + data_header.getIdParty());
+                            Log.d("Header Partai", "OpticName = " + data_header.getOpticName());
+                            Log.d("Header Partai", "OpticAddress = " + data_header.getOpticAddress());
+                            Log.d("Header Partai", "OpticCity = " + data_header.getOpticCity());
+                            Log.d("Header Partai", "Phone = " + data_header.getPhoneNumber());
+                            Log.d("Header Partai", "OrgName = " + data_header.getProdDivType());
+                            Log.d("Header Partai", "ShippingId = " + data_header.getShippingId());
+                            Log.d("Header Partai", "ShippingName = " + data_header.getShippingName());
+                            Log.d("Header Partai", "Province = " + data_header.getOpticProvince());
+                            Log.d("Header Partai", "Service = " + data_header.getShippingService());
+                            Log.d("Header Partai", "ShipPrice = " + data_header.getShippingPrice());
+                            Log.d("Header Partai", "TotalPrice  = " + data_header.getTotalPrice());
+                            Log.d("Header Partai", "CashCarry = " + data_header.getPayment_cashcarry());
+                            Log.d("Header Partai", "Flash Note = " + data_header.getFlashNote());
+
+                            insertHeader(data_header);
 
                             if (isSp == 1)
                             {
-                                Intent intent = new Intent("finishLp");
-                                sendBroadcast(intent);
+                                dataSpHeader.setNoSp(headerNoSp);
+                                dataSpHeader.setTypeSp(headerTipeSp);
+                                dataSpHeader.setSales(headerSales);
+                                dataSpHeader.setShipNumber(headerShipNumber);
+                                dataSpHeader.setCustName(headerCustName);
+                                dataSpHeader.setAddress(headerAddress);
+                                dataSpHeader.setCity(headerCity);
+                                dataSpHeader.setOrderVia(headerOrderVia);
+                                dataSpHeader.setDp(headerDp);
+                                dataSpHeader.setDisc(headerDisc);
+                                dataSpHeader.setCondition(headerCondition);
+                                dataSpHeader.setInstallment(headerInstallment);
+                                dataSpHeader.setStartInstallment(headerStartInstallment);
+                                dataSpHeader.setShipAddress(headerShippingAddress);
+                                dataSpHeader.setPhoto(headerImage);
+                                dataSpHeader.setStatus(headerStatus);
+                                dataSpHeader.setSignedPath(headerSignedPath);
+
+                                insertSpHeader(dataSpHeader);
+                                insertSP(URL_INSERTSAMTEMP, dataSpHeader);
+//                                insertSP(URL_INSERTTRXHEADER, dataSpHeader);
+
+                                for (int i = 0; i < item_partai.size(); i++)
+                                {
+                                    Data_partai_item data_item = new Data_partai_item();
+                                    data_item.setOrderNumber(orderId);
+                                    data_item.setItemId(item_partai.get(i).getProductId());
+                                    data_item.setItemCode(item_partai.get(i).getProductCode());
+                                    data_item.setDescription(item_partai.get(i).getProductDesc());
+                                    data_item.setSide(item_partai.get(i).getProductSide());
+                                    data_item.setQty(item_partai.get(i).getProductQty());
+                                    data_item.setPrice(item_partai.get(i).getProductPrice());
+                                    data_item.setDiscount_name("");
+                                    data_item.setDiscount(item_partai.get(i).getProductDisc());
+                                    Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
+                                    data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
+                                    data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
+
+//                            insertItem(data_item);
+                                    insertItemDurr(data_item);
+                                }
                             }
 
-                            finish();
-                        }
-                    });
+                            for (int i = 0; i < item_partai.size(); i++)
+                            {
+                                Data_partai_item data_item = new Data_partai_item();
+                                data_item.setOrderNumber(orderId);
+                                data_item.setItemId(item_partai.get(i).getProductId());
+                                data_item.setItemCode(item_partai.get(i).getProductCode());
+                                data_item.setDescription(item_partai.get(i).getProductDesc());
+                                data_item.setSide(item_partai.get(i).getProductSide());
+                                data_item.setQty(item_partai.get(i).getProductQty());
+                                data_item.setPrice(item_partai.get(i).getProductPrice());
+                                data_item.setDiscount_name("");
+                                data_item.setDiscount(item_partai.get(i).getProductDisc());
+                                Log.d("Lensorder Item", "diskon = " + item_partai.get(i).getProductDisc());
+                                data_item.setDisc_flashsale(item_partai.get(i).getProductDiscSale());
+                                data_item.setTotal_price(item_partai.get(i).getNewProductDiscPrice());
 
-                    dialog.show();
-                    dialog.getWindow().setAttributes(lwindow);
+                                insertItem(data_item);
+                            }
+
+                            insertNonPayment(orderId);
+
+//                        Toasty.info(getApplicationContext(), "Congratulation, Order has been success", Toast.LENGTH_SHORT).show();
+
+                            final Dialog dialog = new Dialog(FormBatchOrderActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                            dialog.setContentView(R.layout.dialog_warning);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                            ImageView imgIcon  = dialog.findViewById(R.id.dialog_warning_imgIcon);
+                            UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                            txtTitle.setText("Success, order anda telah diterima Timur Raya");
+                            imgIcon.setImageResource(R.drawable.success_outline);
+                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+
+                                    if (isSp == 1)
+                                    {
+                                        Intent intent = new Intent("finishLp");
+                                        sendBroadcast(intent);
+                                    }
+
+                                    finish();
+                                }
+                            });
+
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lwindow);
+                        }
+                    }
+                    else
+                    {
+                        Toasty.warning(getApplicationContext(), "Harap periksa kembali!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {

@@ -2319,17 +2319,41 @@ public class DashboardActivity extends AppCompatActivity
                             default:
                                 if (sts.contains("a") || sts.equals("A"))
                                 {
-                                    Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
-                                    intent.putExtra("idparty", navdash_id.getText().toString());
-                                    intent.putExtra("opticname", data);
-                                    intent.putExtra("province", province_user);
-                                    intent.putExtra("usernameInfo", username);
-                                    intent.putExtra("city", city);
-                                    intent.putExtra("flag", member_flag);
-                                    intent.putExtra("idSp", "0");
-                                    intent.putExtra("isSp", "0");
-                                    intent.putExtra("noHp", "0");
-                                    startActivity(intent);
+                                    if (level_user != null) {
+                                        if (Integer.parseInt(level_user) == 0) {
+                                            Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
+                                            intent.putExtra("idparty", navdash_id.getText().toString());
+                                            intent.putExtra("opticname", data);
+                                            intent.putExtra("province", province_user);
+                                            intent.putExtra("usernameInfo", username);
+                                            intent.putExtra("city", city);
+                                            intent.putExtra("level", level_user);
+                                            intent.putExtra("flag", member_flag);
+                                            intent.putExtra("idSp", "0");
+                                            intent.putExtra("isSp", "0");
+                                            intent.putExtra("noHp", "0");
+                                            startActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                                            intent.putExtra("cond", "LENSSALES");
+                                            startActivity(intent);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
+                                        intent.putExtra("idparty", navdash_id.getText().toString());
+                                        intent.putExtra("opticname", data);
+                                        intent.putExtra("province", province_user);
+                                        intent.putExtra("usernameInfo", username);
+                                        intent.putExtra("city", city);
+                                        intent.putExtra("level", level_user);
+                                        intent.putExtra("flag", member_flag);
+                                        intent.putExtra("idSp", "0");
+                                        intent.putExtra("isSp", "0");
+                                        intent.putExtra("noHp", "0");
+                                        startActivity(intent);
+                                    }
                                 }
                                 else
                                 {
@@ -3242,15 +3266,24 @@ public class DashboardActivity extends AppCompatActivity
                     }
                     else
                     {
-                        Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
-                        intent.putExtra("idparty", navdash_id.getText().toString());
-                        intent.putExtra("opticname", data);
-                        intent.putExtra("province", province_user);
-                        intent.putExtra("province_address", province_address);
-                        intent.putExtra("usernameInfo", username);
-                        intent.putExtra("city", city);
-                        intent.putExtra("flag", member_flag);
-                        startActivityForResult(intent, 2);
+                        if(Integer.parseInt(level_user) == 0)
+                        {
+                            Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
+                            intent.putExtra("idparty", navdash_id.getText().toString());
+                            intent.putExtra("opticname", data);
+                            intent.putExtra("province", province_user);
+                            intent.putExtra("province_address", province_address);
+                            intent.putExtra("usernameInfo", username);
+                            intent.putExtra("city", city);
+                            intent.putExtra("flag", member_flag);
+                            startActivityForResult(intent, 2);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                            intent.putExtra("cond", "CARTSALES");
+                            startActivity(intent);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3388,18 +3421,27 @@ public class DashboardActivity extends AppCompatActivity
                     }
                     else
                     {
-                        Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+                        if (Integer.parseInt(level_user) == 0)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
 
-                        intent.putExtra("idparty", navdash_id.getText().toString());
-                        intent.putExtra("opticname", data);
-                        intent.putExtra("province", province_user);
-                        intent.putExtra("usernameInfo", username);
-                        intent.putExtra("province_address", province_address);
-                        intent.putExtra("city", city);
-                        intent.putExtra("idSp", "0");
-                        intent.putExtra("isSp", 0);
-                        intent.putExtra("flag", member_flag);
-                        startActivity(intent);
+                            intent.putExtra("idparty", navdash_id.getText().toString());
+                            intent.putExtra("opticname", data);
+                            intent.putExtra("province", province_user);
+                            intent.putExtra("usernameInfo", username);
+                            intent.putExtra("province_address", province_address);
+                            intent.putExtra("city", city);
+                            intent.putExtra("idSp", "0");
+                            intent.putExtra("isSp", 0);
+                            intent.putExtra("flag", member_flag);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                            intent.putExtra("cond", "BATCHSALES");
+                            startActivity(intent);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

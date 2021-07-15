@@ -52,6 +52,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     app:rv_type="rectangle"
+                    android:visibility="gone"
                     app:rv_rippleDuration="100">
                     <ImageButton
                         android:id="@+id/form_lensorder_btndone"

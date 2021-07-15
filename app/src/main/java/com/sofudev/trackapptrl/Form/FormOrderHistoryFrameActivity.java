@@ -50,7 +50,7 @@ import java.util.Map;
 import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
-public class FormOrderHistoryFrameActivity extends AppCompatActivity implements CustomRecyclerOrderHistoryClick {
+public class FormOrderHistoryFrameActivity extends AppCompatActivity {
 
     Calendar calendar = Calendar.getInstance();
     Config config = new Config();
@@ -100,7 +100,29 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
         recyclerViewManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerViewManager);
 
-        adapter_orderhistory_frame = new Adapter_orderhistory_frame(FormOrderHistoryFrameActivity.this, itemHistory, this);
+        adapter_orderhistory_frame = new Adapter_orderhistory_frame(FormOrderHistoryFrameActivity.this, itemHistory, new CustomRecyclerOrderHistoryClick() {
+            @Override
+            public void onItemClick(View view, int pos, String id, String status, String paymentType) {
+                if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending"))
+                {
+                    checkPaymentMethod(id);
+                }
+                else if (status.contentEquals("Cancel") || status.equals("Cancel") || status.contains("Cancel"))
+                {
+                    Toasty.warning(getApplicationContext(), "This order has been cancelled", Toast.LENGTH_LONG).show();
+                }
+                else if (status.contentEquals("Failure") || status.equals("Failure") || status.contains("Failure"))
+                {
+                    Toasty.error(getApplicationContext(), "This order canceled by system", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Intent intent = new Intent(FormOrderHistoryFrameActivity.this, FormOrderDetailFrameActivity.class);
+                    intent.putExtra("key", id);
+                    startActivity(intent);
+                }
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +131,14 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
             }
         });
 
-        searchByRangeDate();
         getInfo();
+        searchByRangeDate();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        getAllFrame(idParty);
+//        getAllFrame(idParty);
     }
 
     private void showLoader() {
@@ -982,28 +1004,28 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity implements 
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-    @Override
-    public void onItemClick(View view, int pos, String id, String status, String paymentType) {
-
-        if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending"))
-        {
-            checkPaymentMethod(id);
-        }
-        else if (status.contentEquals("Cancel") || status.equals("Cancel") || status.contains("Cancel"))
-        {
-            Toasty.warning(getApplicationContext(), "This order has been cancelled", Toast.LENGTH_LONG).show();
-        }
-        else if (status.contentEquals("Failure") || status.equals("Failure") || status.contains("Failure"))
-        {
-            Toasty.error(getApplicationContext(), "This order canceled by system", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Intent intent = new Intent(FormOrderHistoryFrameActivity.this, FormOrderDetailFrameActivity.class);
-            intent.putExtra("key", id);
-            startActivity(intent);
-        }
-    }
+//    @Override
+//    public void onItemClick(View view, int pos, String id, String status, String paymentType) {
+//
+//        if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending"))
+//        {
+//            checkPaymentMethod(id);
+//        }
+//        else if (status.contentEquals("Cancel") || status.equals("Cancel") || status.contains("Cancel"))
+//        {
+//            Toasty.warning(getApplicationContext(), "This order has been cancelled", Toast.LENGTH_LONG).show();
+//        }
+//        else if (status.contentEquals("Failure") || status.equals("Failure") || status.contains("Failure"))
+//        {
+//            Toasty.error(getApplicationContext(), "This order canceled by system", Toast.LENGTH_LONG).show();
+//        }
+//        else
+//        {
+//            Intent intent = new Intent(FormOrderHistoryFrameActivity.this, FormOrderDetailFrameActivity.class);
+//            intent.putExtra("key", id);
+//            startActivity(intent);
+//        }
+//    }
 
     private void cancelPayment(String id) {
         Config config = new Config();

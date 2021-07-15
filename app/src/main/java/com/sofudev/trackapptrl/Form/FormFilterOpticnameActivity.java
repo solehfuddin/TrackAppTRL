@@ -30,6 +30,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_filter_optic;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.Data.Data_opticname;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Security.MCrypt;
@@ -50,6 +51,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     Config config = new Config();
     String URLSHOWALLOPTIC      = config.Ip_address + config.filter_optic_showall;
     String URLSHOWOPTICBYNAME   = config.Ip_address + config.filter_optic_showbyname;
+    String URLGETBYSHIPNUMBER   = config.Ip_address + config.filter_optic_getbyshipnumber;
     private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     List<Data_opticname> data_opticnames = new ArrayList<>();
@@ -285,6 +287,22 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     idparty = data_opticnames.get(position).getCustname();
                     countData(data_opticnames.get(position).getCustname());
                 }
+                else if (condition.equals("LENSSALES"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    opticName = data_opticnames.get(position).getCustname();
+//                    Toasty.info(getApplicationContext(), "Id party : " + idparty, Toast.LENGTH_SHORT).show();
+                }
+                else if (condition.equals("CARTSALES"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    opticName = data_opticnames.get(position).getCustname();
+                }
+                else if (condition.equals("BATCHSALES"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    opticName = data_opticnames.get(position).getCustname();
+                }
                 else
                 {
                     idparty = data_opticnames.get(position).getUsername();
@@ -368,6 +386,18 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     intent.putExtra("totalprocess", String.valueOf(sTotal));
                     startActivity(intent);
                 }
+                else if (condition.equals("LENSSALES"))
+                {
+                    showByShipnumber(idparty, 0);
+                }
+                else if (condition.equals("CARTSALES"))
+                {
+                    showByShipnumber(idparty, 1);
+                }
+                else if (condition.equals("BATCHSALES"))
+                {
+                    showByShipnumber(idparty, 2);
+                }
             }
         });
     }
@@ -432,6 +462,90 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showByShipnumber(final String username, final int category)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLGETBYSHIPNUMBER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("invalid"))
+                    {
+                        Toasty.info(getApplicationContext(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        if (category == 0)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
+                            intent.putExtra("idparty", jsonObject.getString("idparty"));
+                            intent.putExtra("opticname", jsonObject.getString("custname"));
+                            intent.putExtra("province", jsonObject.getString("province"));
+                            intent.putExtra("usernameInfo", jsonObject.getString("username"));
+                            intent.putExtra("city", jsonObject.getString("city"));
+                            intent.putExtra("level", "1");
+                            intent.putExtra("flag", jsonObject.getString("flag"));
+                            intent.putExtra("idSp", "0");
+                            intent.putExtra("isSp", "0");
+                            intent.putExtra("noHp", "0");
+                            startActivity(intent);
+                        }
+                        else if (category == 1)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), AddCartProductActivity.class);
+                            intent.putExtra("idparty", jsonObject.getString("idparty"));
+                            intent.putExtra("opticname", jsonObject.getString("custname"));
+                            intent.putExtra("province", jsonObject.getString("province"));
+                            intent.putExtra("province_address", jsonObject.getString("address"));
+                            intent.putExtra("usernameInfo", jsonObject.getString("username"));
+                            intent.putExtra("city", jsonObject.getString("city"));
+                            intent.putExtra("flag", jsonObject.getString("flag"));
+                            startActivityForResult(intent, 2);
+                        }
+                        else if (category == 2)
+                        {
+                            Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+                            intent.putExtra("idparty", jsonObject.getString("idparty"));
+                            intent.putExtra("opticname", jsonObject.getString("custname"));
+                            intent.putExtra("province", jsonObject.getString("province"));
+                            intent.putExtra("usernameInfo", jsonObject.getString("username"));
+                            intent.putExtra("province_address", jsonObject.getString("province"));
+                            intent.putExtra("city", jsonObject.getString("city"));
+                            intent.putExtra("idSp", "0");
+                            intent.putExtra("isSp", 0);
+                            intent.putExtra("flag", jsonObject.getString("flag"));
+                            startActivity(intent);
+                        }
+
+                        Log.d("Idparty : ", jsonObject.getString("idparty"));
+                        Log.d("Opticname : ", jsonObject.getString("custname"));
+                        Log.d("Province : ", jsonObject.getString("province"));
+                        Log.d("Username : ", jsonObject.getString("username"));
+                        Log.d("City : ", jsonObject.getString("city"));
+                        Log.d("Flag : ", jsonObject.getString("flag"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("username", username);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void showAllOptic(int record)
