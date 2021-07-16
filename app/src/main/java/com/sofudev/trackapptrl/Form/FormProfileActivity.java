@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -35,7 +37,10 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
-import com.egistli.droidimagepicker.ImagePicker;
+import com.nj.imagepicker.ImagePicker;
+import com.nj.imagepicker.listener.ImageResultListener;
+import com.nj.imagepicker.result.ImageResult;
+import com.nj.imagepicker.utils.DialogConfiguration;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
@@ -86,8 +91,7 @@ public class FormProfileActivity extends AppCompatActivity{
     Uri img_uri;
     private MCrypt mCrypt;
     private ACProgressFlower loading;
-    private ImagePicker imagePicker;
-    private com.mvc.imagepicker.ImagePicker imgPicker;
+//    private com.mvc.imagepicker.ImagePicker imgPicker;
     private LovelyCustomDialog lovelyCustomDialog;
     private LayoutInflater layoutInflater;
     private View view;
@@ -99,7 +103,7 @@ public class FormProfileActivity extends AppCompatActivity{
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
-        com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
+//        com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
 
         btn_back        = (ImageButton) findViewById(R.id.form_profile_btnback);
         txt_profile     = (UniversalFontTextView) findViewById(R.id.form_profile_txtusername);
@@ -148,12 +152,12 @@ public class FormProfileActivity extends AppCompatActivity{
 
         if(data!=null)
         {
-            Bitmap bitmap = com.mvc.imagepicker.ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
-            img_uri = getImageUrl(this, bitmap);
-
-            filename = getPath(img_uri);
-            img_profile.setImageBitmap(bitmap);
-            changeImgProfile(filename);
+//            Bitmap bitmap = com.mvc.imagepicker.ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
+//            img_uri = getImageUrl(this, bitmap);
+//
+//            filename = getPath(img_uri);
+//            img_profile.setImageBitmap(bitmap);
+//            changeImgProfile(filename);
         }
     }
 
@@ -442,7 +446,19 @@ public class FormProfileActivity extends AppCompatActivity{
 //                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
 //                imagePicker.prompt();
 //                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
-                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
+//                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
+                ImagePicker.build(new DialogConfiguration()
+                        .setTitle("Pilih gambar")
+                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
+                        .setResultImageDimension(600, 600), new ImageResultListener() {
+                    @Override
+                    public void onImageResult(ImageResult imageResult) {
+                        img_uri = getImageUrl(getApplicationContext(), imageResult.getBitmap());
+                        filename = getPath(img_uri);
+                        changeImgProfile(filename);
+                        img_profile.setImageBitmap(imageResult.getBitmap());
+                    }
+                }).show(getSupportFragmentManager());
             }
         });
 
@@ -452,7 +468,19 @@ public class FormProfileActivity extends AppCompatActivity{
 //                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
 //                imagePicker.prompt();
 //                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
-                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
+//                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
+                ImagePicker.build(new DialogConfiguration()
+                        .setTitle("Pilih gambar")
+                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
+                        .setResultImageDimension(600, 600), new ImageResultListener() {
+                    @Override
+                    public void onImageResult(ImageResult imageResult) {
+                        img_uri = getImageUrl(getApplicationContext(), imageResult.getBitmap());
+                        filename = getPath(img_uri);
+                        changeImgProfile(filename);
+                        img_profile.setImageBitmap(imageResult.getBitmap());
+                    }
+                }).show(getSupportFragmentManager());
             }
         });
     }
