@@ -297,7 +297,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
                 ImagePicker.build(new DialogConfiguration()
                         .setTitle("Choose")
                         .setOptionOrientation(LinearLayoutCompat.HORIZONTAL)
-                        .setResultImageDimension(1089, 719), new ImageMultiResultListener() {
+//                        .setResultImageDimension(1089, 719)
+                                .setResultImageDimension(719,  1089)
+                        , new ImageMultiResultListener() {
                     @Override
                     public void onImageResult(ArrayList<ImageResult> imageResult) {
                         Log.e(LOG_TAG, "onImageResult:Number of image picked " + imageResult.size());

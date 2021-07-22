@@ -78,7 +78,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
     Adapter_orderhistory_frame adapter_orderhistory_frame;
     List<Data_orderhistory_optic> itemPartai = new ArrayList<>();
 
-    String idParty, username, start_date, end_date, paymentInfo;
+    String idParty, username, start_date, end_date, paymentInfo, level, sales;
     Integer day, month, year;
     String status;
     long lastClick = 0;
@@ -140,8 +140,24 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
     private void getInfo()
     {
         Bundle bundle = getIntent().getExtras();
-        idParty = bundle.getString("user_info");
-        username= bundle.getString("username");
+        if (bundle != null)
+        {
+            level = bundle.getString("level");
+            assert level != null;
+
+            if (level.equals("0"))
+            {
+                idParty = bundle.getString("user_info");
+                username= bundle.getString("username");
+                sales    = "";
+            }
+            else
+            {
+                sales   = bundle.getString("sales");
+                idParty = "";
+                username = "";
+            }
+        }
 //        Toasty.info(getApplicationContext(), idParty, Toast.LENGTH_SHORT).show();
 
         getAllPartai(idParty);
@@ -351,6 +367,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     paymentInfo = jsonObject.getString("paymentType");
+                    username    = jsonObject.getString("username");
 
 //                    Toasty.info(getApplicationContext(), paymentInfo, Toast.LENGTH_SHORT).show();
 
@@ -537,6 +554,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", id);
+                hashMap.put("salesname", sales);
                 return hashMap;
             }
         };
@@ -606,6 +624,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", id);
+                hashMap.put("salesname", sales);
                 return hashMap;
             }
         };
@@ -664,8 +683,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", id);
-//                hashMap.put("date_from", "2019-05-20");
-//                hashMap.put("date_until", "2019-05-22");
+                hashMap.put("salesname", sales);
                 hashMap.put("start_date", dateFrom);
                 hashMap.put("until_date", dateUntil);
                 return hashMap;
@@ -736,6 +754,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", id);
+                hashMap.put("salesname", sales);
                 hashMap.put("start_date", dateFrom);
                 hashMap.put("until_date", dateUntil);
                 return hashMap;

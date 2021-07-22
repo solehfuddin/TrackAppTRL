@@ -88,7 +88,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     RecyclerView.LayoutManager recyclerViewManager;
     Adapter_orderhistory_optic adapteOrderHistory;
     List<Data_orderhistory_optic> itemOrderHistory = new ArrayList<>();
-    String username, start_date, end_date, status, idparty, paymentInfo;
+    String username, start_date, end_date, status, idparty, paymentInfo, level, sales;
     Integer day, month, year;
     long lastClick = 0;
 
@@ -296,8 +296,24 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     private void getUserInfo()
     {
         Bundle bundle = getIntent().getExtras();
-        username = bundle.getString("user_info");
-        idparty  = bundle.getString("idparty");
+        if (bundle != null)
+        {
+            level    = bundle.getString("level");
+
+            assert level != null;
+            if (level.equals("0"))
+            {
+                username = bundle.getString("user_info");
+                idparty  = bundle.getString("idparty");
+                sales    = "";
+            }
+            else
+            {
+                sales   = bundle.getString("sales");
+                idparty = "";
+                username = "";
+            }
+        }
     }
 
 //    private void showStartDate()
@@ -832,6 +848,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("salesname", sales);
                 hashMap.put("id_party", idparty);
                 hashMap.put("today_date", today_date);
                 return hashMap;
@@ -912,6 +929,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("salesname", sales);
                 hashMap.put("id_party", idparty);
                 hashMap.put("today_date", today_date);
                 return hashMap;
@@ -1101,6 +1119,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", idparty);
+                hashMap.put("salesname", sales);
                 hashMap.put("patient_name", key);
                 return hashMap;
             }
@@ -1177,6 +1196,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", idparty);
+                hashMap.put("salesname", sales);
                 hashMap.put("patient_name", key);
                 return hashMap;
             }
@@ -1379,6 +1399,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", idparty);
+                hashMap.put("salesname", sales);
                 hashMap.put("date_from", startDate);
                 hashMap.put("date_to", endDate);
                 return hashMap;
@@ -1457,6 +1478,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", idparty);
+                hashMap.put("salesname", sales);
                 hashMap.put("date_from", startDate);
                 hashMap.put("date_to", endDate);
                 return hashMap;
@@ -1877,6 +1899,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                     JSONObject jsonObject = new JSONObject(response);
 
                     paymentInfo = jsonObject.getString("paymentType");
+                    username    = jsonObject.getString("username");
 
                     if (paymentInfo.contentEquals("internetBanking") || paymentInfo.equals("internetBanking")
                             || paymentInfo.contains("internetBanking"))

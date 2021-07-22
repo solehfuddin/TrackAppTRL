@@ -13,15 +13,15 @@ android {
         exclude 'META-INF/MANIFEST.MF'
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.sofudev.trackapptrl"
 //        minSdkVersion 21
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 39
-        versionName "1.38"
+        versionCode 42
+        versionName "1.40"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }

@@ -619,18 +619,59 @@ public class DashboardActivity extends AppCompatActivity
         }
             else if (id == R.id.nav_orderhistory)
             {
-                Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                intent.putExtra("idparty", navdash_id.getText().toString());
-                intent.putExtra("user_info", username);
-                startActivity(intent);
+                if (level_user != null) {
+                    if (Integer.parseInt(level_user) == 0) {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("user_info", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                        intent.putExtra("sales", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                    intent.putExtra("idparty", navdash_id.getText().toString());
+                    intent.putExtra("user_info", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
             }
         else if (id == R.id.nav_orderhistoryFrame)
         {
-            Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
-            intent.putExtra("user_info", navdash_id.getText().toString());
-            intent.putExtra("username", username);
-//            intent.putExtra("user_info", username);
-            startActivity(intent);
+            if (level_user != null)
+            {
+                if (Integer.parseInt(level_user) == 0)
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                    intent.putExtra("user_info", navdash_id.getText().toString());
+                    intent.putExtra("username", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                    intent.putExtra("sales", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                intent.putExtra("user_info", navdash_id.getText().toString());
+                intent.putExtra("username", username);
+                intent.putExtra("level", level_user);
+                startActivity(intent);
+            }
         }
         else if (id == R.id.nav_orderCheckBalance)
         {
@@ -661,6 +702,7 @@ public class DashboardActivity extends AppCompatActivity
                         //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                         intent.putExtra("cond", "OTRACK");
+                        intent.putExtra("sales", username);
                         startActivity(intent);
                     }
                 }
@@ -692,6 +734,7 @@ public class DashboardActivity extends AppCompatActivity
                         //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                         intent.putExtra("cond", "DELIVTRACK");
+                        intent.putExtra("sales", username);
                         startActivity(intent);
                     }
                 }
@@ -758,11 +801,32 @@ public class DashboardActivity extends AppCompatActivity
 
             else if (id == R.id.nav_orderhistorybulk)
             {
-                Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                intent.putExtra("user_info", navdash_id.getText().toString());
-                intent.putExtra("username", username);
-//            intent.putExtra("user_info", username);
-                startActivity(intent);
+                if (level_user != null)
+                {
+                    if (level_user.equals("0"))
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("user_info", navdash_id.getText().toString());
+                        intent.putExtra("username", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("sales", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                    intent.putExtra("user_info", navdash_id.getText().toString());
+                    intent.putExtra("username", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
             }
         else if (id == R.id.nav_options)
         {
@@ -930,6 +994,7 @@ public class DashboardActivity extends AppCompatActivity
                     //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                     intent.putExtra("cond", "ESTMENT");
+                    intent.putExtra("sales", username);
                     startActivity(intent);
                 }
             }
@@ -2336,7 +2401,10 @@ public class DashboardActivity extends AppCompatActivity
                                         } else {
                                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                                             intent.putExtra("cond", "LENSSALES");
+                                            intent.putExtra("sales", username);
                                             startActivity(intent);
+
+                                            Log.d("Sales Name Dashboard : ", username);
                                         }
                                     }
                                     else
@@ -3061,6 +3129,7 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("province", province_user);
                         intent.putExtra("province_address", province_address);
                         intent.putExtra("usernameInfo", username);
+                        intent.putExtra("level", level_user);
                         intent.putExtra("city", city);
                         intent.putExtra("flag", member_flag);
                         startActivityForResult(intent, 2);
@@ -3274,6 +3343,7 @@ public class DashboardActivity extends AppCompatActivity
                             intent.putExtra("province", province_user);
                             intent.putExtra("province_address", province_address);
                             intent.putExtra("usernameInfo", username);
+                            intent.putExtra("level", level_user);
                             intent.putExtra("city", city);
                             intent.putExtra("flag", member_flag);
                             startActivityForResult(intent, 2);
@@ -3282,6 +3352,7 @@ public class DashboardActivity extends AppCompatActivity
                         {
                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                             intent.putExtra("cond", "CARTSALES");
+                            intent.putExtra("sales", username);
                             startActivity(intent);
                         }
                     }
@@ -3430,6 +3501,7 @@ public class DashboardActivity extends AppCompatActivity
                             intent.putExtra("province", province_user);
                             intent.putExtra("usernameInfo", username);
                             intent.putExtra("province_address", province_address);
+                            intent.putExtra("level", level_user);
                             intent.putExtra("city", city);
                             intent.putExtra("idSp", "0");
                             intent.putExtra("isSp", 0);
@@ -3440,6 +3512,7 @@ public class DashboardActivity extends AppCompatActivity
                         {
                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                             intent.putExtra("cond", "BATCHSALES");
+                            intent.putExtra("sales", username);
                             startActivity(intent);
                         }
                     }

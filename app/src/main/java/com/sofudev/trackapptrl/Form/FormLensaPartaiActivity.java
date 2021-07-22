@@ -396,6 +396,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 hashMap.put("payment_cashcarry", "Non Payment Method");
                 hashMap.put("flash_note", item.getFlashNote());
                 hashMap.put("order_sp", item.getOrderSp());
+                hashMap.put("salesname", headerSales);
                 return hashMap;
             }
         };

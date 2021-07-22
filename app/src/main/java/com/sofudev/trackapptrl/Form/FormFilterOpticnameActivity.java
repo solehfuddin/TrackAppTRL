@@ -70,7 +70,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
     MCrypt mCrypt;
 
-    String idparty, condition, sActive, sPast, opticName;
+    String idparty, condition, sActive, sPast, opticName, salesName;
     int sTotal;
     Integer req_start = 0, totalrow, lastitem, item;
     long lastclick = 0;
@@ -123,6 +123,9 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
         if (bundle != null)
         {
             condition = bundle.getString("cond");
+            salesName = bundle.getString("sales");
+
+            Log.d("Sales Name chooseopt : ", salesName);
         }
     }
 
@@ -491,6 +494,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("idSp", "0");
                             intent.putExtra("isSp", "0");
                             intent.putExtra("noHp", "0");
+                            intent.putExtra("sales", salesName);
                             startActivity(intent);
                         }
                         else if (category == 1)
@@ -501,8 +505,10 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("province", jsonObject.getString("province"));
                             intent.putExtra("province_address", jsonObject.getString("address"));
                             intent.putExtra("usernameInfo", jsonObject.getString("username"));
+                            intent.putExtra("level", "1");
                             intent.putExtra("city", jsonObject.getString("city"));
                             intent.putExtra("flag", jsonObject.getString("flag"));
+                            intent.putExtra("sales", salesName);
                             startActivityForResult(intent, 2);
                         }
                         else if (category == 2)
@@ -517,6 +523,8 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("idSp", "0");
                             intent.putExtra("isSp", 0);
                             intent.putExtra("flag", jsonObject.getString("flag"));
+                            intent.putExtra("level", "1");
+                            intent.putExtra("sales", salesName);
                             startActivity(intent);
                         }
 

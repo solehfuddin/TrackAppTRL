@@ -28,6 +28,7 @@ import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_partai;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
@@ -139,7 +140,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     String id_lensa, desc_lensa, power_sph, power_cyl, power_add;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, opticFlag, shipmentPrice,
-            shippingName, shippingService, orderId, phone, orgName, idSp;
+            shippingName, shippingService, orderId, phone, orgName, idSp, opticLevel, salesName;
     String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia,
             headerDisc, headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus,
             headerImage, headerSignedPath;
@@ -156,6 +157,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_batch_order);
+
+        UniversalFontComponents.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
@@ -1397,6 +1400,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             opticCity   = bundle.getString("city");
             opticFlag   = bundle.getString("flag");
             opticAddress= bundle.getString("province_address");
+            opticLevel  = bundle.getString("level");
             idSp        = bundle.getString("idSp");
             isSp        = bundle.getInt("isSp", 0);
 
@@ -1419,6 +1423,18 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 headerStatus   = bundle.getString("header_status");
                 headerImage    = bundle.getString("header_image");
                 headerSignedPath = bundle.getString("header_signedpath");
+            }
+
+            if (opticLevel.equals("1"))
+            {
+                salesName = bundle.getString("sales");
+                assert salesName != null;
+                Log.d("Sales Name orderlens : ", salesName);
+            }
+            else
+            {
+                salesName = "";
+                Log.d("Sales Name orderlens : ", salesName);
             }
 
             getPaymentOrNot(opticFlag);
@@ -2782,6 +2798,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 hashMap.put("payment_cashcarry", item.getPayment_cashcarry());
                 hashMap.put("flash_note", item.getFlashNote());
                 hashMap.put("order_sp", item.getOrderSp());
+                hashMap.put("salesname", salesName);
                 return hashMap;
             }
         };

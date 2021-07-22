@@ -141,7 +141,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     Adapter_courier_service adapterCourierService;
     Adapter_paymentmethod adapter_paymentmethod;
 //    Adapter_spinner_shipment adapter_spinner_shipment;
-    String selectedItem, flashsaleNote, isSp;
+    String selectedItem, flashsaleNote, isSp, salesName;
 
     Calendar calendar = Calendar.getInstance();
 
@@ -1833,280 +1833,284 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     private void gettingPrice()
     {
         Bundle bundle = getIntent().getExtras();
-        Integer a = bundle.getInt("price_lens");
-        String b  = bundle.getString("description_lens");
-        Double c   = bundle.getDouble("discount_lens");
-        Integer d = bundle.getInt("facet_lens");
-        Integer e = bundle.getInt("tinting_lens");
-        cityOptic = bundle.getString("city_info");
-        Integer f = bundle.getInt("item_weight");
-        String h  = bundle.getString("flag_pasang");
-        opticFlag = bundle.getString("optic_flag");
-        isSp      = bundle.getString("isSp");
-
-        if (isSp.equals("1"))
+        if (bundle != null)
         {
+            Integer a = bundle.getInt("price_lens");
+            String b  = bundle.getString("description_lens");
+            Double c   = bundle.getDouble("discount_lens");
+            Integer d = bundle.getInt("facet_lens");
+            Integer e = bundle.getInt("tinting_lens");
+            cityOptic = bundle.getString("city_info");
+            Integer f = bundle.getInt("item_weight");
+            String h  = bundle.getString("flag_pasang");
+            opticFlag = bundle.getString("optic_flag");
+            isSp      = bundle.getString("isSp");
+            salesName = bundle.getString("sales");
+            Log.d("Sales Name summary : ", salesName);
+
+            if (isSp.equals("1"))
+            {
 //            getSp();
 
-            headerNoSp       = bundle.getString("headerNoSp");
-            headerTipeSp     = bundle.getString("headerTipeSp");
-            headerSales      = bundle.getString("headerSales");
-            headerShipNumber = bundle.getString("headerShipNumber");
-            headerCustName   = bundle.getString("headerCustName");
-            headerAddress    = bundle.getString("headerAddress");
-            headerCity       = bundle.getString("headerCity");
-            headerOrderVia   = bundle.getString("headerOrderVia");
-            headerDp            = bundle.getInt("headerDp");
-            headerDisc       = bundle.getString("headerDisc");
-            headerCondition  = bundle.getString("headerCondition");
-            headerInstallment = bundle.getString("headerInstallment");
-            headerStartInstallment = bundle.getString("headerStartInstallment");
-            headerShippingAddress  = bundle.getString("headerShippingAddress");
-            headerStatus     = bundle.getString("headerStatus");
-            headerStatus     = "";
-            headerImage      = bundle.getString("headerImage");
-            headerSignedPath = bundle.getString("headerSignedPath");
+                headerNoSp       = bundle.getString("headerNoSp");
+                headerTipeSp     = bundle.getString("headerTipeSp");
+                headerSales      = bundle.getString("headerSales");
+                headerShipNumber = bundle.getString("headerShipNumber");
+                headerCustName   = bundle.getString("headerCustName");
+                headerAddress    = bundle.getString("headerAddress");
+                headerCity       = bundle.getString("headerCity");
+                headerOrderVia   = bundle.getString("headerOrderVia");
+                headerDp            = bundle.getInt("headerDp");
+                headerDisc       = bundle.getString("headerDisc");
+                headerCondition  = bundle.getString("headerCondition");
+                headerInstallment = bundle.getString("headerInstallment");
+                headerStartInstallment = bundle.getString("headerStartInstallment");
+                headerShippingAddress  = bundle.getString("headerShippingAddress");
+                headerStatus     = bundle.getString("headerStatus");
+                headerStatus     = "";
+                headerImage      = bundle.getString("headerImage");
+                headerSignedPath = bundle.getString("headerSignedPath");
 
-            Log.d("headerNoSp", headerNoSp);
-            Log.d("headerTipeSp", headerTipeSp);
-            Log.d("headerSales", headerSales);
-            Log.d("headerShipNumber", headerShipNumber);
-            Log.d("headerCustName", headerCustName);
-            Log.d("headerAddress", headerAddress);
-            Log.d("headerCity", headerCity);
-            Log.d("headerOrderVia", headerOrderVia);
-            Log.d("headerDp", String.valueOf(headerDp));
-            Log.d("headerDisc", headerDisc);
-            Log.d("headerCondition", headerCondition);
-            Log.d("headerInstallment", headerInstallment);
-            Log.d("headerStartInstallment", headerStartInstallment);
-            Log.d("headerShippingAddress", headerShippingAddress);
-            Log.d("headerStatus", headerStatus);
-            Log.d("headerImage", headerImage);
-            Log.d("headerSignedPath", headerSignedPath);
+                Log.d("headerNoSp", headerNoSp);
+                Log.d("headerTipeSp", headerTipeSp);
+                Log.d("headerSales", headerSales);
+                Log.d("headerShipNumber", headerShipNumber);
+                Log.d("headerCustName", headerCustName);
+                Log.d("headerAddress", headerAddress);
+                Log.d("headerCity", headerCity);
+                Log.d("headerOrderVia", headerOrderVia);
+                Log.d("headerDp", String.valueOf(headerDp));
+                Log.d("headerDisc", headerDisc);
+                Log.d("headerCondition", headerCondition);
+                Log.d("headerInstallment", headerInstallment);
+                Log.d("headerStartInstallment", headerStartInstallment);
+                Log.d("headerShippingAddress", headerShippingAddress);
+                Log.d("headerStatus", headerStatus);
+                Log.d("headerImage", headerImage);
+                Log.d("headerSignedPath", headerSignedPath);
 
-            dataSpHeader.setNoSp(headerNoSp);
-            dataSpHeader.setTypeSp(headerTipeSp);
-            dataSpHeader.setSales(headerSales);
-            dataSpHeader.setShipNumber(headerShipNumber);
-            dataSpHeader.setCustName(headerCustName);
-            dataSpHeader.setAddress(headerAddress);
-            dataSpHeader.setCity(headerCity);
-            dataSpHeader.setOrderVia(headerOrderVia);
-            dataSpHeader.setDp(headerDp);
-            dataSpHeader.setDisc(headerDisc);
-            dataSpHeader.setCondition(headerCondition);
-            dataSpHeader.setInstallment(headerInstallment);
-            dataSpHeader.setStartInstallment(headerStartInstallment);
-            dataSpHeader.setShipAddress(headerShippingAddress);
-            dataSpHeader.setPhoto(headerImage);
-            dataSpHeader.setStatus(headerStatus);
-            dataSpHeader.setSignedPath(headerSignedPath);
-        }
+                dataSpHeader.setNoSp(headerNoSp);
+                dataSpHeader.setTypeSp(headerTipeSp);
+                dataSpHeader.setSales(headerSales);
+                dataSpHeader.setShipNumber(headerShipNumber);
+                dataSpHeader.setCustName(headerCustName);
+                dataSpHeader.setAddress(headerAddress);
+                dataSpHeader.setCity(headerCity);
+                dataSpHeader.setOrderVia(headerOrderVia);
+                dataSpHeader.setDp(headerDp);
+                dataSpHeader.setDisc(headerDisc);
+                dataSpHeader.setCondition(headerCondition);
+                dataSpHeader.setInstallment(headerInstallment);
+                dataSpHeader.setStartInstallment(headerStartInstallment);
+                dataSpHeader.setShipAddress(headerShippingAddress);
+                dataSpHeader.setPhoto(headerImage);
+                dataSpHeader.setStatus(headerStatus);
+                dataSpHeader.setSignedPath(headerSignedPath);
+            }
 
-        Double g   = bundle.getDouble("total_price");
-        opticUsername = bundle.getString("username_info");
-        flagShipping  = bundle.getString("flag_shipping");
-        orderNumber   = bundle.getString("order_number");
-        patientName   = bundle.getString("patient_name");
-        idParty       = bundle.getString("id_party");
-        phoneNumber   = bundle.getString("phone_number");
-        note          = bundle.getString("note");
-        divName       = bundle.getString("prodDivType");
-        lenstype      = bundle.getString("lenstype");
-        lensdesc      = bundle.getString("lensdesc");
-        prod_attr_valR= bundle.getString("prod_attr_valR");
-        prod_attr_valL= bundle.getString("prod_attr_valL");
+            Double g   = bundle.getDouble("total_price");
+            opticUsername = bundle.getString("username_info");
+            flagShipping  = bundle.getString("flag_shipping");
+            orderNumber   = bundle.getString("order_number");
+            patientName   = bundle.getString("patient_name");
+            idParty       = bundle.getString("id_party");
+            phoneNumber   = bundle.getString("phone_number");
+            note          = bundle.getString("note");
+            divName       = bundle.getString("prodDivType");
+            lenstype      = bundle.getString("lenstype");
+            lensdesc      = bundle.getString("lensdesc");
+            prod_attr_valR= bundle.getString("prod_attr_valR");
+            prod_attr_valL= bundle.getString("prod_attr_valL");
 
-        sphR          = bundle.getString("sphR");
-        sphL          = bundle.getString("sphL");
-        cylR          = bundle.getString("cylR");
-        cylL          = bundle.getString("cylL");
-        axsR          = bundle.getString("axsR");
-        axsL          = bundle.getString("axsL");
-        addR          = bundle.getString("addR");
-        addL          = bundle.getString("addL");
-        coatCode      = bundle.getString("coatCode");
-        coatDesc      = bundle.getString("coatDesc");
-        tintCode      = bundle.getString("tintCode");
-        tintDesc      = bundle.getString("tintDesc");
-        corridor      = bundle.getString("corridor");
-        mpdR          = bundle.getString("mpdR");
-        mpdL          = bundle.getString("mpdL");
-        pv            = bundle.getString("pv");
-        wrap          = bundle.getString("wrap");
-        panto         = bundle.getString("panto");
-        vd            = bundle.getString("vd");
-        facetInfo     = bundle.getString("facetInfo");
-        frameModel    = bundle.getString("frameModel");
-        dbl           = bundle.getString("dbl");
-        hor           = bundle.getString("hor");
-        ver           = bundle.getString("ver");
-        frameCode     = bundle.getString("frameCode");
-        categoryLens  = bundle.getString("categoryLens");
+            sphR          = bundle.getString("sphR");
+            sphL          = bundle.getString("sphL");
+            cylR          = bundle.getString("cylR");
+            cylL          = bundle.getString("cylL");
+            axsR          = bundle.getString("axsR");
+            axsL          = bundle.getString("axsL");
+            addR          = bundle.getString("addR");
+            addL          = bundle.getString("addL");
+            coatCode      = bundle.getString("coatCode");
+            coatDesc      = bundle.getString("coatDesc");
+            tintCode      = bundle.getString("tintCode");
+            tintDesc      = bundle.getString("tintDesc");
+            corridor      = bundle.getString("corridor");
+            mpdR          = bundle.getString("mpdR");
+            mpdL          = bundle.getString("mpdL");
+            pv            = bundle.getString("pv");
+            wrap          = bundle.getString("wrap");
+            panto         = bundle.getString("panto");
+            vd            = bundle.getString("vd");
+            facetInfo     = bundle.getString("facetInfo");
+            frameModel    = bundle.getString("frameModel");
+            dbl           = bundle.getString("dbl");
+            hor           = bundle.getString("hor");
+            ver           = bundle.getString("ver");
+            frameCode     = bundle.getString("frameCode");
+            categoryLens  = bundle.getString("categoryLens");
 
 
-        hargaLensa = CurencyFormat(a.toString());
-        deskripsiLensa = b;
-        if (c > 0)
-        {
-            diskonLensa = CurencyFormat(c.toString());
-        }
-        else
-        {
-            diskonLensa = c.toString();
-        }
-        facetLensa  = CurencyFormat(d.toString());
-        tintingLensa = CurencyFormat(e.toString());
-        tempTotal  = g.toString();
-        totalPrice = CurencyFormat(g.toString());
-        itemWeight = f.toString();
+            hargaLensa = CurencyFormat(a.toString());
+            deskripsiLensa = b;
+            if (c > 0)
+            {
+                diskonLensa = CurencyFormat(c.toString());
+            }
+            else
+            {
+                diskonLensa = c.toString();
+            }
+            facetLensa  = CurencyFormat(d.toString());
+            tintingLensa = CurencyFormat(e.toString());
+            tempTotal  = g.toString();
+            totalPrice = CurencyFormat(g.toString());
+            itemWeight = f.toString();
 
-        //AREA R
-        itemIdR     = bundle.getString("itemid_R");
-        itemCodeR   = bundle.getString("itemcode_R");
-        descR       = bundle.getString("description_R");
-        powerR      = bundle.getString("power_R");
-        uom         = "PCS";
-        qtyR        = bundle.getString("qty_R");
+            //AREA R
+            itemIdR     = bundle.getString("itemid_R");
+            itemCodeR   = bundle.getString("itemcode_R");
+            descR       = bundle.getString("description_R");
+            powerR      = bundle.getString("power_R");
+            uom         = "PCS";
+            qtyR        = bundle.getString("qty_R");
 
-        if (qtyR == null)
-        {
-            qtyR = "0";
-        }
+            if (qtyR == null)
+            {
+                qtyR = "0";
+            }
 
-        if (itemIdR == null)
-        {
-            itemIdR = "0";
-        }
+            if (itemIdR == null)
+            {
+                itemIdR = "0";
+            }
 
-        if (itemCodeR == null)
-        {
-            itemCodeR = "";
-        }
+            if (itemCodeR == null)
+            {
+                itemCodeR = "";
+            }
 
-        if (descR == null)
-        {
-            descR = "";
-        }
+            if (descR == null)
+            {
+                descR = "";
+            }
 
-        if (powerR == null)
-        {
-            powerR = "";
-        }
+            if (powerR == null)
+            {
+                powerR = "";
+            }
 
-        if (uom == null)
-        {
-            uom = "";
-        }
+            if (uom == null)
+            {
+                uom = "";
+            }
 
-        if (qtyR == null)
-        {
-            qtyR = "";
-        }
+            if (qtyR == null)
+            {
+                qtyR = "";
+            }
 
-        pr          = bundle.getInt("itemprice_R");
-        priceR      = CurencyFormat(pr.toString());
-        ptr         = bundle.getInt("itemtotal_R");
-        totalPriceR = CurencyFormat(ptr.toString());
-        marginR     = bundle.getString("margin_lens");
-        extraMarginR= bundle.getString("extramargin_lens");
+            pr          = bundle.getInt("itemprice_R");
+            priceR      = CurencyFormat(pr.toString());
+            ptr         = bundle.getInt("itemtotal_R");
+            totalPriceR = CurencyFormat(ptr.toString());
+            marginR     = bundle.getString("margin_lens");
+            extraMarginR= bundle.getString("extramargin_lens");
 
-        //AREA L
-        itemIdL     = bundle.getString("itemid_L");
-        itemCodeL   = bundle.getString("itemcode_L");
-        descL       = bundle.getString("description_L");
-        powerL      = bundle.getString("power_L");
-        uom         = "PCS";
-        qtyL        = bundle.getString("qty_L");
+            //AREA L
+            itemIdL     = bundle.getString("itemid_L");
+            itemCodeL   = bundle.getString("itemcode_L");
+            descL       = bundle.getString("description_L");
+            powerL      = bundle.getString("power_L");
+            uom         = "PCS";
+            qtyL        = bundle.getString("qty_L");
 
-        if (qtyL == null)
-        {
-            qtyL = "0";
-        }
+            if (qtyL == null)
+            {
+                qtyL = "0";
+            }
 
-        if (itemIdL == null)
-        {
-            itemIdL = "0";
-        }
+            if (itemIdL == null)
+            {
+                itemIdL = "0";
+            }
 
-        if (itemCodeL == null)
-        {
-            itemCodeL = "";
-        }
+            if (itemCodeL == null)
+            {
+                itemCodeL = "";
+            }
 
-        if (descL == null)
-        {
-            descL = "";
-        }
+            if (descL == null)
+            {
+                descL = "";
+            }
 
-        if (powerL == null)
-        {
-            powerL = "";
-        }
+            if (powerL == null)
+            {
+                powerL = "";
+            }
 
-        if (uom == null)
-        {
-            uom = "";
-        }
+            if (uom == null)
+            {
+                uom = "";
+            }
 
-        if (qtyL == null)
-        {
-            qtyL = "";
-        }
+            if (qtyL == null)
+            {
+                qtyL = "";
+            }
 
-        pl          = bundle.getInt("itemprice_L");
-        priceL      = CurencyFormat(pl.toString());
-        ptl         = bundle.getInt("itemtotal_L");
-        totalPriceL = CurencyFormat(ptl.toString());
-        marginL     = bundle.getString("margin_lens");
-        extraMarginL= bundle.getString("extramargin_lens");
+            pl          = bundle.getInt("itemprice_L");
+            priceL      = CurencyFormat(pl.toString());
+            ptl         = bundle.getInt("itemtotal_L");
+            totalPriceL = CurencyFormat(ptl.toString());
+            marginL     = bundle.getString("margin_lens");
+            extraMarginL= bundle.getString("extramargin_lens");
 
-        //Area diskon
-        discountItem= bundle.getString("description_diskon");
-        disR        = bundle.getDouble("discount_r");
-        discountR   = CurencyFormat(disR.toString());
-        if (discountR.equals(",00") || discountR.equals(",00"))
-        {
-            discountR = "-";
-        }
-        else {
-            discountR = "-" + discountR;
-        }
-        disL        = bundle.getDouble("discount_l");
-        discountL   = CurencyFormat(disL.toString());
-        if (discountL.equals(",00") || discountL.equals(",00"))
-        {
-            discountL = "-";
-        }
-        else {
-            discountL = "-" + discountL;
-        }
-        extraMarginDiscount = bundle.getString("extra_margin_discount");
+            //Area diskon
+            discountItem= bundle.getString("description_diskon");
+            disR        = bundle.getDouble("discount_r");
+            discountR   = CurencyFormat(disR.toString());
+            if (discountR.equals(",00") || discountR.equals(",00"))
+            {
+                discountR = "-";
+            }
+            else {
+                discountR = "-" + discountR;
+            }
+            disL        = bundle.getDouble("discount_l");
+            discountL   = CurencyFormat(disL.toString());
+            if (discountL.equals(",00") || discountL.equals(",00"))
+            {
+                discountL = "-";
+            }
+            else {
+                discountL = "-" + discountL;
+            }
+            extraMarginDiscount = bundle.getString("extra_margin_discount");
 
-        //Area facet
-        itemFacetCode   = bundle.getString("itemcode_facet");
-        facetDescription= bundle.getString("description_facet");
-        facetqty        = bundle.getString("qty_facet");
-        Integer fp      = bundle.getInt("price_facet");
-        facetPrice      = CurencyFormat(fp.toString());
-        Integer tf      = bundle.getInt("total_facet");
-        facetTotal      = CurencyFormat(tf.toString());
-        facetMargin     = bundle.getString("margin_facet");
-        facetExtraMargin= bundle.getString("extra_margin_facet");
+            //Area facet
+            itemFacetCode   = bundle.getString("itemcode_facet");
+            facetDescription= bundle.getString("description_facet");
+            facetqty        = bundle.getString("qty_facet");
+            Integer fp      = bundle.getInt("price_facet");
+            facetPrice      = CurencyFormat(fp.toString());
+            Integer tf      = bundle.getInt("total_facet");
+            facetTotal      = CurencyFormat(tf.toString());
+            facetMargin     = bundle.getString("margin_facet");
+            facetExtraMargin= bundle.getString("extra_margin_facet");
 
-        //Area tinting
-        itemTintingCode     = bundle.getString("itemcode_tinting");
-        tintingDescription  = bundle.getString("description_tinting");
-        tintingqty          = bundle.getString("qty_tinting");
-        tintp               = bundle.getInt("price_tinting");
-        tintingPrice        = CurencyFormat(tintp.toString());
-        Integer tintt       = bundle.getInt("total_tinting");
-        tintingTotal        = CurencyFormat(tintt.toString());
-        tintingMargin       = bundle.getString("margin_tinting");
-        tintingExtraMargin  = bundle.getString("extra_margin_tinting");
+            //Area tinting
+            itemTintingCode     = bundle.getString("itemcode_tinting");
+            tintingDescription  = bundle.getString("description_tinting");
+            tintingqty          = bundle.getString("qty_tinting");
+            tintp               = bundle.getInt("price_tinting");
+            tintingPrice        = CurencyFormat(tintp.toString());
+            Integer tintt       = bundle.getInt("total_tinting");
+            tintingTotal        = CurencyFormat(tintt.toString());
+            tintingMargin       = bundle.getString("margin_tinting");
+            tintingExtraMargin  = bundle.getString("extra_margin_tinting");
 
-        //Toasty.info(getApplicationContext(), flagShipping, Toast.LENGTH_SHORT).show();
+            //Toasty.info(getApplicationContext(), flagShipping, Toast.LENGTH_SHORT).show();
 //        if (flagShipping.equals("0") | flagShipping.contentEquals("0") | flagShipping.contains("0"))
 //        {
 //            txtShippingMethod.setVisibility(View.GONE);
@@ -2123,51 +2127,52 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
 
 
-        if (h.equals("2") | h.contentEquals("2") | h.contains("2"))
-        {
-            txtSide.setText("RL");
-        }
-        else
-        {
-            txtSide.setText("R");
-        }
-
-        if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
-        {
-            if (itemIdR != null)
+            if (h.equals("2") | h.contentEquals("2") | h.contains("2"))
             {
-                getSideRXR(itemIdR);
-                getDiscSaleR(itemIdR);
+                txtSide.setText("RL");
+            }
+            else
+            {
+                txtSide.setText("R");
             }
 
-            if (itemIdL != null)
+            if (categoryLens.equals("R") || categoryLens.contentEquals("R"))
             {
-                getSideRXL(itemIdL);
-                getDiscSaleL(itemIdL);
+                if (itemIdR != null)
+                {
+                    getSideRXR(itemIdR);
+                    getDiscSaleR(itemIdR);
+                }
+
+                if (itemIdL != null)
+                {
+                    getSideRXL(itemIdL);
+                    getDiscSaleL(itemIdL);
+                }
             }
-        }
-        else
-        {
-            if (itemIdR != null)
+            else
             {
-                getSideSTOCKR(itemIdR);
-                getDiscSaleR(itemIdR);
+                if (itemIdR != null)
+                {
+                    getSideSTOCKR(itemIdR);
+                    getDiscSaleR(itemIdR);
+                }
+
+                if (itemIdL != null)
+                {
+                    getSideSTOCKL(itemIdL);
+                    getDiscSaleL(itemIdL);
+                }
             }
 
-            if (itemIdL != null)
-            {
-                getSideSTOCKL(itemIdL);
-                getDiscSaleL(itemIdL);
-            }
-        }
+            Toasty.info(getApplicationContext(), "Category : " + categoryLens, Toast.LENGTH_SHORT).show();
 
-        Toasty.info(getApplicationContext(), "Category : " + categoryLens, Toast.LENGTH_SHORT).show();
-
-        getLensInformation();
+            getLensInformation();
 //        getInfoLensR(itemCodeR);
 //        getInfoLensL(itemCodeL);
-        getDiscountItemR(prod_attr_valR, opticUsername);
-        getDiscountItemL(prod_attr_valL, opticUsername);
+            getDiscountItemR(prod_attr_valR, opticUsername);
+            getDiscountItemL(prod_attr_valL, opticUsername);
+        }
     }
 
     private void getLensInformation()
@@ -2832,6 +2837,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 hashMap.put("cashCarry", header.getCash_carry());
                 hashMap.put("flash_note", header.getFlash_note());
                 hashMap.put("order_sp", header.getOrderSp());
+                hashMap.put("sales", salesName);
                 return hashMap;
             }
         };
@@ -2935,6 +2941,9 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         Config config = new Config();
         String URL = config.Ip_address + config.discount_item_getDiscount;
 
+        discOperandR = "0";
+        discNameR    = "";
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -2976,6 +2985,9 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     {
         Config config = new Config();
         String URL = config.Ip_address + config.discount_item_getDiscount;
+
+        discOperandL = "0";
+        discNameL    = "";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override

@@ -113,7 +113,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId, flagPayment;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticFlag, opticAddress, shipmentPrice, shippingName,
-            shippingService, orderId, subcustId, subcustLocId, estimasi, flashSaleInfo;
+            shippingService, orderId, subcustId, subcustLocId, estimasi, flashSaleInfo, opticLevel, salesName;
     String selectedItem, kodeBilling, duration, expDate;
 
     @Override
@@ -651,9 +651,22 @@ public class AddCartProductActivity extends AppCompatActivity {
             opticUsername = bundle.getString("usernameInfo");
             opticCity   = bundle.getString("city");
             opticFlag   = bundle.getString("flag");
+            opticLevel  = bundle.getString("level");
 
             getOraId(opticId);
             getPaymentOrNot(opticFlag);
+
+            if (opticLevel.equals("1"))
+            {
+                salesName = bundle.getString("sales");
+                assert salesName != null;
+                Log.d("Sales Name orderlens : ", salesName);
+            }
+            else
+            {
+                salesName = "";
+                Log.d("Sales Name orderlens : ", salesName);
+            }
         }
         opticId     = opticId + ",";
         opticName   = opticName + ",";
@@ -1169,6 +1182,7 @@ public class AddCartProductActivity extends AppCompatActivity {
                 hashMap.put("subcust_id", subcustid);
                 hashMap.put("subcust_loc_id", subcustlocid);
                 hashMap.put("flashSaleInfo", flashSale);
+                hashMap.put("salesname", salesName);
 
                 return hashMap;
             }

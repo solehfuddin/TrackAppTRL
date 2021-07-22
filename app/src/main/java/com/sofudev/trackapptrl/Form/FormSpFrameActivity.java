@@ -2062,6 +2062,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("payment_cashcarry", item.getPaymentCashCarry());
                 hashMap.put("subcust_id", subcustid);
                 hashMap.put("subcust_loc_id", subcustlocid);
+                hashMap.put("salesname", headerSales);
 //                hashMap.put("flashSaleInfo", flashSale);
 
                 return hashMap;

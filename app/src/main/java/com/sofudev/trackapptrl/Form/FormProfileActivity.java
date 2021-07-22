@@ -4,12 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.nj.imagepicker.ImagePicker;
-import com.nj.imagepicker.listener.ImageResultListener;
+import com.nj.imagepicker.listener.ImageMultiResultListener;
 import com.nj.imagepicker.result.ImageResult;
 import com.nj.imagepicker.utils.DialogConfiguration;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
@@ -56,13 +57,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import es.dmoral.toasty.Toasty;
+
+import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
 
 public class FormProfileActivity extends AppCompatActivity{
     Config config = new Config();
@@ -73,7 +78,7 @@ public class FormProfileActivity extends AppCompatActivity{
     private String CHANGEPASS  = config.Ip_address + config.profile_update_password;
     private String CHANGEIMG   = config.Ip_address + config.profile_update_image;
 
-    ImageButton btn_back, btn_updateContact;
+    ImageButton btn_back, btn_updateContact, btnDone;
     UniversalFontTextView txt_profile, txt_customer, txt_address, txt_contact, txt_phone, txt_email;
     UniversalFontTextView info_txt_contact, info_txt_phone, info_txt_email, info_txt_oldpass, info_txt_newpass,
                           info_txt_confirmpass;
@@ -91,7 +96,6 @@ public class FormProfileActivity extends AppCompatActivity{
     Uri img_uri;
     private MCrypt mCrypt;
     private ACProgressFlower loading;
-//    private com.mvc.imagepicker.ImagePicker imgPicker;
     private LovelyCustomDialog lovelyCustomDialog;
     private LayoutInflater layoutInflater;
     private View view;
@@ -103,9 +107,8 @@ public class FormProfileActivity extends AppCompatActivity{
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
-//        com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
-
         btn_back        = (ImageButton) findViewById(R.id.form_profile_btnback);
+        btnDone         = findViewById(R.id.form_profile_btndone);
         txt_profile     = (UniversalFontTextView) findViewById(R.id.form_profile_txtusername);
         txt_customer    = (UniversalFontTextView) findViewById(R.id.form_profile_txtCustomer);
         txt_address     = (UniversalFontTextView) findViewById(R.id.form_profile_txtAddress);
@@ -136,69 +139,6 @@ public class FormProfileActivity extends AppCompatActivity{
 
         updatePassword();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-//        if (imagePicker != null && imagePicker.handleActivityResult(requestCode, resultCode, data))
-//        {
-//            //informationImage("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-//                    //DefaultBootstrapBrand.WARNING);
-//
-//            //Toasty.warning(getApplicationContext(), "Image operation was cancel", Toast.LENGTH_SHORT, true).show();
-//            Toasty.info(getApplicationContext(), "Profile has been updated", Toast.LENGTH_SHORT, true).show();
-//        }
-
-        if(data!=null)
-        {
-//            Bitmap bitmap = com.mvc.imagepicker.ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
-//            img_uri = getImageUrl(this, bitmap);
-//
-//            filename = getPath(img_uri);
-//            img_profile.setImageBitmap(bitmap);
-//            changeImgProfile(filename);
-        }
-    }
-
-//    @Override
-//    public void imagePickerDidCancel(com.egistli.droidimagepicker.ImagePicker imagePicker) {
-//
-//    }
-
-//    @Override
-//    public void imagePickerDidSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, Bitmap bitmap) {
-//        showLoading();
-//
-//        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-//        NetworkInfo ni = cm.getActiveNetworkInfo();
-//
-//        img_uri = getImageUrl(getApplicationContext(), bitmap);
-//        //Toast.makeText(getApplicationContext(), img_uri.toString(), Toast.LENGTH_SHORT).show();
-//        filename = getPath(img_uri);
-//        img_profile.setImageBitmap(bitmap);
-//        changeImgProfile(filename);
-//        loading.dismiss();
-//
-//        //dashboard.getUserDetailDB(txt_profile.getText().toString());
-//        //dash.img_profile.setImageBitmap(bitmap);
-//    }
-
-//    @Override
-//    public void imagePickerDidFailToSelectImage(com.egistli.droidimagepicker.ImagePicker imagePicker, ImagePickerError error) {
-//        Toasty.error(getApplicationContext(), "Error operation when select image", Toast.LENGTH_SHORT, true).show();
-//    }
-//
-//    @Override
-//    public boolean imagePickerShouldCrop(com.egistli.droidimagepicker.ImagePicker imagePicker) {
-//        return true;
-//    }
-//
-//    @Override
-//    public void imagePickerSetUpCropDetail(com.egistli.droidimagepicker.ImagePicker imagePicker, Crop crop) {
-//        crop.asSquare();
-//        crop.withMaxSize(480, 480);
-//    }
 
     @Override
     public void onBackPressed() {
@@ -437,50 +377,53 @@ public class FormProfileActivity extends AppCompatActivity{
 
     private void imageChooser()
     {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
         btn_changeimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
-//                imagePicker.prompt();
-//                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
-//                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
                 ImagePicker.build(new DialogConfiguration()
                         .setTitle("Pilih gambar")
-                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
-                        .setResultImageDimension(600, 600), new ImageResultListener() {
+                        .setOptionOrientation(LinearLayoutCompat.HORIZONTAL)
+                        .setResultImageDimension(600, 600), new ImageMultiResultListener() {
                     @Override
-                    public void onImageResult(ImageResult imageResult) {
-                        img_uri = getImageUrl(getApplicationContext(), imageResult.getBitmap());
-                        filename = getPath(img_uri);
-                        changeImgProfile(filename);
-                        img_profile.setImageBitmap(imageResult.getBitmap());
+                    public void onImageResult(ArrayList<ImageResult> arrayList) {
+                        Log.e(LOG_TAG, "onImageResult:Number of image picked " + arrayList.size());
+
+                        Toasty.info(getApplicationContext(), arrayList.get(0).getPath(), Toast.LENGTH_LONG).show();
+
+                        img_profile.setImageBitmap(arrayList.get(0).getBitmap());
+
+//                        img_uri = getImageUrl(FormProfileActivity.this, arrayList.get(0).getBitmap());
+//                        filename = getPath(img_uri);
+//                        changeImgProfile(arrayList.get(0).getPath());
                     }
                 }).show(getSupportFragmentManager());
             }
         });
 
-        img_profile.setOnClickListener(new View.OnClickListener() {
+//        img_profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ImagePicker.build(new DialogConfiguration()
+//                        .setTitle("Pilih gambar")
+//                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
+//                        .setResultImageDimension(600, 600), new ImageMultiResultListener() {
+//                    @Override
+//                    public void onImageResult(ArrayList<ImageResult> arrayList) {
+//                        Log.e(LOG_TAG, "onImageResult:Number of image picked " + arrayList.size());
+//                        img_profile.setImageBitmap(arrayList.get(0).getBitmap());
+//                        Toasty.info(getApplicationContext(), arrayList.get(0).getPath(), Toast.LENGTH_LONG).show();
+////                        img_uri = getImageUrl(FormProfileActivity.this, arrayList.get(0).getBitmap());
+////                        filename = getPath(img_uri);
+////                        changeImgProfile(arrayList.get(0).getPath());
+//                    }
+//                }).show(getSupportFragmentManager());
+//            }
+//        });
+
+        btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                imagePicker = new ImagePicker(FormProfileActivity.this, FormProfileActivity.this, 480);
-//                imagePicker.prompt();
-//                com.mvc.imagepicker.ImagePicker.setMinQuality(600, 600);
-//                com.mvc.imagepicker.ImagePicker.pickImage(FormProfileActivity.this, "Select your image:");
-                ImagePicker.build(new DialogConfiguration()
-                        .setTitle("Pilih gambar")
-                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
-                        .setResultImageDimension(600, 600), new ImageResultListener() {
-                    @Override
-                    public void onImageResult(ImageResult imageResult) {
-                        img_uri = getImageUrl(getApplicationContext(), imageResult.getBitmap());
-                        filename = getPath(img_uri);
-                        changeImgProfile(filename);
-                        img_profile.setImageBitmap(imageResult.getBitmap());
-                    }
-                }).show(getSupportFragmentManager());
+                changeImgProfile(filename);
             }
         });
     }
@@ -943,7 +886,9 @@ public class FormProfileActivity extends AppCompatActivity{
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,
+                "Title", null);
 
         return Uri.parse(path);
     }
@@ -979,7 +924,7 @@ public class FormProfileActivity extends AppCompatActivity{
                     catch (JSONException e) {
                         // JSON error
                         e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e) {

@@ -62,6 +62,12 @@
                     app:bootstrapBrand="danger"
                     app:bootstrapSize="md"
                     app:bootstrapText="{fa_camera} Change profile picture" />
+
+                <ImageView
+                    android:id="@+id/form_profile_imgtest"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/account" />
             </LinearLayout>
 
             <FrameLayout
@@ -94,6 +100,7 @@
                         app:customFont="DroidBold.ttf" />
 
                     <ImageButton
+                        android:id="@+id/form_profile_btndone"
                         android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
