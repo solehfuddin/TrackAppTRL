@@ -296,6 +296,10 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
                             dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductPrice());
                             dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+
+//                            int discPrice = itemCart.get(i).getProductDisc() / 100 * itemCart.get(i).getProductPrice();
+//                            dataFrameItem.setFrameDiscPrice(discPrice);
+
                             dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
 
                             insertLineItem(dataFrameItem);
@@ -598,6 +602,10 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                                        dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductDiscPrice());
             dataFrameItem.setFrameRealPrice(itemCart.get(i).getProductPrice());
             dataFrameItem.setFrameDisc(itemCart.get(i).getProductDisc());
+
+//            int discPrice = itemCart.get(i).getProductDisc() / 100 * itemCart.get(i).getProductPrice();
+//            dataFrameItem.setFrameDiscPrice(discPrice);
+
             dataFrameItem.setFrameDiscPrice(itemCart.get(i).getNewProductDiscPrice());
 
             insertLineItem(dataFrameItem);

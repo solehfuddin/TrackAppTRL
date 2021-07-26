@@ -46,6 +46,7 @@ import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.jkb.vcedittext.VerificationAction;
 import com.jkb.vcedittext.VerificationCodeEditText;
@@ -3316,7 +3317,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         UniversalFontTextView lbl_framemodel, lbl_dbl, lbl_hora, lbl_verb, lbl_framecode;
 
         final BootstrapButton btn_editorder, btn_sentorder;
-
+        TypefaceProvider.registerDefaultIconSets();
         AlertDialog.Builder builder = new AlertDialog.Builder(FormOrderLensActivity.this);
 
         LayoutInflater inflater = FormOrderLensActivity.this.getLayoutInflater();

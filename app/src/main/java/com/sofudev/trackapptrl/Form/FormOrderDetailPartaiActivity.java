@@ -48,6 +48,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
     RippleView btnDownload;
     RecyclerView recyclerViewItem;
 
+    boolean isSp;
     String orderNumber, titleSale;
 
     List<Data_item_orderdetail> listItem = new ArrayList<>();
@@ -100,16 +101,35 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
     private void getInfo()
     {
         Bundle bundle = getIntent().getExtras();
-        orderNumber = bundle.getString("key");
+        if (bundle != null)
+        {
+            orderNumber = bundle.getString("key");
 
-        getHeader(orderNumber);
+            assert orderNumber != null;
+            if (orderNumber.contains("SPAL"))
+            {
+                Log.d("Is SP : ", "true");
 
-        try {
-            Thread.sleep(1000);
+                isSp = true;
+                btnDownload.setVisibility(View.GONE);
+            }
+            else
+            {
+                Log.d("Is SP : ", "false");
+                isSp = false;
 
-            getItem(orderNumber);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                btnDownload.setVisibility(View.VISIBLE);
+            }
+
+            getHeader(orderNumber);
+
+            try {
+                Thread.sleep(1000);
+
+                getItem(orderNumber);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -142,20 +162,41 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
                     {
                         case "0":
                             nonpay = "Awaiting Approval";
-                            txtInfo.setText(nonpay);
-                            txtInfo.setTextColor(Color.parseColor("#ff9100"));
+                            if (isSp)
+                            {
+                                txtInfo.setText("");
+                            }
+                            else
+                            {
+                                txtInfo.setText(nonpay);
+                                txtInfo.setTextColor(Color.parseColor("#ff9100"));
+                            }
                             break;
 
                         case "1":
                             nonpay = "Approved";
-                            txtInfo.setText(nonpay);
-                            txtInfo.setTextColor(Color.parseColor("#45ac2d"));
+                            if (isSp)
+                            {
+                                txtInfo.setText("");
+                            }
+                            else
+                            {
+                                txtInfo.setText(nonpay);
+                                txtInfo.setTextColor(Color.parseColor("#45ac2d"));
+                            }
                             break;
 
                         case "2":
                             nonpay = "Rejected";
-                            txtInfo.setText(nonpay);
-                            txtInfo.setTextColor(Color.parseColor("#f90606"));
+                            if (isSp)
+                            {
+                                txtInfo.setText("");
+                            }
+                            else
+                            {
+                                txtInfo.setText(nonpay);
+                                txtInfo.setTextColor(Color.parseColor("#f90606"));
+                            }
                             break;
 
                         default:
@@ -225,7 +266,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
 
                         String note = titleSale;
 
-                        Log.d("ITEM PARTAI", note);
+//                        Log.d("ITEM PARTAI", note);
 
                         Data_item_orderdetail data = new Data_item_orderdetail();
                         data.setNo(object.getInt("no"));

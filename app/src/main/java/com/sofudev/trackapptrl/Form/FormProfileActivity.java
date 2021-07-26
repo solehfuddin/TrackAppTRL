@@ -79,6 +79,7 @@ public class FormProfileActivity extends AppCompatActivity{
     private String CHANGEIMG   = config.Ip_address + config.profile_update_image;
 
     ImageButton btn_back, btn_updateContact, btnDone;
+    ImageView img_tmp;
     UniversalFontTextView txt_profile, txt_customer, txt_address, txt_contact, txt_phone, txt_email;
     UniversalFontTextView info_txt_contact, info_txt_phone, info_txt_email, info_txt_oldpass, info_txt_newpass,
                           info_txt_confirmpass;
@@ -90,7 +91,7 @@ public class FormProfileActivity extends AppCompatActivity{
 
     private String decrypt_username, decrypt_image, decrypt_customer, decrypt_status, decrypt_address1,
             decrypt_address2, decrypt_city, decrypt_province, decrypt_postcode, decrypt_contact, decrypt_phone,
-            decrypt_email;
+            decrypt_email, imgpath;
     private String id_data;
     String filename;
     Uri img_uri;
@@ -116,6 +117,7 @@ public class FormProfileActivity extends AppCompatActivity{
         txt_phone       = (UniversalFontTextView) findViewById(R.id.form_profile_txtPhonePerson);
         txt_email       = (UniversalFontTextView) findViewById(R.id.form_profile_txtEmailPerson);
         img_profile     = (BootstrapCircleThumbnail) findViewById(R.id.form_profile_imgprofile);
+        img_tmp         = findViewById(R.id.form_profile_imgtest);
         btn_changeimg   = (BootstrapButton) findViewById(R.id.form_profile_btnChangeimg);
         btn_status      = (BootstrapButton) findViewById(R.id.form_profile_btnStatus);
         btn_updateContact = (ImageButton) findViewById(R.id.form_profile_imgbtnEditContact);
@@ -129,6 +131,7 @@ public class FormProfileActivity extends AppCompatActivity{
         info_txt_oldpass    = (UniversalFontTextView) findViewById(R.id.form_profile_lblOldPassword);
         info_txt_newpass    = (UniversalFontTextView) findViewById(R.id.form_profile_lblNewPassword);
         info_txt_confirmpass= (UniversalFontTextView) findViewById(R.id.form_profile_lblConfirmPassword);
+        img_tmp.setVisibility(View.GONE);
 
         mCrypt = new MCrypt();
         getUsernameData();
@@ -387,43 +390,56 @@ public class FormProfileActivity extends AppCompatActivity{
                     @Override
                     public void onImageResult(ArrayList<ImageResult> arrayList) {
                         Log.e(LOG_TAG, "onImageResult:Number of image picked " + arrayList.size());
+                        Log.d("Image path : ", arrayList.get(0).getPath());
 
-                        Toasty.info(getApplicationContext(), arrayList.get(0).getPath(), Toast.LENGTH_LONG).show();
+//                        Toasty.info(getApplicationContext(), arrayList.get(0).getPath(), Toast.LENGTH_LONG).show();
 
                         img_profile.setImageBitmap(arrayList.get(0).getBitmap());
+                        img_tmp.setImageBitmap(arrayList.get(0).getBitmap());
 
-//                        img_uri = getImageUrl(FormProfileActivity.this, arrayList.get(0).getBitmap());
-//                        filename = getPath(img_uri);
-//                        changeImgProfile(arrayList.get(0).getPath());
+                        img_uri = getImageUrl(getApplicationContext(), arrayList.get(0).getBitmap());
+                        filename = getPath(img_uri);
+                        String[] delimit = filename.split("/");
+                        imgpath  = delimit[delimit.length - 1];
+
+                        changeImgProfile(filename);
                     }
                 }).show(getSupportFragmentManager());
             }
         });
 
-//        img_profile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ImagePicker.build(new DialogConfiguration()
-//                        .setTitle("Pilih gambar")
-//                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
-//                        .setResultImageDimension(600, 600), new ImageMultiResultListener() {
-//                    @Override
-//                    public void onImageResult(ArrayList<ImageResult> arrayList) {
-//                        Log.e(LOG_TAG, "onImageResult:Number of image picked " + arrayList.size());
-//                        img_profile.setImageBitmap(arrayList.get(0).getBitmap());
+        img_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.build(new DialogConfiguration()
+                        .setTitle("Pilih gambar")
+                        .setOptionOrientation(LinearLayoutCompat.VERTICAL)
+                        .setResultImageDimension(600, 600), new ImageMultiResultListener() {
+                    @Override
+                    public void onImageResult(ArrayList<ImageResult> arrayList) {
+                        Log.e(LOG_TAG, "onImageResult:Number of image picked " + arrayList.size());
+                        Log.d("Image path : ", arrayList.get(0).getPath());
+
 //                        Toasty.info(getApplicationContext(), arrayList.get(0).getPath(), Toast.LENGTH_LONG).show();
-////                        img_uri = getImageUrl(FormProfileActivity.this, arrayList.get(0).getBitmap());
-////                        filename = getPath(img_uri);
-////                        changeImgProfile(arrayList.get(0).getPath());
-//                    }
-//                }).show(getSupportFragmentManager());
-//            }
-//        });
+
+                        img_profile.setImageBitmap(arrayList.get(0).getBitmap());
+                        img_tmp.setImageBitmap(arrayList.get(0).getBitmap());
+
+                        img_uri = getImageUrl(getApplicationContext(), arrayList.get(0).getBitmap());
+                        filename = getPath(img_uri);
+                        String[] delimit = filename.split("/");
+                        imgpath  = delimit[delimit.length - 1];
+
+                        changeImgProfile(filename);
+                    }
+                }).show(getSupportFragmentManager());
+            }
+        });
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeImgProfile(filename);
+//                changeImgProfile(filename);
             }
         });
     }
@@ -887,8 +903,9 @@ public class FormProfileActivity extends AppCompatActivity{
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
+        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,
-                "Title", null);
+                id_data + "_" + timeStamp, null);
 
         return Uri.parse(path);
     }

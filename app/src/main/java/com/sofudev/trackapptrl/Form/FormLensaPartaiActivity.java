@@ -23,7 +23,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -33,18 +36,25 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.request.StringRequest;
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Adapter.Adapter_lenstype;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.DashboardActivity;
+import com.sofudev.trackapptrl.Data.Data_lenstype;
 import com.sofudev.trackapptrl.Data.Data_partai_header;
+import com.sofudev.trackapptrl.Data.Data_partai_item;
 import com.sofudev.trackapptrl.Data.Data_spheader;
 import com.sofudev.trackapptrl.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,6 +67,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
@@ -68,21 +79,34 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
     private static final String TAG = "Download Task";
     Config config = new Config();
     private String downloadUrl = "http://180.250.96.154/trl-webs/assets/template/Order_partai.xls";
+    String URLALLLENS = config.Ip_address + config.show_all_stocklens;
     String URLINSERTHEADER     = config.Ip_address + config.orderpartai_insertHeader;
+    String URLINSERTITEM       = config.Ip_address + config.orderpartai_insertItem;
+    String URLINSERTNONPAY     = config.Ip_address + config.orderpartai_nonpayment;
     String URL_INSERTSPHEADER  = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTSAMTEMP   = config.Ip_address + config.ordersp_insert_samTemp;
     String URL_UPDATEEXCEL     = config.Ip_address + config.ordersp_update_excel;
     String URL_GETACTIVESALE        = config.Ip_address + config.flashsale_getActiveSale;
+    String URL_GETPARTAIPRICE  = config.Ip_address + config.orderpartai_getPrice;
 
     ACProgressFlower loading;
+    ImageView btnBack;
+    BootstrapEditText txtLensa, txtQty;
+    Button btnSave;
+    RippleView btnChoose;
     String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia,
             headerDisc, headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus,
-            headerImage, headerSignedPath, flashsaleNote;
+            headerImage, headerSignedPath, flashsaleNote, id_lensa, desc_lensa;
     String opticId, opticName, opticUsername, opticProvince, opticCity, opticAddress, opticFlag;
-    int headerDp, flagDiscSale, isSp;
+    String itemId, itemCode, itemDesc, itemRl, fileString;
+    int headerDp, flagDiscSale, isSp, itemPrice, itemQty, totalPrice;
+    Boolean isQty, isLens, isFile;
     private DownloadManager downloadManager;
 
+    List<Data_lenstype> item_stocklens = new ArrayList<>();
     Data_spheader dataSpHeader = new Data_spheader();
+
+    Adapter_lenstype adapter_lenstype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +114,59 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form_lensa_partai);
 
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        btnBack         = findViewById(R.id.form_lensapartai_btnback);
+        btnSave         = findViewById(R.id.form_lensapartai_btnsave);
+        txtLensa        = findViewById(R.id.form_lensapartai_txtlens);
+        txtQty          = findViewById(R.id.form_lensapartai_txtqty);
+        btnChoose       = findViewById(R.id.form_lensapartai_btnChooselens);
 
         getData();
         getActiveSale();
+
+        btnChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAllLens();
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileCheck();
+                qtyCheck();
+                lensCheck();
+
+                if (isQty && isLens && isFile)
+                {
+//                    Toasty.info(getApplicationContext(), "Upload dan simpan data", Toast.LENGTH_SHORT).show();
+                    showLoading();
+                    updateExcel(fileString);
+                }
+                else
+                {
+                    if (!isFile)
+                    {
+                        Toasty.warning(getApplicationContext(), "File belum dipilih", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!isQty)
+                    {
+                        Toasty.warning(getApplicationContext(), "Qty belum diisi", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toasty.warning(getApplicationContext(), "Jenis lensa belum dipilih", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
 
         final RippleView btnDownload = findViewById(R.id.form_lensapartai_ripplebtndownload);
         final RippleView btnUpload   = findViewById(R.id.form_lensapartai_ripplebtnupload);
@@ -154,12 +228,12 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                     @Override
                     public void onSelectedFilePaths(String[] files) {
                         Log.d("File path : ", files[0]);
-
+                        fileString = files[0];
 //                      String outputPath = Environment.getExternalStorageDirectory() + "/TRL APPS/temp/";
 //                      String inputPath = part[0] + '/' + part[1] + '/' + part[2] + '/' + part[3] + '/' + part[4] + '/';
 
-                        showLoading();
-                        updateExcel(files[0]);
+//                        showLoading();
+//                        updateExcel(files[0]);
                     }
                 });
                 pickerDialog.show();
@@ -243,12 +317,24 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         data_header.setFlashNote(flashsaleNote);
         data_header.setOrderSp(String.valueOf(isSp));
 
+        Data_partai_item data_item = new Data_partai_item();
+        data_item.setOrderNumber(headerNoSp);
+        data_item.setItemId(Integer.parseInt(itemId));
+        data_item.setItemCode(itemCode);
+        data_item.setDescription(itemDesc);
+        data_item.setSide(itemRl);
+        data_item.setQty(itemQty);
+        data_item.setPrice(itemPrice);
+        data_item.setTotal_price(totalPrice);
+
         insertSpHeader(dataSpHeader, path);
         insertSP(URL_INSERTSAMTEMP, dataSpHeader, path);
         insertHeader(data_header);
+        inserItem(data_item);
+        insertNonPay(headerNoSp);
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(2500);
             hideLoading();
             successDialog();
         } catch (InterruptedException e) {
@@ -365,7 +451,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                     if (jsonObject.names().get(0).equals("success"))
                     {
 //                        Toasty.info(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                        Log.d(FormBatchOrderActivity.class.getSimpleName(), "Success Insert Header");
+                        Log.d(FormLensaPartaiActivity.class.getSimpleName(), "Success Insert Header");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -392,12 +478,88 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 hashMap.put("optic_province", item.getOpticProvince());
                 hashMap.put("shipping_service", "");
                 hashMap.put("shipping_price", "0");
-                hashMap.put("total_price", "0");
+                hashMap.put("total_price", String.valueOf(totalPrice));
                 hashMap.put("payment_cashcarry", "Non Payment Method");
                 hashMap.put("flash_note", item.getFlashNote());
                 hashMap.put("order_sp", item.getOrderSp());
                 hashMap.put("salesname", headerSales);
                 return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void inserItem(final Data_partai_item item)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLINSERTITEM, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Log.d(FormLensaPartaiActivity.class.getSimpleName(), "Success Insert Item");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("order_number", item.getOrderNumber());
+                map.put("item_id", String.valueOf(item.getItemId()));
+                map.put("item_code", item.getItemCode());
+                map.put("description", item.getDescription());
+                map.put("side", item.getSide());
+                map.put("qty", String.valueOf(item.getQty()));
+                map.put("price", String.valueOf(item.getPrice()));
+                map.put("discount_name", "");
+                map.put("discount", "0");
+                map.put("discount_sale", "0");
+                map.put("total_price", String.valueOf(item.getTotal_price()));
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void insertNonPay(final String noSp)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLINSERTNONPAY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Log.d(FormLensaPartaiActivity.class.getSimpleName(), "Success Insert Non payment");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("order_number", noSp);
+                return map;
             }
         };
 
@@ -517,6 +679,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
 
     private void getActiveSale()
     {
+        flashsaleNote = "";
         StringRequest request = new StringRequest(Request.Method.POST, URL_GETACTIVESALE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -525,6 +688,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
 
                     if (object.names().get(0).equals("error"))
                     {
+                        flashsaleNote = "";
                         Log.d("Status sale", "Tidak ada flashsale");
 
                         flagDiscSale = 0;
@@ -546,11 +710,142 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 if (!error.getMessage().isEmpty() || error.getMessage().equals(null))
                 {
                     Log.d("Error Active Sale", error.getMessage());
+                    flashsaleNote = "";
                 }
             }
         });
 
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getAllStock()
+    {
+        item_stocklens.clear();
+        StringRequest request = new StringRequest(Request.Method.POST, URLALLLENS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String deskripsi = object.getString("item_desc");
+                        String kodelensa = object.getString("item_code_opto");
+                        String gambar    = object.getString("image");
+
+                        Data_lenstype dataLenstype = new Data_lenstype();
+                        dataLenstype.setImage(gambar);
+                        dataLenstype.setLenstype(kodelensa);
+                        dataLenstype.setLensdescription(deskripsi);
+
+                        item_stocklens.add(dataLenstype);
+                    }
+
+                    adapter_lenstype.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getPricePartai(final String key)
+    {
+        itemPrice = 0;
+        itemQty = 1;
+        itemId = "0";
+        itemCode = "";
+        itemDesc = "";
+        itemRl = "";
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETPARTAIPRICE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("error"))
+                    {
+                        itemPrice = 0;
+                        itemQty = 1;
+                        itemId = "0";
+                        itemCode = "";
+                        itemDesc = "";
+                        itemRl = "";
+                    }
+                    else
+                    {
+                        itemId    = jsonObject.getString("itemId");
+                        itemCode  = jsonObject.getString("itemCode");
+                        itemDesc  = jsonObject.getString("description");
+                        itemRl    = jsonObject.getString("rl");
+                        itemPrice = jsonObject.getInt("price");
+
+                        Log.i("Item Price : ", String.valueOf(itemPrice));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                itemPrice = 0;
+                itemQty = 1;
+                itemId = "0";
+                itemCode = "";
+                itemDesc = "";
+                itemRl = "";
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("item_code", key);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void qtyCheck()
+    {
+        if (txtQty.getText().toString().isEmpty())
+        {
+            isQty = false;
+            itemQty = 1;
+        }
+        else
+        {
+            isQty = true;
+            itemQty   = Integer.parseInt(txtQty.getText().toString());
+        }
+
+        totalPrice = itemPrice * itemQty;
+        Log.i("Total Price : ", String.valueOf(totalPrice));
+    }
+
+    private void lensCheck()
+    {
+        isLens = id_lensa != null;
+
+        Log.i("Lensa check : ", isLens.toString());
+    }
+
+    private void fileCheck()
+    {
+        isFile = fileString != null;
+        Log.i("File check : ", isFile.toString());
     }
 
     private void showLoading()
@@ -599,5 +894,57 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
 
         dialog.show();
         dialog.getWindow().setAttributes(lwindow);
+    }
+
+    private void dialogAllLens()
+    {
+        final ListView listView;
+        final BootstrapButton btn_save;
+        final Dialog dialog = new Dialog(FormLensaPartaiActivity.this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.form_choose_lensstock);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        adapter_lenstype = new Adapter_lenstype(FormLensaPartaiActivity.this, item_stocklens);
+
+        listView    =  dialog.findViewById(R.id.choose_lensstock_listview);
+        btn_save    =  dialog.findViewById(R.id.choose_lensstock_btnsave);
+
+        getAllStock();
+        listView.setAdapter(adapter_lenstype);
+
+        btn_save.setEnabled(false);
+        btn_save.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                id_lensa = item_stocklens.get(position).getLenstype();
+                desc_lensa = item_stocklens.get(position).getLensdescription();
+
+                if (id_lensa.isEmpty())
+                {
+                    btn_save.setEnabled(false);
+                    btn_save.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
+                }
+                else
+                {
+                    btn_save.setEnabled(true);
+                    btn_save.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);
+                }
+            }
+        });
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtLensa.setText(desc_lensa);
+                getPricePartai(id_lensa);
+                dialog.hide();
+            }
+        });
+
+        dialog.show();
     }
 }

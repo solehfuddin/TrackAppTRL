@@ -271,6 +271,8 @@ public class Config {
     public String orderpartai_generateId          = "index.php/Android_lensstockorder/generateId";
     public String orderpartai_insertHeader        = "index.php/Android_lensstockorder/insertHeader";
     public String orderpartai_insertItem          = "index.php/Android_lensstockorder/insertItem";
+    public String orderpartai_nonpayment          = "index.php/Android_lensstockorder/insertNonPayment";
+    public String orderpartai_getPrice            = "index.php/Android_lensstockorder/getPricePartai";
     public String orderpartai_show_allhistory     = "index.php/Android_orderhistorypartai/getAllPartai";
     public String orderpartai_show_rangehistory   = "index.php/Android_orderhistorypartai/getAllPartaiByRange";
     public String orderpartai_show_detailitem     = "index.php/Android_orderhistorypartai/getDetailPartai";

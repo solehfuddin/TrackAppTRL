@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Adapter;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,21 +37,30 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         Data_item_orderdetail data = item.get(i);
 
         String disc = String.valueOf(data.getDiskon()) + " %";
+        String tintPrice = "-";
         int cat     = data.getCategory();
 
         if (cat == 3)
         {
             int discSale = data.getDiskonFlashSale();
+            int tint = data.getTinting();
 
             if (discSale > 0)
             {
                 disc = disc + " + " + discSale + "% (" + data.getTitleFlashSale() + ")";
             }
+            else
+            {
+                disc = "-";
+            }
+
+            if (tint > 0) { tintPrice = "Rp. " + CurencyFormat(String.valueOf(tint)); } else { tintPrice = "-"; }
         }
         else if (cat == 2)
         {
@@ -66,7 +76,7 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
         holder.txtDeskripsi.setText(data.getDeskripsi());
         holder.txtJumlah.setText(String.valueOf(data.getJumlah()));
         holder.txtDiskon.setText(disc);
-        holder.txtTinting.setText("Rp. " +CurencyFormat(String.valueOf(data.getTinting())));
+        holder.txtTinting.setText(tintPrice);
         holder.txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(data.getTotalAll())));
     }
 

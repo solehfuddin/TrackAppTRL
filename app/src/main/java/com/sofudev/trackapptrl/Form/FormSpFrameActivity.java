@@ -386,6 +386,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             dataFrameItem.setFrameDisc(modelFrameSpList.get(i).getProductDisc());
             dataFrameItem.setFrameDiscPrice(modelFrameSpList.get(i).getNewProductDiscPrice());
 
+            Log.d("Diskon : ", String.valueOf(modelFrameSpList.get(i).getProductDisc()));
+            Log.d("Amount : ", String.valueOf(modelFrameSpList.get(i).getNewProductDiscPrice()));
+
             insertLineItem(dataFrameItem);
         }
 
@@ -411,7 +414,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         Log.d("Signed Path : ", headerSignedPath);
 
         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-//        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
         insertSpHeader(dataSpHeader);
 
         Toasty.success(getApplicationContext(), "Data Berhasil disimpan", Toast.LENGTH_SHORT).show();
@@ -1376,9 +1378,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         rpFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                progressLayout.setVisibility(View.VISIBLE);
-//                showCategoryFrame();
-
                 final UniversalFontTextView txtTitle;
                 final ListView listView;
                 final BootstrapButton btnChoose;

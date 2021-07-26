@@ -73,97 +73,282 @@
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
 
-    <com.andexert.library.RippleView
-        android:id="@+id/form_lensapartai_ripplebtndownload"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+    <!-- Area Digital Signature -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/form_lensapartai_cardlengkapi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_layoutheader"
-        app:rv_rippleDuration="100"
-        app:rv_type="rectangle">
+        app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_layoutheader">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/round_corner"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <com.andexert.library.RippleView
+                android:id="@+id/form_lensapartai_rippledigitalsign"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_cloud_computing" />
+                app:rv_rippleDuration="150"
+                app:rv_type="rectangle">
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dot_dark_screen2"
+                    android:orientation="horizontal">
 
-    </com.andexert.library.RippleView>
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="8dp"
+                        android:text="Lengkapi Data"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16sp"
+                        app:customFont="UbuntuMedium.ttf" />
+                </LinearLayout>
 
-    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-        android:id="@+id/form_lensapartai_txtnote"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorStm"
-        android:paddingLeft="8dp"
-        android:paddingTop="5dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="5dp"
-        android:text="* Silahkan download file dengan menekan tombol download. File ini berisi format order lensa partai"
-        android:textAlignment="center"
-        android:textColor="@color/colorContent"
-        android:textSize="12sp"
-        app:customFont="RobotoMedium.ttf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/form_lensapartai_ripplebtndownload"
-        app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_layoutheader" />
+            </com.andexert.library.RippleView>
 
-    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-        android:id="@+id/form_lensapartai_txtnote2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="#BBDEFB"
-        android:paddingLeft="8dp"
-        android:paddingTop="5dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="5dp"
-        android:text="* Silahkan pilih file dengan menekan tombol upload. File yang diupload harus berisi format order lensa partai"
-        android:textAlignment="center"
-        android:textColor="@color/colorContent"
-        android:textSize="12sp"
-        app:customFont="RobotoMedium.ttf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/form_lensapartai_ripplebtndownload"
-        app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_txtnote" />
+            <net.cachapa.expandablelayout.ExpandableLayout
+                android:id="@+id/form_lensapartai_expandlayoutdigitalsign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:el_duration="1500"
+                app:el_expanded="true">
 
-    <com.andexert.library.RippleView
-        android:id="@+id/form_lensapartai_ripplebtnupload"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_ripplebtndownload">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/round_corner"
-            android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_cloud_upload" />
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensapartai_ripplebtndownload"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="20dp"
+                            app:rv_rippleDuration="100"
+                            app:rv_type="rectangle">
 
-        </RelativeLayout>
-    </com.andexert.library.RippleView>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/round_corner"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/ic_cloud_computing" />
+                            </RelativeLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_lensapartai_txtnote"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="18dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/colorStm"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="5dp"
+                            android:text="* Silahkan download file dengan menekan tombol download. File ini berisi format order lensa partai"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="RobotoMedium.ttf"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/form_lensapartai_ripplebtndownload"
+                            app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_cardlengkapi" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensapartai_ripplebtnupload"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="31dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_ripplebtndownload">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/round_corner"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="23dp"
+                                    android:layout_height="23dp"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/ic_cloud_upload" />
+
+                            </RelativeLayout>
+                        </com.andexert.library.RippleView>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/form_lensapartai_txtnote2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="#BBDEFB"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="5dp"
+                            android:text="* Silahkan pilih file dengan menekan tombol upload. File yang diupload harus berisi format order lensa partai"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="RobotoMedium.ttf"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/form_lensapartai_ripplebtndownload"
+                            app:layout_constraintTop_toBottomOf="@+id/form_lensapartai_txtnote" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight=".7"
+                            android:padding="5dp"
+                            android:text="Qty"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="UbuntuMedium.ttf" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="3.3"
+                            android:padding="5dp"
+                            android:text="Jenis Lensa"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="UbuntuMedium.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="4"
+                        android:orientation="horizontal">
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/form_lensapartai_txtqty"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:textAlignment="center"
+                            android:hint="0"
+                            android:inputType="numberSigned"
+                            android:maxLength="3"
+                            android:padding="5dp"
+                            android:textColor="@color/colorHint"
+                            android:textColorHint="@color/colorContent"
+                            app:bootstrapBrand="info"
+                            app:bootstrapSize="md"
+                            app:roundedCorners="true" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/form_lensapartai_txtlens"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:hint="Jakarta"
+                            android:enabled="false"
+                            android:textAlignment="center"
+                            android:inputType="phone"
+                            android:padding="5dp"
+                            android:textColor="@color/colorHint"
+                            android:textColorHint="@color/colorContent"
+                            app:bootstrapBrand="info"
+                            app:bootstrapSize="md"
+                            app:roundedCorners="true" />
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_lensapartai_btnChooselens"
+                            android:layout_width="0dp"
+                            android:layout_height="27dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight=".3"
+                            app:rv_type="simpleRipple"
+                            app:rv_rippleDuration="100">
+
+                            <ImageView
+                                android:id="@+id/form_lensapartai_imgChooserlens"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:src="@drawable/ic_arrow_drop_down_white"
+                                android:background="@color/dot_dark_screen2"/>
+                        </com.andexert.library.RippleView>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/form_lensapartai_btnsave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Simpan"
+                        android:background="@color/dot_dark_screen2"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="11sp"/>
+
+                </LinearLayout>
+            </net.cachapa.expandablelayout.ExpandableLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

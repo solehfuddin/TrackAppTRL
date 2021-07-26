@@ -754,14 +754,20 @@ public class HomeFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                        String title = jsonObject.getString("title");
-                        String image = jsonObject.getString("image");
-
-                        if (!image.isEmpty())
+                        if (jsonObject.names().get(0).equals("error"))
                         {
-                            Log.d("Image Promo", "link : " + image);
+                            Log.d("Info", "Tidak ada promo");
+                        }
+                        else
+                        {
+                            String image = jsonObject.getString("image");
 
-                            dialogPromo(image);
+                            if (!image.isEmpty())
+                            {
+                                Log.d("Image Promo", "link : " + image);
+
+                                dialogPromo(image);
+                            }
                         }
                     }
                 } catch (JSONException e) {

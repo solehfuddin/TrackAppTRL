@@ -303,6 +303,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     @Override
                     public void onImageResult(ArrayList<ImageResult> imageResult) {
                         Log.e(LOG_TAG, "onImageResult:Number of image picked " + imageResult.size());
+                        Log.d("Image path : ", imageResult.get(0).getPath());
 
 
 //                        Toasty.info(getApplicationContext(), imageResult.get(0).getPath(), Toast.LENGTH_SHORT).show();
@@ -1438,6 +1439,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_status", "");
                         intent.putExtra("header_image", imgpath);
                         intent.putExtra("header_signedpath", signedpath);
+                        intent.putExtra("sales", username);
                         startActivity(intent);
                     }
                     else if (spinTipeSp.getSelectedItem().toString().equals("Lensa Partai"))

@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/D:/Software/android-studio-ide-193.6626763-windows/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/more_vert/baseline_more_vert_24.xml" />
+                                      <entry key="url" value="jar:file:/D:/Software/android-studio-ide-193.6626763-windows/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/arrow_drop_down/baseline_arrow_drop_down_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_cloud_upload" />
+                            <entry key="outputName" value="ic_arrow_drop_down_white" />
                             <entry key="sourceFile" value="C:\Users\sholeh\Downloads\cloud_upload.svg" />
                           </map>
                         </option>
