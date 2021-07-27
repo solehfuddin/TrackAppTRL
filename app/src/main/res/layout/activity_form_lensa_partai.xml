@@ -300,7 +300,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="5dp"
-                            android:hint="Jakarta"
+                            android:hint="Presio Advance 1.5 10 B4"
                             android:enabled="false"
                             android:textAlignment="center"
                             android:inputType="phone"

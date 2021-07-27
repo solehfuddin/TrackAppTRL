@@ -341,7 +341,10 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             String transNumber  = jsonObject.getString("transnumber");
                             String transStatus  = jsonObject.getString("transstatus");
 
-                            checkStatusPayment(transNumber, transStatus);
+                            if (!transStatus.contains("Non Payment"))
+                            {
+                                checkStatusPayment(transNumber, transStatus);
+                            }
                         }
                     }
 

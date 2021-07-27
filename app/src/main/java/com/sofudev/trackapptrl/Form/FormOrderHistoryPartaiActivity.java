@@ -535,7 +535,10 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                             Log.d(FormBatchOrderActivity.class.getSimpleName(), "TransNumber = " + transNumber);
                             Log.d(FormBatchOrderActivity.class.getSimpleName(), "TransStatus = " + transStatus);
 
-                            checkStatusPayment(transNumber, transStatus);
+                            if (!transStatus.contains("Non Payment"))
+                            {
+                                checkStatusPayment(transNumber, transStatus);
+                            }
                         }
                     }
 
@@ -664,7 +667,10 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                             String transNumber  = jsonObject.getString("transNumber");
                             String transStatus  = jsonObject.getString("transStatus");
 
-                            checkStatusPayment(transNumber, transStatus);
+                            if (!transStatus.contains("Non Payment"))
+                            {
+                                checkStatusPayment(transNumber, transStatus);
+                            }
                         }
                     }
 
