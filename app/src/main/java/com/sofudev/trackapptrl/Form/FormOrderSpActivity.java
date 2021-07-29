@@ -99,10 +99,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
     Config config = new Config();
     String URL_GETIDSP = config.Ip_address + config.ordersp_get_spId;
     String URL_GETIDSPFRAME   = config.Ip_address + config.ordersp_get_spIdFrame;
-    String URL_INSERTSPHEADER = config.Ip_address + config.ordersp_insert_spHeader;
-    String URL_AUTOSENTPHOTO  = config.Ip_address + config.ordersp_autosent_photo;
-    String URL_INSERTSAMTEMP  = config.Ip_address + config.ordersp_insert_samTemp;
-    String URL_INSERTTRXHEADER= config.Ip_address + config.ordersp_insert_trxHeader;
     String URL_UPDATEPHOTO    = config.Ip_address + config.ordersp_update_photo;
     String URL_UPDATESIGNED   = config.Ip_address + config.ordersp_update_digitalsigned;
 

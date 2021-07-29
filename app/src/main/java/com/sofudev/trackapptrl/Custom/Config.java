@@ -312,7 +312,6 @@ public class Config {
     public String ordersp_get_opticInfo           = "index.php/Android_apisp/getOpticInfo";
     public String ordersp_insert_spHeader         = "index.php/Android_apisp/insertSp";
     public String ordersp_insert_samTemp          = "index.php/Android_apisp/insertSamTemp";
-    public String ordersp_insert_trxHeader        = "index.php/Android_apisp/insertTrxHeader";
     public String ordersp_update_photo            = "index.php/Android_apisp/updatePhoto";
     public String ordersp_update_digitalsigned    = "index.php/Android_apisp/updateSigned";
     public String ordersp_update_excel            = "index.php/Android_apisp/updateExcel";

@@ -103,7 +103,6 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String URL_INSERTSPHEADER       = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTDURATION       = config.Ip_address + config.ordersp_insert_duration;
     String URL_INSERTSAMTEMP        = config.Ip_address + config.ordersp_insert_samTemp;
-    String URL_INSERTTRXHEADER      = config.Ip_address + config.ordersp_insert_trxHeader;
 
     ACProgressCustom loading;
     ImageView btnBack, btnAddItem;
@@ -339,7 +338,6 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
                                 insertSpHeader(dataSpHeader);
                                 insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-//                                insertSP(URL_INSERTTRXHEADER, dataSpHeader);
 
                                 for (int i = 0; i < item_partai.size(); i++)
                                 {

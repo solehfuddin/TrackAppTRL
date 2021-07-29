@@ -92,7 +92,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_GETSPHEADER     = config.Ip_address + config.ordersp_get_spHeader;
     String URL_INSERTSPHEADER = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTSAMTEMP  = config.Ip_address + config.ordersp_insert_samTemp;
-    String URL_INSERTTRXHEADER= config.Ip_address + config.ordersp_insert_trxHeader;
     String URL_INSERTDURATION = config.Ip_address + config.ordersp_insert_duration;
 
     ACProgressCustom loading;
@@ -851,7 +850,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     {
                         insertSpHeader(dataSpHeader);
                         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-                        insertSP(URL_INSERTTRXHEADER, dataSpHeader);
 
                         Intent intent = new Intent("finishLs");
                         sendBroadcast(intent);

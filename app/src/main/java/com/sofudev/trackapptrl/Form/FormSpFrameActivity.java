@@ -93,7 +93,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String URL_INSERTSPHEADER    = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTDURATION    = config.Ip_address + config.ordersp_insert_duration;
     String URL_INSERTSAMTEMP     = config.Ip_address + config.ordersp_insert_samTemp;
-    String URL_INSERTTRXHEADER   = config.Ip_address + config.ordersp_insert_trxHeader;
     String URL_GETBRANDFRAME     = config.Ip_address + config.spframe_get_framebrand;
     String URL_GETFRAMEBYBRAND   = config.Ip_address + config.spframe_get_byframe;
     String URL_GETFRAMESEARCH    = config.Ip_address + config.spframe_get_searchframe;
