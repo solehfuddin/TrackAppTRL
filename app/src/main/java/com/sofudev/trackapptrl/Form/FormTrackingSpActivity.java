@@ -76,8 +76,8 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
 
     Calendar calendar;
 
-    Button btn_filterdate, btn_detail;
-    RippleView btnBack, btnFilter, btnSearch, rp_filterdate, ripple_btnDetail;
+    Button btn_filterdate, btn_detail, btnDownload;
+    RippleView btnBack, btnFilter, btnSearch, rp_filterdate, ripple_btnDetail, ripple_btndownload;
     BootstrapButton btnPrev, btnNext;
     UniversalFontTextView txtCounter, lbl_duration;
     AdvancedTextView  txt_status, txt_statusnull, txt_datestatus, txt_duration, txt_invoice;
@@ -346,7 +346,6 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
     private void showDialogTrack(int pos) {
         final UniversalFontTextView txt_jobNumber;
         final AdvancedTextView txt_tipe, txt_nama, txt_kondisi, txt_via;
-        final RippleView ripple_btndownload;
 
 //        final BootstrapLabel btn_lblfacet;
 
@@ -384,6 +383,7 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         btn_detail      = dialog.findViewById(R.id.form_dialogtracksp_btnDetail);
         ripple_btnDetail= dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDetail);
         ripple_btndownload = dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDownload);
+        btnDownload     = dialog.findViewById(R.id.form_dialogtracksp_btnDownload);
         final String noSp = listSp.get(pos).getNoSp();
         final String tipe = listSp.get(pos).getTipeSp();
 
@@ -1285,6 +1285,8 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                         txt_duration.setVisibility(View.GONE);
                         ripple_btnDetail.setEnabled(false);
                         btn_detail.setBackgroundColor(Color.parseColor("#58595e"));
+                        ripple_btndownload.setEnabled(false);
+                        btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
                     }
                     else {
                         if (status.equals("AR")){
@@ -1297,12 +1299,16 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                                 {
                                     txt_status.setBackgroundColor(Color.parseColor("#45ac2d"));
                                     txt_status.setTextColor(Color.WHITE);
+                                    ripple_btndownload.setEnabled(true);
+                                    btnDownload.setBackgroundColor(Color.parseColor("#45ac2d"));
 //                                    txt_status.setHintTextColor(Color.parseColor("#fff"));
                                 }
                                 else
                                 {
                                     txt_status.setBackgroundColor(Color.parseColor("#f90606"));
                                     txt_status.setTextColor(Color.WHITE);
+                                    ripple_btndownload.setEnabled(false);
+                                    btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
 //                                    txt_status.setHintTextColor(Color.parseColor("#fff"));
                                 }
                             }
