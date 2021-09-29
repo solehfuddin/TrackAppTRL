@@ -13,6 +13,9 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -25,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -125,6 +129,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
     private static final String[] tint_descr = new String[] {"None"};
     private static final String[] spin_province = new String[] {"Choose Province"};
 
+    ConstraintLayout constraintLayoutOpticName;
     ACProgressFlower loading;
     LovelyStandardDialog dialog;
     AlertDialog dialogUpload;
@@ -136,9 +141,14 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 txt_wrap, txt_phantose, txt_vertex, txt_segh, txt_addl, txt_addr, txt_lenstype, txt_lensdesc,
                 txt_infofacet, txt_phonenumber;
     TextView txt_coatdescr;
-    UniversalFontTextView txt_tinttitle;
+    UniversalFontTextView txt_tinttitle, txt_custname;
     CheckBox cb_sideR, cb_sideL;
     RelativeLayout rl_error;
+
+    View animateView;
+    RelativeLayout animateCard;
+    ImageView animateImg;
+    Boolean isUp;
 
     ImageView  img_error;
 
@@ -197,7 +207,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
         ripple_refraksidetail   = (RippleView) findViewById(R.id.form_lensorder_ripplerefraksidetail);
         btn_lenstype            = (RippleView) findViewById(R.id.form_lensorder_btnlenstype);
 
+        constraintLayoutOpticName = (ConstraintLayout) findViewById(R.id.form_lensorder_layoutopticname);
         txt_tinttitle           = (UniversalFontTextView) findViewById(R.id.form_lensorder_txttinttitle);
+        txt_custname            = (UniversalFontTextView) findViewById(R.id.form_lensorder_txtopticname);
         txt_orderNumber         = (BootstrapEditText) findViewById(R.id.form_lensorder_txtOrderNumber);
         txt_patientName         = (BootstrapEditText) findViewById(R.id.form_lensorder_txtPatientName);
         txt_orderInformation    = (BootstrapEditText) findViewById(R.id.form_lensorder_txtOrderInformation);
@@ -245,6 +257,13 @@ public class FormOrderLensActivity extends AppCompatActivity {
         expandableLayout_facetdetail    = (ExpandableLayout) findViewById(R.id.form_lensorder_expandlayoutfacetdetail);
         expandableLayout_refraksidetail = (ExpandableLayout) findViewById(R.id.form_lensorder_expandlayoutrefraksidetail);
 
+        animateView = findViewById(R.id.form_lensorder_rlopticname);
+        animateCard = findViewById(R.id.form_lensorder_handleopticname);
+        animateImg = findViewById(R.id.form_lensorder_imgopticname);
+
+        animateView.setVisibility(View.VISIBLE);
+        isUp = true;
+
         btn_done.setEnabled(false);
         spin_corridor.setAdapter(new ArrayAdapter<>(this, R.layout.spin_framemodel_item, carridor));
         spin_corridor.setEnabled(false);
@@ -269,6 +288,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
         chooseFrameModel();
         checkFacet();
+        spin_framemodel.setVisibility(View.VISIBLE);
 
         setAutoDecimal(txt_sphr);
         setAutoDecimal(txt_sphl);
@@ -279,6 +299,21 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
         txt_orderNumber.setEnabled(false);
         txt_patientName.requestFocus();
+
+        animateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isUp) {
+                    slideHide(animateView);
+                    animateImg.setImageResource(R.drawable.ic_expanded);
+                }
+                else {
+                    slideShow(animateView);
+                    animateImg.setImageResource(R.drawable.ic_collapse);
+                }
+                isUp = !isUp;
+            }
+        });
 
         spin_tintgroup.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -433,7 +468,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 //        txt_dbl.setEnabled(false);
 //        txt_hor.setEnabled(false);
 //        txt_ver.setEnabled(false);
-        spin_framemodel.setVisibility(View.GONE);
+//        spin_framemodel.setVisibility(View.GONE);
 
         txt_sphr.setLongClickable(false);
         txt_sphl.setLongClickable(false);
@@ -443,6 +478,30 @@ public class FormOrderLensActivity extends AppCompatActivity {
         txt_axsl.setLongClickable(false);
         txt_addr.setLongClickable(false);
         txt_addl.setLongClickable(false);
+    }
+
+    private void slideShow(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth(), 0, 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Show", Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideHide(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0, -view.getWidth(), 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
     }
 
     private void backToDashboard()
@@ -480,7 +539,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     txt_phantose.setEnabled(true);
                     txt_vertex.setEnabled(true);
                     txt_infofacet.setEnabled(true);
-                    spin_framemodel.setVisibility(View.VISIBLE);
+//                    spin_framemodel.setVisibility(View.VISIBLE);
 
 //                    txt_dbl.setEnabled(true);
 //                    txt_hor.setEnabled(true);
@@ -500,7 +559,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 //                    txt_dbl.setEnabled(false);
 //                    txt_hor.setEnabled(false);
 //                    txt_ver.setEnabled(false);
-                    spin_framemodel.setVisibility(View.GONE);
+//                    spin_framemodel.setVisibility(View.GONE);
 
 //                    txt_segh.setText("");
                     txt_wrap.setText("");
@@ -603,11 +662,14 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 salesName = bundle.getString("sales");
                 assert salesName != null;
                 Log.d("Sales Name orderlens : ", salesName);
+                txt_custname.setText(opticName);
+                constraintLayoutOpticName.setVisibility(View.VISIBLE);
             }
             else
             {
                 salesName = "";
                 Log.d("Sales Name orderlens : ", salesName);
+                constraintLayoutOpticName.setVisibility(View.GONE);
             }
 
             countOrderTemp(opticUsername,todayDate);
@@ -7643,6 +7705,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("categoryLens", categoryLens);
                             intent.putExtra("isSp", isSp);
                             intent.putExtra("sales", salesName);
+                            intent.putExtra("level", opticLevel);
+                            intent.putExtra("opticname", opticName);
                             Log.d("FORM ORDER : ", categoryLens);
 
                             /* Input SP Header */
@@ -7742,7 +7806,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            finish();
+                            //finish();
                         }
                         else
                         {
@@ -7832,6 +7896,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("categoryLens", categoryLens);
                             intent.putExtra("isSp", isSp);
                             intent.putExtra("sales", salesName);
+                            intent.putExtra("level", opticLevel);
+                            intent.putExtra("opticname", opticName);
                             Log.d("FORM ORDER : ", categoryLens);
 
                              /* Input SP Header */
@@ -7931,7 +7997,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            finish();
+                            //finish();
                         }
                     }
                     else if (object.names().get(0).equals("error"))
@@ -8169,6 +8235,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("categoryLens", categoryLens);
                             intent.putExtra("isSp", isSp);
                             intent.putExtra("sales", salesName);
+                            intent.putExtra("level", opticLevel);
+                            intent.putExtra("opticname", opticName);
                             Log.d("FORM ORDER : ", categoryLens);
 
                              /* Input SP Header */
@@ -8268,7 +8336,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            finish();
+                            //finish();
                         }
                         else
                         {
@@ -8359,6 +8427,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("categoryLens", categoryLens);
                             intent.putExtra("sales", salesName);
                             intent.putExtra("isSp", isSp);
+                            intent.putExtra("level", opticLevel);
+                            intent.putExtra("opticname", opticName);
 //                            Log.d("FORM ORDER : ", categoryLens);
 
                              /* Input SP Header */
@@ -8458,7 +8528,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            finish();
+                            //finish();
                         }
                     }
                 } catch (JSONException e) {

@@ -1,11 +1,13 @@
 package com.sofudev.trackapptrl.Form;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,20 +15,26 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +45,9 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -68,6 +78,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,6 +115,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     Adapter_framesp_qty adapter_framesp_qty;
     Adapter_sorting_onhand adapter_sorting_onhand;
 
+    private View custom;
+    ConstraintLayout constraintLayoutOpticName;
     LinearLayout progressLayout;
     ProgressWheel loader;
     ImageView imgFrameNotFound;
@@ -113,11 +126,17 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     EditText txtBarcode;
     ImageView imgNotfound, btnBack;
     LinearLayout linearEmpty;
-    CardView cardView;
+    CardView cardView, cardSummary;
     ScrollView scrollView;
     Button btnSave;
-    UniversalFontTextView txtPrice, txtDisc, txtShipping, txtTotalPrice;
+    UniversalFontTextView txtPrice, txtDisc, txtShipping, txtTotalPrice, txtOpticName;
+    UniversalFontTextView txtPriceBottom, txtDiscBottom, txtTotalBottom;
+    BootstrapEditText edDiscBottom;
     EditText txtSearch;
+    View animateView;
+    RelativeLayout animateCard;
+    ImageView animateImg;
+    Boolean isUp;
 
     List<ModelFrameSp> modelFrameSpList = new ArrayList<>();
     List<Data_sortingonhand> itemSorting = new ArrayList<>();
@@ -176,12 +195,38 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         txtTotalPrice = findViewById(R.id.form_spframe_txttotalprice);
         txtBarcode = findViewById(R.id.form_spframe_txtBarcode);
         txtTmp     = findViewById(R.id.form_spframe_txttmp);
+        txtOpticName = findViewById(R.id.form_spframe_txtopticname);
+        cardSummary = findViewById(R.id.form_spframe_cardsummary);
         cardView = findViewById(R.id.form_spframe_cardview);
         btnSave = findViewById(R.id.form_spframe_btncontinue);
+        constraintLayoutOpticName = findViewById(R.id.form_spframe_layoutopticname);
+        animateView = findViewById(R.id.form_spframe_rlopticname);
+        animateCard = findViewById(R.id.form_spframe_handleopticname);
+        animateImg = findViewById(R.id.form_spframe_imgopticname);
+
+        animateView.setVisibility(View.VISIBLE);
+        isUp = true;
+
         btnSave.setOnClickListener(this);
         btnPilihFrame.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         cardView.setOnClickListener(this);
+        cardSummary.setVisibility(View.GONE);
+
+        animateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isUp) {
+                    slideHide(animateView);
+                    animateImg.setImageResource(R.drawable.ic_expanded);
+                }
+                else {
+                    slideShow(animateView);
+                    animateImg.setImageResource(R.drawable.ic_collapse);
+                }
+                isUp = !isUp;
+            }
+        });
 
         flagPayment = 1;
 
@@ -251,6 +296,30 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         recyclerItemFrame.setAdapter(adapter_add_framesp);
     }
 
+    private void slideShow(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth(), 0, 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Show", Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideHide(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0, -view.getWidth(), 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
+    }
+
     private void getIdOptic() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
@@ -280,11 +349,13 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             headerImage    = bundle.getString("header_image");
             headerSignedPath = bundle.getString("header_signedpath");
 
+            txtOpticName.setText(opticName);
 //            getSp();
             getOraId(opticId);
         }
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -348,10 +419,209 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 }
                 else
                 {
-                    saveOrder();
+//                    saveOrder();
+                    custom = LayoutInflater.from(this).inflate(R.layout.bottom_dialog_payment_sp, null);
+
+                    UniversalFontComponents.init(this);
+
+                    txtPriceBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemprice);
+                    txtDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemdisc);
+                    txtTotalBottom = custom.findViewById(R.id.bottom_dialog_paysp_txttotalprice);
+                    Spinner spinPilihBayarBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtPembayaran);
+                    Spinner spinCicilanBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinCicilan);
+                    Spinner spinMulaiCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinMulaiCicilan);
+                    LinearLayout linearTitleCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearTitleCicilan);
+                    LinearLayout linearContentCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearContentCicilan);
+                    BootstrapEditText edJmlDpBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtJumlahDp);
+                    edDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtDiskon);
+                    RippleView btnSave = custom.findViewById(R.id.bottom_dialog_paysp_btndetail);
+
+                    BottomDialog bottomDialog = new BottomDialog.Builder(this)
+                            .setTitle("Payment Info")
+                            .setCustomView(custom)
+                            .build();
+
+                    choosePaymentSp(spinPilihBayarBottom, linearTitleCicilBottom, linearContentCicilBottom);
+                    setDp(edJmlDpBottom);
+                    setDisc(edDiscBottom);
+                    chooseDurasiCicil(spinCicilanBottom);
+                    chooseStartInstallment(spinMulaiCicilBottom);
+
+                    btnSave.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            saveOrder();
+                        }
+                    });
+
+                    calcPrice();
+
+                    bottomDialog.show();
                 }
                 break;
         }
+    }
+
+    private void calcPrice() {
+        txtPriceBottom.setText("Rp. " + CurencyFormat(String.valueOf(totalPrice)));
+        headerDisc = edDiscBottom.getText().toString().length() > 0
+                ? Double.parseDouble(edDiscBottom.getText().toString()) >= 90 ? "0" : edDiscBottom.getText().toString()
+                : "0";
+        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+        txtDiscBottom.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
+        totalAllPrice = totalPrice - totalDisc;
+        txtTotalBottom.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
+    }
+
+    private void choosePaymentSp(final Spinner spinPilihPembayaran, final LinearLayout linearTitleCicilan,
+                                 final LinearLayout linearContentCicilan) {
+        final String [] model = getResources().getStringArray(R.array.payment_sp_array);
+        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(this, R.layout.spin_framemodel_item, model);
+        spinPilihPembayaran.setAdapter(spin_adapter);
+
+        spinPilihPembayaran.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (spinPilihPembayaran.getSelectedItem().toString().equals("Cicilan"))
+                {
+                    linearTitleCicilan.setVisibility(View.VISIBLE);
+                    linearContentCicilan.setVisibility(View.VISIBLE);
+//                    spinMulaiCicilan.setEnabled(true);
+//                    txtCicilan.setEnabled(true);
+                }
+                else
+                {
+                    linearTitleCicilan.setVisibility(View.GONE);
+                    linearContentCicilan.setVisibility(View.GONE);
+//                    spinMulaiCicilan.setEnabled(false);
+//                    txtCicilan.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setDp(final BootstrapEditText edJmlDp){
+        edJmlDp.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().equals(current)) {
+                    edJmlDp.removeTextChangedListener(this);
+
+                    Locale local = new Locale("id", "id");
+                    String replaceable = String.format("[Rp,.\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String cleanString = editable.toString().replaceAll(replaceable,
+                            "");
+
+                    double parsed;
+                    try {
+                        parsed = Double.parseDouble(cleanString);
+                    } catch (NumberFormatException e) {
+                        parsed = 0.00;
+                    }
+
+                    NumberFormat formatter = NumberFormat
+                            .getCurrencyInstance(local);
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setParseIntegerOnly(true);
+                    String formatted = formatter.format((parsed));
+
+                    String replace = String.format("[Rp\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String clean = formatted.replaceAll(replace, "");
+
+                    current = formatted;
+                    edJmlDp.setText(clean);
+                    edJmlDp.setSelection(clean.length());
+                    edJmlDp.addTextChangedListener(this);
+                }
+            }
+        });
+    }
+
+    private void setDisc(final BootstrapEditText edDiscount){
+        edDiscount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                edDiscount.removeTextChangedListener(this);
+                if (!editable.toString().equals(""))
+                {
+                    String data = edDiscount.getText().toString().replace(".", "");
+
+                    if(edDiscount.getText().length() > 2)
+                    {
+                        double amount = Double.valueOf(data);
+
+                        amount = amount / 10;
+                        edDiscount.setText(String.valueOf(amount));
+                        edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                    }
+                    else
+                    {
+                        edDiscount.setText(data);
+                    }
+
+                    edDiscount.setSelection(edDiscount.length());
+                }
+                calcPrice();
+                edDiscount.addTextChangedListener(this);
+            }
+        });
+    }
+
+    private void chooseDurasiCicil(final Spinner spinCicilan)
+    {
+//        final int [] durasi = getResources().getIntArray(R.array.durasi_cicilan);
+        final String [] durasi = new String[] {"1", "2", "3"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spin_framemodel_item, durasi);
+        spinCicilan.setAdapter(adapter);
+    }
+
+    private void chooseStartInstallment(final Spinner spinMulaiCicilan) {
+        final String [] model = getResources().getStringArray(R.array.month_array);
+        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(this, R.layout.spin_framemodel_item, model);
+        spinMulaiCicilan.setAdapter(spin_adapter);
+
+        spinMulaiCicilan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+//                spinMulaiCicilan.setsele(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void saveOrder() {
@@ -382,7 +652,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             dataFrameItem.setFrameName(modelFrameSpList.get(i).getProductName());
             dataFrameItem.setFrameQty(modelFrameSpList.get(i).getProductQty());
             dataFrameItem.setFrameRealPrice(modelFrameSpList.get(i).getProductPrice());
-            dataFrameItem.setFrameDisc(modelFrameSpList.get(i).getProductDisc());
+//            dataFrameItem.setFrameDisc(modelFrameSpList.get(i).getProductDisc());
+            dataFrameItem.setFrameDisc(Integer.parseInt(headerDisc));
             dataFrameItem.setFrameDiscPrice(modelFrameSpList.get(i).getNewProductDiscPrice());
 
             Log.d("Diskon : ", String.valueOf(modelFrameSpList.get(i).getProductDisc()));

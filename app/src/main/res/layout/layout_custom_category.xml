@@ -39,7 +39,7 @@
                 tools:ignore="DisableBaselineAlignment">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout6"
+                    android:id="@+id/layout_custom_lensorder"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -68,13 +68,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout7"
+                    android:id="@+id/layout_custom_stockorder"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:orientation="vertical"
-                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"
+                    app:layout_constraintStart_toEndOf="@+id/layout_custom_lensorder"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="UseCompoundDrawables">
 
@@ -99,13 +99,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout8"
+                    android:id="@+id/layout_custom_sporder"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:orientation="vertical"
-                    app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+                    app:layout_constraintEnd_toStartOf="@+id/layout_custom_stockorder"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="UseCompoundDrawables">
 
@@ -130,7 +130,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout9"
+                    android:id="@+id/layout_custom_onhand"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                 tools:ignore="DisableBaselineAlignment">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout10"
+                    android:id="@+id/layout_custom_ordertrack"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout11"
+                    android:id="@+id/layout_custom_deliverytracking"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout12"
+                    android:id="@+id/layout_custom_sptracking"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout13"
+                    android:id="@+id/layout_custom_more"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"

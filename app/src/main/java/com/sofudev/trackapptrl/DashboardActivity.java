@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.text.InputType;
@@ -45,12 +47,14 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -108,7 +112,11 @@ import com.sofudev.trackapptrl.Fragment.BannerFragment;
 import com.sofudev.trackapptrl.Fragment.CategoryFragment;
 import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
+import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
+import com.sofudev.trackapptrl.Fragment.OtherProductFragment;
+import com.sofudev.trackapptrl.Fragment.PromoBannerFragment;
+import com.sofudev.trackapptrl.Fragment.PromoFrameFragment;
 import com.sofudev.trackapptrl.Fragment.SpecialProductFragment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
@@ -165,7 +173,7 @@ public class DashboardActivity extends AppCompatActivity
     private String URLSETSICCODE  = config.Ip_address + config.set_sic_code;
     private String URLVERIFYSICCODE = config.Ip_address + config.verify_siccode;
     private String URLSTATUSUSER  = config.Ip_address + config.status_user;
-//    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
+    //    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
     String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
     String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
     String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
@@ -197,6 +205,9 @@ public class DashboardActivity extends AppCompatActivity
     RippleView pinBtn1, pinBtn2, pinBtn3, pinBtn4, pinBtn5, pinBtn6, pinBtn7, pinBtn8, pinBtn9, pinBtn0;
     List<Integer> pinnumber = new ArrayList<>();
 
+    CardView cardTop;
+    ImageView imgTop;
+    NestedScrollView scrollView;
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
     Button btn_profile, btn_topup;
     public BootstrapCircleThumbnail img_profile;
@@ -209,6 +220,7 @@ public class DashboardActivity extends AppCompatActivity
     Boolean isHide = true;
     int sTotal;
     int smsFlag = 0;
+    private int oldScrollYPostion = 0;
     LoginSession session;
 
     WishlistHelper wishlistHelper;
@@ -243,11 +255,34 @@ public class DashboardActivity extends AppCompatActivity
         txt_countCart = findViewById(R.id.appbardashboard_badge_cart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         searchViews = (MaterialSearchView) findViewById(R.id.dashboard_search);
+        cardTop = findViewById(R.id.appbardashboard_cartTop);
+        imgTop = findViewById(R.id.appbardashboard_buttonTop);
+        scrollView = findViewById(R.id.dashboard_scrollview);
         session = new LoginSession(getApplicationContext());
 //        bannerSlider = findViewById(R.id.layout_custom_mybanner);
 //        myDots       = findViewById(R.id.layout_custom_mydots);
 //        mLinearLayout = findViewById(R.id.layout_custom_pagesContainer);
 
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if (scrollView.getScrollY() > oldScrollYPostion)
+                {
+                    cardTop.setVisibility(View.VISIBLE);
+                }
+                else if (scrollView.getScrollY() < oldScrollYPostion || scrollView.getScrollY() <= oldScrollYPostion)
+                {
+                    cardTop.setVisibility(View.INVISIBLE);
+                }
+                oldScrollYPostion = scrollView.getScrollY();
+            }
+        });
+        imgTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scrollView.smoothScrollTo(0, 0, 2500);
+            }
+        });
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -330,11 +365,17 @@ public class DashboardActivity extends AppCompatActivity
         navdash_id.setText(data1);
         getUserDetailDB(data1);
 
-        homeProduk();
-//        showBanner();
-//        showBalance();
-//        showCategory();
-//        showSpesialProduk();
+//        homeProduk();
+        isHomeActive();
+        showBanner();
+        showBalance();
+        showCategory();
+        showPromoFrame();
+        showSpesialProduk();
+        showAnotherProduk();
+        showMoreFrame();
+        showPromoBanner();
+        frameProduk();
 //        setupSlider();
 
         dt_time = new Date();
@@ -572,7 +613,8 @@ public class DashboardActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-            homeProduk();
+            isHomeActive();
+//            homeProduk();
 //            showBanner();
 //            showBalance();
 //            showCategory();
@@ -617,33 +659,33 @@ public class DashboardActivity extends AppCompatActivity
 
             return true;
         }
-            else if (id == R.id.nav_orderhistory)
-            {
-                if (level_user != null) {
-                    if (Integer.parseInt(level_user) == 0) {
-                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                        intent.putExtra("idparty", navdash_id.getText().toString());
-                        intent.putExtra("user_info", username);
-                        intent.putExtra("level", level_user);
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                        intent.putExtra("sales", username);
-                        intent.putExtra("level", level_user);
-                        startActivity(intent);
-                    }
-                }
-                else
-                {
+        else if (id == R.id.nav_orderhistory)
+        {
+            if (level_user != null) {
+                if (Integer.parseInt(level_user) == 0) {
                     Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
                     intent.putExtra("idparty", navdash_id.getText().toString());
                     intent.putExtra("user_info", username);
                     intent.putExtra("level", level_user);
                     startActivity(intent);
                 }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                    intent.putExtra("sales", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
             }
+            else
+            {
+                Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                intent.putExtra("idparty", navdash_id.getText().toString());
+                intent.putExtra("user_info", username);
+                intent.putExtra("level", level_user);
+                startActivity(intent);
+            }
+        }
         else if (id == R.id.nav_orderhistoryFrame)
         {
             if (level_user != null)
@@ -680,65 +722,47 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("username", username);
             startActivity(intent);
         }
-            //Submenu Options click
-            else if (id == R.id.nav_orderdashboard)
+        //Submenu Options click
+        else if (id == R.id.nav_orderdashboard)
+        {
+            Intent intent = new Intent(getApplicationContext(), FormOrderDashboardActivity.class);
+            intent.putExtra("idparty", navdash_id.getText().toString());
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_ordertrack)
+        {
+            if (level_user != null)
             {
-                Intent intent = new Intent(getApplicationContext(), FormOrderDashboardActivity.class);
-                intent.putExtra("idparty", navdash_id.getText().toString());
-                startActivity(intent);
-            }
-            else if (id == R.id.nav_ordertrack)
-            {
-                if (level_user != null)
-                {
-                    if (Integer.parseInt(level_user) == 0)
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
-                        intent.putExtra("idparty", navdash_id.getText().toString());
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
-                        intent.putExtra("cond", "OTRACK");
-                        intent.putExtra("sales", username);
-                        startActivity(intent);
-                    }
-                }
-                else
+                if (Integer.parseInt(level_user) == 0)
                 {
                     Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
                     intent.putExtra("idparty", navdash_id.getText().toString());
                     startActivity(intent);
                 }
-
-                drawer.closeDrawers();
-                return true;
-            }
-            else if (id == R.id.nav_deliverytrack)
-            {
-                if (level_user != null)
-                {
-                    if (Integer.parseInt(level_user) == 0)
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
-                        intent.putExtra("username", navdash_username.getText().toString());
-                        intent.putExtra("activetitle", sActive);
-                        intent.putExtra("pasttitle", sPast);
-                        intent.putExtra("totalprocess", String.valueOf(sTotal));
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
-                        intent.putExtra("cond", "DELIVTRACK");
-                        intent.putExtra("sales", username);
-                        startActivity(intent);
-                    }
-                }
                 else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "OTRACK");
+                    intent.putExtra("sales", username);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
+                intent.putExtra("idparty", navdash_id.getText().toString());
+                startActivity(intent);
+            }
+
+            drawer.closeDrawers();
+            return true;
+        }
+        else if (id == R.id.nav_deliverytrack)
+        {
+            if (level_user != null)
+            {
+                if (Integer.parseInt(level_user) == 0)
                 {
                     Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
                     intent.putExtra("username", navdash_username.getText().toString());
@@ -747,79 +771,81 @@ public class DashboardActivity extends AppCompatActivity
                     intent.putExtra("totalprocess", String.valueOf(sTotal));
                     startActivity(intent);
                 }
-
-                return true;
+                else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "DELIVTRACK");
+                    intent.putExtra("sales", username);
+                    startActivity(intent);
+                }
             }
-
-            else if (id == R.id.nav_orderlens)
+            else
             {
-                statusUser(username, 0);
-            }
-
-            else if (id == R.id.nav_orderOnHand)
-            {
-                Intent intent = new Intent(getApplicationContext(), OnHandActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
+                intent.putExtra("username", navdash_username.getText().toString());
+                intent.putExtra("activetitle", sActive);
+                intent.putExtra("pasttitle", sPast);
+                intent.putExtra("totalprocess", String.valueOf(sTotal));
                 startActivity(intent);
             }
 
-            else if (id == R.id.nav_orderSp)
-            {
-                Intent intent = new Intent(getApplicationContext(), FormOrderSpActivity.class);
-                intent.putExtra("idparty", navdash_id.getText().toString());
-                intent.putExtra("username", username);
-                startActivity(intent);
+            return true;
+        }
+
+        else if (id == R.id.nav_orderlens)
+        {
+            statusUser(username, 0);
+        }
+
+        else if (id == R.id.nav_orderOnHand)
+        {
+            Intent intent = new Intent(getApplicationContext(), OnHandActivity.class);
+            startActivity(intent);
+        }
+
+        else if (id == R.id.nav_orderSp)
+        {
+            Intent intent = new Intent(getApplicationContext(), FormOrderSpActivity.class);
+            intent.putExtra("idparty", navdash_id.getText().toString());
+            intent.putExtra("username", username);
+            startActivity(intent);
 
 //                Intent intent = new Intent(getApplicationContext(), FormSpFrameActivity.class);
 //                startActivity(intent);
-            }
+        }
 
-            else if (id == R.id.nav_trackingSp)
-            {
-                if (level_user != null) {
-                    if (Integer.parseInt(level_user) == 1) {
-                        Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
-                        intent.putExtra("username", username);
-                        intent.putExtra("level", 1);
+        else if (id == R.id.nav_trackingSp)
+        {
+            if (level_user != null) {
+                if (Integer.parseInt(level_user) == 1) {
+                    Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("level", 1);
 
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
-                        intent.putExtra("username", navdash_username.getText().toString());
-                        intent.putExtra("level", 0);
-
-                        startActivity(intent);
-                    }
-                }
-            }
-
-            else if (id == R.id.nav_orderbulk)
-            {
-                statusUser(username, 1);
-            }
-
-            else if (id == R.id.nav_orderhistorybulk)
-            {
-                if (level_user != null)
-                {
-                    if (level_user.equals("0"))
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                        intent.putExtra("user_info", navdash_id.getText().toString());
-                        intent.putExtra("username", username);
-                        intent.putExtra("level", level_user);
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                        intent.putExtra("sales", username);
-                        intent.putExtra("level", level_user);
-                        startActivity(intent);
-                    }
+                    startActivity(intent);
                 }
                 else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
+                    intent.putExtra("username", navdash_username.getText().toString());
+                    intent.putExtra("level", 0);
+
+                    startActivity(intent);
+                }
+            }
+        }
+
+        else if (id == R.id.nav_orderbulk)
+        {
+            statusUser(username, 1);
+        }
+
+        else if (id == R.id.nav_orderhistorybulk)
+        {
+            if (level_user != null)
+            {
+                if (level_user.equals("0"))
                 {
                     Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
                     intent.putExtra("user_info", navdash_id.getText().toString());
@@ -827,7 +853,23 @@ public class DashboardActivity extends AppCompatActivity
                     intent.putExtra("level", level_user);
                     startActivity(intent);
                 }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                    intent.putExtra("sales", username);
+                    intent.putExtra("level", level_user);
+                    startActivity(intent);
+                }
             }
+            else
+            {
+                Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                intent.putExtra("user_info", navdash_id.getText().toString());
+                intent.putExtra("username", username);
+                intent.putExtra("level", level_user);
+                startActivity(intent);
+            }
+        }
         else if (id == R.id.nav_options)
         {
             try {
@@ -841,21 +883,21 @@ public class DashboardActivity extends AppCompatActivity
 
             return true;
         }
-            //Submenu Options click
-            else if (id == R.id.nav_optionsuser) {
-                Intent intent = new Intent(getApplicationContext(), FormUACActivity.class);
-                startActivity(intent);
+        //Submenu Options click
+        else if (id == R.id.nav_optionsuser) {
+            Intent intent = new Intent(getApplicationContext(), FormUACActivity.class);
+            startActivity(intent);
 
-                drawer.closeDrawers();
-                return true;
-            }
-            else if (id == R.id.nav_optionsreport) {
-                Intent intent = new Intent(getApplicationContext(), ReportSalesActivity.class);
-                startActivity(intent);
+            drawer.closeDrawers();
+            return true;
+        }
+        else if (id == R.id.nav_optionsreport) {
+            Intent intent = new Intent(getApplicationContext(), ReportSalesActivity.class);
+            startActivity(intent);
 
-                drawer.closeDrawers();
-                return true;
-            }
+            drawer.closeDrawers();
+            return true;
+        }
 
         else if (id == R.id.nav_logout)
         {
@@ -913,7 +955,7 @@ public class DashboardActivity extends AppCompatActivity
                 e.printStackTrace();
             }*/
 
-            frameProduk();
+            isFrameActive();
 
             //return true;
         }
@@ -1626,7 +1668,7 @@ public class DashboardActivity extends AppCompatActivity
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               dialog.dismiss();
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -2521,7 +2563,7 @@ public class DashboardActivity extends AppCompatActivity
                             phone_pincode = pin;
 
                             String pesan = phone_number + ",Terima kasih telah melengkapi data " + data +
-                                            ". Masukkan kode = " + pin + " untuk mengaktifkan user anda.";
+                                    ". Masukkan kode = " + pin + " untuk mengaktifkan user anda.";
 
                             String enc_pincode = MCrypt.bytesToHex(mCrypt.encrypt(phone_pincode));
 
@@ -2895,18 +2937,6 @@ public class DashboardActivity extends AppCompatActivity
         finish();
     }
 
-//    private void homeProduk() {
-//        HomeFragment homeFragment = new HomeFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("activity", "dashboard");
-//        homeFragment.setArguments(bundle);
-//
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-////        fragmentTransaction.replace(R.id.appbar_dashboard_fragment_container, homeFragment);
-//        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
-//        fragmentTransaction.commit();
-//    }
-
     private void homeProduk() {
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
@@ -2914,41 +2944,90 @@ public class DashboardActivity extends AppCompatActivity
         homeFragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbar_dashboard_fragment_container, homeFragment);
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
         fragmentTransaction.commit();
     }
 
-//    private void showBanner() {
-//        BannerFragment bannerFragment = new BannerFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbardashboard_header, bannerFragment, "home");
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showBalance() {
-//        BalanceFragment balanceFragment = new BalanceFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbardashboard_balance, balanceFragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showCategory() {
-//        CategoryFragment categoryFragment = new CategoryFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbardashboard_category, categoryFragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showSpesialProduk() {
-//        SpecialProductFragment fragment = new SpecialProductFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("activity", "dashboard");
-//        fragment.setArguments(bundle);
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbardashboard_special_product, fragment);
-//        fragmentTransaction.commit();
-//    }
+    private void showBanner() {
+        BannerFragment bannerFragment = new BannerFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_header, bannerFragment, "home");
+        fragmentTransaction.commit();
+    }
+
+    private void showBalance() {
+        getSaldoDepo(username);
+
+        BalanceFragment balanceFragment = new BalanceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        bundle.putString("nominal", nominal);
+        bundle.putString("user_info", data1);
+        bundle.putString("username", data);
+        balanceFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_balance, balanceFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showCategory() {
+        CategoryFragment categoryFragment = new CategoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        bundle.putString("partySiteId", data1);
+        bundle.putString("username", data);
+        categoryFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_category, categoryFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showPromoFrame() {
+        PromoFrameFragment fragment = new PromoFrameFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_promo_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showSpesialProduk() {
+        SpecialProductFragment fragment = new SpecialProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_special_product, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showAnotherProduk() {
+        OtherProductFragment fragment = new OtherProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_another_product, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showMoreFrame() {
+        MoreFrameFragment fragment = new MoreFrameFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_other_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showPromoBanner() {
+        PromoBannerFragment fragment = new PromoBannerFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_promo_banner, fragment);
+        fragmentTransaction.commit();
+    }
 
     private void frameProduk() {
         NewFrameFragment newFrameFragment = new NewFrameFragment();
@@ -2956,8 +3035,22 @@ public class DashboardActivity extends AppCompatActivity
         bundle.putString("activity", "dashboard");
         newFrameFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment, "newframe");
+        fragmentTransaction.replace(R.id.appbardashboard_fragment_container, newFrameFragment, "newframe");
         fragmentTransaction.commit();
+    }
+
+    private void isHomeActive(){
+        NestedScrollView nestedMain = findViewById(R.id.dashboard_scrollview);
+        FrameLayout fmcontainer = findViewById(R.id.appbardashboard_fragment_container);
+        nestedMain.setVisibility(View.VISIBLE);
+        fmcontainer.setVisibility(View.GONE);
+    }
+
+    private void isFrameActive(){
+        NestedScrollView nestedMain = findViewById(R.id.dashboard_scrollview);
+        FrameLayout fmcontainer = findViewById(R.id.appbardashboard_fragment_container);
+        nestedMain.setVisibility(View.GONE);
+        fmcontainer.setVisibility(View.VISIBLE);
     }
 
     public void enableBroadcastReceiver(Context context)

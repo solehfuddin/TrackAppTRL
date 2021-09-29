@@ -264,15 +264,15 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             txt_tinting.setText("");
         }
 
-        if (order_facettrl.equals("F") | order_facettrl.equals("N"))
-        {
-            btn_lblfacet.setText("NON FACET");
-            btn_lblfacet.setBootstrapBrand(DefaultBootstrapBrand.INFO);
-        }
-        else
+        if (order_facettrl.equals("G"))
         {
             btn_lblfacet.setText("FACET TIMUR RAYA");
             btn_lblfacet.setBootstrapBrand(DefaultBootstrapBrand.DANGER);
+        }
+        else
+        {
+            btn_lblfacet.setText("NON FACET");
+            btn_lblfacet.setBootstrapBrand(DefaultBootstrapBrand.INFO);
         }
 
         if (order_status.equals("IMPT"))

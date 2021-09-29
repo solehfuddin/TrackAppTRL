@@ -34,33 +34,33 @@
                     android:textSize="22dp" />
 
                 <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <RelativeLayout
-                    android:id="@+id/relative_layout_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/appbardashboard_btn_wishlist"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_margin="10.5dp"
-                        android:src="@drawable/ic_favorite_white"/>
-                </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/relative_layout_item_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/appbardashboard_badge_wishlist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@id/relative_layout_item_count"
-                    android:background="@android:drawable/ic_notification_overlay"
-                    android:text=" 0 "
-                    android:textColor="#FFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold"/>
-            </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/appbardashboard_btn_wishlist"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="10.5dp"
+                            android:src="@drawable/ic_favorite_white"/>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/appbardashboard_badge_wishlist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/relative_layout_item_count"
+                        android:background="@android:drawable/ic_notification_overlay"
+                        android:text=" 0 "
+                        android:textColor="#FFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -100,77 +100,164 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/appbardashboard_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/dashboard_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bggray"
         android:layout_marginTop="56dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/appbarmain_fragment_container"
+                android:id="@+id/appbardashboard_header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-        </LinearLayout>
+                android:layout_height="210dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:orientation="vertical">-->
+            <FrameLayout
+                android:id="@+id/appbardashboard_balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_header"/>
 
-<!--            <FrameLayout-->
-<!--                android:id="@+id/appbardashboard_header"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="210dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+            <FrameLayout
+                android:id="@+id/appbardashboard_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_balance"/>
 
-<!--            <FrameLayout-->
-<!--                android:id="@+id/appbardashboard_balance"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="-10dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_header"/>-->
+            <include
+                android:id="@+id/appbardashboard_iklan1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/layout_promo_iklan1"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_category"/>
 
-<!--            <FrameLayout-->
-<!--                android:id="@+id/appbardashboard_category"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_balance"/>-->
+            <FrameLayout
+                android:id="@+id/appbardashboard_promo_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_iklan1" />
 
-<!--            <FrameLayout-->
-<!--                android:id="@+id/appbardashboard_special_product"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_category" />-->
+            <FrameLayout
+                android:id="@+id/appbardashboard_special_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_promo_frame" />
 
-<!--            <FrameLayout-->
-<!--                android:id="@+id/appbarmain_fragment_container"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:visibility="visible"-->
-<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/appbardashboard_header" />-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <FrameLayout
+                android:id="@+id/appbardashboard_another_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_special_product" />
+
+            <include
+                android:id="@+id/appbardashboard_iklan2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/layout_promo_iklan2"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_another_product"/>
+
+            <FrameLayout
+                android:id="@+id/appbardashboard_other_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_iklan2" />
+
+            <include
+                android:id="@+id/appbardashboard_see_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/see_more_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_other_frame"/>
+
+            <FrameLayout
+                android:id="@+id/appbardashboard_promo_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_special_product" />
+
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/appbarmain_fragment_container"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:visibility="visible"-->
+            <!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/appbardashboard_header" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/appbardashboard_cartTop"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="@dimen/keyline_1_minus_8dp"
+        android:layout_marginRight="@dimen/keyline_1_minus_8dp"
+        app:layout_anchor="@+id/dashboard_scrollview"
+        app:cardCornerRadius="17dp"
+        app:cardElevation="5dp"
+        app:layout_anchorGravity="bottom|end">
+
+        <ImageView
+            android:id="@+id/appbardashboard_buttonTop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:src="@drawable/ic_up_arrow"/>
+    </androidx.cardview.widget.CardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

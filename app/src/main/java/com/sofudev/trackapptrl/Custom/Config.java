@@ -27,6 +27,8 @@ public class Config {
     public String set_sic_code = "index.php/Android_Main/setSicCode";
     public String verify_siccode = "index.php/Android_Main/verifySicCode";
     public String status_user  = "index.php/Android_Main/cekStatusUser";
+    public String get_user_byid= "index.php/Android_Main/getUserById";
+    public String get_user_bycustname= "index.php/Android_Main/getUserByCustname";
 
     /* Area Dashboard*/
     public String dashboard_user_detail = "index.php/android_dashboard/userDetail";
@@ -37,6 +39,7 @@ public class Config {
     public String dashboard_product_home= "index.php/android_dashboard/show_productHome";
     public String dashboard_hot_sale    = "index.php/android_dashboard/show_hotsale";
     public String dashboard_brand_random = "index.php/Android_dashboard/show_brandrandom";
+    public String dashboard_more_frame  = "index.php/Android_dashboard/show_moreframe";
     public String dashboard_update_offline = "index.php/android_main/updateLogout";
     public String dashboard_check_userinfo = "index.php/android_dashboard/checkUserDetail";
     public String dashboard_update_phone   = "index.php/android_dashboard/updateMobileNumber";
@@ -47,6 +50,8 @@ public class Config {
     public String dashboard_search_product = "index.php/android_dashboard/searchProduct";
     public String dashboard_search_producttitle = "index.php/android_dashboard/searchProductTitle";
     public String dashboard_getpromo_banner= "index.php/Android_dashboard/getPromoBanner";
+    public String dashboard_another_product= "index.php/Android_Dashboard/show_anotherproduct";
+    public String dashboard_popular_frame  = "index.php/Android_Dashboard/show_popularframe";
 
     /* Area Profile */
     public String profile_user_detail       = "index.php/android_profile/userProfileDetail";

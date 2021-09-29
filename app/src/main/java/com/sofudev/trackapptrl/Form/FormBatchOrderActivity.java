@@ -6,17 +6,20 @@ import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -104,18 +107,23 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String URL_INSERTDURATION       = config.Ip_address + config.ordersp_insert_duration;
     String URL_INSERTSAMTEMP        = config.Ip_address + config.ordersp_insert_samTemp;
 
+    ConstraintLayout constraintLayoutOpticName;
     ACProgressCustom loading;
     ImageView btnBack, btnAddItem;
     BootstrapEditText txtlenstype, txtlensdescription;
     RippleView btnlenstype, btnSph, btnCyl, btnAdd;
     ScalableLayout scalableCourier;
     UniversalFontTextView txtSph, txtCyl, txtAdd, txtSubtotalPrice, txtSubtotalDisc, txtShippingPrice, txtTotalPrice,
-        txtTitleShip, txtInfoShipping;
+        txtTitleShip, txtInfoShipping, txtOpticName;
     RecyclerView recyclerView, recyclerCourier;
     CardView cardView, cardContinue;
 //    Spinner spinShipping;
     LinearLayout linearPayment, linearLayout;
     Button btnContinue;
+    View animateView;
+    RelativeLayout animateCard;
+    ImageView animateImg;
+    Boolean isUp;
 
     ListView listPayment;
     RippleView btnChoosePayment;
@@ -155,14 +163,17 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_batch_order);
 
-        UniversalFontComponents.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
         lensPartaiHelper = LensPartaiHelper.getINSTANCE(getApplicationContext());
         lensPartaiHelper.open();
+
+        constraintLayoutOpticName = findViewById(R.id.form_batchorder_layoutopticname);
+        txtOpticName = findViewById(R.id.form_batchorder_txtopticname);
 
         getIdOptic();
         if (idSp.equals("0"))
@@ -203,6 +214,12 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         linearPayment = findViewById(R.id.form_batchorder_linearPayment);
         linearLayout = findViewById(R.id.form_batchorder_linearLayout);
         btnContinue = findViewById(R.id.form_batchorder_btncontinue);
+        animateView = findViewById(R.id.form_batchorder_rlopticname);
+        animateCard = findViewById(R.id.form_batchorder_handleopticname);
+        animateImg = findViewById(R.id.form_batchorder_imgopticname);
+
+        animateView.setVisibility(View.VISIBLE);
+        isUp = true;
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,6 +232,21 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogAllLens();
+            }
+        });
+
+        animateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isUp) {
+                    slideHide(animateView);
+                    animateImg.setImageResource(R.drawable.ic_expanded);
+                }
+                else {
+                    slideShow(animateView);
+                    animateImg.setImageResource(R.drawable.ic_collapse);
+                }
+                isUp = !isUp;
             }
         });
 
@@ -1428,11 +1460,15 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 salesName = bundle.getString("sales");
                 assert salesName != null;
                 Log.d("Sales Name orderlens : ", salesName);
+
+                txtOpticName.setText(opticName.replace(',', ' '));
+                constraintLayoutOpticName.setVisibility(View.VISIBLE);
             }
             else
             {
                 salesName = "";
                 Log.d("Sales Name orderlens : ", salesName);
+                constraintLayoutOpticName.setVisibility(View.GONE);
             }
 
             getPaymentOrNot(opticFlag);
@@ -1441,6 +1477,30 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         opticName   = opticName + ",";
 
         //Toast.makeText(getApplicationContext(), opticUsername, Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideShow(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth(), 0, 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Show", Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideHide(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0, -view.getWidth(), 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
     }
 
     private void getAllPayment()

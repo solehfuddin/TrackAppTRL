@@ -6,15 +6,18 @@ import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -94,23 +97,29 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_INSERTSAMTEMP  = config.Ip_address + config.ordersp_insert_samTemp;
     String URL_INSERTDURATION = config.Ip_address + config.ordersp_insert_duration;
 
+    ConstraintLayout constraintLayoutOpticName;
     ACProgressCustom loading;
     Button btnCheckout;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceDiscSale ,txtPriceFacet, txtPriceTinting, txtPriceShipping,
-                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping;
+                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping, txtOpticName;
     ScalableLayout scalableCourier;
     RecyclerView recyclerCourier;
     ImageView imgLensModel;
     ListView listPayment;
     CardView cardPayment;
     LinearLayout linearFlashSale;
+    View animateView;
+    RelativeLayout animateCard;
+    ImageView animateImg;
+    Boolean isUp;
+
     String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia, headerDisc,
             headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus, headerImage,
             headerSignedPath;
     String orderNumber, opticUsername, hargaLensa, deskripsiLensa, diskonLensa, facetLensa, tintingLensa, totalPrice,
             tempTotal, cityOptic, provinceOptic ,itemWeight, lensCategory, date1, date2, addTemp, flagShipping, patientName, idParty,
             shippingMethod, kodeBilling, duration, expDate, ownerPhone, memberFlag, opticName, opticAddress, phoneNumber,
-            note, lenstype, lensdesc, opticFlag;
+            note, lenstype, lensdesc, opticFlag, opticLevel;
     String itemCodeR, descR, powerR, uom, qtyR, priceR, totalPriceR, marginR, extraMarginR, itemCodeL, descL, powerL,
             qtyL, priceL, totalPriceL, marginL, extraMarginL, discountItem, discountR, discountL, extraMarginDiscount,
             itemFacetCode, facetDescription, facetqty, facetPrice, facetTotal, facetMargin, facetExtraMargin,
@@ -168,11 +177,19 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         txtLensModel    =  findViewById(R.id.activity_lenssummary_txt_lensmodel);
         txtSide         =  findViewById(R.id.activity_lenssummary_txt_side);
         txtShippingMethod =  findViewById(R.id.activity_lenssummary_txt_shippingmethod);
+        txtOpticName    =  findViewById(R.id.form_lensorder_txtopticname);
 //        spinShipment    =  findViewById(R.id.activity_lenssummary_spin_shipment);
         imgLensModel    =  findViewById(R.id.activity_lenssummary_img_logo);
         listPayment     =  findViewById(R.id.activity_lenssummary_listview_paymentMethod);
         cardPayment     =  findViewById(R.id.activity_lenssummary_card_payment);
         linearFlashSale =  findViewById(R.id.activity_lenssummary_linear_flashsale);
+        constraintLayoutOpticName = findViewById(R.id.form_lenssummary_layoutopticname);
+        animateView = findViewById(R.id.form_lenssummary_rlopticname);
+        animateCard = findViewById(R.id.form_lenssummary_handleopticname);
+        animateImg = findViewById(R.id.form_lenssummary_imgopticname);
+
+        animateView.setVisibility(View.VISIBLE);
+        isUp = true;
 
         LinearLayoutManager horizonManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerCourier.setLayoutManager(horizonManager);
@@ -233,6 +250,21 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         getAllPayment();
 
         checkMember(opticUsername);
+
+        animateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isUp) {
+                    slideHide(animateView);
+                    animateImg.setImageResource(R.drawable.ic_expanded);
+                }
+                else {
+                    slideShow(animateView);
+                    animateImg.setImageResource(R.drawable.ic_collapse);
+                }
+                isUp = !isUp;
+            }
+        });
 
 //        if (opticFlag.equals("0"))
 //        try {
@@ -949,10 +981,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         loading.dismiss();
     }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+////        super.onBackPressed();
+//    }
 
     private void disableButton() {
         btnCheckout.setEnabled(false);
@@ -1828,6 +1860,30 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         return output;
     }
 
+    private void slideShow(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth(), 0, 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Show", Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideHide(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0, -view.getWidth(), 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
+    }
+
     private void gettingPrice()
     {
         Bundle bundle = getIntent().getExtras();
@@ -1842,6 +1898,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             Integer f = bundle.getInt("item_weight");
             String h  = bundle.getString("flag_pasang");
             opticFlag = bundle.getString("optic_flag");
+            opticName = bundle.getString("opticname");
+            opticLevel= bundle.getString("level");
             isSp      = bundle.getString("isSp");
             salesName = bundle.getString("sales");
             Log.d("Sales Name summary : ", salesName);
@@ -1904,6 +1962,16 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 dataSpHeader.setPhoto(headerImage);
                 dataSpHeader.setStatus(headerStatus);
                 dataSpHeader.setSignedPath(headerSignedPath);
+            }
+
+            if (opticLevel.equals("1"))
+            {
+                txtOpticName.setText(opticName.replace(',', ' '));
+                constraintLayoutOpticName.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                constraintLayoutOpticName.setVisibility(View.GONE);
             }
 
             Double g   = bundle.getDouble("total_price");
@@ -2168,8 +2236,20 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             getLensInformation();
 //        getInfoLensR(itemCodeR);
 //        getInfoLensL(itemCodeL);
-            getDiscountItemR(prod_attr_valR, opticUsername);
-            getDiscountItemL(prod_attr_valL, opticUsername);
+
+            if (prod_attr_valR.isEmpty()) {
+                discOperandR = "0";
+            } else {
+                getDiscountItemR(prod_attr_valR, opticUsername);
+            }
+
+            if (prod_attr_valL.isEmpty()) {
+                discOperandL = "0";
+            }
+            else
+            {
+                getDiscountItemL(prod_attr_valL, opticUsername);
+            }
         }
     }
 

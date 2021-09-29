@@ -110,7 +110,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
     BootstrapEditText txtNomorSp, txtNamaOptik, txtKotaOptik, txtAlamatOptik, txtDiskon, txtJumlahDp,
             txtCicilan, txtAlamatPengiriman, txtShipNumber;
     RippleView btnChooseOptik, btnSave, btnBack;
-    LinearLayout linearTitleCicilan, linearContentCicilan;
+    LinearLayout linearTitleCicilan, linearContentCicilan, linearPembayaran;
     ImageView imgPhoto;
     TextView txtImgLoc;
     SignaturePad digitalSignature;
@@ -155,6 +155,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
         btnClearSign = findViewById(R.id.form_ordersp_btndigitalsign);
         imgPhoto = findViewById(R.id.form_ordersp_imgPhoto);
         txtImgLoc = findViewById(R.id.form_ordersp_imglocation);
+        linearPembayaran = findViewById(R.id.form_ordersp_linearPembayaran);
         linearTitleCicilan = findViewById(R.id.form_ordersp_linearTitleCicilan);
         linearContentCicilan = findViewById(R.id.form_ordersp_linearContentCicilan);
 
@@ -499,6 +500,19 @@ public class FormOrderSpActivity extends AppCompatActivity {
                 {
 //                    Log.d("SELECTED SP", "Lensa");
                     getIdSp(otherDate);
+                }
+
+                if (spinTipeSp.getSelectedItem().toString().equals("Lensa Satuan"))
+                {
+                    linearPembayaran.setVisibility(View.VISIBLE);
+                    linearTitleCicilan.setVisibility(View.VISIBLE);
+                    linearContentCicilan.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    linearPembayaran.setVisibility(View.GONE);
+                    linearTitleCicilan.setVisibility(View.GONE);
+                    linearContentCicilan.setVisibility(View.GONE);
                 }
             }
 
@@ -1341,19 +1355,28 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     Toasty.warning(getApplicationContext(), "Harap isi tanda tangan digital", Toast.LENGTH_SHORT).show();
                 }
 
-                if (spinPilihPembayaran.getSelectedItem().toString().matches("Cicilan"))
+                if (spinTipeSp.getSelectedItem().toString().equals("Lensa Satuan"))
                 {
-                    if (spinMulaiCicilan.getSelectedItem().toString().matches("-- Pilih Bulan --"))
+                    if (spinPilihPembayaran.getSelectedItem().toString().matches("Cicilan"))
                     {
-                        Toasty.warning(getApplicationContext(), "Harap pilih bulan", Toast.LENGTH_SHORT).show();
+                        if (spinMulaiCicilan.getSelectedItem().toString().matches("-- Pilih Bulan --"))
+                        {
+                            Toasty.warning(getApplicationContext(), "Harap pilih bulan", Toast.LENGTH_SHORT).show();
 //                        spinMulaiCicilan.setError("Pilih Bulan");
-                        isMulaiBayar = false;
-                        cicilanVal = "";
+                            isMulaiBayar = false;
+                            cicilanVal = "";
+                        }
+                        else
+                        {
+                            isMulaiBayar = true;
+                            cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+                        }
                     }
                     else
                     {
                         isMulaiBayar = true;
-                        cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+//                    cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+                        cicilanVal = "";
                     }
                 }
                 else

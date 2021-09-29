@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.ViewCompat;
@@ -77,6 +78,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.iwgang.countdownview.CountdownView;
 import es.dmoral.toasty.Toasty;
@@ -106,6 +108,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     ImageView imgNotfound;
     LinearLayout linear_flashsale;
     CountdownView countdown_flashsale;
+    CardView cardTop;
+    ImageView imgTop;
 
     View view;
     Adapter_framefragment_bestproduct adapter_framefragment_bestproduct;
@@ -133,132 +137,6 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return view = inflater.inflate(R.layout.fragment_new_frame, container, false);
-
-//        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
-//
-//        imgNotfound = view.findViewById(R.id.fragment_newframe_notfound);
-//
-//        recyclerView = view.findViewById(R.id.fragment_newframe_recyclerview);
-//        recyclerView.setHasFixedSize(true);
-//
-//        btnFilter = view.findViewById(R.id.fragment_newframe_btnfilter);
-//        btnSort = view.findViewById(R.id.fragment_newframe_btnsort);
-//
-//        linear_flashsale = view.findViewById(R.id.fragment_newframe_linearSale);
-//        countdown_flashsale = view.findViewById(R.id.fragment_newframe_countdown);
-//
-//        btnFilter.setBootstrapBrand(new BlackStyle(getContext()));
-//        btnSort.setBootstrapBrand(new BlackStyle(getContext()));
-//
-//        btnFilter.setOnClickListener(this);
-//        btnSort.setOnClickListener(this);
-//
-//        RecyclerView.LayoutManager verticalGrid = new GridLayoutManager(getContext(), 2);
-//        recyclerView.setLayoutManager(verticalGrid);
-//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//
-//        progress = view.findViewById(R.id.fragment_newframe_progressBar);
-//        getData();
-//
-//        adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
-//                new RecyclerViewOnClickListener() {
-//            @Override
-//            public void onItemClick(View view, int pos, String id) {
-////                Toasty.success(getContext(), itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
-////                Intent intent = new Intent(getActivity(), DetailProductActivity.class);
-////                intent.putExtra("id_lensa", itemBestProduct.get(pos).getProduct_id());
-////                startActivity(intent);
-//
-//                if (ACTIVITY_TAG.equals("main"))
-//                {
-//                    Toasty.warning(getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-////                    DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-////                    Bundle bundle = new Bundle();
-////                    bundle.putString("product_id", itemBestProduct.get(pos).getProduct_id());
-////                    detailFrameFragment.setArguments(bundle);
-////
-////                    getActivity().getSupportFragmentManager().beginTransaction()
-////                            .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
-////                            .addToBackStack(null)
-////                            .commit();
-//
-//                    Intent intent = new Intent(getContext(), DetailProductActivity.class);
-//                    intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
-//                    startActivity(intent);
-//                }
-//            }
-//        }, ACTIVITY_TAG);
-//
-//        recyclerView.setAdapter(adapter_framefragment_bestproduct);
-//        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-//
-//        itemBestProduct.clear();
-//        from = 0;
-//        limit = 8;
-//
-//        showData(from.toString(), limit.toString());
-//        getDurationSale();
-//        hasil = (from + limit);
-//
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (dy > 0)
-//                {
-//                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN))
-//                    {
-//                        switch (pos){
-//                            case 1:
-//                                showDataByGroup(hasil.toString(), limit.toString(), "item.`item_code` ASC");
-//                                hasil = hasil + limit;
-//                                //Toasty.info(getContext(), "hasil : " + hasil, Toast.LENGTH_SHORT).show();
-//                                break;
-//
-//                            case 2:
-//                                showDataByGroup(hasil.toString(), limit.toString(), "item.`item_code` DESC");
-//                                hasil = hasil + limit;
-//                                break;
-//
-//                            case 3:
-//                                showDataByPrice(hasil.toString(), limit.toString(), "price.`price_list_item` ASC");
-//                                hasil = hasil + limit;
-//                                break;
-//
-//                            case 4:
-//                                showDataByPrice(hasil.toString(), limit.toString(), "price.`price_list_item` DESC");
-//                                hasil = hasil + limit;
-//                                break;
-//
-//                            case 5:
-//                                showScrollByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-//                                        hasil.toString(), limit.toString());
-//                                hasil = hasil + limit;
-//                                break;
-//
-//                            default:
-//                                showData(hasil.toString(), limit.toString());
-//                                hasil = (hasil + limit);
-//                                //Toasty.info(getContext(), "hasil : " + hasil, Toast.LENGTH_SHORT).show();
-//                                break;
-//                        }
-//
-//                    }
-//                }
-//            }
-//        });
-//
-//
-//        if (mListener != null)
-//        {
-//            mListener.onFragmentInteraction("Frame Corner");
-//        }
-
-//        return view;
     }
 
     @Override
@@ -277,6 +155,9 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
         linear_flashsale = view.findViewById(R.id.fragment_newframe_linearSale);
         countdown_flashsale = view.findViewById(R.id.fragment_newframe_countdown);
+
+        cardTop = view.findViewById(R.id.fragment_newframe_cartTop);
+        imgTop  = view.findViewById(R.id.fragment_newframe_buttonTop);
 
         btnFilter.setBootstrapBrand(new BlackStyle(getContext()));
         btnSort.setBootstrapBrand(new BlackStyle(getContext()));
@@ -335,12 +216,21 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         getDurationSale();
         hasil = (from + limit);
 
+        cardTop.setVisibility(View.GONE);
+        imgTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0)
                 {
+                    cardTop.setVisibility(View.VISIBLE);
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN))
                     {
                         switch (pos){

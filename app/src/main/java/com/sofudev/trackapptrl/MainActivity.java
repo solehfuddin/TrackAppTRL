@@ -18,6 +18,9 @@ import android.provider.ContactsContract;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,12 +39,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +64,6 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Adapter.Adapter_banner_custom;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
@@ -69,27 +72,24 @@ import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.VersionChecker;
 import com.sofudev.trackapptrl.Custom.WSCallerVersionListener;
-import com.sofudev.trackapptrl.Decoration.MyBanner;
-import com.sofudev.trackapptrl.Decoration.SliderIndicator;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
+import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
+import com.sofudev.trackapptrl.Fragment.OtherProductFragment;
 import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
 import com.sofudev.trackapptrl.Fragment.CategoryFragment;
-import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
-import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
 import com.sofudev.trackapptrl.Fragment.PromoBannerFragment;
+import com.sofudev.trackapptrl.Fragment.PromoFrameFragment;
 import com.sofudev.trackapptrl.Fragment.SpecialProductFragment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.PermissionSettings;
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.zfdang.devicemodeltomarketingname.DeviceMarketingName;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,18 +97,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
-import ss.com.bannerslider.banners.Banner;
-import ss.com.bannerslider.banners.RemoteBanner;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, WSCallerVersionListener,
@@ -150,8 +146,12 @@ public class MainActivity extends AppCompatActivity
     FabSpeedDial fab_about;
     LayoutInflater inflater;
     View dialogView;
+    CardView cardTop;
+    ImageView imgTop;
+    NestedScrollView scrollView;
     //Encrypted data class
     private MCrypt mCrypt;
+    private int oldScrollYPostion = 0;
     Animation slidedown;
     private String deviceInfo, datetime, readTxt, urlPdf;
     boolean isForceUpdate = true;
@@ -179,6 +179,9 @@ public class MainActivity extends AppCompatActivity
         txt_countcart = findViewById(R.id.main_badge_cart);
         rl_viewprize = findViewById(R.id.appbarmain_view_prize);
         img_closeprize = findViewById(R.id.appbarmain_close_prize);
+        cardTop = findViewById(R.id.appbarmain_cartTop);
+        imgTop = findViewById(R.id.appbarmain_buttonTop);
+        scrollView = findViewById(R.id.main_scrollview);
         session = new LoginSession(getApplicationContext());
 
 //        img_closeprize.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +190,27 @@ public class MainActivity extends AppCompatActivity
 //                rl_viewprize.setVisibility(View.GONE);
 //            }
 //        });
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if (scrollView.getScrollY() > oldScrollYPostion)
+                {
+                    cardTop.setVisibility(View.VISIBLE);
+                }
+                else if (scrollView.getScrollY() < oldScrollYPostion || scrollView.getScrollY() <= oldScrollYPostion)
+                {
+                    cardTop.setVisibility(View.INVISIBLE);
+                }
+                oldScrollYPostion = scrollView.getScrollY();
+            }
+        });
+        imgTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scrollView.smoothScrollTo(0, 0, 2500);
+            }
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -252,12 +276,17 @@ public class MainActivity extends AppCompatActivity
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         datetime = sdf.format(calendar.getTime());
 
-        homeProduk();
-//        showBanner();
-//        showBalance();
-//        showCategory();
-//        showSpesialProduk();
-//        showPromoBanner();
+//        homeProduk();
+        isHomeActive();
+        showBanner();
+        showBalance();
+        showCategory();
+        showPromoFrame();
+        showSpesialProduk();
+        showAnotherProduk();
+        showMoreFrame();
+        showPromoBanner();
+        frameProduk();
 //        setupSlider();
 
         imgWishlist.setOnClickListener(new View.OnClickListener() {
@@ -402,12 +431,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            homeProduk();
-//            showBanner();
-//            showBalance();
-//            showCategory();
-//            showSpesialProduk();
-//            showPromoBanner();
+            isHomeActive();
         } else if (id == R.id.nav_login) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
@@ -471,7 +495,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.nav_frames) {
             //Toasty.info(getApplicationContext(), "Show another fragment", Toast.LENGTH_SHORT, true).show();
-            frameProduk();
+            isFrameActive();
             /*try {
                 Thread.sleep(200);
                 Boolean b = !menu.findItem(R.id.nav_frame1).isVisible();
@@ -1087,54 +1111,93 @@ public class MainActivity extends AppCompatActivity
         alertDialogBuilder.show();
     }
 
-    private void homeProduk() {
-        HomeFragment homeFragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("activity", "main");
-        homeFragment.setArguments(bundle);
+//    private void homeProduk() {
+//        HomeFragment homeFragment = new HomeFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("activity", "main");
+//        homeFragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
+////        fragmentTransaction.replace(R.id.appbarmain_fragment_myproduct, homeFragment, "home");
+//        fragmentTransaction.commit();
+//    }
+
+    private void showBanner() {
+        BannerFragment bannerFragment = new BannerFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.appbarmain_fragment_container, homeFragment, "home");
-//        fragmentTransaction.replace(R.id.appbarmain_fragment_myproduct, homeFragment, "home");
+        fragmentTransaction.replace(R.id.appbarmain_header, bannerFragment, "home");
         fragmentTransaction.commit();
     }
 
-//    private void showBanner() {
-//        BannerFragment bannerFragment = new BannerFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbarmain_header, bannerFragment, "home");
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showBalance() {
-//        BalanceFragment balanceFragment = new BalanceFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbarmain_balance, balanceFragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showCategory() {
-//        CategoryFragment categoryFragment = new CategoryFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbarmain_category, categoryFragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showSpesialProduk() {
-//        SpecialProductFragment fragment = new SpecialProductFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("activity", "main");
-//        fragment.setArguments(bundle);
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbarmain_special_product, fragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void showPromoBanner() {
-//        PromoBannerFragment fragment = new PromoBannerFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.appbarmain_promo_banner, fragment);
-//        fragmentTransaction.commit();
-//    }
+    private void showBalance() {
+        BalanceFragment balanceFragment = new BalanceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        bundle.putString("nominal", "0");
+        bundle.putString("user_info", "");
+        bundle.putString("username", "");
+        balanceFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_balance, balanceFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showCategory() {
+        CategoryFragment categoryFragment = new CategoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        categoryFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_category, categoryFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showPromoFrame() {
+        PromoFrameFragment fragment = new PromoFrameFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_promo_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showSpesialProduk() {
+        SpecialProductFragment fragment = new SpecialProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_special_product, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showAnotherProduk() {
+        OtherProductFragment fragment = new OtherProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_another_product, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showMoreFrame() {
+        MoreFrameFragment fragment = new MoreFrameFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_other_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showPromoBanner() {
+        PromoBannerFragment fragment = new PromoBannerFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_promo_banner, fragment);
+        fragmentTransaction.commit();
+    }
 
     private void frameProduk() {
         NewFrameFragment newFrameFragment = new NewFrameFragment();
@@ -1144,6 +1207,20 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment, "newframe");
         fragmentTransaction.commit();
+    }
+
+    private void isHomeActive(){
+        NestedScrollView nestedMain = findViewById(R.id.main_scrollview);
+        FrameLayout fmcontainer = findViewById(R.id.appbarmain_fragment_container);
+        nestedMain.setVisibility(View.VISIBLE);
+        fmcontainer.setVisibility(View.GONE);
+    }
+
+    private void isFrameActive(){
+        NestedScrollView nestedMain = findViewById(R.id.main_scrollview);
+        FrameLayout fmcontainer = findViewById(R.id.appbarmain_fragment_container);
+        nestedMain.setVisibility(View.GONE);
+        fmcontainer.setVisibility(View.VISIBLE);
     }
 
     private void removeFragment(Fragment fragment)

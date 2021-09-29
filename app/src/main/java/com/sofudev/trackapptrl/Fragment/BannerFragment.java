@@ -67,8 +67,8 @@ public class BannerFragment extends Fragment {
         myDots       = view.findViewById(R.id.layout_custom_mydots);
         shimmerLayout= view.findViewById(R.id.layout_custom_shimmer);
 
-        shimmerLayout.setVisibility(View.VISIBLE);
-        bannerSlider.setVisibility(View.INVISIBLE);
+//        shimmerLayout.setVisibility(View.VISIBLE);
+//        bannerSlider.setVisibility(View.INVISIBLE);
 
         setupSlider();
         return view;
@@ -106,7 +106,7 @@ public class BannerFragment extends Fragment {
                     try {
                         Thread.sleep(3000);
                         bannerSlider.setVisibility(View.VISIBLE);
-                        shimmerLayout.setVisibility(View.INVISIBLE);
+//                        shimmerLayout.setVisibility(View.INVISIBLE);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

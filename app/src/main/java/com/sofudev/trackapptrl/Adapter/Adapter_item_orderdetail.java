@@ -42,7 +42,7 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         Data_item_orderdetail data = item.get(i);
 
-        String disc = String.valueOf(data.getDiskon()) + " %";
+        String disc = data.getDiskon() + " %";
         String tintPrice = "-";
         int cat     = data.getCategory();
 
@@ -57,7 +57,14 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
             }
             else
             {
-                disc = "-";
+                if (data.getDiskon() > 0)
+                {
+                    disc = data.getDiskon() + "%";
+                }
+                else
+                {
+                    disc = "-";
+                }
             }
 
             if (tint > 0) { tintPrice = "Rp. " + CurencyFormat(String.valueOf(tint)); } else { tintPrice = "-"; }

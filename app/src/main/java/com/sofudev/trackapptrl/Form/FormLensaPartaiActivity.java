@@ -3,6 +3,8 @@ package com.sofudev.trackapptrl.Form;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,14 +21,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -43,6 +53,7 @@ import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_lenstype;
 import com.sofudev.trackapptrl.App.AppController;
@@ -64,10 +75,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
@@ -89,19 +104,30 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
     String URL_GETACTIVESALE        = config.Ip_address + config.flashsale_getActiveSale;
     String URL_GETPARTAIPRICE  = config.Ip_address + config.orderpartai_getPrice;
 
+    ConstraintLayout constraintLayoutOpticName;
     ACProgressFlower loading;
     ImageView btnBack;
-    BootstrapEditText txtLensa, txtQty;
+    UniversalFontTextView txtPrice, txtDisc, txtTotal;
+    Spinner spinPilihPembayaran, spinCicilan, spinMulaiCicilan;
+    BootstrapEditText txtLensa, txtQty, edJmlDp, edDiscount;
     Button btnSave;
     RippleView btnChoose;
+    View animateView;
+    RelativeLayout animateCard;
+    LinearLayout linearTitleCicilan, linearContentCicilan;
+    ImageView animateImg;
+    Boolean isUp;
+
     String headerNoSp, headerTipeSp, headerSales, headerShipNumber, headerCustName, headerAddress, headerCity, headerOrderVia,
             headerDisc, headerCondition, headerInstallment, headerStartInstallment, headerShippingAddress, headerStatus,
             headerImage, headerSignedPath, flashsaleNote, id_lensa, desc_lensa;
     String opticId, opticName, opticUsername, opticProvince, opticCity, opticAddress, opticFlag;
     String itemId, itemCode, itemDesc, itemRl, fileString;
     int headerDp, flagDiscSale, isSp, itemPrice, itemQty, totalPrice;
+    Double itemDisc;
     Boolean isQty, isLens, isFile;
     private DownloadManager downloadManager;
+    UniversalFontTextView txtOpticName;
 
     List<Data_lenstype> item_stocklens = new ArrayList<>();
     Data_spheader dataSpHeader = new Data_spheader();
@@ -113,20 +139,148 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_lensa_partai);
 
+        UniversalFontComponents.init(this);
+
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         btnBack         = findViewById(R.id.form_lensapartai_btnback);
         btnSave         = findViewById(R.id.form_lensapartai_btnsave);
         txtLensa        = findViewById(R.id.form_lensapartai_txtlens);
         txtQty          = findViewById(R.id.form_lensapartai_txtqty);
+        txtOpticName    = findViewById(R.id.form_lensapartai_txtopticname);
+        txtPrice        = findViewById(R.id.form_lensapartai_txtitemprice);
+        txtDisc         = findViewById(R.id.form_lensapartai_txtitemdisc);
+        txtTotal        = findViewById(R.id.form_lensapartai_txttotalprice);
+        spinPilihPembayaran = findViewById(R.id.form_lensapartai_txtPembayaran);
+        spinCicilan     = findViewById(R.id.form_lensapartai_spinCicilan);
+        spinMulaiCicilan= findViewById(R.id.form_lensapartai_spinMulaiCicilan);
+        edJmlDp         = findViewById(R.id.form_lensapartai_txtJumlahDp);
+        edDiscount      = findViewById(R.id.form_lensapartai_txtDiskon);
+        linearTitleCicilan = findViewById(R.id.form_lensapartai_linearTitleCicilan);
+        linearContentCicilan = findViewById(R.id.form_lensapartai_linearContentCicilan);
         btnChoose       = findViewById(R.id.form_lensapartai_btnChooselens);
+        constraintLayoutOpticName = findViewById(R.id.form_lensapartai_layoutopticname);
+        animateView = findViewById(R.id.form_lensapartai_rlopticname);
+        animateCard = findViewById(R.id.form_lensapartai_handleopticname);
+        animateImg = findViewById(R.id.form_lensapartai_imgopticname);
+
+        animateView.setVisibility(View.VISIBLE);
+        isUp = true;
 
         getData();
         getActiveSale();
+        choosePaymentSp();
+        chooseStartInstallment();
+        chooseDurasiCicil();
 
         btnChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialogAllLens();
+            }
+        });
+
+        txtQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                calcPrice();
+            }
+        });
+
+        edJmlDp.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().equals(current)) {
+                    edJmlDp.removeTextChangedListener(this);
+
+                    Locale local = new Locale("id", "id");
+                    String replaceable = String.format("[Rp,.\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String cleanString = editable.toString().replaceAll(replaceable,
+                            "");
+
+                    double parsed;
+                    try {
+                        parsed = Double.parseDouble(cleanString);
+                    } catch (NumberFormatException e) {
+                        parsed = 0.00;
+                    }
+
+                    NumberFormat formatter = NumberFormat
+                            .getCurrencyInstance(local);
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setParseIntegerOnly(true);
+                    String formatted = formatter.format((parsed));
+
+                    String replace = String.format("[Rp\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String clean = formatted.replaceAll(replace, "");
+
+                    current = formatted;
+                    edJmlDp.setText(clean);
+                    edJmlDp.setSelection(clean.length());
+                    edJmlDp.addTextChangedListener(this);
+                }
+            }
+        });
+
+        edDiscount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                edDiscount.removeTextChangedListener(this);
+                if (!editable.toString().equals(""))
+                {
+                    String data = edDiscount.getText().toString().replace(".", "");
+
+                    if(edDiscount.getText().length() > 2)
+                    {
+                        double amount = Double.valueOf(data);
+
+                        amount = amount / 10;
+                        edDiscount.setText(String.valueOf(amount));
+                        edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                    }
+                    else
+                    {
+                        edDiscount.setText(data);
+                    }
+
+                    edDiscount.setSelection(edDiscount.length());
+                }
+                calcPrice();
+                edDiscount.addTextChangedListener(this);
             }
         });
 
@@ -144,7 +298,13 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 qtyCheck();
                 lensCheck();
 
-                if (isQty && isLens && isFile)
+                int valDp = edJmlDp.getText().toString().length() > 0
+                        ? Integer.parseInt(edJmlDp.getText().toString().replace(".", ""))
+                        : 0;
+
+                boolean isDp = dpCheck(valDp);
+
+                if (isQty && isLens && isFile && isDp)
                 {
 //                    Toasty.info(getApplicationContext(), "Upload dan simpan data", Toast.LENGTH_SHORT).show();
                     showLoading();
@@ -160,11 +320,30 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                     {
                         Toasty.warning(getApplicationContext(), "Qty belum diisi", Toast.LENGTH_SHORT).show();
                     }
+                    else if (!isDp)
+                    {
+                        Toasty.warning(getApplicationContext(), "Masukkan jml bayar / dp", Toast.LENGTH_SHORT).show();
+                    }
                     else
                     {
                         Toasty.warning(getApplicationContext(), "Jenis lensa belum dipilih", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        animateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isUp) {
+                    slideHide(animateView);
+                    animateImg.setImageResource(R.drawable.ic_expanded);
+                }
+                else {
+                    slideShow(animateView);
+                    animateImg.setImageResource(R.drawable.ic_collapse);
+                }
+                isUp = !isUp;
             }
         });
 
@@ -256,6 +435,88 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         }
     }
 
+    private void choosePaymentSp() {
+        final String [] model = getResources().getStringArray(R.array.payment_sp_array);
+        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(this, R.layout.spin_framemodel_item, model);
+        spinPilihPembayaran.setAdapter(spin_adapter);
+
+        spinPilihPembayaran.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (spinPilihPembayaran.getSelectedItem().toString().equals("Cicilan"))
+                {
+                    linearTitleCicilan.setVisibility(View.VISIBLE);
+                    linearContentCicilan.setVisibility(View.VISIBLE);
+//                    spinMulaiCicilan.setEnabled(true);
+//                    txtCicilan.setEnabled(true);
+                }
+                else
+                {
+                    linearTitleCicilan.setVisibility(View.GONE);
+                    linearContentCicilan.setVisibility(View.GONE);
+//                    spinMulaiCicilan.setEnabled(false);
+//                    txtCicilan.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void chooseStartInstallment() {
+        final String [] model = getResources().getStringArray(R.array.month_array);
+        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>(this, R.layout.spin_framemodel_item, model);
+        spinMulaiCicilan.setAdapter(spin_adapter);
+
+        spinMulaiCicilan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+//                spinMulaiCicilan.setsele(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void chooseDurasiCicil()
+    {
+//        final int [] durasi = getResources().getIntArray(R.array.durasi_cicilan);
+        final String [] durasi = new String[] {"1", "2", "3"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spin_framemodel_item, durasi);
+        spinCicilan.setAdapter(adapter);
+    }
+
+    private void slideShow(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth(), 0, 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Show", Toast.LENGTH_SHORT).show();
+    }
+
+    private void slideHide(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0, -view.getWidth(), 0, 0
+        );
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+
+        //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
+    }
+
     private void getData(){
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
@@ -277,7 +538,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
             headerCity     = bundle.getString("header_city");
             headerOrderVia = bundle.getString("header_ordervia");
             headerDp       = bundle.getInt("header_dp");
-            headerDisc     = bundle.getString("header_disc");
+//            headerDisc     = bundle.getString("header_disc");
+            headerDisc = edDiscount.getText().toString().length() > 0 ? edDiscount.getText().toString() : "0";
             headerCondition= bundle.getString("header_condition");
             headerInstallment = bundle.getString("header_installment");
             headerStartInstallment = bundle.getString("header_startinstallment");
@@ -285,6 +547,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
             headerStatus   = bundle.getString("header_status");
             headerImage    = bundle.getString("header_image");
             headerSignedPath = bundle.getString("header_signedpath");
+
+            txtOpticName.setText(opticName);
         }
     }
 
@@ -325,6 +589,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         data_item.setSide(itemRl);
         data_item.setQty(itemQty);
         data_item.setPrice(itemPrice);
+        data_item.setDiscount(itemDisc);
         data_item.setTotal_price(totalPrice);
 
         insertSpHeader(dataSpHeader, path);
@@ -523,7 +788,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 map.put("qty", String.valueOf(item.getQty()));
                 map.put("price", String.valueOf(item.getPrice()));
                 map.put("discount_name", "");
-                map.put("discount", "0");
+//                map.put("discount", "0");
+                map.put("discount", String.valueOf(item.getDiscount()));
                 map.put("discount_sale", "0");
                 map.put("total_price", String.valueOf(item.getTotal_price()));
                 return map;
@@ -789,6 +1055,7 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                         itemRl    = jsonObject.getString("rl");
                         itemPrice = jsonObject.getInt("price");
 
+                        calcPrice();
                         Log.i("Item Price : ", String.valueOf(itemPrice));
                     }
                 } catch (JSONException e) {
@@ -831,8 +1098,55 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
             itemQty   = Integer.parseInt(txtQty.getText().toString());
         }
 
-        totalPrice = itemPrice * itemQty;
-        Log.i("Total Price : ", String.valueOf(totalPrice));
+//        totalPrice = itemPrice * itemQty;
+//        String strTotal = String.valueOf(totalPrice);
+//        Log.i("Total Price : ", strTotal);
+    }
+
+    private boolean dpCheck(int val)
+    {
+        return val > 0;
+    }
+
+    private void calcPrice(){
+        itemQty = txtQty.getText().toString().length() > 0 ? Integer.parseInt(txtQty.getText().toString().trim()) : 0;
+        headerDisc = edDiscount.getText().toString().length() > 0
+                ? Double.parseDouble(edDiscount.getText().toString()) >= 90 ? "0" : edDiscount.getText().toString()
+                : "0";
+        headerDp = edJmlDp.length() > 0 ? Integer.parseInt(edJmlDp.getText().toString().replace(".","")) : 0;
+        itemDisc = Double.parseDouble(headerDisc);
+
+        double hitungTotalItem = itemPrice * itemQty;
+        double hitungDiscItem = Double.parseDouble(headerDisc) / 100 * itemPrice * itemQty;
+        String strTotalItem = "Rp. " + CurencyFormat(String.valueOf(hitungTotalItem));
+        txtPrice.setText(strTotalItem);
+
+        calcDisc(hitungDiscItem);
+        calcTotal(hitungTotalItem, hitungDiscItem);
+    }
+
+    private void calcDisc(double hitungDiscItem){
+        String strDiscItem = "Rp. " + CurencyFormat(String.valueOf(hitungDiscItem));
+        txtDisc.setText(strDiscItem);
+    }
+
+    private void calcTotal(double hitungTotalItem, double hitungDiscItem){
+        double grandTotal = hitungTotalItem - hitungDiscItem;
+        String strGrandTotal = "Rp. " + CurencyFormat(String.valueOf(grandTotal));
+        txtTotal.setText(strGrandTotal);
+        totalPrice = (int) grandTotal;
+    }
+
+    private String CurencyFormat(String Rp){
+        if (Rp.contentEquals("0") | Rp.equals("0"))
+        {
+            return "0";
+        }
+
+        Double money = Double.valueOf(Rp);
+        String strFormat ="#,###.#";
+        DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
+        return df.format(money);
     }
 
     private void lensCheck()
