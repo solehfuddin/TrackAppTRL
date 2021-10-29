@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Custom.DateFormat;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_child_estatement;
 import com.sofudev.trackapptrl.R;
@@ -23,6 +24,7 @@ public class Adapter_summary_estatement extends RecyclerView.Adapter<Adapter_sum
     private Context context;
     private List<Data_child_estatement> item;
     private RecyclerViewOnClickListener itemClick;
+    DateFormat tglFormat = new DateFormat();
 
     public Adapter_summary_estatement(Context context, List<Data_child_estatement> item, RecyclerViewOnClickListener itemClick) {
         this.context = context;
@@ -43,7 +45,7 @@ public class Adapter_summary_estatement extends RecyclerView.Adapter<Adapter_sum
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Data_child_estatement data = item.get(position);
 
-        holder.txtTahun.setText(data.getChildTanggal());
+        holder.txtTahun.setText(tglFormat.indo(data.getChildTanggal()));
         holder.txtHarga.setText(CurencyFormat(data.getChildHarga()));
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

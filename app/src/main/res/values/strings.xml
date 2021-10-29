@@ -1,5 +1,6 @@
 <resources>
     <array name="frame_model_array">
+        <item>-- Model --</item>
         <item>Full</item>
         <item>Bor</item>
         <item>Nylon</item>
@@ -48,6 +49,12 @@
         <item>November</item>
         <item>Desember</item>
     </array>
+    <string name="code">Serial number: \n <font size='10'> 32000354</font></string>
+    <string name="price1">Price: \n <font size='10'> 3,254,544</font></string>
+    <string name="dst_city"><b>Mashhad</b>\n<font size='10'>MHD</font></string>
+    <string name="src_city"><b>Bangkok</b>\n<font size='10'>BKKA</font></string>
+    <string name="date">01&#8211;03&#8211;2018</string>
+    <string name="name">Mohamad Reza Eram</string>
     <string name="app_name">TRL Apps</string>
     <string name="title_activity_welcome">Home Screen</string>
     <string name="next">NEXT</string>
@@ -194,4 +201,7 @@
     <string name="item">Item</string>
     <string name="diskon">Diskon</string>
     <string name="total">Total</string>
+    <string name="e_invoice">E-Invoice</string>
+    <string name="nama_optik">Nama Optik</string>
+    <string name="periode_einvoice">Periode 1 Okt 2021 s/d 31 Okt 2021</string>
 </resources>

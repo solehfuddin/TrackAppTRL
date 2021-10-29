@@ -90,7 +90,10 @@ public class CheckBalanceActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     @Override

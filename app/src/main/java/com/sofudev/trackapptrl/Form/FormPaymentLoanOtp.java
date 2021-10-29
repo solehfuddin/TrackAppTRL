@@ -124,7 +124,10 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void postLoanPayment(final String billingId, final String nomorHandphone, final String otp, final String nominal)
@@ -324,6 +327,9 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
                 finish();
             }
         });
-        dialog.show();
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 }

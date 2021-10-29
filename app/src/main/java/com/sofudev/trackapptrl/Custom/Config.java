@@ -374,6 +374,11 @@ public class Config {
     public String estatement_getsummarylast       = "index.php/Android_estatement/getTotalSummaryLast";
     public String estatement_getdetailsummary     = "index.php/Android_estatement/getDetailSummaryLast";
 
+    /* AREA EINVOICE */
+    public String einvoice_getdata                = "index.php/Android_einvoice/showInvoice";
+    public String einvoice_getcategory            = "index.php/Android_einvoice/showCategory";
+    public String einvoice_getDetail              = "index.php/Android_einvoice/showDetailData";
+
     /* AREA DELIVERY TRACK */
     public String deliverytrack_bydate            = "index.php/Android_deliverytrack/showDataByDate";
     public String deliverytrack_counter           = "index.php/Android_deliverytrack/countData";

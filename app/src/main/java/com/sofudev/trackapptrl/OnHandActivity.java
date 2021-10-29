@@ -414,7 +414,9 @@ public class OnHandActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void getItemInfo() {

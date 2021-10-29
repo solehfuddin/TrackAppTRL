@@ -33,6 +33,7 @@ import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
+import com.sofudev.trackapptrl.Form.EinvoiceActivity;
 import com.sofudev.trackapptrl.Form.EstatementActivity;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormBatchOrderActivity;
@@ -624,6 +625,42 @@ public class CategoryFragment extends Fragment {
         }
     }
 
+    private void handlerEInvoice()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 0)
+                {
+                    Intent intent = new Intent(myContext, EinvoiceActivity.class);
+                    intent.putExtra("username", USERNAME);
+                    intent.putExtra("custname", CUSTNAME);
+                    startActivity(intent);
+                }
+                else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(myContext, FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "EINVOICE");
+                    intent.putExtra("sales", USERNAME);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, EinvoiceActivity.class);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("custname", CUSTNAME);
+                startActivity(intent);
+            }
+        }
+    }
+
     private void handlerCustomerCare()
     {
         Intent intent = new Intent(myContext, FanpageActivity.class);
@@ -649,6 +686,7 @@ public class CategoryFragment extends Fragment {
         LinearLayout linMasterOnHand = custom.findViewById(R.id.layout_custom_masteronhand);
         LinearLayout linStatement = custom.findViewById(R.id.layout_custom_estatement);
         LinearLayout linWarranty = custom.findViewById(R.id.layout_custom_ewarranty);
+        LinearLayout linInvoice = custom.findViewById(R.id.layout_custom_featureinvoice);
         LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
 
         final BottomDialog bottomDialog = new BottomDialog.Builder(myContext)
@@ -760,6 +798,14 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        linInvoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerEInvoice();
+                bottomDialog.dismiss();
+            }
+        });
+
         linCustomercare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -795,7 +841,10 @@ public class CategoryFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-        dialog.show();
+
+        if (getActivity().isFinishing()){
+            dialog.show();
+        }
     }
 
     private void getUserById(final String id)

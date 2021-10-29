@@ -176,8 +176,12 @@ public class DetailDepositActivity extends AppCompatActivity {
                             lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
                             lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                         else if (atmType.contentEquals("BANK MANDIRI") || atmType.equals("BANK MANDIRI") || atmType.contains("BANK MANDIRIO"))
                         {
@@ -187,13 +191,20 @@ public class DetailDepositActivity extends AppCompatActivity {
                             lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
                             lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
 //                dialog.getWindow().setAttributes(lwindow);
             }
         });

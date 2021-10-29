@@ -130,7 +130,9 @@ public class FormPaymentVA extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
                 //dialog.getWindow().setAttributes(lwindow);
             }
         });
@@ -191,7 +193,10 @@ public class FormPaymentVA extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void cancelPayment(String id) {

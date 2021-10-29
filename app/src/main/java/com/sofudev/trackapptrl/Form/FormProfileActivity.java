@@ -183,7 +183,10 @@ public class FormProfileActivity extends AppCompatActivity{
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
@@ -218,7 +221,9 @@ public class FormProfileActivity extends AppCompatActivity{
             }
         });
 
-        dialog.show();
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void informationImage(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
@@ -252,7 +257,9 @@ public class FormProfileActivity extends AppCompatActivity{
             }
         });
 
-        dialog.show();
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void showDetailuser()
@@ -362,8 +369,9 @@ public class FormProfileActivity extends AppCompatActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
-                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+//                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
                 loading.dismiss();
             }
         }){
@@ -584,7 +592,9 @@ public class FormProfileActivity extends AppCompatActivity{
                     }
                 });
 
-                lovelyCustomDialog.show();
+                if (!isFinishing()){
+                    lovelyCustomDialog.show();
+                }
             }
         });
     }
@@ -951,9 +961,10 @@ public class FormProfileActivity extends AppCompatActivity{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                informationImage("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+//                informationImage("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
                 loading.dismiss();
+                error.printStackTrace();
                 //Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

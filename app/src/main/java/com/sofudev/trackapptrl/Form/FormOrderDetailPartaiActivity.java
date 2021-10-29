@@ -79,6 +79,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewItem.setLayoutManager(layoutManager);
         recyclerViewItem.setNestedScrollingEnabled(false);
+        recyclerViewItem.setAdapter(adapter_item_orderdetail);
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,10 +236,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Partai Header", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override
@@ -285,7 +283,6 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
                     }
 
                     adapter_item_orderdetail.notifyDataSetChanged();
-                    recyclerViewItem.setAdapter(adapter_item_orderdetail);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -293,10 +290,7 @@ public class FormOrderDetailPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Item Frame", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override

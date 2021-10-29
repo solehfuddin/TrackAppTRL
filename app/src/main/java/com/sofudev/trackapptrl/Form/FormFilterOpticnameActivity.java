@@ -306,6 +306,11 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     idparty = data_opticnames.get(position).getIdParty();
                     opticName = data_opticnames.get(position).getCustname();
                 }
+                else if (condition.equals("EINVOICE"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    opticName = data_opticnames.get(position).getCustname();
+                }
                 else
                 {
                     idparty = data_opticnames.get(position).getUsername();
@@ -400,6 +405,13 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 else if (condition.equals("BATCHSALES"))
                 {
                     showByShipnumber(idparty, 2);
+                }
+                else if (condition.equals("EINVOICE"))
+                {
+                    Intent intent = new Intent(getApplicationContext(), EinvoiceActivity.class);
+                    intent.putExtra("username", idparty);
+                    intent.putExtra("custname", opticName);
+                    startActivity(intent);
                 }
             }
         });

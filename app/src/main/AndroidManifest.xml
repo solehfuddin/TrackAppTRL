@@ -3,13 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sofudev.trackapptrl">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />-->
-<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>-->
-
     <application
         android:name=".App.AppController"
         android:allowBackup="true"
@@ -24,7 +17,9 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="q">
-        <activity android:name=".Form.FormLensaPartaiActivity"></activity>
+        <activity android:name=".Form.DetailEinvoiceActivity"></activity>
+        <activity android:name=".Form.EinvoiceActivity" />
+        <activity android:name=".Form.FormLensaPartaiActivity" />
         <activity android:name=".FrameProductActivity" />
         <activity android:name=".Form.DetailDeliveryTrackingActivity" />
         <activity android:name=".Form.FormDeliveryTrackingActivity" /> <!-- <provider -->
@@ -164,5 +159,10 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

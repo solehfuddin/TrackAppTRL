@@ -113,6 +113,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         recycler_data.setLayoutManager(recyclerViewManager);
 
         adapteOrderHistory = new Adapter_orderhistory_optic(getApplicationContext(), itemOrderHistory, this);
+        recycler_data.setAdapter(adapteOrderHistory);
 
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +174,6 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.filter_trackdate);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.show();
 
                 UniversalFontTextView txtTitle = (UniversalFontTextView) dialog.findViewById(R.id.filter_track_txtTitle);
                 txtTitle.setText("Filter Order History By Date");
@@ -250,6 +250,11 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                         }
                     }
                 });
+
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
             }
         });
     }
@@ -476,7 +481,10 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing())
+        {
+            datePickerDialog.show();
+        }
     }
 
 //    private void showEndDate()
@@ -639,155 +647,12 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
-    }
 
-//    private void showDataByDate()
-//    {
-//        loading.setVisibility(View.VISIBLE);
-//        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//        itemOrderHistory.clear();
-//
-//        final String todayDate = sdf1.format(calendar.getTime());
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, GETBYDATE, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                            loader.dismiss();
-//                        }
-//                        else
-//                        {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String noOrder  = jsonObject.getString("nomor_order");
-//                            String status     = jsonObject.getString("status");
-//
-//                            checkStatusPayment(noOrder, status);
-//                        }
-//                    }
-//
-//                    showDataByDateResult();
-//                    //loader.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//
-//                    img_error.setVisibility(View.VISIBLE);
-//                    recycler_data.setVisibility(View.GONE);
-//                    loader.dismiss();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loading.setVisibility(View.GONE);
-//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                loader.dismiss();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("today_date", todayDate);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
-//
-//    private void showDataByDateResult()
-//    {
-//        //loading.setVisibility(View.VISIBLE);
-//        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-//        itemOrderHistory.clear();
-//
-//        final String todayDate = sdf1.format(calendar.getTime());
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, GETBYDATE, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                        }
-//                        else
-//                        {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String tglOrder = jsonObject.getString("tanggal_order");
-//                            String noOrder  = jsonObject.getString("nomor_order");
-//                            String pasien   = jsonObject.getString("nama_pasien");
-//                            String totalBiaya = jsonObject.getString("total_biaya");
-//                            String status     = jsonObject.getString("status");
-//                            String paymentType= jsonObject.getString("payment_type");
-//                            String icon     = jsonObject.getString("icon");
-//
-//                            Data_orderhistory_optic dataOrder = new Data_orderhistory_optic();
-//                            dataOrder.setTanggalOrder(tglOrder);
-//                            dataOrder.setNomorOrder(noOrder);
-//                            dataOrder.setNamaPasien(pasien);
-//                            dataOrder.setTotalBiaya(totalBiaya);
-//                            dataOrder.setStatusOrder(status);
-//                            dataOrder.setIconOrder(icon);
-//                            dataOrder.setPaymentType(paymentType);
-//
-//                            itemOrderHistory.add(dataOrder);
-//                        }
-//                    }
-//
-//                    recycler_data.setAdapter(adapteOrderHistory);
-//                    loader.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//
-//                    img_error.setVisibility(View.VISIBLE);
-//                    recycler_data.setVisibility(View.GONE);
-//                    loader.dismiss();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loading.setVisibility(View.GONE);
-//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                loader.dismiss();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("today_date", todayDate);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
+        if (!isFinishing())
+        {
+            datePickerDialog.show();
+        }
+    }
 
     private void historyLensByDate()
     {
@@ -839,10 +704,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null)
-                {
-                    Log.d("Error Check", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override
@@ -908,7 +770,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                         }
                     }
 
-                    recycler_data.setAdapter(adapteOrderHistory);
+                    adapteOrderHistory.notifyDataSetChanged();
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -922,7 +784,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             @Override
             public void onErrorResponse(VolleyError error) {
                 loading.setVisibility(View.GONE);
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
                 loader.dismiss();
             }
         }){
@@ -938,138 +800,6 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
 
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
-
-//    private void showDataByOrderNumber(final String key)
-//    {
-//        loading.setVisibility(View.VISIBLE);
-//        itemOrderHistory.clear();
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEARCHBYORDERNUMBER, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                            loader.dismiss();
-//                        }
-//                        else
-//                        {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String noOrder  = jsonObject.getString("nomor_order");
-//                            String status   = jsonObject.getString("status");
-//
-//                            checkStatusPayment(noOrder, status);
-//                        }
-//                    }
-//
-//                    showDataByOrderNumberResult(key);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loading.setVisibility(View.GONE);
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("patient_name", key);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
-//
-//    private void showDataByOrderNumberResult(final String key)
-//    {
-//        loading.setVisibility(View.VISIBLE);
-//        itemOrderHistory.clear();
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEARCHBYORDERNUMBER, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                        }
-//                        else
-//                        {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String tglOrder = jsonObject.getString("tanggal_order");
-//                            String noOrder  = jsonObject.getString("nomor_order");
-//                            String pasien   = jsonObject.getString("nama_pasien");
-//                            String totalBiaya = jsonObject.getString("total_biaya");
-//                            String status   = jsonObject.getString("status");
-//                            String paymentType= jsonObject.getString("payment_type");
-//                            String icon     = jsonObject.getString("icon");
-//
-//                            Data_orderhistory_optic dataOrder = new Data_orderhistory_optic();
-//                            dataOrder.setTanggalOrder(tglOrder);
-//                            dataOrder.setNomorOrder(noOrder);
-//                            dataOrder.setNamaPasien(pasien);
-//                            dataOrder.setTotalBiaya(totalBiaya);
-//                            dataOrder.setStatusOrder(status);
-//                            dataOrder.setIconOrder(icon);
-//                            dataOrder.setPaymentType(paymentType);
-//
-//                            itemOrderHistory.add(dataOrder);
-//                        }
-//                    }
-//
-//                    loader.dismiss();
-//                    recycler_data.setAdapter(adapteOrderHistory);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//
-//                    img_error.setVisibility(View.VISIBLE);
-//                    recycler_data.setVisibility(View.GONE);
-//                    loader.dismiss();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loading.setVisibility(View.GONE);
-//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//                loader.dismiss();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("patient_name", key);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
 
     private void historyLensByPatient(final String key)
     {
@@ -1113,6 +843,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             @Override
             public void onErrorResponse(VolleyError error) {
                 loading.setVisibility(View.GONE);
+                error.printStackTrace();
             }
         }){
             @Override
@@ -1175,7 +906,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                     }
 
                     loader.dismiss();
-                    recycler_data.setAdapter(adapteOrderHistory);
+                    adapteOrderHistory.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
 
@@ -1188,7 +919,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             @Override
             public void onErrorResponse(VolleyError error) {
                 loading.setVisibility(View.GONE);
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
                 loader.dismiss();
             }
         }){
@@ -1204,146 +935,6 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
 
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
-
-//    private void showDataByDateRange(final String startDate, final String endDate)
-//    {
-//        loading.setVisibility(View.VISIBLE);
-//        itemOrderHistory.clear();
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEARCHBYRANGEDATE, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                            loader.dismiss();
-//                        }
-//                        else {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String noOrder = jsonObject.getString("nomor_order");
-//                            String status = jsonObject.getString("status");
-//
-//                            checkStatusPayment(noOrder, status);
-//                        }
-//                    }
-//                    showDataByDateRangeResult(startDate, endDate);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//
-//                    img_error.setVisibility(View.VISIBLE);
-//                    recycler_data.setVisibility(View.GONE);
-//                    loader.dismiss();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loader.dismiss();
-//                loading.setVisibility(View.GONE);
-//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("date_from", startDate);
-//                hashMap.put("date_to", endDate);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
-//
-//    private void showDataByDateRangeResult(final String startDate, final String endDate)
-//    {
-//        loading.setVisibility(View.VISIBLE);
-//        itemOrderHistory.clear();
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEARCHBYRANGEDATE, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                loading.setVisibility(View.GONE);
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for (int i = 0; i < jsonArray.length(); i++)
-//                    {
-//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-//
-//                        if (jsonObject.names().get(0).equals("Error"))
-//                        {
-//                            img_error.setVisibility(View.VISIBLE);
-//                            recycler_data.setVisibility(View.GONE);
-//                        }
-//                        else {
-//                            img_error.setVisibility(View.GONE);
-//                            recycler_data.setVisibility(View.VISIBLE);
-//
-//                            String tglOrder = jsonObject.getString("tanggal_order");
-//                            String noOrder = jsonObject.getString("nomor_order");
-//                            String pasien = jsonObject.getString("nama_pasien");
-//                            String totalBiaya = jsonObject.getString("total_biaya");
-//                            String status = jsonObject.getString("status");
-//                            String paymentType= jsonObject.getString("payment_type");
-//                            String icon = jsonObject.getString("icon");
-//
-//                            Data_orderhistory_optic dataOrder = new Data_orderhistory_optic();
-//                            dataOrder.setTanggalOrder(tglOrder);
-//                            dataOrder.setNomorOrder(noOrder);
-//                            dataOrder.setNamaPasien(pasien);
-//                            dataOrder.setTotalBiaya(totalBiaya);
-//                            dataOrder.setStatusOrder(status);
-//                            dataOrder.setIconOrder(icon);
-//                            dataOrder.setPaymentType(paymentType);
-//
-//                            itemOrderHistory.add(dataOrder);
-//                        }
-//                    }
-//
-//                    adapteOrderHistory.notifyDataSetChanged();
-//                    recycler_data.setAdapter(adapteOrderHistory);
-//                    loader.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//
-//                    img_error.setVisibility(View.VISIBLE);
-//                    recycler_data.setVisibility(View.GONE);
-//                    loader.dismiss();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                loader.dismiss();
-//                loading.setVisibility(View.GONE);
-//                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> hashMap = new HashMap<>();
-//                hashMap.put("key_order", "ALO" + username);
-//                hashMap.put("date_from", startDate);
-//                hashMap.put("date_to", endDate);
-//                return hashMap;
-//            }
-//        };
-//
-//        AppController.getInstance().addToRequestQueue(stringRequest);
-//    }
 
     private void historyLensByRangeDate(final String startDate, final String endDate)
     {
@@ -1392,7 +983,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             public void onErrorResponse(VolleyError error) {
                 loader.dismiss();
                 loading.setVisibility(View.GONE);
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -1456,7 +1047,6 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                     }
 
                     adapteOrderHistory.notifyDataSetChanged();
-                    recycler_data.setAdapter(adapteOrderHistory);
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1471,7 +1061,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             public void onErrorResponse(VolleyError error) {
                 loader.dismiss();
                 loading.setVisibility(View.GONE);
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override

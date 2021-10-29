@@ -26,6 +26,7 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
@@ -156,6 +157,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
+
         setContentView(R.layout.activity_form_lens_summary);
         showLoading();
 
@@ -624,15 +627,35 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 //
                     String sphr, sphl, cylr, cyll;
 
-                    if (!sphR.isEmpty())
+//                    if (!sphR.isEmpty())
+//                    {
+//                        if (Double.valueOf(sphR) > 0)
+//                        {
+//                            sphr = "+" + String.valueOf(sphR);
+//                        }
+//                        else
+//                        {
+//                            sphr = String.valueOf(sphR);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        sphr = "0";
+//                    }
+
+                    if (sphR != null)
                     {
-                        if (Double.valueOf(sphR) > 0)
+                        sphr = "0";
+                        if (!sphR.isEmpty())
                         {
-                            sphr = "+" + String.valueOf(sphR);
-                        }
-                        else
-                        {
-                            sphr = String.valueOf(sphR);
+                            if (Double.valueOf(sphR) > 0)
+                            {
+                                sphr = "+" + String.valueOf(sphR);
+                            }
+                            else
+                            {
+                                sphr = String.valueOf(sphR);
+                            }
                         }
                     }
                     else
@@ -640,15 +663,35 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         sphr = "0";
                     }
 
-                    if (!sphL.isEmpty())
+//                    if (!sphL.isEmpty())
+//                    {
+//                        if (Double.valueOf(sphL) > 0)
+//                        {
+//                            sphl = "+" + String.valueOf(sphL);
+//                        }
+//                        else
+//                        {
+//                            sphl = String.valueOf(sphL);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        sphl = "0";
+//                    }
+
+                    if (sphL != null)
                     {
-                        if (Double.valueOf(sphL) > 0)
+                        sphl = "0";
+                        if (!sphL.isEmpty())
                         {
-                            sphl = "+" + String.valueOf(sphL);
-                        }
-                        else
-                        {
-                            sphl = String.valueOf(sphL);
+                            if (Double.valueOf(sphL) > 0)
+                            {
+                                sphl = "+" + String.valueOf(sphL);
+                            }
+                            else
+                            {
+                                sphl = String.valueOf(sphL);
+                            }
                         }
                     }
                     else
@@ -656,15 +699,35 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         sphl = "0";
                     }
 
-                    if (!cylR.isEmpty())
+//                    if (!cylR.isEmpty())
+//                    {
+//                        if (Double.valueOf(cylR) > 0)
+//                        {
+//                            cylr = "+" + String.valueOf(cylR);
+//                        }
+//                        else
+//                        {
+//                            cylr = String.valueOf(cylR);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        cylr = "0";
+//                    }
+
+                    if (cylR != null)
                     {
-                        if (Double.valueOf(cylR) > 0)
+                        cylr = "0";
+                        if (!cylR.isEmpty())
                         {
-                            cylr = "+" + String.valueOf(cylR);
-                        }
-                        else
-                        {
-                            cylr = String.valueOf(cylR);
+                            if (Double.valueOf(cylR) > 0)
+                            {
+                                cylr = "+" + String.valueOf(cylR);
+                            }
+                            else
+                            {
+                                cylr = String.valueOf(cylR);
+                            }
                         }
                     }
                     else
@@ -672,15 +735,34 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         cylr = "0";
                     }
 
-                    if (!cylL.isEmpty())
+//                    if (!cylL.isEmpty())
+//                    {
+//                        if (Double.valueOf(cylL) > 0)
+//                        {
+//                            cyll = "+" + String.valueOf(cylL);
+//                        }
+//                        else
+//                        {
+//                            cyll = String.valueOf(cylL);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        cyll = "0";
+//                    }
+                    if (cylL != null)
                     {
-                        if (Double.valueOf(cylL) > 0)
+                        cyll = "0";
+                        if (!cylL.isEmpty())
                         {
-                            cyll = "+" + String.valueOf(cylL);
-                        }
-                        else
-                        {
-                            cyll = String.valueOf(cylL);
+                            if (Double.valueOf(cylL) > 0)
+                            {
+                                cyll = "+" + String.valueOf(cylL);
+                            }
+                            else
+                            {
+                                cyll = String.valueOf(cylL);
+                            }
                         }
                     }
                     else
@@ -688,22 +770,42 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         cyll = "0";
                     }
 
-                    if (axsR.isEmpty())
+//                    if (axsR.isEmpty())
+//                    {
+//                        axsR = "0";
+//                    }
+
+                    if (axsR == null)
                     {
                         axsR = "0";
                     }
 
-                    if (axsL.isEmpty())
+//                    if (axsL.isEmpty())
+//                    {
+//                        axsL = "0";
+//                    }
+
+                    if (axsL == null)
                     {
                         axsL = "0";
                     }
 
-                    if (addR.isEmpty())
+//                    if (addR.isEmpty())
+//                    {
+//                        addR = "0";
+//                    }
+
+                    if (addR == null)
                     {
                         addR = "0";
                     }
 
-                    if (addL.isEmpty())
+//                    if (addL.isEmpty())
+//                    {
+//                        addL = "0";
+//                    }
+
+                    if (addL == null)
                     {
                         addL = "0";
                     }
@@ -831,17 +933,17 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     dataItemR.setUnitStandardWeight(20);
                     Log.d("ITEM Weight R : ", String.valueOf(dataItemR.getUnitStandardWeight()));
                     dataItemR.setDiscountName(discNameR);
-                    Log.d("ITEM DiscName R : ", dataItemR.getDiscountName());
-                    dataItemR.setDiscount(Double.valueOf(discOperandR));
-                    Log.d("ITEM Disc R : ", String.valueOf(dataItemR.getDiscount()));
+//                    Log.d("ITEM DiscName R : ", dataItemR.getDiscountName());
+                    dataItemR.setDiscount(Double.parseDouble(discOperandR));
+//                    Log.d("ITEM Disc R : ", String.valueOf(dataItemR.getDiscount()));
                     dataItemR.setDiscountSale(discSaleR);
-                    Log.d("ITEM DiscSale R :", String.valueOf(dataItemR.getDiscountSale()));
+//                    Log.d("ITEM DiscSale R :", String.valueOf(dataItemR.getDiscountSale()));
                     dataItemR.setTotalWeight(20);
                     Log.d("ITEM TotalWeight R : ", String.valueOf(dataItemR.getTotalWeight()));
                     dataItemR.setTintingPrice(tintp);
-                    Log.d("ITEM Tinting R : ", String.valueOf(dataItemR.getTintingPrice()));
+//                    Log.d("ITEM Tinting R : ", String.valueOf(dataItemR.getTintingPrice()));
                     dataItemR.setAmount(ptr);
-                    Log.d("ITEM Amount R : ", String.valueOf(dataItemR.getAmount()));
+//                    Log.d("ITEM Amount R : ", String.valueOf(dataItemR.getAmount()));
 
                     dataItemL.setOrderNumber(orderNumber);
                     Log.d("ITEM OrderNumber L : ", dataItemL.getOrderNumber());
@@ -864,17 +966,17 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     dataItemL.setUnitStandardWeight(20);
                     Log.d("ITEM Weigh L : ", String.valueOf(dataItemL.getUnitStandardWeight()));
                     dataItemL.setDiscountName(discNameL);
-                    Log.d("ITEM DiscName L : ", dataItemL.getDiscountName());
-                    dataItemL.setDiscount(Double.valueOf(discOperandL));
-                    Log.d("ITEM Disc L : ", String.valueOf(dataItemL.getDiscount()));
+//                    Log.d("ITEM DiscName L : ", dataItemL.getDiscountName());
+                    dataItemL.setDiscount(Double.parseDouble(discOperandL));
+//                    Log.d("ITEM Disc L : ", String.valueOf(dataItemL.getDiscount()));
                     dataItemL.setDiscountSale(discSaleL);
-                    Log.d("ITEM DiscSale L :", String.valueOf(dataItemL.getDiscountSale()));
+//                    Log.d("ITEM DiscSale L :", String.valueOf(dataItemL.getDiscountSale()));
                     dataItemL.setTotalWeight(20);
                     Log.d("ITEM TotalWeight L : ", String.valueOf(dataItemL.getTotalWeight()));
                     dataItemL.setTintingPrice(tintp);
-                    Log.d("ITEM Tinting L : ", String.valueOf(dataItemL.getTintingPrice()));
+//                    Log.d("ITEM Tinting L : ", String.valueOf(dataItemL.getTintingPrice()));
                     dataItemL.setAmount(ptl);
-                    Log.d("ITEM Amount L : ", String.valueOf(dataItemL.getAmount()));
+//                    Log.d("ITEM Amount L : ", String.valueOf(dataItemL.getAmount()));
 
                     insertLensOrderHeader(dataHeader);
 
@@ -1006,7 +1108,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void postBillingQR(final String paymentType, final String grossAmount, final String orderId)
@@ -1334,7 +1439,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -2237,19 +2342,49 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 //        getInfoLensR(itemCodeR);
 //        getInfoLensL(itemCodeL);
 
-            if (prod_attr_valR.isEmpty()) {
+            if(prod_attr_valR != null)
+            {
                 discOperandR = "0";
-            } else {
-                getDiscountItemR(prod_attr_valR, opticUsername);
-            }
-
-            if (prod_attr_valL.isEmpty()) {
-                discOperandL = "0";
+                if (prod_attr_valR.isEmpty()) {
+                    discOperandR = "0";
+                } else {
+                    getDiscountItemR(prod_attr_valR, opticUsername);
+                }
             }
             else
             {
-                getDiscountItemL(prod_attr_valL, opticUsername);
+                discOperandR = "0";
             }
+
+//            if (prod_attr_valR.isEmpty()) {
+//                discOperandR = "0";
+//            } else {
+//                getDiscountItemR(prod_attr_valR, opticUsername);
+//            }
+
+            if (prod_attr_valL != null)
+            {
+                discOperandL = "0";
+                if (prod_attr_valL.isEmpty()) {
+                    discOperandL = "0";
+                }
+                else
+                {
+                    getDiscountItemL(prod_attr_valL, opticUsername);
+                }
+            }
+            else
+            {
+                discOperandL = "0";
+            }
+
+//            if (prod_attr_valL.isEmpty()) {
+//                discOperandL = "0";
+//            }
+//            else
+//            {
+//                getDiscountItemL(prod_attr_valL, opticUsername);
+//            }
         }
     }
 
@@ -3164,7 +3299,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -3283,10 +3419,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty() || error.getMessage().equals(null))
-                {
-                    Log.d("Error Active Sale", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 

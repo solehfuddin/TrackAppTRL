@@ -123,6 +123,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                 }
             }
         });
+        recyclerView.setAdapter(adapter_orderhistory_frame);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,7 +225,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -281,7 +282,6 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter_orderhistory_frame);
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -293,7 +293,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
                 loader.dismiss();
             }
         }){
@@ -348,6 +348,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                         }
                     }
 
+                    adapter_orderhistory_frame.notifyDataSetChanged();
                     getAllFrameByRangeResult(id, dateFrom, dateUntil);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -356,7 +357,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -418,7 +419,6 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter_orderhistory_frame);
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -427,7 +427,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override

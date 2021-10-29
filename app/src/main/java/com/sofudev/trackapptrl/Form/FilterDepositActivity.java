@@ -286,7 +286,10 @@ public class FilterDepositActivity extends AppCompatActivity {
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing())
+        {
+            datePickerDialog.show();
+        }
     }
 
     private void showEndDate() {
@@ -377,7 +380,9 @@ public class FilterDepositActivity extends AppCompatActivity {
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing()){
+            datePickerDialog.show();
+        }
     }
 
     private void showRecentDeposit(final String username, final String tglAwal, final String tglAkhir) {

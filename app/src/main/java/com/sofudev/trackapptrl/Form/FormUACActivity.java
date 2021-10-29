@@ -255,7 +255,9 @@ public class FormUACActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void filterData(final String Key, int record)
@@ -268,7 +270,7 @@ public class FormUACActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, FILTER_URL + String.valueOf(record), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                loading.hide();
+                loading.dismiss();
                 listView_auc.removeFooterView(progressLoading);
                 rl_uac.removeView(imageView_uac);
                 String info1 = "customer";
@@ -344,11 +346,12 @@ public class FormUACActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loading.hide();
+                loading.dismiss();
                 listView_auc.removeFooterView(progressLoading);
+                error.printStackTrace();
                 //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
-                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+//                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
                 disableNext();
             }
         }){
@@ -398,7 +401,10 @@ public class FormUACActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void showErrorImage()
@@ -467,7 +473,9 @@ public class FormUACActivity extends AppCompatActivity {
                             lovelyCustomDialog.setIcon(R.drawable.ic_settings);
                             lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                             lovelyCustomDialog.setView(view);
-                            lovelyCustomDialog.show();
+                            if (!isFinishing()){
+                                lovelyCustomDialog.show();
+                            }
 
                             txt_username = (BootstrapEditText) view.findViewById(R.id.form_uac_txtusername);
                             txt_customer = (BootstrapEditText) view.findViewById(R.id.form_uac_txtcustomer);
@@ -618,7 +626,9 @@ public class FormUACActivity extends AppCompatActivity {
                                 }
                             });
 
-                            lovelyCustomDialog.show();
+                            if (!isFinishing()){
+                                lovelyCustomDialog.show();
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -747,7 +757,9 @@ public class FormUACActivity extends AppCompatActivity {
                 lovelyCustomDialog.setIcon(R.drawable.ic_settings);
                 lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                 lovelyCustomDialog.setView(view);
-                lovelyCustomDialog.show();
+                if (!isFinishing()){
+                    lovelyCustomDialog.show();
+                }
 
                 txt_username = (BootstrapEditText) view.findViewById(R.id.form_uac_txtusername);
                 txt_customer = (BootstrapEditText) view.findViewById(R.id.form_uac_txtcustomer);
@@ -925,7 +937,9 @@ public class FormUACActivity extends AppCompatActivity {
                     }
                 });
 
-                lovelyCustomDialog.show();
+                if (!isFinishing()){
+                    lovelyCustomDialog.show();
+                }
             }
         });
     }

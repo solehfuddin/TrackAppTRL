@@ -32,5 +32,4 @@
         <item name="android:progressTint">#358bff</item>
         <item name="android:colorControlActivated">#ff9100</item>
     </style>
-
 </resources>

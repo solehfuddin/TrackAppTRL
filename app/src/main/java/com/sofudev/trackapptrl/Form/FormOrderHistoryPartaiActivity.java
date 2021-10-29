@@ -125,6 +125,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                 }
             }
         });
+        recyclerView.setAdapter(adapter_orderhistory_frame);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +270,10 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing())
+        {
+            datePickerDialog.show();
+        }
     }
 
     private void showEndDate()
@@ -355,7 +359,10 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing())
+        {
+            datePickerDialog.show();
+        }
     }
 
     private void checkPaymentMethod(final String transnumber)
@@ -426,7 +433,6 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.filter_trackdate);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.show();
 
                 UniversalFontTextView txtTitle = (UniversalFontTextView) dialog.findViewById(R.id.filter_track_txtTitle);
                 txtTitle.setText("Filter Order History By Date");
@@ -497,6 +503,11 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
             }
         });
     }
@@ -607,7 +618,6 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter_orderhistory_frame);
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -619,7 +629,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
                 loader.dismiss();
             }
         }){
@@ -682,7 +692,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -744,7 +754,6 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapter_orderhistory_frame);
                     loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -753,7 +762,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override

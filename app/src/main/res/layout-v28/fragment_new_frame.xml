@@ -82,7 +82,6 @@
                     app:bootstrapBrand="regular"
                     app:bootstrapSize="xs"
                     app:bootstrapText="{fa-filter} Filter"
-                    app:buttonMode="regular"
                     app:roundedCorners="false"
                     app:scale_height="30"
                     app:scale_left="7"

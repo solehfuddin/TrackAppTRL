@@ -710,10 +710,7 @@ public class DetailFrameFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null || !error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Duration", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 

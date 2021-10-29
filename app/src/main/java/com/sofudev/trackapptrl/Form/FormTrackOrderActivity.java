@@ -300,13 +300,17 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        dialog.show();
+
+        if(!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loading.hide();
+        loading.dismiss();
     }
 
     private void getFrameBrand(final String jobNumber)
@@ -513,7 +517,10 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void informationTrackOrder(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
@@ -1038,7 +1045,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_ORDER + String.valueOf(record), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                loading.hide();
+                loading.dismiss();
                 progress.setVisibility(View.GONE);
                 rl_track.removeView(img_track);
                 btn_next.setEnabled(true);
@@ -1193,10 +1200,10 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
-                informationTrackOrder("Error connection", "Can't connect to server, press ok to reconnect ",
-                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
-
-                loading.hide();
+//                informationTrackOrder("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
                 String notfound = "0 record";
                 txt_counter.setText(notfound);
                 progress.setVisibility(View.GONE);
@@ -1224,7 +1231,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
                 rl_track.removeView(img_track);
                 btn_next.setEnabled(true);
-                loading.hide();
+                loading.dismiss();
 
                 String data1 = "order_number";
                 String data2 = "order_entrydate";
@@ -1374,9 +1381,10 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
                 //loading.hide();
-                informationTrackOrderByCustomer("Error connection", "Can't connect to server, press ok to reconnect ",
-                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
-                loading.hide();
+//                informationTrackOrderByCustomer("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
 
                 String notfound = "0 record";
                 txt_counter.setText(notfound);
@@ -1406,7 +1414,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
                 rl_track.removeView(img_track);
                 btn_next.setEnabled(true);
-                loading.hide();
+                loading.dismiss();
 
                 String data1 = "order_number";
                 String data2 = "order_entrydate";
@@ -1554,9 +1562,10 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
                 //loading.hide();
-                informationTrackOrderByCustomer("Error connection", "Can't connect to server, press ok to reconnect ",
-                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
-                loading.hide();
+//                informationTrackOrderByCustomer("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
 
                 String notfound = "0 record";
                 txt_counter.setText(notfound);
@@ -1586,7 +1595,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
                 rl_track.removeView(img_track);
                 btn_next.setEnabled(true);
-                loading.hide();
+                loading.dismiss();
 
                 String data1 = "order_number";
                 String data2 = "order_entrydate";
@@ -1734,9 +1743,10 @@ public class FormTrackOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
                 //loading.hide();
-                informationTrackOrderByDate("Error connection", "Can't connect to server, press ok to reconnect ",
-                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
-                loading.hide();
+//                informationTrackOrderByDate("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
                 String notfound = "0 record";
                 txt_counter.setText(notfound);
                 progress.setVisibility(View.GONE);

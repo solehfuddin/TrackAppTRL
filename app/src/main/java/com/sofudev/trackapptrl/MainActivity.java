@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UniversalFontComponents.init(this);
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_main);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
@@ -964,6 +965,7 @@ public class MainActivity extends AppCompatActivity
                             //Open dashboard
                             loading.dismiss();
                             startActivity(intent);
+                            dialog.dismiss();
                             finish();
                         }
                     }
@@ -1077,7 +1079,11 @@ public class MainActivity extends AppCompatActivity
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing())
+        {
+            loading.show();
+        }
     }
 
     @Override
@@ -1108,7 +1114,11 @@ public class MainActivity extends AppCompatActivity
                 dialog.dismiss();
             }
         });
-        alertDialogBuilder.show();
+
+        if (!isFinishing())
+        {
+            alertDialogBuilder.show();
+        }
     }
 
 //    private void homeProduk() {

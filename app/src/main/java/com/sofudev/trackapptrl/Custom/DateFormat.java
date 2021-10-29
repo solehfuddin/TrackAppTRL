@@ -33,6 +33,20 @@ public class DateFormat {
         return data;
     }
 
+    public String indoOther(String data) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date newdate = sdf.parse(data);
+            sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+            data = sdf.format(newdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
     public String ValueDbDate(int dayOfMonth, int month, int year) {
         month = (month + 1);
         String day;

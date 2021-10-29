@@ -89,6 +89,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
         getData();
 
         adapter_item_orderdetail = new Adapter_item_orderdetail(this, itemList);
+        recyclerViewItem.setAdapter(adapter_item_orderdetail);
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +210,6 @@ public class FormOrderDetailActivity extends AppCompatActivity {
                     }
 
                     adapter_item_orderdetail.notifyDataSetChanged();
-                    recyclerViewItem.setAdapter(adapter_item_orderdetail);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -217,10 +217,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Item", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override

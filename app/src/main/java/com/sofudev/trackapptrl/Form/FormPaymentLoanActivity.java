@@ -202,7 +202,10 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void showBankTransfer()
@@ -391,7 +394,9 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void actionUpdate(final String key, final String phone)

@@ -16,10 +16,24 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/D:/Software/android-studio-ide-193.6626763-windows/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/beenhere/baseline_beenhere_24.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_expanded" />
+                            <entry key="outputName" value="ic_beenhere_24" />
                             <entry key="sourceFile" value="C:\Users\sholeh\Downloads\previous.svg" />
                           </map>
                         </option>

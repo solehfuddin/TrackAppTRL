@@ -125,7 +125,10 @@ public class FormPaymentDeposit extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private String convertToInt(String amount)
@@ -338,7 +341,10 @@ public class FormPaymentDeposit extends AppCompatActivity {
                 finish();
             }
         });
-        dialog.show();
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void setTimer(final UniversalFontTextView lbl_timer, int duration)

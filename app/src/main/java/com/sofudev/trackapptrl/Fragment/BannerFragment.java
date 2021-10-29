@@ -120,15 +120,16 @@ public class BannerFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                try {
-                    Thread.sleep(3000);
-                    information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                            DefaultBootstrapBrand.WARNING);
-
-                    error.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(3000);
+//                    information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                            DefaultBootstrapBrand.WARNING);
+//
+//                    error.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                error.printStackTrace();
             }
         });
 
@@ -172,7 +173,9 @@ public class BannerFragment extends Fragment {
                 }
             });
 
-            dialog.show();
+            if (getActivity().isFinishing()){
+                dialog.show();
+            }
         }
     }
 
@@ -184,6 +187,9 @@ public class BannerFragment extends Fragment {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(getActivity().isFinishing()){
+            loading.show();
+        }
     }
 }

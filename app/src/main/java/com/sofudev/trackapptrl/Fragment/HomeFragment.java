@@ -454,10 +454,7 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null && !error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Duration", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 
@@ -517,17 +514,9 @@ public class HomeFragment extends Fragment {
 
     private void showBannerFromDb()
     {
-        //banner_header.removeAllBanners();
-
         final StringRequest string = new StringRequest(BANNER_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //banner_header.removeAllBanners();
-                //banner_header.removeViewAt(0);
-                /*List<Banner> bumpersbanner = new ArrayList<>();
-                bumpersbanner.add(new DrawableBanner(R.drawable.bumperbanner));
-                banner_header.setBanners(bumpersbanner);*/
-
                 try {
                     List<Banner> banners = new ArrayList<>();
                     JSONArray jsonArr = new JSONArray(response);
@@ -537,8 +526,6 @@ public class HomeFragment extends Fragment {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);
 
                         String dt_url = jsonObj.getString("img_source");
-
-                        //Toast.makeText(getApplicationContext(), dt_url, Toast.LENGTH_SHORT).show();
 
                         banners.add(new RemoteBanner(dt_url));
                         banners.get(i).setScaleType(ImageView.ScaleType.FIT_XY);
@@ -554,16 +541,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                try {
-                    Thread.sleep(3000);
-                    hideLoading();
-                    information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                            DefaultBootstrapBrand.WARNING);
-
-                    error.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(3000);
+//                    hideLoading();
+//                    information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                            DefaultBootstrapBrand.WARNING);
+//
+//                    error.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                error.printStackTrace();
             }
         });
 
@@ -794,7 +782,10 @@ public class HomeFragment extends Fragment {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(40)
                 .build();
-        loading.show();
+
+        if(getActivity().isFinishing()){
+            loading.show();
+        }
     }
 
     private void hideLoading()
@@ -839,7 +830,10 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            dialog.show();
+            if (!getActivity().isFinishing())
+            {
+                dialog.show();
+            }
         }
     }
 
@@ -883,7 +877,10 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            dialog.show();
+            if (!getActivity().isFinishing())
+            {
+                dialog.show();
+            }
             dialog.getWindow().setAttributes(lwindow);
         }
     }

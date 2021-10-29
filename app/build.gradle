@@ -20,15 +20,22 @@ android {
 //        minSdkVersion 21
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 44
-        versionName "1.42"
+//        versionCode 47
+//        versionName "1.46"
+        versionCode 48
+        versionName "1.47"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            //minifyEnabled true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            multiDexKeepFile file('multidex-config.txt')
+        }
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //minifyEnabled true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //multiDexKeepFile file('multidex-config.txt')
         }
     }
@@ -43,6 +50,12 @@ android {
 //    }
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 
 //    configurations.all {
@@ -146,6 +159,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
+    implementation 'com.android.support:multidex:1.0.3'
     compile 'com.github.angads25:filepicker:1.1.1'
     compile 'com.hanks:passcodeview:0.1.2'
     annotationProcessor  'com.jakewharton:butterknife:7.0.1'
@@ -222,6 +236,8 @@ dependencies {
     compile 'com.github.sharish:ShimmerRecyclerView:v1.3'
     compile 'com.github.gcacace:signature-pad:1.2.1'
     compile 'com.github.javiersantos:BottomDialogs:1.2.1'
+    compile 'com.github.captain-miao:optroundcardview:1.0.0'
+    implementation 'com.vipulasri:ticketview:1.1.2'
     testCompile 'junit:junit:4.12'
 }
 

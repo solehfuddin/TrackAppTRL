@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Custom.DateFormat;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_child_estatement;
 import com.sofudev.trackapptrl.R;
@@ -27,6 +28,7 @@ public class Adapter_child_estatement extends RecyclerView.Adapter<Adapter_child
     private Context context;
     private List<Data_child_estatement> item;
     private RecyclerViewOnClickListener itemClick;
+    DateFormat tglFormat = new DateFormat();
 
     public Adapter_child_estatement(Context context, List<Data_child_estatement> item, RecyclerViewOnClickListener itemClick) {
         this.context = context;
@@ -48,7 +50,7 @@ public class Adapter_child_estatement extends RecyclerView.Adapter<Adapter_child
         final Data_child_estatement data = item.get(i);
 
         holder.txtInvoice.setText(data.getChildInvoice());
-        holder.txtTanggal.setText(data.getChildTanggal());
+        holder.txtTanggal.setText(tglFormat.indoOther(data.getChildTanggal()));
         holder.txtHarga.setText(CurencyFormat(data.getChildHarga()));
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

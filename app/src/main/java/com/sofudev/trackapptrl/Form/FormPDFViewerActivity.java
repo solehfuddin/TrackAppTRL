@@ -76,7 +76,10 @@ public class FormPDFViewerActivity extends AppCompatActivity{
                     }
                 });
 
-                alertDialog.show();
+                if (!isFinishing())
+                {
+                    alertDialog.show();
+                }
                 super.onReceivedError(webView, errorCode, description, failingUrl);
             }
 
@@ -106,7 +109,9 @@ public class FormPDFViewerActivity extends AppCompatActivity{
                     }
                 });
 
-                alertDialog.show();
+                if (!isFinishing()) {
+                    alertDialog.show();
+                }
             }
 
             @Override
@@ -133,7 +138,10 @@ public class FormPDFViewerActivity extends AppCompatActivity{
                     }
                 });
 
-                alertDialog.show();
+                if (!isFinishing())
+                {
+                    alertDialog.show();
+                }
             }
         });
 

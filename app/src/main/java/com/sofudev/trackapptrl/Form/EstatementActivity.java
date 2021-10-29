@@ -289,13 +289,14 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
                 }
             });
 
-            dialog.show();
+            if (!isFinishing())
+            {
+                dialog.show();
+            }
         }
     }
 
     private void setDateNow() {
-//        stateAdapter.removeAllFragment();
-
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat, dateFormat1;
 

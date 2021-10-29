@@ -130,7 +130,10 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void getKonfirmOrder(final String billingId, final String nomorHandphone, final String nominal)

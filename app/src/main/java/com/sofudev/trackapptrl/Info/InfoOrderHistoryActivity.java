@@ -109,7 +109,10 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void backToTrackOrder()

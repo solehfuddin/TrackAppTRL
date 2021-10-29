@@ -552,7 +552,40 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         }
     }
 
+    private String cekBulanCicil()
+    {
+        if (spinPilihPembayaran.getSelectedItem().toString().matches("Cicilan"))
+        {
+            if (spinMulaiCicilan.getSelectedItem().toString().matches("-- Pilih Bulan --"))
+            {
+                Toasty.warning(getApplicationContext(), "Harap pilih bulan", Toast.LENGTH_SHORT).show();
+//                        spinMulaiCicilan.setError("Pilih Bulan");
+//                isMulaiBayar = false;
+//                cicilanVal = "";
+
+                return "";
+            }
+            else
+            {
+//                isMulaiBayar = true;
+//                cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+                return spinMulaiCicilan.getSelectedItem().toString();
+            }
+        }
+        else
+        {
+//            isMulaiBayar = true;
+//            cicilanVal = "";
+            return "";
+        }
+    }
+
     private void sentData(String path) {
+        headerDp = edJmlDp.length() > 0 ? Integer.parseInt(edJmlDp.getText().toString().replace(".","")) : 0;
+        headerCondition = spinPilihPembayaran.getSelectedItem().toString();
+        headerInstallment = spinCicilan.getSelectedItem().toString();
+        headerStartInstallment = cekBulanCicil();
+
         dataSpHeader.setNoSp(headerNoSp);
         dataSpHeader.setTypeSp(headerTipeSp);
         dataSpHeader.setSales(headerSales);
@@ -973,11 +1006,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty() || error.getMessage().equals(null))
-                {
-                    Log.d("Error Active Sale", error.getMessage());
-                    flashsaleNote = "";
-                }
+                error.printStackTrace();
+                flashsaleNote = "";
             }
         });
 
@@ -1169,7 +1199,10 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void hideLoading()

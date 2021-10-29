@@ -163,7 +163,9 @@ public class FormPaymentKreditpro extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
             }
         });
 
@@ -280,7 +282,10 @@ public class FormPaymentKreditpro extends AppCompatActivity {
             }
         });
 
-        dialog3ds.show();
+        if (!isFinishing())
+        {
+            dialog3ds.show();
+        }
     }
 
     private void cancelPayment(String id) {
@@ -349,7 +354,10 @@ public class FormPaymentKreditpro extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void showPanduan() {

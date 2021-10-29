@@ -414,8 +414,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         }
                     });
 
-                    dialog.show();
                     dialog.getWindow().setAttributes(lwindow);
+                    if (!isFinishing()){
+                        dialog.show();
+                    }
                 }
                 else
                 {
@@ -427,12 +429,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     txtPriceBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemprice);
                     txtDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemdisc);
                     txtTotalBottom = custom.findViewById(R.id.bottom_dialog_paysp_txttotalprice);
-                    Spinner spinPilihBayarBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtPembayaran);
-                    Spinner spinCicilanBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinCicilan);
-                    Spinner spinMulaiCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinMulaiCicilan);
+                    final Spinner spinPilihBayarBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtPembayaran);
+                    final Spinner spinCicilanBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinCicilan);
+                    final Spinner spinMulaiCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinMulaiCicilan);
                     LinearLayout linearTitleCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearTitleCicilan);
                     LinearLayout linearContentCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearContentCicilan);
-                    BootstrapEditText edJmlDpBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtJumlahDp);
+                    final BootstrapEditText edJmlDpBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtJumlahDp);
                     edDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtDiskon);
                     RippleView btnSave = custom.findViewById(R.id.bottom_dialog_paysp_btndetail);
 
@@ -450,6 +452,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     btnSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            headerDp = edJmlDpBottom.getText().toString().length() > 0
+                                    ? Integer.parseInt(edJmlDpBottom.getText().toString().replace(".", ""))
+                                    : 0;
+                            headerCondition = spinPilihBayarBottom.getSelectedItem().toString();
+                            headerInstallment = spinCicilanBottom.getSelectedItem().toString();
+                            headerStartInstallment = cekBulanCicil(spinPilihBayarBottom, spinMulaiCicilBottom);
                             saveOrder();
                         }
                     });
@@ -459,6 +467,34 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     bottomDialog.show();
                 }
                 break;
+        }
+    }
+
+    private String cekBulanCicil(Spinner spinPilihPembayaran, Spinner spinMulaiCicilan)
+    {
+        if (spinPilihPembayaran.getSelectedItem().toString().matches("Cicilan"))
+        {
+            if (spinMulaiCicilan.getSelectedItem().toString().matches("-- Pilih Bulan --"))
+            {
+                Toasty.warning(getApplicationContext(), "Harap pilih bulan", Toast.LENGTH_SHORT).show();
+//                        spinMulaiCicilan.setError("Pilih Bulan");
+//                isMulaiBayar = false;
+//                cicilanVal = "";
+
+                return "";
+            }
+            else
+            {
+//                isMulaiBayar = true;
+//                cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+                return spinMulaiCicilan.getSelectedItem().toString();
+            }
+        }
+        else
+        {
+//            isMulaiBayar = true;
+//            cicilanVal = "";
+            return "";
         }
     }
 
@@ -1235,7 +1271,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1800,7 +1838,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
             }
         });
 
@@ -1814,7 +1854,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
-        dialog.show();
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void handleRecyclerQty(List<Data_fragment_bestproduct> newItem) {

@@ -343,8 +343,11 @@ public class AddCartProductActivity extends AppCompatActivity {
                                 }
                             });
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                     }
                     else
@@ -396,8 +399,11 @@ public class AddCartProductActivity extends AppCompatActivity {
                                 }
                             });
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                         else
                         {
@@ -516,8 +522,11 @@ public class AddCartProductActivity extends AppCompatActivity {
                                 }
                             });
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
 
 //                        Toasty.error(getApplicationContext(), "total item cart : " + itemCart.size(), Toast.LENGTH_SHORT).show();
                         }
@@ -644,7 +653,10 @@ public class AddCartProductActivity extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void getIdOptic()
@@ -1112,9 +1124,11 @@ public class AddCartProductActivity extends AppCompatActivity {
         UniversalFontTextView txtInfo = dialog.findViewById(R.id.dialog_warning_txtInfo);
         txtInfo.setText("Terjadi kesalahan silahkan coba kembali nanti");
 
-
-        dialog.show();
         dialog.getWindow().setAttributes(lwindow);
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void generateId(final String username)
@@ -1352,7 +1366,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -1380,7 +1394,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
 //                loading.dismiss();
-                loading.hide();
+                loading.dismiss();
             }
         }){
             @Override
@@ -1499,7 +1513,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if(jsonObject.length() > 0)
@@ -1646,7 +1660,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -1738,7 +1752,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -1881,7 +1895,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -2087,10 +2101,7 @@ public class AddCartProductActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null || !error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Duration", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 

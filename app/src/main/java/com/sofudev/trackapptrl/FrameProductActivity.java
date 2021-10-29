@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
 
 public class FrameProductActivity extends AppCompatActivity {
@@ -16,6 +17,7 @@ public class FrameProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_frame_product);
 
         imgBack = findViewById(R.id.frame_product_btnback);

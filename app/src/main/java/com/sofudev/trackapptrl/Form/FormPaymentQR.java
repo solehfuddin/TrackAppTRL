@@ -148,7 +148,9 @@ public class FormPaymentQR extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
                 //dialog.getWindow().setAttributes(lwindow);
             }
         });
@@ -171,8 +173,10 @@ public class FormPaymentQR extends AppCompatActivity {
                     lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
                     lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                    dialog.show();
                     dialog.getWindow().setAttributes(lwindow);
+                    if (!isFinishing()){
+                        dialog.show();
+                    }
                 }
                 else if (atmType.contentEquals("Mobile Banking Yang Tersedia") || atmType.equals("Mobile Banking Yang Tersedia") || atmType.contains("Mobile Banking Yang Tersedia"))
                 {
@@ -182,8 +186,10 @@ public class FormPaymentQR extends AppCompatActivity {
                     lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
                     lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
 
-                    dialog.show();
                     dialog.getWindow().setAttributes(lwindow);
+                    if (!isFinishing()){
+                        dialog.show();
+                    }
                 }
             }
         });
@@ -197,7 +203,10 @@ public class FormPaymentQR extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void cancelPayment(String id) {

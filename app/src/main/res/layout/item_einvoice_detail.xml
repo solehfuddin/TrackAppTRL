@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="33dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/item_detaileinv_txttitle"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:text="QUBE The Smart System ( for Anterior Vitrectomy Phacoemulsification )"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        app:customFont="RobotoRegular.ttf"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/item_detaileinv_txtprice"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="IDR 803.891.084"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:gravity="end"
+        android:textColor="@color/colorEinvPurple"
+        app:customFont="RobotoRegular.ttf"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.cardview.widget.CardView;
@@ -40,12 +41,6 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
-//import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
-//import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-//import com.orhanobut.dialogplus.DialogPlus;
-//import com.orhanobut.dialogplus.ViewHolder;
-//import com.orhanobut.dialogplus.DialogPlus;
-//import com.orhanobut.dialogplus.ViewHolder;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.sofudev.trackapptrl.Adapter.Adapter_brandfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_colorfilter;
@@ -58,7 +53,6 @@ import com.sofudev.trackapptrl.Custom.CustomAdapterFrameBrand;
 import com.sofudev.trackapptrl.Custom.CustomAdapterFrameColor;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.GridSpacingItemDecoration;
-import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_brand_filter;
 import com.sofudev.trackapptrl.Data.Data_color_filter;
@@ -78,7 +72,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import cn.iwgang.countdownview.CountdownView;
 import es.dmoral.toasty.Toasty;
@@ -86,8 +79,8 @@ import viethoa.com.snackbar.BottomSnackBarMessage;
 
 public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
-    private OnFragmentInteractionListener mListener;
     Config config = new Config();
+    Context myContext;
 
     String allDataUrl = config.Ip_address + config.frame_bestproduct_showAllData;
     String sortGroupUrl = config.Ip_address + config.frame_filterby_group;
@@ -98,8 +91,6 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     String GETACTIVESALE_URL = config.Ip_address + config.flashsale_getActiveSale;
 
     RecyclerView recyclerView,recyclerColor, recyclerBrand;
-//    private EditText txtRangeMin, txtRangeMax;
-//    CrystalRangeSeekbar rangePrice;
     private EditText txtRangeMax;
     private SeekBar rangePrice;
     ProgressWheel progress;
@@ -127,8 +118,6 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     String ACTIVITY_TAG;
 
     List<String> listSortBy = new ArrayList<>();
-//    ArrayList<String> itemBrand  = new ArrayList<>();
-    String itemBrand, outputSelected;
     List<String> listBrand = new ArrayList<>();
     List<String> listColor = new ArrayList<>();
 
@@ -136,12 +125,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return view = inflater.inflate(R.layout.fragment_new_frame, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        TypefaceProvider.registerDefaultIconSets();
+        view = inflater.inflate(R.layout.fragment_new_frame, container, false);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
 
@@ -159,8 +144,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         cardTop = view.findViewById(R.id.fragment_newframe_cartTop);
         imgTop  = view.findViewById(R.id.fragment_newframe_buttonTop);
 
-        btnFilter.setBootstrapBrand(new BlackStyle(getContext()));
-        btnSort.setBootstrapBrand(new BlackStyle(getContext()));
+        btnFilter.setBootstrapBrand(new BlackStyle(myContext));
+        btnSort.setBootstrapBrand(new BlackStyle(myContext));
 
         btnFilter.setOnClickListener(this);
         btnSort.setOnClickListener(this);
@@ -177,27 +162,12 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 new RecyclerViewOnClickListener() {
                     @Override
                     public void onItemClick(View view, int pos, String id) {
-//                Toasty.success(getContext(), itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), DetailProductActivity.class);
-//                intent.putExtra("id_lensa", itemBestProduct.get(pos).getProduct_id());
-//                startActivity(intent);
-
                         if (ACTIVITY_TAG.equals("main"))
                         {
                             Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-//                    DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("product_id", itemBestProduct.get(pos).getProduct_id());
-//                    detailFrameFragment.setArguments(bundle);
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.appbarmain_fragment_container, detailFrameFragment)
-//                            .addToBackStack(null)
-//                            .commit();
-
                             Intent intent = new Intent(getContext(), DetailProductActivity.class);
                             intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
                             startActivity(intent);
@@ -226,7 +196,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0)
                 {
@@ -278,6 +248,12 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 //        {
 //            mListener.onFragmentInteraction("Frame Corner");
 //        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void getData()
@@ -291,15 +267,14 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-//        mListener = (OnFragmentInteractionListener) context;
+        myContext = context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
     @Override
@@ -327,22 +302,17 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         if(getActivity() != null){
             final Dialog dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            //WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
 
             List<String> allSort = Arrays.asList("Title (A-Z)", "Title (Z-A)", "Price (Low-High)", "Price (High-Low)");
             listSortBy.clear();
             listSortBy.addAll(allSort);
 
-            //Toasty.info(getContext(), "Position " + pos, Toast.LENGTH_SHORT).show();
-
-            //ArrayAdapter<String> itemAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listSortBy);
             adapter_sortbyframe = new Adapter_sortbyframe(getContext(), listSortBy, pos);
 
             dialog.setContentView(R.layout.dialog_sort);
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             dialog.setCancelable(true);
-            //lwindow.copyFrom(dialog.getWindow().getAttributes());
             final ListView lvSortBy = dialog.findViewById(R.id.dialog_sort_listview);
             lvSortBy.setAdapter(adapter_sortbyframe);
 
@@ -429,7 +399,10 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-            dialog.show();
+            if (!getActivity().isFinishing())
+            {
+                dialog.show();
+            }
         }
     }
 
@@ -564,159 +537,21 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             });
 
             selectRangePrice();
-            dialog.show();
+
+            if (!getActivity().isFinishing())
+            {
+                dialog.show();
+            }
         }
     }
-
-//    private void dialogFilter()
-//    {
-//        final DialogPlus dialogPlus = DialogPlus.newDialog(getContext())
-//                .setContentHolder(new ViewHolder(R.layout.dialog_filter))
-//                .create();
-//
-//        showBrand();
-//        showColor();
-//
-//        recyclerColor = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_recyclerColor);
-//        recyclerBrand = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_recyclerBrand);
-//        //rangePrice    = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_rangebar);
-//        txtRangeMin   = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_txtrangemin);
-//        txtRangeMax   = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_txtrangemax);
-//        btnClear      = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_btnClear);
-//        btnApply      = dialogPlus.getHolderView().findViewById(R.id.dialog_filter_btnApply);
-//
-//        //Toasty.info(getContext(), chooseBrand, Toast.LENGTH_SHORT).show();
-//
-//        recyclerColor.setLayoutManager(new GridLayoutManager(getContext(), 6));
-//        adapter_colorfilter = new Adapter_colorfilter(getContext(), dataColor, customAdapterFrameColor, chooseColor);
-//        recyclerColor.setAdapter(adapter_colorfilter);
-//
-//        recyclerBrand.setLayoutManager(new GridLayoutManager(getContext(), 4));
-//        adapter_brandfilter = new Adapter_brandfilter(getContext(), dataBrand, customAdapterFrameFragment, chooseBrand);
-//        recyclerBrand.setAdapter(adapter_brandfilter);
-//
-//       // rangePrice.setMinStartValue(Float.valueOf(valueMin)).setMaxStartValue(Float.valueOf(valueMax)).apply();
-//
-//        listBrand.clear();
-//        listColor.clear();
-//
-//        btnApply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                itemBestProduct.clear();
-//                valueMin = removeRupiah(txtRangeMin.getText().toString());
-//                valueMax = removeRupiah(txtRangeMax.getText().toString());
-//
-//                Object[] allBrand = listBrand.toArray();
-//                Object[] allColor = listColor.toArray();
-//
-//                //Toasty.info(getContext(), "Pos " + Arrays.toString(allBrand), Toast.LENGTH_SHORT).show();
-//
-//                filterPrice = "AND price.`price_list_item` BETWEEN " + valueMin + " AND " + valueMax;
-//                if (allBrand.length > 0)
-//                {
-//                    chooseBrand = Arrays.toString(allBrand).replace('[', ' ').replace(']', ' ').trim();
-//                    filterBrand = "AND item.`category_item` IN ( " + chooseBrand + ")";
-//
-////                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
-////                    Log.d("READ THIS : ", filterPrice + " " + filterBrand);
-//                }
-//                else
-//                {
-//                    filterBrand = "";
-//                }
-//
-//                if (allColor.length > 0)
-//                {
-//                    chooseColor = Arrays.toString(allColor).replace('[', ' ').replace(']', ' ').trim();
-//                    filterColor = "AND item.`color_type` IN (" + chooseColor + ")";
-//
-////                    Toasty.info(getContext(), filterPrice + filterBrand, Toast.LENGTH_SHORT).show();
-////                    Log.d("READ THIS : ", filterPrice + " " + filterBrand + " " + filterColor);
-//                }
-//                else
-//                {
-//                    filterColor = "";
-//                }
-//
-//                //Toasty.info(getContext(), filterPrice, Toast.LENGTH_SHORT).show();
-//                from = 0;
-//                limit = 8;
-//
-//                sortCondition = "item.`item_code` ASC";
-//                showDataByFilter(sortCondition, filterPrice + " " + filterBrand + " " + filterColor,
-//                        from.toString(), limit.toString());
-//                pos = 5;
-//                hasil = (from + limit);
-//                dialogPlus.dismiss();
-//            }
-//        });
-//
-//        btnClear.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                valueMin = "0";
-//                valueMax = "7000000";
-//
-//                chooseBrand = null;
-//                chooseColor = null;
-//
-//                dialogPlus.dismiss();
-//            }
-//        });
-//
-////        txtRangeMin.setOnKeyListener(new View.OnKeyListener() {
-////            @Override
-////            public boolean onKey(View v, int keyCode, KeyEvent event) {
-////                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
-////                {
-//////                    Toasty.info(getContext(), "Min " + txtRangeMin.getText(), Toast.LENGTH_SHORT).show();
-//////                    String rangeMin = removeRupiah(txtRangeMin.getText().toString());
-//////                    String rangeMax = removeRupiah(txtRangeMax.getText().toString());
-////
-////                    valueMin = removeRupiah(txtRangeMin.getText().toString());
-////                    valueMax = removeRupiah(txtRangeMax.getText().toString());
-////
-////                    rangePrice.setMinStartValue(Float.valueOf(valueMin)).setMaxStartValue(Float.valueOf(valueMax)).apply();
-////
-////                    txtRangeMin.setText("Rp " + valueMin);
-////                }
-////
-////                return false;
-////            }
-////        });
-////
-////        txtRangeMax.setOnKeyListener(new View.OnKeyListener() {
-////            @Override
-////            public boolean onKey(View v, int keyCode, KeyEvent event) {
-////                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
-////                {
-//////                    String rangeMin = removeRupiah(txtRangeMin.getText().toString());
-//////                    String rangeMax = removeRupiah(txtRangeMax.getText().toString());
-////
-////                    valueMin = removeRupiah(txtRangeMin.getText().toString());
-////                    valueMax = removeRupiah(txtRangeMax.getText().toString());
-////
-////                    rangePrice.setMinStartValue(Float.valueOf(valueMin)).setMaxStartValue(Float.valueOf(valueMax)).apply();
-////
-////                    txtRangeMax.setText("Rp " + valueMax);
-////                }
-////
-////                return false;
-////            }
-////        });
-//
-//      selectRangePrice();
-//
-//        dialogPlus.show();
-//    }
 
     private void selectRangePrice()
     {
         rangePrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txtRangeMax.setText("Rp " + String.valueOf(progress));
+                String range = "Rp " + String.valueOf(progress);
+                txtRangeMax.setText(range);
             }
 
             @Override
@@ -1256,10 +1091,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null || !error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Duration", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 

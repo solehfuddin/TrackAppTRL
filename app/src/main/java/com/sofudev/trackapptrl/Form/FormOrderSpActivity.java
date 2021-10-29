@@ -203,7 +203,10 @@ public class FormOrderSpActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private static Bitmap convertToPng(Bitmap bitmap){
@@ -873,7 +876,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing()){
+                    dialog.show();
+                }
             }
 
             private void disableSelect() {
@@ -1657,7 +1662,10 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //                finish();
             }
         });
-        dialog.show();
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void updatePhoto(Data_spheader item, final String url) {

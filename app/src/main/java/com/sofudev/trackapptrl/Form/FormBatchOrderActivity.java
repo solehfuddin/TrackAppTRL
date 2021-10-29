@@ -306,8 +306,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                                 }
                             });
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                         else
                         {
@@ -445,8 +448,12 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                                 }
                             });
 
-                            dialog.show();
                             dialog.getWindow().setAttributes(lwindow);
+
+                            if (!isFinishing())
+                            {
+                                dialog.show();
+                            }
                         }
                     }
                     else
@@ -502,8 +509,12 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             }
                         });
 
-                        dialog.show();
                         dialog.getWindow().setAttributes(lwindow);
+
+                        if (!isFinishing())
+                        {
+                            dialog.show();
+                        }
                     }
                     else
                     {
@@ -678,8 +689,11 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                             }
                         });
 
-                        dialog.show();
                         dialog.getWindow().setAttributes(lwindow);
+                        if (!isFinishing())
+                        {
+                            dialog.show();
+                        }
                     }
                 }
             }
@@ -810,7 +824,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -864,7 +881,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -918,7 +938,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1403,7 +1426,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+                if (!isFinishing()){
+                    loading.show();
+                }
     }
 
     private String CurencyFormat(String Rp){
@@ -2057,7 +2083,10 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void potongStock(final String itemId, final String qty)
@@ -2991,7 +3020,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -3019,7 +3048,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
 //                loading.dismiss();
-                loading.hide();
+                loading.dismiss();
             }
         }){
             @Override
@@ -3042,7 +3071,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -3218,7 +3247,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -3299,7 +3328,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.hide();
+                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -3630,10 +3659,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Get Status", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override
@@ -3675,10 +3701,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty() || error.getMessage().equals(null))
-                {
-                    Log.d("Error Active Sale", error.getMessage());
-                }
+                error.printStackTrace();
             }
         });
 

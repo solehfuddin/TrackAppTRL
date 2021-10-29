@@ -274,7 +274,10 @@ public class FormPaymentCC extends AppCompatActivity {
                     }
                 });
 
-                dialog3ds.show();
+                if (!isFinishing())
+                {
+                    dialog3ds.show();
+                }
             }
 
             @Override
@@ -327,7 +330,10 @@ public class FormPaymentCC extends AppCompatActivity {
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     private void ViewPdfByFilter(final String title, final String header)
@@ -545,7 +551,10 @@ public class FormPaymentCC extends AppCompatActivity {
                 finish();
             }
         });
-        dialog.show();
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private class CustomWebView extends WebView {

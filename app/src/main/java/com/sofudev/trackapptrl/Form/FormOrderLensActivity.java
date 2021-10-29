@@ -532,59 +532,64 @@ public class FormOrderLensActivity extends AppCompatActivity {
         sw_facet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (sw_facet.isChecked())
-                {
-                    txt_segh.setEnabled(true);
-                    txt_wrap.setEnabled(true);
-                    txt_phantose.setEnabled(true);
-                    txt_vertex.setEnabled(true);
-                    txt_infofacet.setEnabled(true);
+                checkFc();
+            }
+        });
+    }
+
+    private void checkFc()
+    {
+        if (sw_facet.isChecked())
+        {
+            txt_segh.setEnabled(true);
+            txt_wrap.setEnabled(true);
+            txt_phantose.setEnabled(true);
+            txt_vertex.setEnabled(true);
+            txt_infofacet.setEnabled(true);
 //                    spin_framemodel.setVisibility(View.VISIBLE);
 
 //                    txt_dbl.setEnabled(true);
 //                    txt_hor.setEnabled(true);
 //                    txt_ver.setEnabled(true);
 
-                    //Toasty.info(getApplicationContext(), "Facet", Toast.LENGTH_SHORT, true).show();
-                    isfacet = "G";
-                    //Toasty.warning(getApplicationContext(), isfacet, Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    txt_segh.setEnabled(true);
-                    txt_wrap.setEnabled(false);
-                    txt_phantose.setEnabled(false);
-                    txt_vertex.setEnabled(false);
-                    txt_infofacet.setEnabled(false);
+            //Toasty.info(getApplicationContext(), "Facet", Toast.LENGTH_SHORT, true).show();
+            isfacet = "G";
+            //Toasty.warning(getApplicationContext(), isfacet, Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            txt_segh.setEnabled(true);
+            txt_wrap.setEnabled(false);
+            txt_phantose.setEnabled(false);
+            txt_vertex.setEnabled(false);
+            txt_infofacet.setEnabled(false);
 //                    txt_dbl.setEnabled(false);
 //                    txt_hor.setEnabled(false);
 //                    txt_ver.setEnabled(false);
 //                    spin_framemodel.setVisibility(View.GONE);
 
 //                    txt_segh.setText("");
-                    txt_wrap.setText("");
-                    txt_phantose.setText("");
-                    txt_vertex.setText("");
-                    txt_infofacet.setText("");
+            txt_wrap.setText("");
+            txt_phantose.setText("");
+            txt_vertex.setText("");
+            txt_infofacet.setText("");
 //                    txt_dbl.setText("");
 //                    txt_hor.setText("");
 //                    txt_ver.setText("");
-                    //Toasty.warning(getApplicationContext(), "Not facet", Toast.LENGTH_SHORT, true).show();
+            //Toasty.warning(getApplicationContext(), "Not facet", Toast.LENGTH_SHORT, true).show();
 
-                    String hor = txt_hor.getText().toString();
-                    String ver = txt_ver.getText().toString();
+            String hor = txt_hor.getText().toString();
+            String ver = txt_ver.getText().toString();
 
-                    if (!hor.isEmpty() && !ver.isEmpty())
-                    {
-                        isfacet = "F";
-                    }
-                    else
-                    {
-                        isfacet = "N";
-                    }
-                }
+            if (!hor.isEmpty() && !ver.isEmpty())
+            {
+                isfacet = "F";
             }
-        });
+            else
+            {
+                isfacet = "N";
+            }
+        }
     }
 
     private void getIdOptic()
@@ -789,9 +794,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     koridor = "";
                 }
 
-                String frameType = spin_framemodel.getText().toString();
+                String frameType = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString();
                 final String kodeitemR, kodeitemL;
                 getPaymentOrNot(opticFlag);
+
+                checkFc();
 
                 if (categoryLens.equals("S"))
                 {
@@ -947,8 +954,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                         }
                                                                                                     });
 
-                                                                                                    dialog.show();
                                                                                                     dialog.getWindow().setAttributes(lwindow);
+
+                                                                                                    if (!isFinishing())
+                                                                                                    {
+                                                                                                        dialog.show();
+                                                                                                    }
                                                                                                 }
                                                                                                 else
                                                                                                 {
@@ -957,24 +968,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                    if (sw_facet.isChecked())
-                                                                                                    {
-                                                                                                        isfacet = "G";
-                                                                                                    }
-                                                                                                    else
-                                                                                                    {
-                                                                                                        String hor = txt_hor.getText().toString();
-                                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                        {
-                                                                                                            isfacet = "F";
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            isfacet = "N";
-                                                                                                        }
-                                                                                                    }
+//                                                                                                    if (sw_facet.isChecked())
+//                                                                                                    {
+//                                                                                                        isfacet = "G";
+//                                                                                                    }
+//                                                                                                    else
+//                                                                                                    {
+//                                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                        {
+//                                                                                                            isfacet = "F";
+//                                                                                                        }
+//                                                                                                        else
+//                                                                                                        {
+//                                                                                                            isfacet = "N";
+//                                                                                                        }
+//                                                                                                    }
 
                                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1010,7 +1021,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                 dialog.dismiss();
                                                                                                             }
                                                                                                         });
-                                                                                                        dialog.show();
+
+                                                                                                        if (!isFinishing())
+                                                                                                        {
+                                                                                                            dialog.show();
+                                                                                                        }
                                                                                                     }
                                                                                                 }
                                                                                             } catch (JSONException e) {
@@ -1026,24 +1041,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                    if (sw_facet.isChecked())
-                                                                                    {
-                                                                                        isfacet = "G";
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        String hor = txt_hor.getText().toString();
-                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                        {
-                                                                                            isfacet = "F";
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            isfacet = "N";
-                                                                                        }
-                                                                                    }
+//                                                                                    if (sw_facet.isChecked())
+//                                                                                    {
+//                                                                                        isfacet = "G";
+//                                                                                    }
+//                                                                                    else
+//                                                                                    {
+//                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                        {
+//                                                                                            isfacet = "F";
+//                                                                                        }
+//                                                                                        else
+//                                                                                        {
+//                                                                                            isfacet = "N";
+//                                                                                        }
+//                                                                                    }
 
                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1079,7 +1094,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                 dialog.dismiss();
                                                                                             }
                                                                                         });
-                                                                                        dialog.show();
+
+                                                                                        if (!isFinishing())
+                                                                                        {
+                                                                                            dialog.show();
+                                                                                        }
                                                                                     }
                                                                                 }
 
@@ -1216,8 +1235,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                     }
                                                                                                 });
 
-                                                                                                dialog.show();
                                                                                                 dialog.getWindow().setAttributes(lwindow);
+
+                                                                                                if (!isFinishing())
+                                                                                                {
+                                                                                                    dialog.show();
+                                                                                                }
                                                                                             }
                                                                                             else
                                                                                             {
@@ -1226,24 +1249,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                 String order = txt_orderNumber.getText().toString();
                                                                                                 String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                if (sw_facet.isChecked())
-                                                                                                {
-                                                                                                    isfacet = "G";
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    String hor = txt_hor.getText().toString();
-                                                                                                    String ver = txt_ver.getText().toString();
-
-                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                    {
-                                                                                                        isfacet = "F";
-                                                                                                    }
-                                                                                                    else
-                                                                                                    {
-                                                                                                        isfacet = "N";
-                                                                                                    }
-                                                                                                }
+//                                                                                                if (sw_facet.isChecked())
+//                                                                                                {
+//                                                                                                    isfacet = "G";
+//                                                                                                }
+//                                                                                                else
+//                                                                                                {
+//                                                                                                    String hor = txt_hor.getText().toString();
+//                                                                                                    String ver = txt_ver.getText().toString();
+//
+//                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                    {
+//                                                                                                        isfacet = "F";
+//                                                                                                    }
+//                                                                                                    else
+//                                                                                                    {
+//                                                                                                        isfacet = "N";
+//                                                                                                    }
+//                                                                                                }
 
                                                                                                 Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1278,7 +1301,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                             dialog.dismiss();
                                                                                                         }
                                                                                                     });
-                                                                                                    dialog.show();
+
+                                                                                                    if (!isFinishing())
+                                                                                                    {
+                                                                                                        dialog.show();
+                                                                                                    }
                                                                                                 }
                                                                                             }
                                                                                         } catch (JSONException e) {
@@ -1294,24 +1321,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                 String order = txt_orderNumber.getText().toString();
                                                                                 String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                if (sw_facet.isChecked())
-                                                                                {
-                                                                                    isfacet = "G";
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    String hor = txt_hor.getText().toString();
-                                                                                    String ver = txt_ver.getText().toString();
-
-                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                    {
-                                                                                        isfacet = "F";
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        isfacet = "N";
-                                                                                    }
-                                                                                }
+//                                                                                if (sw_facet.isChecked())
+//                                                                                {
+//                                                                                    isfacet = "G";
+//                                                                                }
+//                                                                                else
+//                                                                                {
+//                                                                                    String hor = txt_hor.getText().toString();
+//                                                                                    String ver = txt_ver.getText().toString();
+//
+//                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                    {
+//                                                                                        isfacet = "F";
+//                                                                                    }
+//                                                                                    else
+//                                                                                    {
+//                                                                                        isfacet = "N";
+//                                                                                    }
+//                                                                                }
 
                                                                                 Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1346,7 +1373,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                             dialog.dismiss();
                                                                                         }
                                                                                     });
-                                                                                    dialog.show();
+
+                                                                                    if (!isFinishing())
+                                                                                    {
+                                                                                        dialog.show();
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }
@@ -1522,8 +1553,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                         }
                                                                                                                                     });
 
-                                                                                                                                    dialog.show();
                                                                                                                                     dialog.getWindow().setAttributes(lwindow);
+
+                                                                                                                                    if (!isFinishing())
+                                                                                                                                    {
+                                                                                                                                        dialog.show();
+                                                                                                                                    }
                                                                                                                                 }
                                                                                                                                 else
                                                                                                                                 {
@@ -1532,24 +1567,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                                                    if (sw_facet.isChecked())
-                                                                                                                                    {
-                                                                                                                                        isfacet = "G";
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        String hor = txt_hor.getText().toString();
-                                                                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                                                        {
-                                                                                                                                            isfacet = "F";
-                                                                                                                                        }
-                                                                                                                                        else
-                                                                                                                                        {
-                                                                                                                                            isfacet = "N";
-                                                                                                                                        }
-                                                                                                                                    }
+//                                                                                                                                    if (sw_facet.isChecked())
+//                                                                                                                                    {
+//                                                                                                                                        isfacet = "G";
+//                                                                                                                                    }
+//                                                                                                                                    else
+//                                                                                                                                    {
+//                                                                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                                                        {
+//                                                                                                                                            isfacet = "F";
+//                                                                                                                                        }
+//                                                                                                                                        else
+//                                                                                                                                        {
+//                                                                                                                                            isfacet = "N";
+//                                                                                                                                        }
+//                                                                                                                                    }
 
                                                                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1584,7 +1619,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                                 dialog.dismiss();
                                                                                                                                             }
                                                                                                                                         });
-                                                                                                                                        dialog.show();
+
+                                                                                                                                        if(!isFinishing())
+                                                                                                                                        {
+                                                                                                                                            dialog.show();
+                                                                                                                                        }
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                             } catch (JSONException e) {
@@ -1600,24 +1639,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                                    if (sw_facet.isChecked())
-                                                                                                                    {
-                                                                                                                        isfacet = "G";
-                                                                                                                    }
-                                                                                                                    else
-                                                                                                                    {
-                                                                                                                        String hor = txt_hor.getText().toString();
-                                                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                                        {
-                                                                                                                            isfacet = "F";
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            isfacet = "N";
-                                                                                                                        }
-                                                                                                                    }
+//                                                                                                                    if (sw_facet.isChecked())
+//                                                                                                                    {
+//                                                                                                                        isfacet = "G";
+//                                                                                                                    }
+//                                                                                                                    else
+//                                                                                                                    {
+//                                                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                                        {
+//                                                                                                                            isfacet = "F";
+//                                                                                                                        }
+//                                                                                                                        else
+//                                                                                                                        {
+//                                                                                                                            isfacet = "N";
+//                                                                                                                        }
+//                                                                                                                    }
 
                                                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1652,7 +1691,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                 dialog.dismiss();
                                                                                                                             }
                                                                                                                         });
-                                                                                                                        dialog.show();
+
+                                                                                                                        if (!isFinishing())
+                                                                                                                        {
+                                                                                                                            dialog.show();
+                                                                                                                        }
                                                                                                                     }
                                                                                                                 }
                                                                                                             }
@@ -1797,8 +1840,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                                     }
                                                                                                                                                 });
 
-                                                                                                                                                dialog.show();
                                                                                                                                                 dialog.getWindow().setAttributes(lwindow);
+
+                                                                                                                                                if (!isFinishing())
+                                                                                                                                                {
+                                                                                                                                                    dialog.show();
+                                                                                                                                                }
                                                                                                                                             }
                                                                                                                                             else
                                                                                                                                             {
@@ -1807,24 +1854,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                                 String order = txt_orderNumber.getText().toString();
                                                                                                                                                 String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                                                                if (sw_facet.isChecked())
-                                                                                                                                                {
-                                                                                                                                                    isfacet = "G";
-                                                                                                                                                }
-                                                                                                                                                else
-                                                                                                                                                {
-                                                                                                                                                    String hor = txt_hor.getText().toString();
-                                                                                                                                                    String ver = txt_ver.getText().toString();
-
-                                                                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                                                                    {
-                                                                                                                                                        isfacet = "F";
-                                                                                                                                                    }
-                                                                                                                                                    else
-                                                                                                                                                    {
-                                                                                                                                                        isfacet = "N";
-                                                                                                                                                    }
-                                                                                                                                                }
+//                                                                                                                                                if (sw_facet.isChecked())
+//                                                                                                                                                {
+//                                                                                                                                                    isfacet = "G";
+//                                                                                                                                                }
+//                                                                                                                                                else
+//                                                                                                                                                {
+//                                                                                                                                                    String hor = txt_hor.getText().toString();
+//                                                                                                                                                    String ver = txt_ver.getText().toString();
+//
+//                                                                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                                                                    {
+//                                                                                                                                                        isfacet = "F";
+//                                                                                                                                                    }
+//                                                                                                                                                    else
+//                                                                                                                                                    {
+//                                                                                                                                                        isfacet = "N";
+//                                                                                                                                                    }
+//                                                                                                                                                }
 
                                                                                                                                                 Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1859,7 +1906,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                                             dialog.dismiss();
                                                                                                                                                         }
                                                                                                                                                     });
-                                                                                                                                                    dialog.show();
+
+                                                                                                                                                    if (!isFinishing())
+                                                                                                                                                    {
+                                                                                                                                                        dialog.show();
+                                                                                                                                                    }
                                                                                                                                                 }
                                                                                                                                             }
 
@@ -1883,24 +1934,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                                    if (sw_facet.isChecked())
-                                                                                                                    {
-                                                                                                                        isfacet = "G";
-                                                                                                                    }
-                                                                                                                    else
-                                                                                                                    {
-                                                                                                                        String hor = txt_hor.getText().toString();
-                                                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                                        {
-                                                                                                                            isfacet = "F";
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            isfacet = "N";
-                                                                                                                        }
-                                                                                                                    }
+//                                                                                                                    if (sw_facet.isChecked())
+//                                                                                                                    {
+//                                                                                                                        isfacet = "G";
+//                                                                                                                    }
+//                                                                                                                    else
+//                                                                                                                    {
+//                                                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                                        {
+//                                                                                                                            isfacet = "F";
+//                                                                                                                        }
+//                                                                                                                        else
+//                                                                                                                        {
+//                                                                                                                            isfacet = "N";
+//                                                                                                                        }
+//                                                                                                                    }
 
                                                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -1935,7 +1986,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                 dialog.dismiss();
                                                                                                                             }
                                                                                                                         });
-                                                                                                                        dialog.show();
+
+                                                                                                                        if (!isFinishing())
+                                                                                                                        {
+                                                                                                                            dialog.show();
+                                                                                                                        }
                                                                                                                     }
                                                                                                                 }
                                                                                                             }
@@ -2409,8 +2464,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                     }
                                                                                                                                 });
 
-                                                                                                                                dialog.show();
                                                                                                                                 dialog.getWindow().setAttributes(lwindow);
+
+                                                                                                                                if (!isFinishing())
+                                                                                                                                {
+                                                                                                                                    dialog.show();
+                                                                                                                                }
                                                                                                                             }
                                                                                                                             else
                                                                                                                             {
@@ -2419,24 +2478,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                 String order = txt_orderNumber.getText().toString();
                                                                                                                                 String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                                                if (sw_facet.isChecked())
-                                                                                                                                {
-                                                                                                                                    isfacet = "G";
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    String hor = txt_hor.getText().toString();
-                                                                                                                                    String ver = txt_ver.getText().toString();
-
-                                                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                                                    {
-                                                                                                                                        isfacet = "F";
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        isfacet = "N";
-                                                                                                                                    }
-                                                                                                                                }
+//                                                                                                                                if (sw_facet.isChecked())
+//                                                                                                                                {
+//                                                                                                                                    isfacet = "G";
+//                                                                                                                                }
+//                                                                                                                                else
+//                                                                                                                                {
+//                                                                                                                                    String hor = txt_hor.getText().toString();
+//                                                                                                                                    String ver = txt_ver.getText().toString();
+//
+//                                                                                                                                    if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                                                    {
+//                                                                                                                                        isfacet = "F";
+//                                                                                                                                    }
+//                                                                                                                                    else
+//                                                                                                                                    {
+//                                                                                                                                        isfacet = "N";
+//                                                                                                                                    }
+//                                                                                                                                }
 
                                                                                                                                 Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -2471,7 +2530,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                             dialog.dismiss();
                                                                                                                                         }
                                                                                                                                     });
-                                                                                                                                    dialog.show();
+
+                                                                                                                                    if (!isFinishing())
+                                                                                                                                    {
+                                                                                                                                        dialog.show();
+                                                                                                                                    }
                                                                                                                                 }
                                                                                                                             }
                                                                                                                         }
@@ -2494,24 +2557,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                     String order = txt_orderNumber.getText().toString();
                                                                                                     String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                                    if (sw_facet.isChecked())
-                                                                                                    {
-                                                                                                        isfacet = "G";
-                                                                                                    }
-                                                                                                    else
-                                                                                                    {
-                                                                                                        String hor = txt_hor.getText().toString();
-                                                                                                        String ver = txt_ver.getText().toString();
-
-                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                        {
-                                                                                                            isfacet = "F";
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            isfacet = "N";
-                                                                                                        }
-                                                                                                    }
+//                                                                                                    if (sw_facet.isChecked())
+//                                                                                                    {
+//                                                                                                        isfacet = "G";
+//                                                                                                    }
+//                                                                                                    else
+//                                                                                                    {
+//                                                                                                        String hor = txt_hor.getText().toString();
+//                                                                                                        String ver = txt_ver.getText().toString();
+//
+//                                                                                                        if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                        {
+//                                                                                                            isfacet = "F";
+//                                                                                                        }
+//                                                                                                        else
+//                                                                                                        {
+//                                                                                                            isfacet = "N";
+//                                                                                                        }
+//                                                                                                    }
 
                                                                                                     Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -2546,7 +2609,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                 dialog.dismiss();
                                                                                                             }
                                                                                                         });
-                                                                                                        dialog.show();
+
+                                                                                                        if (!isFinishing())
+                                                                                                        {
+                                                                                                            dialog.show();
+                                                                                                        }
                                                                                                     }
                                                                                                 }
                                                                                             }
@@ -2654,8 +2721,12 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                 }
                                                                                             });
 
-                                                                                            dialog.show();
                                                                                             dialog.getWindow().setAttributes(lwindow);
+
+                                                                                            if (!isFinishing())
+                                                                                            {
+                                                                                                dialog.show();
+                                                                                            }
                                                                                         }
                                                                                         else
                                                                                         {
@@ -2664,24 +2735,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                             String order = txt_orderNumber.getText().toString();
                                                                                             String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                            if (sw_facet.isChecked())
-                                                                                            {
-                                                                                                isfacet = "G";
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                String hor = txt_hor.getText().toString();
-                                                                                                String ver = txt_ver.getText().toString();
-
-                                                                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                                {
-                                                                                                    isfacet = "F";
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    isfacet = "N";
-                                                                                                }
-                                                                                            }
+//                                                                                            if (sw_facet.isChecked())
+//                                                                                            {
+//                                                                                                isfacet = "G";
+//                                                                                            }
+//                                                                                            else
+//                                                                                            {
+//                                                                                                String hor = txt_hor.getText().toString();
+//                                                                                                String ver = txt_ver.getText().toString();
+//
+//                                                                                                if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                                {
+//                                                                                                    isfacet = "F";
+//                                                                                                }
+//                                                                                                else
+//                                                                                                {
+//                                                                                                    isfacet = "N";
+//                                                                                                }
+//                                                                                            }
 
                                                                                             Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -2717,7 +2788,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                         dialog.dismiss();
                                                                                                     }
                                                                                                 });
-                                                                                                dialog.show();
+
+                                                                                                if (!isFinishing())
+                                                                                                {
+                                                                                                    dialog.show();
+                                                                                                }
                                                                                             }
                                                                                         }
                                                                                     } catch (JSONException e) {
@@ -2733,24 +2808,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                             String order = txt_orderNumber.getText().toString();
                                                                             String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                            if (sw_facet.isChecked())
-                                                                            {
-                                                                                isfacet = "G";
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                String hor = txt_hor.getText().toString();
-                                                                                String ver = txt_ver.getText().toString();
-
-                                                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                {
-                                                                                    isfacet = "F";
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    isfacet = "N";
-                                                                                }
-                                                                            }
+//                                                                            if (sw_facet.isChecked())
+//                                                                            {
+//                                                                                isfacet = "G";
+//                                                                            }
+//                                                                            else
+//                                                                            {
+//                                                                                String hor = txt_hor.getText().toString();
+//                                                                                String ver = txt_ver.getText().toString();
+//
+//                                                                                if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                {
+//                                                                                    isfacet = "F";
+//                                                                                }
+//                                                                                else
+//                                                                                {
+//                                                                                    isfacet = "N";
+//                                                                                }
+//                                                                            }
 
                                                                             Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -2786,7 +2861,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                         dialog.dismiss();
                                                                                     }
                                                                                 });
-                                                                                dialog.show();
+
+                                                                                if (!isFinishing())
+                                                                                {
+                                                                                    dialog.show();
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -2922,8 +3001,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                             }
                                                                                         });
 
-                                                                                        dialog.show();
                                                                                         dialog.getWindow().setAttributes(lwindow);
+                                                                                        if (!isFinishing())
+                                                                                        {
+                                                                                            dialog.show();
+                                                                                        }
                                                                                     }
                                                                                     else
                                                                                     {
@@ -2932,24 +3014,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                         String order = txt_orderNumber.getText().toString();
                                                                                         String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                                        if (sw_facet.isChecked())
-                                                                                        {
-                                                                                            isfacet = "G";
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            String hor = txt_hor.getText().toString();
-                                                                                            String ver = txt_ver.getText().toString();
-
-                                                                                            if (!hor.isEmpty() && !ver.isEmpty())
-                                                                                            {
-                                                                                                isfacet = "F";
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                isfacet = "N";
-                                                                                            }
-                                                                                        }
+//                                                                                        if (sw_facet.isChecked())
+//                                                                                        {
+//                                                                                            isfacet = "G";
+//                                                                                        }
+//                                                                                        else
+//                                                                                        {
+//                                                                                            String hor = txt_hor.getText().toString();
+//                                                                                            String ver = txt_ver.getText().toString();
+//
+//                                                                                            if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                                            {
+//                                                                                                isfacet = "F";
+//                                                                                            }
+//                                                                                            else
+//                                                                                            {
+//                                                                                                isfacet = "N";
+//                                                                                            }
+//                                                                                        }
 
                                                                                         Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -2985,7 +3067,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                     dialog.dismiss();
                                                                                                 }
                                                                                             });
-                                                                                            dialog.show();
+
+                                                                                            if (!isFinishing())
+                                                                                            {
+                                                                                                dialog.show();
+                                                                                            }
                                                                                         }
                                                                                     }
                                                                                 } catch (JSONException e) {
@@ -3001,24 +3087,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                         String order = txt_orderNumber.getText().toString();
                                                                         String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                                                        if (sw_facet.isChecked())
-                                                                        {
-                                                                            isfacet = "G";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            String hor = txt_hor.getText().toString();
-                                                                            String ver = txt_ver.getText().toString();
-
-                                                                            if (!hor.isEmpty() && !ver.isEmpty())
-                                                                            {
-                                                                                isfacet = "F";
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                isfacet = "N";
-                                                                            }
-                                                                        }
+//                                                                        if (sw_facet.isChecked())
+//                                                                        {
+//                                                                            isfacet = "G";
+//                                                                        }
+//                                                                        else
+//                                                                        {
+//                                                                            String hor = txt_hor.getText().toString();
+//                                                                            String ver = txt_ver.getText().toString();
+//
+//                                                                            if (!hor.isEmpty() && !ver.isEmpty())
+//                                                                            {
+//                                                                                isfacet = "F";
+//                                                                            }
+//                                                                            else
+//                                                                            {
+//                                                                                isfacet = "N";
+//                                                                            }
+//                                                                        }
 
                                                                         Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -3054,7 +3140,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                     dialog.dismiss();
                                                                                 }
                                                                             });
-                                                                            dialog.show();
+
+                                                                            if (!isFinishing())
+                                                                            {
+                                                                                dialog.show();
+                                                                            }
                                                                         }
                                                                     }
 
@@ -3177,24 +3267,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                             String order = txt_orderNumber.getText().toString();
                                             String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                            if (sw_facet.isChecked())
-                                            {
-                                                isfacet = "G";
-                                            }
-                                            else
-                                            {
-                                                String hor = txt_hor.getText().toString();
-                                                String ver = txt_ver.getText().toString();
-
-                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                {
-                                                    isfacet = "F";
-                                                }
-                                                else
-                                                {
-                                                    isfacet = "N";
-                                                }
-                                            }
+//                                            if (sw_facet.isChecked())
+//                                            {
+//                                                isfacet = "G";
+//                                            }
+//                                            else
+//                                            {
+//                                                String hor = txt_hor.getText().toString();
+//                                                String ver = txt_ver.getText().toString();
+//
+//                                                if (!hor.isEmpty() && !ver.isEmpty())
+//                                                {
+//                                                    isfacet = "F";
+//                                                }
+//                                                else
+//                                                {
+//                                                    isfacet = "N";
+//                                                }
+//                                            }
 
                                             Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -3230,7 +3320,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                         dialog.dismiss();
                                                     }
                                                 });
-                                                dialog.show();
+
+                                                if (!isFinishing())
+                                                {
+                                                    dialog.show();
+                                                }
                                             }
                                         }
                                     });
@@ -3260,24 +3354,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                             String order = txt_orderNumber.getText().toString();
                                             String none = spin_corridor.getSelectedItem().toString().trim();
 
-                                            if (sw_facet.isChecked())
-                                            {
-                                                isfacet = "G";
-                                            }
-                                            else
-                                            {
-                                                String hor = txt_hor.getText().toString();
-                                                String ver = txt_ver.getText().toString();
-
-                                                if (!hor.isEmpty() && !ver.isEmpty())
-                                                {
-                                                    isfacet = "F";
-                                                }
-                                                else
-                                                {
-                                                    isfacet = "N";
-                                                }
-                                            }
+//                                            if (sw_facet.isChecked())
+//                                            {
+//                                                isfacet = "G";
+//                                            }
+//                                            else
+//                                            {
+//                                                String hor = txt_hor.getText().toString();
+//                                                String ver = txt_ver.getText().toString();
+//
+//                                                if (!hor.isEmpty() && !ver.isEmpty())
+//                                                {
+//                                                    isfacet = "F";
+//                                                }
+//                                                else
+//                                                {
+//                                                    isfacet = "N";
+//                                                }
+//                                            }
 
                                             Toasty.info(getApplicationContext(), "Facet : " + isfacet, Toast.LENGTH_SHORT).show();
 
@@ -3313,7 +3407,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                         dialog.dismiss();
                                                     }
                                                 });
-                                                dialog.show();
+
+                                                if (!isFinishing())
+                                                {
+                                                    dialog.show();
+                                                }
                                             }
                                         }
                                     });
@@ -3367,7 +3465,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 finish();
             }
         });
-        dialog.show();
+
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void confirmOrder()
@@ -3550,7 +3652,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         lbl_infofacet.setText(infofacet);
 
         /* Show data in area frame details*/
-        String framemodel   = spin_framemodel.getText().toString();
+        String framemodel   = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString();
         String dbl          = txt_dbl.getText().toString();
         String hora         = txt_hor.getText().toString();
         String verb         = txt_ver.getText().toString();
@@ -3579,7 +3681,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         {
             String kodeLensa = txt_lenstype.getText().toString();
             String koridor   = spin_corridor.getSelectedItem().toString().trim();
-            String frameType = spin_framemodel.getText().toString();
+            String frameType = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString();
             String kodeitemR, kodeitemL;
 
 //            Toasty.warning(getApplicationContext(), "Koridor : " + koridor, Toast.LENGTH_SHORT).show();
@@ -3712,7 +3814,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
         else if (categoryLens.contentEquals("S") || categoryLens.equals("S"))
         {
             String kodeLensa = txt_lenstype.getText().toString();
-            String frameType = spin_framemodel.getText().toString();
+            String frameType = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString();
 
             checkStockRL(kodeLensa);
 
@@ -4429,8 +4531,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
                 //hideLoading();
-                informationEmail("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+//                informationEmail("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
             }
         }){
             @Override
@@ -4540,8 +4643,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
         phoneNumber = phoneNumber.replace("+62", "0").replaceAll("\\s","");
 
         //Area Frame Detail
-        model_frame      = spin_framemodel.getText().toString() + ",";
-        if (model_frame.contains("Model"))
+        model_frame      = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString() + ",";
+        if (model_frame.equals("-- Model --"))
         {
             model_frame = "" + ",";
         }
@@ -4624,7 +4727,10 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     + txt_patientName.getText().toString() + ".txt";
 //        createTxt(allData);
 
-        confirmOrder();
+        if (!isFinishing())
+        {
+            confirmOrder();
+        }
     }
 
     private void insertTemp()
@@ -4805,7 +4911,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id", id);
-                hashMap.put("frame_model", spin_framemodel.getText().toString());
+                hashMap.put("frame_model", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                 hashMap.put("dbl", txt_dbl.getText().toString());
                 hashMap.put("hor_a", txt_hor.getText().toString());
                 hashMap.put("ver_b", txt_ver.getText().toString());
@@ -4952,7 +5058,10 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void hideLoading()
@@ -4993,7 +5102,10 @@ public class FormOrderLensActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     public void informationEmail(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
@@ -5032,7 +5144,10 @@ public class FormOrderLensActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void informationEmailNewOrder(final String orderNumber, final String opticName, final String patientName,
@@ -5262,8 +5377,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideLoading();
-                informationUpload("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+//                informationUpload("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
                 //Toast.makeText(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
             }
         });
@@ -5320,8 +5436,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideLoading();
-                informationUpload("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+//                informationUpload("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
                 //Toast.makeText(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
             }
         });
@@ -5483,8 +5600,6 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 filterLenstype(lenstype, adapter_lenstype, data);
                 listView.setAdapter(adapter_lenstype);
 
-                dialog.show();
-
                 /*AREA EVENT CONTROL*/
                 spin_typelens.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -5585,6 +5700,11 @@ public class FormOrderLensActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
             }
         });
     }
@@ -7749,7 +7869,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
-                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
                             intent.putExtra("hor", txt_hor.getText().toString());
                             intent.putExtra("ver", txt_ver.getText().toString());
@@ -7806,7 +7926,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            //finish();
+                            finish();
                         }
                         else
                         {
@@ -7940,7 +8060,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
-                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
                             intent.putExtra("hor", txt_hor.getText().toString());
                             intent.putExtra("ver", txt_ver.getText().toString());
@@ -7997,7 +8117,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            //finish();
+                            finish();
                         }
                     }
                     else if (object.names().get(0).equals("error"))
@@ -8143,7 +8263,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                              }
                         });
 
-                        lovelyCustomDialog.show();
+                        if (!isFinishing()){
+                            lovelyCustomDialog.show();
+                        }
                     }
                     else
                     {
@@ -8279,7 +8401,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
-                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
                             intent.putExtra("hor", txt_hor.getText().toString());
                             intent.putExtra("ver", txt_ver.getText().toString());
@@ -8336,7 +8458,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            //finish();
+                            finish();
                         }
                         else
                         {
@@ -8471,7 +8593,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
-                            intent.putExtra("frameModel", spin_framemodel.getText().toString());
+                            intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
                             intent.putExtra("hor", txt_hor.getText().toString());
                             intent.putExtra("ver", txt_ver.getText().toString());
@@ -8528,7 +8650,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                             startActivity(intent);
 
-                            //finish();
+                            finish();
                         }
                     }
                 } catch (JSONException e) {

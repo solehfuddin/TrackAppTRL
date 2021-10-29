@@ -35,6 +35,7 @@ import android.view.SubMenu;
 import android.view.View;
 
 import com.andexert.library.RippleView;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -235,6 +236,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_dashboard);
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
@@ -1217,7 +1219,9 @@ public class DashboardActivity extends AppCompatActivity
                 /*.useImages(R.drawable.cobaloader)*/
                 .speed(60)
                 .build();
-        loading.show();
+        if (!isFinishing()){
+            loading.show();
+        }
     }
 
     private void hideLoading()
@@ -1381,8 +1385,9 @@ public class DashboardActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
-                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
-                        DefaultBootstrapBrand.WARNING);
+//                information("Error connection", "Can't connect to server, press ok to reconnect ", R.drawable.failed_outline,
+//                        DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
             }
         }){
             @Override

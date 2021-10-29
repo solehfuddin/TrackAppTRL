@@ -167,7 +167,10 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                 .themeColor(Color.GREEN)
                 .text("Please wait ...")
                 .fadeColor(Color.DKGRAY).build();
-        loading.show();
+
+        if(!isFinishing()){
+            loading.show();
+        }
     }
 
     @Override
@@ -440,7 +443,10 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                 }
             }
         });
-        dialog.show();
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void handlerDialog() {
@@ -448,7 +454,6 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter_trackdate);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.show();
 
         calendar = Calendar.getInstance();
 
@@ -528,6 +533,10 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                 }
             }
         });
+
+        if (!isFinishing()){
+            dialog.show();
+        }
     }
 
     private void showStartDate() {
@@ -602,7 +611,9 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing()){
+            datePickerDialog.show();
+        }
     }
 
     private void showEndDate() {
@@ -677,7 +688,9 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        datePickerDialog.show();
+        if (!isFinishing()){
+            datePickerDialog.show();
+        }
     }
 
     private void getListSp(final String sales, final String start) {

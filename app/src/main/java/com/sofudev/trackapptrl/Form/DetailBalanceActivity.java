@@ -87,6 +87,8 @@ public class DetailBalanceActivity extends AppCompatActivity {
 
         adapter_detail_balance_lens = new Adapter_detail_balance(getApplicationContext(), list_lens);
         adapter_detail_balance_frame= new Adapter_detail_balance(getApplicationContext(), list_frame);
+        recyclerLens.setAdapter(adapter_detail_balance_lens);
+        recyclerFrame.setAdapter(adapter_detail_balance_frame);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +189,10 @@ public class DetailBalanceActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void showLensHistory(final String idparty)
@@ -231,7 +236,6 @@ public class DetailBalanceActivity extends AppCompatActivity {
                         txtMoreLens.setVisibility(View.VISIBLE);
 
                         adapter_detail_balance_lens.notifyDataSetChanged();
-                        recyclerLens.setAdapter(adapter_detail_balance_lens);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -240,7 +244,7 @@ public class DetailBalanceActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override
@@ -295,7 +299,6 @@ public class DetailBalanceActivity extends AppCompatActivity {
                         txtMoreFrame.setVisibility(View.VISIBLE);
 
                         adapter_detail_balance_frame.notifyDataSetChanged();
-                        recyclerFrame.setAdapter(adapter_detail_balance_frame);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -304,7 +307,7 @@ public class DetailBalanceActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }){
             @Override

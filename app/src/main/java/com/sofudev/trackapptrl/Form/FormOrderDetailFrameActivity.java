@@ -75,6 +75,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewItem.setLayoutManager(layoutManager);
+        recyclerViewItem.setAdapter(adapter_item_orderdetail);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,10 +167,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Header Frame", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override
@@ -214,7 +212,6 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
                     }
 
                     adapter_item_orderdetail.notifyDataSetChanged();
-                    recyclerViewItem.setAdapter(adapter_item_orderdetail);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -222,10 +219,7 @@ public class FormOrderDetailFrameActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().isEmpty())
-                {
-                    Log.d("Error Item Frame", error.getMessage());
-                }
+                error.printStackTrace();
             }
         }){
             @Override

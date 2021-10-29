@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.captain_miao.optroundcardview.OptRoundCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/keyline_1_minus_8dp"
+    android:layout_marginBottom="@dimen/keyline_1_minus_8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@color/white"
+    app:optRoundCardCornerRadius="10dp"
+    app:optRoundCardElevation="30dp"
+    app:optRoundCardLeftBottomCorner="false"
+    app:optRoundCardPreventCornerOverlap="false"
+    app:optRoundCardRightBottomCorner="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_einvoice_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+
+        <ImageView
+            android:id="@+id/imageView101"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/about_1_title"
+            android:src="@drawable/ic_navigate_next_gray"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view91"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/divider_container"
+            android:layerType="software"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_einvoice_txtprice" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/item_einvoice_cardsales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view91">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/item_einvoice_txtsales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorEinvBgLabel"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:text="Sugeng Widodo"
+                android:textAlignment="center"
+                android:textColor="@color/colorEinvTextLabel"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:customFont="LatoBold.ttf" />
+
+        </androidx.cardview.widget.CardView>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_einvoice_txtcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Inv STOCKIEST LEINZ"
+            android:textAlignment="center"
+            android:textColor="@color/colorEinvPurple"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:customFont="DroidBold.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/universalFontTextView71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="IDR"
+            android:textAlignment="center"
+            android:textColor="@color/colorEnd"
+            android:textSize="12sp"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintEnd_toStartOf="@+id/item_einvoice_txtprice"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_einvoice_txtprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="63.000"
+            android:textAlignment="center"
+            android:textColor="@color/colorEnd"
+            android:textSize="16sp"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintEnd_toStartOf="@+id/imageView101"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/universalFontTextView81"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Invoice Number"
+            android:textAlignment="center"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view91" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/universalFontTextView91"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Invoice Date"
+            android:textAlignment="center"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintEnd_toStartOf="@+id/item_einvoice_cardsales"
+            app:layout_constraintStart_toEndOf="@+id/universalFontTextView81"
+            app:layout_constraintTop_toBottomOf="@+id/view91" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_einvoice_txtinvnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="290329415"
+            android:textAlignment="center"
+            android:textColor="@color/colorEinvPurple"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:customFont="DroidBold.ttf"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/universalFontTextView81" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_einvoice_txtinvdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="01 Juli 2021"
+            android:textAlignment="center"
+            android:textColor="@color/colorEinvPurple"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:customFont="DroidBold.ttf"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_einvoice_cardsales"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/universalFontTextView91"
+            app:layout_constraintTop_toBottomOf="@+id/universalFontTextView91" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.github.captain_miao.optroundcardview.OptRoundCardView>

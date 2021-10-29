@@ -34,6 +34,10 @@
     <color name="colorIjo">#51B8D1</color>
     <color name="colorInv">#E8FDF7</color>
     <color name="colorStm">#bcece6</color>
+    <color name="colorEinvPurple">#3c215c</color>
+    <color name="colorEinvBgLabel">#f5f3fd</color>
+    <color name="colorEinvTextLabel">#7d7ac1</color>
+    <color name="colorEinvButton">#f4b173</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
