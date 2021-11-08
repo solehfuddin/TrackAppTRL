@@ -1239,7 +1239,10 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
             }
         });
 
-        dialog.show();
+        if(!isFinishing())
+        {
+            dialog.show();
+        }
         dialog.getWindow().setAttributes(lwindow);
     }
 
@@ -1288,10 +1291,13 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
             public void onClick(View v) {
                 txtLensa.setText(desc_lensa);
                 getPricePartai(id_lensa);
-                dialog.hide();
+                dialog.dismiss();
             }
         });
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 }

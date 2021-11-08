@@ -43,6 +43,7 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
 
     private Config config = new Config();
     private String URLDETAIL = config.Ip_address + config.einvoice_getDetail;
+//    private String URLDETAIL = config.Ip_addressdev + config.einvoice_getDetail;
     private String TAG = DetailEinvoiceActivity.class.getSimpleName();
 
     RelativeLayout rlInvNumber, rlPriceTotal, rlPurchaseOrder, rlInvDate, rlShipAmount, rlTotalAmount;
@@ -189,17 +190,7 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
                                 String flag = itemObj.getString("dis_line");
                                 String title = itemObj.getString("line_desc");
 
-                                String price;
-
-                                if (flag.equals("B"))
-                                {
-                                    price = "IDR - " + CurencyFormat(itemObj.getString("unit_standard_price"));
-                                }
-                                else
-                                {
-                                    price = "IDR " + CurencyFormat(itemObj.getString("unit_standard_price"));
-                                }
-
+                                String price = "IDR " + CurencyFormat(itemObj.getString("unit_standard_price"));
 
                                 Data_item_einvoice dt = new Data_item_einvoice();
                                 dt.setPrice(price);

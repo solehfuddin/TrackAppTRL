@@ -126,6 +126,7 @@ public class FormPaymentVA extends AppCompatActivity {
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dialog.dismiss();
                         cancelPayment(txtOrderNumber.getText().toString());
                     }
                 });

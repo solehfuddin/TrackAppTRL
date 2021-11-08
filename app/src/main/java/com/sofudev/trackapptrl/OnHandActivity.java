@@ -224,7 +224,7 @@ public class OnHandActivity extends AppCompatActivity {
 //                            getOnHandBySort(itemOrgId, itemSortDesc);
 //                        }
 
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
 
@@ -273,7 +273,10 @@ public class OnHandActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if (!isFinishing())
+                {
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -292,7 +295,7 @@ public class OnHandActivity extends AppCompatActivity {
                             getOnHandBySort(itemOrgId, itemSortDesc);
                         }
 //                        getSuggestion(itemOrgId);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }
@@ -348,7 +351,10 @@ public class OnHandActivity extends AppCompatActivity {
                     }
                 });
 
-                dialog.show();
+                if(!isFinishing())
+                {
+                    dialog.show();
+                }
 
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -373,7 +379,7 @@ public class OnHandActivity extends AppCompatActivity {
                             }
                         }
 //                        getSuggestion(itemOrgId);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }

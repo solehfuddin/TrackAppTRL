@@ -465,7 +465,10 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.filter_trackdate);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.show();
+
+                if (!isFinishing()){
+                    dialog.show();
+                }
 
                 UniversalFontTextView txtTitle = (UniversalFontTextView) dialog.findViewById(R.id.filter_track_txtTitle);
                 txtTitle.setText("Filter Order History By Date");

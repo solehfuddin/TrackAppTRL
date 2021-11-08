@@ -50,6 +50,7 @@ public class EwarrantyActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView imgError;
     CircleProgressBar loader;
+    Dialog dialog;
 
     Adapter_ewarranty adapter_ewarranty;
     List<Data_ewarranty> list = new ArrayList<>();
@@ -99,7 +100,7 @@ public class EwarrantyActivity extends AppCompatActivity {
 
     private void openDialogFilter()
     {
-        final Dialog dialog = new Dialog(this);
+        dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_ewarranty);
 
@@ -121,7 +122,10 @@ public class EwarrantyActivity extends AppCompatActivity {
 
         search(txtNama.getText().toString(), txtNohp.getText().toString().trim());
 
-        dialog.show();
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
     }
 
     private void search(final String name, final String phone)
@@ -133,6 +137,8 @@ public class EwarrantyActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("Search output : ", response);
+                dialog.dismiss();
+
                 try {
                     JSONArray jsonArray = new JSONArray(response);
 
@@ -175,7 +181,8 @@ public class EwarrantyActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                dialog.dismiss();
             }
         }){
             @Override

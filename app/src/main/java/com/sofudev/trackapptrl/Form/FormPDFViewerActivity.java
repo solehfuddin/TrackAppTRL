@@ -66,11 +66,12 @@ public class FormPDFViewerActivity extends AppCompatActivity{
                 }
 
                 webView.loadUrl("about:blank");
-                AlertDialog alertDialog = new AlertDialog.Builder(FormPDFViewerActivity.this).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(FormPDFViewerActivity.this).create();
                 alertDialog.setTitle("Error");
                 alertDialog.setMessage("Check your internet connection and try again.");
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
                         finish();
                         startActivity(getIntent());
                     }

@@ -1677,7 +1677,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         }
 //                        }
 //                        getSuggestion(itemOrgId);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }
@@ -1834,7 +1834,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         };
 
                         AppController.getInstance().addToRequestQueue(request);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
 

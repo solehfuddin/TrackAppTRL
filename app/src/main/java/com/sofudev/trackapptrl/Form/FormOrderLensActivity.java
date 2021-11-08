@@ -4336,7 +4336,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
             }
         });
 
-        dialogVerify.show();
+        if(!isFinishing()){
+            dialogVerify.show();
+        }
     }
 
     private void setTimer(final UniversalFontTextView lbl_timer, final UniversalFontTextView lbl_error,

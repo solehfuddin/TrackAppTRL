@@ -57,6 +57,8 @@ public class EinvoiceActivity extends AppCompatActivity {
     private String TAG = EinvoiceActivity.class.getSimpleName();
     private String URLGETDATA = config.Ip_address + config.einvoice_getdata;
     private String URLGETCATEGORY = config.Ip_address + config.einvoice_getcategory;
+//    private String URLGETDATA = config.Ip_addressdev + config.einvoice_getdata;
+//    private String URLGETCATEGORY = config.Ip_addressdev + config.einvoice_getcategory;
     private String username;
 
     UniversalFontTextView txtOpticName, txtPeriod, txtCounter;
@@ -114,8 +116,8 @@ public class EinvoiceActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.INVISIBLE);
         imgNotFound.setVisibility(View.GONE);
 
-        setDateNow();
         getDataIntent();
+        setDateNow();
 
         rpBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +147,7 @@ public class EinvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 limiter -= 10;
-                getInvoice(username, awal, akhir, String.valueOf(limiter));
+                getInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
 
                 shimmer.setDemoLayoutManager(ShimmerRecyclerView.LayoutMangerType.GRID);
                 shimmer.showShimmerAdapter();
@@ -162,7 +164,7 @@ public class EinvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 limiter += 10;
-                getInvoice(username, awal, akhir, String.valueOf(limiter));
+                getInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
 
                 shimmer.setDemoLayoutManager(ShimmerRecyclerView.LayoutMangerType.GRID);
                 shimmer.showShimmerAdapter();
@@ -223,10 +225,12 @@ public class EinvoiceActivity extends AppCompatActivity {
         String periode = "Periode " + tgAwal + " s/d " + tgAkhir;
         txtPeriod.setText(periode);
 
-        getInvoice(username, awal, akhir, String.valueOf(limiter));
+        divisi = "";
+        getInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
     }
 
     private void dialogFilter(){
+        limiter = 0;
         new SlyCalendarDialog()
                 .setSingle(false)
                 .setCallback(new SlyCalendarDialog.Callback() {
@@ -277,7 +281,7 @@ public class EinvoiceActivity extends AppCompatActivity {
                                 shimmer.setVisibility(View.VISIBLE);
                                 recyclerView.setVisibility(View.GONE);
                                 imgNotFound.setVisibility(View.GONE);
-                                getInvoice(username, awal, akhir, String.valueOf(limiter));
+                                getInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
                             }
                             else
                             {
@@ -298,6 +302,7 @@ public class EinvoiceActivity extends AppCompatActivity {
 
     private void dialogSorting(List<String> allSort) {
         if(getApplicationContext() != null){
+            limiter = 0;
             final Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             listSortBy.clear();
@@ -349,7 +354,7 @@ public class EinvoiceActivity extends AppCompatActivity {
                     recyclerView.setVisibility(View.GONE);
                     imgNotFound.setVisibility(View.GONE);
 
-                    getInvoice(username, awal, akhir, String.valueOf(limiter));
+                    getInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
                     dialog.dismiss();
                 }
             });
@@ -361,8 +366,15 @@ public class EinvoiceActivity extends AppCompatActivity {
         }
     }
 
-    private void getInvoice(final String username, final String awal, final String akhir, final String limit) {
+    private void getInvoice(final String username, final String awal, final String akhir, final String div, final String limit) {
         data_einvoices.clear();
+        Log.d(EinvoiceActivity.class.getSimpleName(), "Username : " + username);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "Awal : " + awal);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "akhir : " + akhir);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "div : " + div);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "limit : " + limit);
+
+
         StringRequest request = new StringRequest(Request.Method.POST, URLGETDATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -459,7 +471,7 @@ public class EinvoiceActivity extends AppCompatActivity {
                 map.put("username", username);
                 map.put("startmon", awal + " 00:00:00");
                 map.put("endmon", akhir + " 23:59:59");
-                map.put("divisi", divisi);
+                map.put("divisi", div);
                 map.put("limit", limit);
                 return map;
             }

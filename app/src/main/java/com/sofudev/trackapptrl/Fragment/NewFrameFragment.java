@@ -115,6 +115,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             valueMax = "7000000";
 
     int pos = 0;
+    int posSw = 0;
     String ACTIVITY_TAG;
 
     List<String> listSortBy = new ArrayList<>();
@@ -307,7 +308,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
             listSortBy.clear();
             listSortBy.addAll(allSort);
 
-            adapter_sortbyframe = new Adapter_sortbyframe(getContext(), listSortBy, pos);
+            adapter_sortbyframe = new Adapter_sortbyframe(getContext(), listSortBy, posSw);
 
             dialog.setContentView(R.layout.dialog_sort);
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
@@ -331,12 +332,14 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                             showDataByGroup(from.toString(), limit.toString(), "item.`item_code` ASC");
                             hasil = (from + limit);
                             pos = 1;
+                            posSw = 1;
                         }
                         else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
                         {
                             showDataByGroup(from.toString(), limit.toString(), "item.`item_code` DESC");
                             hasil = (from + limit);
                             pos = 2;
+                            posSw = 2;
                         }
                         else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
                                 chooser.equals("Price (Low-High)"))
@@ -344,6 +347,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                             showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` ASC");
                             hasil = (from + limit);
                             pos = 3;
+                            posSw = 3;
                         }
                         else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
                                 chooser.equals("Price (High-Low)"))
@@ -351,6 +355,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                             showDataByPrice(from.toString(), limit.toString(), "price.`price_list_item` DESC");
                             hasil = (from + limit);
                             pos = 4;
+                            posSw = 4;
                         }
                     }
                     else
@@ -363,6 +368,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                                     from.toString(), limit.toString());
                             hasil = (from + limit);
                             pos = 5;
+                            posSw = 1;
                         }
                         else if (chooser.contains("Title (Z-A)") || chooser.contentEquals("Title (Z-A)") || chooser.equals("Title (Z-A)"))
                         {
@@ -372,6 +378,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                                     from.toString(), limit.toString());
                             hasil = (from + limit);
                             pos = 5;
+                            posSw = 2;
                         }
                         else if (chooser.contains("Price (Low-High)") || chooser.contentEquals("Price (Low-High)") ||
                                 chooser.equals("Price (Low-High)"))
@@ -382,6 +389,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                                     from.toString(), limit.toString());
                             hasil = (from + limit);
                             pos = 5;
+                            posSw = 3;
                         }
                         else if (chooser.contains("Price (High-Low)") || chooser.contentEquals("Price (High-Low)") ||
                                 chooser.equals("Price (High-Low)"))
@@ -392,6 +400,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                                     from.toString(), limit.toString());
                             hasil = (from + limit);
                             pos = 5;
+                            posSw = 4;
                         }
                     }
 

@@ -192,6 +192,12 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
     }

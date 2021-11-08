@@ -833,7 +833,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         txtSph.setText(power_sph);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }
@@ -890,7 +890,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         txtCyl.setText(power_cyl);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }
@@ -947,7 +947,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         txtAdd.setText(power_add);
-                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
             }
@@ -2079,7 +2079,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 showCylPower(id_lensa);
                 showAddPower(id_lensa);
 
-                dialog.hide();
+                dialog.dismiss();
             }
         });
 

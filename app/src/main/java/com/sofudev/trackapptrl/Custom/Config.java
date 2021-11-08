@@ -8,7 +8,7 @@ public class Config {
     public String Ip_tiki    = "http://180.250.96.154/trl_tiki/";
 
     //Development Server
-//    public String Ip_address = "http://180.250.96.154/trl-dev/";
+//    public String Ip_addressdev = "http://180.250.96.154/trl-dev/";
 //    public String Ip_address = "http://192.168.44.21/trl-dev/";
 //    public String Ip_address = "http://192.168.44.143/trl-webs/"; /* Localhost */
 

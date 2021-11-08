@@ -253,7 +253,8 @@ public class FormProfileActivity extends AppCompatActivity{
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             changeImgProfile(filename);
+                dialog.dismiss();
+                changeImgProfile(filename);
             }
         });
 
