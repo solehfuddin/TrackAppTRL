@@ -385,15 +385,18 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                         }
 
                         linear_frameBrand.setVisibility(View.VISIBLE);
-                        if (!frame_brand_dt.isEmpty())
+                        if (frame_brand_dt != null)
                         {
-                            if (frame_type_dt.equals("-"))
+                            if (!frame_brand_dt.isEmpty())
                             {
-                                frame_type_dt = frame_brand_dt;
-                            }
-                            else
-                            {
-                                frame_type_dt = frame_type_dt + " - " + frame_brand_dt;
+                                if (frame_type_dt.equals("-"))
+                                {
+                                    frame_type_dt = frame_brand_dt;
+                                }
+                                else
+                                {
+                                    frame_type_dt = frame_type_dt + " - " + frame_brand_dt;
+                                }
                             }
                         }
                         else
@@ -401,7 +404,6 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                             if (frame_type_dt.equals("-"))
                             {
                                 frame_type_dt = "-";
-
                             }
                         }
 

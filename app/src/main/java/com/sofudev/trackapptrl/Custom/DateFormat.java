@@ -1,10 +1,21 @@
 package com.sofudev.trackapptrl.Custom;
 
+import android.annotation.SuppressLint;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@SuppressLint("SimpleDateFormat")
 public class DateFormat {
+    java.text.DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    public long daysBetween(Date one, Date two){
+        long diff = (one.getTime()-two.getTime())/86400000;
+        return Math.abs(diff);
+    }
+    public Date getDate(String date) throws ParseException {
+        return df.parse(date);
+    }
     public String indo(String data) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {

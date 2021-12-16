@@ -52,6 +52,8 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     String URLSHOWALLOPTIC      = config.Ip_address + config.filter_optic_showall;
     String URLSHOWOPTICBYNAME   = config.Ip_address + config.filter_optic_showbyname;
     String URLGETBYSHIPNUMBER   = config.Ip_address + config.filter_optic_getbyshipnumber;
+    String URLSHOWDATACHILD     = config.Ip_address + config.getchild_data;
+    String URLSEARCHCHILD       = config.Ip_address + config.searchchild_data;
     private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     List<Data_opticname> data_opticnames = new ArrayList<>();
@@ -71,9 +73,11 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     MCrypt mCrypt;
 
     String idparty, condition, sActive, sPast, opticName, salesName;
+    Boolean isHavingChild;
     int sTotal;
     Integer req_start = 0, totalrow, lastitem, item;
     long lastclick = 0;
+    int customerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +118,15 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
         openTrackOrder();
 
         data_opticnames.clear();
-        showAllOptic(req_start);
+
+        if (isHavingChild)
+        {
+            showChildOnly(customerId, req_start);
+        }
+        else
+        {
+            showAllOptic(req_start);
+        }
     }
 
     private void getUsernameData()
@@ -124,6 +136,8 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
         {
             condition = bundle.getString("cond");
             salesName = bundle.getString("sales");
+            isHavingChild = bundle.getBoolean("havingChild");
+            customerId = bundle.getInt("customerId", 0);
 
             Log.d("Sales Name chooseopt : ", salesName);
         }
@@ -201,7 +215,15 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                         enablePrev();
                         disableSelect();
                         listView.addHeaderView(progress);
-                        showAllOptic(req_start);
+
+                        if (isHavingChild)
+                        {
+                            showChildOnly(customerId, req_start);
+                        }
+                        else
+                        {
+                            showAllOptic(req_start);
+                        }
                     }
                     else
                     {
@@ -214,7 +236,15 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                         enablePrev();
                         disableSelect();
                         listView.addHeaderView(progress);
-                        showOpticByName(txt_search.getText().toString(),req_start);
+
+                        if (isHavingChild)
+                        {
+                            searchChild(customerId, req_start, txt_search.getText().toString());
+                        }
+                        else
+                        {
+                            showOpticByName(txt_search.getText().toString(),req_start);
+                        }
                     }
                 }
                 catch (InterruptedException e) {
@@ -250,7 +280,14 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
                         disableSelect();
                         listView.addHeaderView(progress);
-                        showAllOptic(req_start);
+                        if (isHavingChild)
+                        {
+                            showChildOnly(customerId, req_start);
+                        }
+                        else
+                        {
+                            showAllOptic(req_start);
+                        }
                     }
                     else
                     {
@@ -263,7 +300,14 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
                         disableSelect();
                         listView.addHeaderView(progress);
-                        showOpticByName(txt_search.getText().toString(), req_start);
+                        if (isHavingChild)
+                        {
+                            searchChild(customerId, req_start, txt_search.getText().toString());
+                        }
+                        else
+                        {
+                            showOpticByName(txt_search.getText().toString(),req_start);
+                        }
                     }
                 }
                 catch (InterruptedException e) {
@@ -281,39 +325,101 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
                 if (condition.equals("ESTMENT"))
                 {
-                    idparty = data_opticnames.get(position).getIdParty();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+                    }
                     opticName = data_opticnames.get(position).getCustname();
+
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Optic name : " + opticName);
 //                    Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
                 }
                 else if (condition.equals("DELIVTRACK"))
                 {
                     idparty = data_opticnames.get(position).getCustname();
                     countData(data_opticnames.get(position).getCustname());
+
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
                 }
                 else if (condition.equals("LENSSALES"))
                 {
-                    idparty = data_opticnames.get(position).getIdParty();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+                    }
+
                     opticName = data_opticnames.get(position).getCustname();
-//                    Toasty.info(getApplicationContext(), "Id party : " + idparty, Toast.LENGTH_SHORT).show();
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(),"Id party : " + idparty);
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Optic name : " + opticName);
                 }
                 else if (condition.equals("CARTSALES"))
                 {
-                    idparty = data_opticnames.get(position).getIdParty();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+                    }
+
                     opticName = data_opticnames.get(position).getCustname();
+
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Optic name : " + opticName);
                 }
                 else if (condition.equals("BATCHSALES"))
                 {
-                    idparty = data_opticnames.get(position).getIdParty();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+                    }
+
                     opticName = data_opticnames.get(position).getCustname();
+
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Optic name : " + opticName);
                 }
                 else if (condition.equals("EINVOICE"))
                 {
-                    idparty = data_opticnames.get(position).getIdParty();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+
+                    }
+
                     opticName = data_opticnames.get(position).getCustname();
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Optic name : " + opticName);
                 }
                 else
                 {
-                    idparty = data_opticnames.get(position).getUsername();
+                    if (isHavingChild)
+                    {
+                        idparty = data_opticnames.get(position).getIdParty();
+                    }
+                    else
+                    {
+                        idparty = data_opticnames.get(position).getUsername();
+                    }
 //                    Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
                 }
 
@@ -447,7 +553,14 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        showOpticByName(check, req_start);
+                        if (isHavingChild)
+                        {
+                            searchChild(customerId, req_start, txt_search.getText().toString());
+                        }
+                        else
+                        {
+                            showOpticByName(check,req_start);
+                        }
                         disablePrev();
                     }
                 }
@@ -472,7 +585,14 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    showOpticByName(check, req_start);
+                    if (isHavingChild)
+                    {
+                        searchChild(customerId, req_start, txt_search.getText().toString());
+                    }
+                    else
+                    {
+                        showOpticByName(check,req_start);
+                    }
                     disablePrev();
                 }
             }
@@ -758,6 +878,184 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 hashMap.put("custname", key);
 
                 return hashMap;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showChildOnly(final int key, final int limit)
+    {
+        data_opticnames.clear();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWDATACHILD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listView.removeHeaderView(progress);
+                rl_optic.removeView(imgView_opticname);
+                Log.d(FormFilterOpticnameActivity.class.getSimpleName(), response);
+
+                try {
+                    JSONObject object = new JSONObject(response);
+                    int isFound = object.getInt("code");
+
+                    if (isFound == 200)
+                    {
+                        JSONArray dataArr = object.getJSONArray("data");
+
+                        totalrow = object.getInt("total_row");
+                        int start = object.getInt("start");
+                        int until = object.getInt("until");
+
+                        boolean isPrev = object.getBoolean("prev");
+                        boolean isNext = object.getBoolean("next");
+
+                        String counter = "Show " + start + " - " + until + " from "+ totalrow + " records";
+                        txt_counter.setText(counter);
+
+                        if (isPrev) {
+                            enablePrev();
+                        } else {
+                            disablePrev();
+                        }
+
+                        if (isNext) {
+                            enableNext();
+                        }
+                        else
+                        {
+                            disableNext();
+                        }
+
+                        for (int i = 0; i < dataArr.length(); i++)
+                        {
+                            JSONObject dataObj = dataArr.getJSONObject(i);
+
+                            Data_opticname item = new Data_opticname();
+                            item.setIdParty(dataObj.getString("id_party"));
+                            item.setUsername(dataObj.getString("username"));
+                            item.setCustname(dataObj.getString("cust_name"));
+                            item.setStatus(dataObj.getString("status"));
+
+                            data_opticnames.add(item);
+                        }
+
+                        adapter_filter_optic.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        showErrorImage();
+                        String info = "No record found";
+                        txt_counter.setText(info);
+                        disableNext();
+                        disablePrev();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("customer_id", String.valueOf(key));
+                map.put("limit", String.valueOf(limit));
+                return map;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void searchChild(final int key, final int limit, final String opticName)
+    {
+        data_opticnames.clear();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSEARCHCHILD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listView.removeHeaderView(progress);
+                rl_optic.removeView(imgView_opticname);
+                Log.d(FormFilterOpticnameActivity.class.getSimpleName(), response);
+
+                try {
+                    JSONObject object = new JSONObject(response);
+                    int isFound = object.getInt("code");
+
+                    if (isFound == 200)
+                    {
+                        JSONArray dataArr = object.getJSONArray("data");
+                        totalrow = object.getInt("total_row");
+                        int start = object.getInt("start");
+                        int until = object.getInt("until");
+
+                        boolean isPrev = object.getBoolean("prev");
+                        boolean isNext = object.getBoolean("next");
+
+                        String counter = "Show " + start + " - " + until + " from "+ totalrow + " records";
+                        txt_counter.setText(counter);
+
+                        if (isPrev) {
+                            enablePrev();
+                        } else {
+                            disablePrev();
+                        }
+
+                        if (isNext) {
+                            enableNext();
+                        }
+                        else
+                        {
+                            disableNext();
+                        }
+
+                        for (int i = 0; i < dataArr.length(); i++)
+                        {
+                            JSONObject dataObj = dataArr.getJSONObject(i);
+
+                            Data_opticname item = new Data_opticname();
+                            item.setIdParty(dataObj.getString("id_party"));
+                            item.setUsername(dataObj.getString("username"));
+                            item.setCustname(dataObj.getString("cust_name"));
+                            item.setStatus(dataObj.getString("status"));
+
+                            data_opticnames.add(item);
+                        }
+
+                        adapter_filter_optic.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        showErrorImage();
+                        String info = "No record found";
+                        txt_counter.setText(info);
+                        disableNext();
+                        disablePrev();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("customer_id", String.valueOf(key));
+                map.put("limit", String.valueOf(limit));
+                map.put("key", opticName);
+                return map;
             }
         };
 

@@ -467,7 +467,6 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INFOORDERJOB, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                loading.dismiss();
                 String info1 = "order_custname";
                 String info2 = "order_statusdt";
                 String info3 = "order_statustm";

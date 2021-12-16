@@ -24,6 +24,7 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_frame;
@@ -86,6 +87,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_order_history_frame);
         showLoader();
 
@@ -175,6 +177,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
             }
         }
 
+        if (sales.length() < 1) { sales = "unknown";}
+        Log.d(FormOrderHistoryFrameActivity.class.getSimpleName(), "Salesname : " + sales);
 //        Toasty.info(getApplicationContext(), idParty, Toast.LENGTH_SHORT).show();
 
         getAllFrame(idParty);

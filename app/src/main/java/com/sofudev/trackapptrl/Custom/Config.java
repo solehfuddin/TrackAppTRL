@@ -393,4 +393,9 @@ public class Config {
     public String generatetiki_token              = "index.php/Texp/req_access_token";
     public String getconnote_info                 = "index.php/Texp/connote_info";
     public String getconnote_status               = "index.php/Texp/connote_history";
+
+    /* AREA PARENT CHILD CHECK */
+    public String getparent_info                  = "index.php/Android_parentchild/getParent";
+    public String getchild_data                   = "index.php/Android_parentchild/showChild";
+    public String searchchild_data                = "index.php/Android_parentchild/searchChild";
 }

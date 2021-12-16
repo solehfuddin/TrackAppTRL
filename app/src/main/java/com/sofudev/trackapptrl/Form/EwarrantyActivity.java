@@ -122,10 +122,7 @@ public class EwarrantyActivity extends AppCompatActivity {
 
         search(txtNama.getText().toString(), txtNohp.getText().toString().trim());
 
-        if (!isFinishing())
-        {
-            dialog.show();
-        }
+        dialog.show();
     }
 
     private void search(final String name, final String phone)
@@ -137,7 +134,7 @@ public class EwarrantyActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("Search output : ", response);
-                dialog.dismiss();
+//                dialog.dismiss();
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -182,7 +179,7 @@ public class EwarrantyActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                dialog.dismiss();
+//                dialog.dismiss();
             }
         }){
             @Override

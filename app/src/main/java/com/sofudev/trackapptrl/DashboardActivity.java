@@ -174,6 +174,7 @@ public class DashboardActivity extends AppCompatActivity
     private String URLSETSICCODE  = config.Ip_address + config.set_sic_code;
     private String URLVERIFYSICCODE = config.Ip_address + config.verify_siccode;
     private String URLSTATUSUSER  = config.Ip_address + config.status_user;
+    private String URLPARENTINFO  = config.Ip_address + config.getparent_info;
     //    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
     String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
     String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
@@ -217,10 +218,11 @@ public class DashboardActivity extends AppCompatActivity
     Date dt_time;
     SimpleDateFormat sdf;
     String nominal, sActive, sPast, sic_code;
-    Boolean is_siccode;
+    Boolean isHavingChild = false;
     Boolean isHide = true;
     int sTotal;
     int smsFlag = 0;
+    int customerId = 0;
     private int oldScrollYPostion = 0;
     LoginSession session;
 
@@ -366,6 +368,7 @@ public class DashboardActivity extends AppCompatActivity
         navdash_username.setText(data);
         navdash_id.setText(data1);
         getUserDetailDB(data1);
+        getParentInfo(navdash_id.getText().toString());
 
 //        homeProduk();
         isHomeActive();
@@ -665,11 +668,21 @@ public class DashboardActivity extends AppCompatActivity
         {
             if (level_user != null) {
                 if (Integer.parseInt(level_user) == 0) {
-                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                    intent.putExtra("idparty", navdash_id.getText().toString());
-                    intent.putExtra("user_info", username);
-                    intent.putExtra("level", level_user);
-                    startActivity(intent);
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                        intent.putExtra("sales", username);
+                        intent.putExtra("level", "1");
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("user_info", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -694,11 +707,21 @@ public class DashboardActivity extends AppCompatActivity
             {
                 if (Integer.parseInt(level_user) == 0)
                 {
-                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
-                    intent.putExtra("user_info", navdash_id.getText().toString());
-                    intent.putExtra("username", username);
-                    intent.putExtra("level", level_user);
-                    startActivity(intent);
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                        intent.putExtra("sales", username);
+                        intent.putExtra("level", "1");
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                        intent.putExtra("user_info", navdash_id.getText().toString());
+                        intent.putExtra("username", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -737,9 +760,21 @@ public class DashboardActivity extends AppCompatActivity
             {
                 if (Integer.parseInt(level_user) == 0)
                 {
-                    Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
-                    intent.putExtra("idparty", navdash_id.getText().toString());
-                    startActivity(intent);
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "OTRACK");
+                        intent.putExtra("sales", username);
+                        intent.putExtra("havingChild", isHavingChild);
+                        intent.putExtra("customerId", customerId);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
+                        intent.putExtra("idparty", navdash_id.getText().toString());
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -747,6 +782,8 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                     intent.putExtra("cond", "OTRACK");
                     intent.putExtra("sales", username);
+                    intent.putExtra("havingChild", isHavingChild);
+                    intent.putExtra("customerId", customerId);
                     startActivity(intent);
                 }
             }
@@ -766,12 +803,24 @@ public class DashboardActivity extends AppCompatActivity
             {
                 if (Integer.parseInt(level_user) == 0)
                 {
-                    Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
-                    intent.putExtra("username", navdash_username.getText().toString());
-                    intent.putExtra("activetitle", sActive);
-                    intent.putExtra("pasttitle", sPast);
-                    intent.putExtra("totalprocess", String.valueOf(sTotal));
-                    startActivity(intent);
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "DELIVTRACK");
+                        intent.putExtra("sales", username);
+                        intent.putExtra("havingChild", isHavingChild);
+                        intent.putExtra("customerId", customerId);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormDeliveryTrackingActivity.class);
+                        intent.putExtra("username", navdash_username.getText().toString());
+                        intent.putExtra("activetitle", sActive);
+                        intent.putExtra("pasttitle", sPast);
+                        intent.putExtra("totalprocess", String.valueOf(sTotal));
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -779,6 +828,8 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                     intent.putExtra("cond", "DELIVTRACK");
                     intent.putExtra("sales", username);
+                    intent.putExtra("havingChild", isHavingChild);
+                    intent.putExtra("customerId", customerId);
                     startActivity(intent);
                 }
             }
@@ -849,11 +900,21 @@ public class DashboardActivity extends AppCompatActivity
             {
                 if (level_user.equals("0"))
                 {
-                    Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                    intent.putExtra("user_info", navdash_id.getText().toString());
-                    intent.putExtra("username", username);
-                    intent.putExtra("level", level_user);
-                    startActivity(intent);
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("sales", username);
+                        intent.putExtra("level", "1");
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("user_info", navdash_id.getText().toString());
+                        intent.putExtra("username", username);
+                        intent.putExtra("level", level_user);
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -1016,21 +1077,28 @@ public class DashboardActivity extends AppCompatActivity
             {
                 if (Integer.parseInt(level_user) == 0)
                 {
-                    String prefix = navdash_username.getText().toString().substring(navdash_username.length() - 7);
-                    Log.d("Prefix : ", prefix);
-
-                    if (prefix.equals("(STAFF)"))
+                    if (isHavingChild)
                     {
-                        showAccessDenied();
+                        Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "ESTMENT");
+                        intent.putExtra("sales", username);
+                        intent.putExtra("havingChild", isHavingChild);
+                        intent.putExtra("customerId", customerId);
+                        startActivity(intent);
                     }
                     else
                     {
-                        getSicCode(username);
+                        String prefix = navdash_username.getText().toString().substring(navdash_username.length() - 7);
+                        Log.d("Prefix : ", prefix);
 
-//                        Intent intent = new Intent(getApplicationContext(), EstatementActivity.class);
-//                        intent.putExtra("username", username);
-//                        intent.putExtra("opticname", navdash_username.getText().toString());
-//                        startActivity(intent);
+                        if (prefix.equals("(STAFF)"))
+                        {
+                            showAccessDenied();
+                        }
+                        else
+                        {
+                            getSicCode(username);
+                        }
                     }
                 }
                 else
@@ -1039,6 +1107,8 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                     intent.putExtra("cond", "ESTMENT");
                     intent.putExtra("sales", username);
+                    intent.putExtra("havingChild", isHavingChild);
+                    intent.putExtra("customerId", customerId);
                     startActivity(intent);
                 }
             }
@@ -2433,22 +2503,36 @@ public class DashboardActivity extends AppCompatActivity
                                 {
                                     if (level_user != null) {
                                         if (Integer.parseInt(level_user) == 0) {
-                                            Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
-                                            intent.putExtra("idparty", navdash_id.getText().toString());
-                                            intent.putExtra("opticname", data);
-                                            intent.putExtra("province", province_user);
-                                            intent.putExtra("usernameInfo", username);
-                                            intent.putExtra("city", city);
-                                            intent.putExtra("level", level_user);
-                                            intent.putExtra("flag", member_flag);
-                                            intent.putExtra("idSp", "0");
-                                            intent.putExtra("isSp", "0");
-                                            intent.putExtra("noHp", "0");
-                                            startActivity(intent);
+                                            if (isHavingChild)
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                                                intent.putExtra("cond", "LENSSALES");
+                                                intent.putExtra("sales", username);
+                                                intent.putExtra("havingChild", isHavingChild);
+                                                intent.putExtra("customerId", customerId);
+                                                startActivity(intent);
+                                            }
+                                            else
+                                            {
+                                                Intent intent = new Intent(getApplicationContext(), FormOrderLensActivity.class);
+                                                intent.putExtra("idparty", navdash_id.getText().toString());
+                                                intent.putExtra("opticname", data);
+                                                intent.putExtra("province", province_user);
+                                                intent.putExtra("usernameInfo", username);
+                                                intent.putExtra("city", city);
+                                                intent.putExtra("level", level_user);
+                                                intent.putExtra("flag", member_flag);
+                                                intent.putExtra("idSp", "0");
+                                                intent.putExtra("isSp", "0");
+                                                intent.putExtra("noHp", "0");
+                                                startActivity(intent);
+                                            }
                                         } else {
                                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                                             intent.putExtra("cond", "LENSSALES");
                                             intent.putExtra("sales", username);
+                                            intent.putExtra("havingChild", isHavingChild);
+                                            intent.putExtra("customerId", customerId);
                                             startActivity(intent);
 
                                             Log.d("Sales Name Dashboard : ", username);
@@ -3435,22 +3519,36 @@ public class DashboardActivity extends AppCompatActivity
                     {
                         if(Integer.parseInt(level_user) == 0)
                         {
-                            Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
-                            intent.putExtra("idparty", navdash_id.getText().toString());
-                            intent.putExtra("opticname", data);
-                            intent.putExtra("province", province_user);
-                            intent.putExtra("province_address", province_address);
-                            intent.putExtra("usernameInfo", username);
-                            intent.putExtra("level", level_user);
-                            intent.putExtra("city", city);
-                            intent.putExtra("flag", member_flag);
-                            startActivityForResult(intent, 2);
+                            if (isHavingChild)
+                            {
+                                Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                                intent.putExtra("cond", "CARTSALES");
+                                intent.putExtra("sales", username);
+                                intent.putExtra("havingChild", isHavingChild);
+                                intent.putExtra("customerId", customerId);
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Intent intent = new Intent(DashboardActivity.this, AddCartProductActivity.class);
+                                intent.putExtra("idparty", navdash_id.getText().toString());
+                                intent.putExtra("opticname", data);
+                                intent.putExtra("province", province_user);
+                                intent.putExtra("province_address", province_address);
+                                intent.putExtra("usernameInfo", username);
+                                intent.putExtra("level", level_user);
+                                intent.putExtra("city", city);
+                                intent.putExtra("flag", member_flag);
+                                startActivityForResult(intent, 2);
+                            }
                         }
                         else
                         {
                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                             intent.putExtra("cond", "CARTSALES");
                             intent.putExtra("sales", username);
+                            intent.putExtra("havingChild", isHavingChild);
+                            intent.putExtra("customerId", customerId);
                             startActivity(intent);
                         }
                     }
@@ -3592,25 +3690,39 @@ public class DashboardActivity extends AppCompatActivity
                     {
                         if (Integer.parseInt(level_user) == 0)
                         {
-                            Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
+                            if (isHavingChild)
+                            {
+                                Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
+                                intent.putExtra("cond", "BATCHSALES");
+                                intent.putExtra("sales", username);
+                                intent.putExtra("havingChild", isHavingChild);
+                                intent.putExtra("customerId", customerId);
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Intent intent = new Intent(getApplicationContext(), FormBatchOrderActivity.class);
 
-                            intent.putExtra("idparty", navdash_id.getText().toString());
-                            intent.putExtra("opticname", data);
-                            intent.putExtra("province", province_user);
-                            intent.putExtra("usernameInfo", username);
-                            intent.putExtra("province_address", province_address);
-                            intent.putExtra("level", level_user);
-                            intent.putExtra("city", city);
-                            intent.putExtra("idSp", "0");
-                            intent.putExtra("isSp", 0);
-                            intent.putExtra("flag", member_flag);
-                            startActivity(intent);
+                                intent.putExtra("idparty", navdash_id.getText().toString());
+                                intent.putExtra("opticname", data);
+                                intent.putExtra("province", province_user);
+                                intent.putExtra("usernameInfo", username);
+                                intent.putExtra("province_address", province_address);
+                                intent.putExtra("level", level_user);
+                                intent.putExtra("city", city);
+                                intent.putExtra("idSp", "0");
+                                intent.putExtra("isSp", 0);
+                                intent.putExtra("flag", member_flag);
+                                startActivity(intent);
+                            }
                         }
                         else
                         {
                             Intent intent = new Intent(getApplicationContext(), FormFilterOpticnameActivity.class);
                             intent.putExtra("cond", "BATCHSALES");
                             intent.putExtra("sales", username);
+                            intent.putExtra("havingChild", isHavingChild);
+                            intent.putExtra("customerId", customerId);
                             startActivity(intent);
                         }
                     }
@@ -3691,6 +3803,51 @@ public class DashboardActivity extends AppCompatActivity
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("ship_number", shipNumber);
                 return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getParentInfo(final String key){
+        StringRequest request = new StringRequest(Request.Method.POST, URLPARENTINFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    Log.d(DashboardActivity.class.getSimpleName(), response);
+
+                    if (object.getInt("code") == 200){
+                        JSONObject dataObject = object.getJSONObject("data");
+                        String idFlag = dataObject.getString("id_flag");
+                        customerId = dataObject.getInt("customer_id");
+
+                        Log.d(DashboardActivity.class.getSimpleName(), "Id flag : " + idFlag);
+                        Log.d(DashboardActivity.class.getSimpleName(), "Customer Id : " + customerId);
+                        if (idFlag.equals("Y") && customerId > 0)
+                        {
+                            isHavingChild = true;
+                        }
+                    }
+                    else
+                    {
+                        isHavingChild = false;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("key", key);
+                return map;
             }
         };
 

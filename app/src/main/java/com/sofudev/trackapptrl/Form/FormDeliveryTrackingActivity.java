@@ -200,7 +200,7 @@ public class FormDeliveryTrackingActivity extends AppCompatActivity {
         }
     }
 
-    private class ViewStatePagerAdapter extends FragmentStatePagerAdapter {
+    private static class ViewStatePagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private List<Data_filter_deliverytrack> item = new ArrayList<>();
 
@@ -208,6 +208,7 @@ public class FormDeliveryTrackingActivity extends AppCompatActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int i) {
             return DeliveryTrackingFragment.newInstance(item.get(i));
@@ -225,7 +226,12 @@ public class FormDeliveryTrackingActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return item.get(position).getTitle();
+            if (!item.get(position).getTitle().isEmpty()) {
+                 return item.get(position).getTitle();
+            }
+            else {
+                return "";
+            }
         }
 
         private void addFragment(Fragment fragment, Data_filter_deliverytrack data) {
