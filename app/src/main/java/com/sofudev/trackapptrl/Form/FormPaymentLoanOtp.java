@@ -30,6 +30,7 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
@@ -39,7 +40,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentLoanOtp extends AppCompatActivity {
@@ -51,7 +51,7 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
     Button btnNext, btnPrev;
     UniversalFontTextView txtBillingId, txtTotalBilling;
     BootstrapEditText edOtp;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
 
     String billingId, totalBilling, nomorHp, orderNumber, username, sisaSaldo;
     @Override
@@ -60,6 +60,7 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
         setContentView(R.layout.activity_form_payment_loan_otp);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         btnNext = findViewById(R.id.form_paymentloan_otp_btnNext);
         btnPrev = findViewById(R.id.form_paymentloan_otp_btnPrev);
@@ -116,23 +117,10 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
         });
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentLoanOtp.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
-    }
-
     private void postLoanPayment(final String billingId, final String nomorHandphone, final String otp, final String nominal)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest request = new StringRequest(Request.Method.POST, URLPOSTLOAN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -159,7 +147,8 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
                     Toasty.error(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -174,7 +163,8 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
                             "Request Time out !!",
                             Toast.LENGTH_LONG).show();
                 }
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -225,12 +215,14 @@ public class FormPaymentLoanOtp extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

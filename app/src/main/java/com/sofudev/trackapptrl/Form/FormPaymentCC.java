@@ -45,6 +45,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.CustomSpinner;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
@@ -63,7 +64,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentCC extends AppCompatActivity {
@@ -76,7 +76,7 @@ public class FormPaymentCC extends AppCompatActivity {
 
     Dialog dialogCC;
     AlertDialog dialog3ds;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     ImageView btnBack;
     UniversalFontTextView txtOrderNumber, txtTimer, txtDate, txtAmount;
     Button btnPay, btnCancel;
@@ -94,6 +94,7 @@ public class FormPaymentCC extends AppCompatActivity {
         setContentView(R.layout.activity_form_payment_cc);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         BASE_URL    = "http://www.timurrayalab.com/";
 //        CLIENT_KEY  = "SB-Mid-client-WeC58FxcSR3DiAlh";
@@ -322,20 +323,6 @@ public class FormPaymentCC extends AppCompatActivity {
         lvPanduan.setAdapter(adapter_panduantransfer);
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentCC.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
-    }
-
     private void ViewPdfByFilter(final String title, final String header)
     {
         Intent intent = new Intent(FormPaymentCC.this, FormPDFViewerActivity.class);
@@ -416,7 +403,8 @@ public class FormPaymentCC extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String output = jsonObject.getString("responseStatus");
@@ -433,12 +421,14 @@ public class FormPaymentCC extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -598,7 +588,8 @@ public class FormPaymentCC extends AppCompatActivity {
             super.onPageFinished(view, url);
             // Check if redirect URL has "/token/callback/" to ensure authorization was completed
             if (url.contains("/token/callback/")) {
-                showLoading();
+//                showLoading();
+                customLoading.showLoadingDialog();
                 dialogCC.dismiss();
                 dialog3ds.dismiss();
 

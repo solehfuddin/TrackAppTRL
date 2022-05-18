@@ -24,6 +24,8 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
 import org.json.JSONException;
@@ -36,7 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentDeposit extends AppCompatActivity {
@@ -45,7 +46,7 @@ public class FormPaymentDeposit extends AppCompatActivity {
     private String URLCHECKDEPOSIT= config.Ip_address + config.depo_getsaldo;
     private String URLPAYDEPOSIT  = config.Ip_address + config.payment_method_deposit;
 
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     UniversalFontTextView txtOrderNumber, txtTimer, txtDate, txtAmount, txtDeposit;
     Button btnCancel, btnPay;
 //    ImageView btnBack;
@@ -56,6 +57,9 @@ public class FormPaymentDeposit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_deposit);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
 //        btnBack = findViewById(R.id.form_paymentcc_btn_back);
         txtOrderNumber = findViewById(R.id.form_paymentdepo_txtOrderNumber);
@@ -78,7 +82,8 @@ public class FormPaymentDeposit extends AppCompatActivity {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoading();
+//                showLoading();
+                customLoading.showLoadingDialog();
                 int hasil = Integer.valueOf(nominal) - Integer.valueOf(tempAmount);
 //                Toasty.info(getApplicationContext(), "sisa saldo = " + String.valueOf(hasil), Toast.LENGTH_SHORT).show();
                 if (hasil > 0)
@@ -86,8 +91,8 @@ public class FormPaymentDeposit extends AppCompatActivity {
                     payDeposit(orderNumber, username, "-" + tempAmount, "Order pending #" + orderNumber);
                 }
                 else {
-                    loading.dismiss();
-
+//                    loading.dismiss();
+                        customLoading.dismissLoadingDialog();
                         information("Transaksi Gagal", "Mohon maaf sisa saldo depositmu tidak mencukupi", R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
 //                    Toasty.error(getApplicationContext(), "Insufficient balance, please topup deposit", Toast.LENGTH_SHORT).show();
                 }
@@ -115,20 +120,6 @@ public class FormPaymentDeposit extends AppCompatActivity {
         tempAmount = convertToInt(CurencyFormat(totalAmount));
 
         setTimer(txtTimer, Integer.parseInt(duration));
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentDeposit.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
     }
 
     private String convertToInt(String amount)
@@ -263,7 +254,8 @@ public class FormPaymentDeposit extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String output = jsonObject.getString("responseStatus");
@@ -280,12 +272,14 @@ public class FormPaymentDeposit extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

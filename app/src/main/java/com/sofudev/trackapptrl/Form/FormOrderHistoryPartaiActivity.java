@@ -29,6 +29,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_frame;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
@@ -47,7 +48,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
@@ -65,11 +65,11 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
     String CHECKSTATUS          = config.payment_check_status;
     String UPDATESTATUS         = config.Ip_address + config.payment_method_updateStatus;
 
-    ACProgressCustom loader;
     ImageView btnBack, btnOption, imgError;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     CircleProgressBar progressBar;
+    CustomLoading customLoading;
 
     MaterialEditText txt_startdate, txt_enddate;
     Button btn_filterdate;
@@ -90,7 +90,9 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
 
-        showLoader();
+//        showLoader();
+        customLoading = new CustomLoading(this);
+        customLoading.showLoadingDialog();
 
         btnBack     = findViewById(R.id.activity_orderhistory_partai_btnBack);
         btnOption   = findViewById(R.id.activity_orderhistory_partai_btnDaterange);
@@ -162,17 +164,6 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
 //        Toasty.info(getApplicationContext(), idParty, Toast.LENGTH_SHORT).show();
 
         getAllPartai(idParty);
-    }
-
-    private void showLoader() {
-        loader = new ACProgressCustom.Builder(FormOrderHistoryPartaiActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-        loader.show();
     }
 
     private String CurencyFormat(String Rp){
@@ -520,6 +511,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    customLoading.dismissLoadingDialog();
                     JSONArray jsonArray = new JSONArray(response);
 
                     for (int i = 0; i < jsonArray.length(); i++)
@@ -531,14 +523,14 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                            loader.dismiss();
+//                            loader.dismiss();
                         }
                         else
                         {
                             progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
-                            loader.dismiss();
+//                            loader.dismiss();
 
                             String transNumber = object.getString("transNumber");
                             String transStatus = object.getString("transStatus");
@@ -556,12 +548,14 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     getAllPartaiResult(id);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -617,20 +611,23 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                         }
                     }
 
+                    customLoading.dismissLoadingDialog();
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    loader.dismiss();
+//                    loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     imgError.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
-                    loader.dismiss();
+//                    loader.dismiss();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                loader.dismiss();
+//                loader.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -649,7 +646,8 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
     {
         //progressBar.setVisibility(View.VISIBLE);
         itemPartai.clear();
-        showLoader();
+//        showLoader();
+        customLoading.showLoadingDialog();
 
         StringRequest request = new StringRequest(Request.Method.POST, SHOWRANGEHISTORY, new Response.Listener<String>() {
             @Override
@@ -666,7 +664,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                             //progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                            loader.dismiss();
+//                            loader.dismiss();
                         }
                         else
                         {
@@ -685,14 +683,17 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     }
 
                     getAllFrameByRangeResult(id, dateFrom, dateUntil);
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -730,7 +731,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
 
-                            loader.dismiss();
+//                            loader.dismiss();
                         }
                         else
                         {
@@ -754,15 +755,18 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    loader.dismiss();
+                    customLoading.dismissLoadingDialog();
+//                    loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

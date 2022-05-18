@@ -226,12 +226,15 @@ public class FormDeliveryTrackingActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (!item.get(position).getTitle().isEmpty()) {
-                 return item.get(position).getTitle();
-            }
-            else {
+            if (item.get(position).getTitle() == null)
+            {
                 return "";
             }
+            if (item.get(position).getTitle().isEmpty()) {
+                return "";
+            }
+
+            return item.get(position).getTitle();
         }
 
         private void addFragment(Fragment fragment, Data_filter_deliverytrack data) {

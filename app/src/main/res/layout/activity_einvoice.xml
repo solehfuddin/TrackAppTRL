@@ -57,6 +57,23 @@
                     app:customFont="DroidBold.ttf" />
 
                 <com.andexert.library.RippleView
+                    android:id="@+id/form_einvoice_ripplebtndownload"
+                    android:layout_width="40dp"
+                    android:layout_height="110dp"
+                    android:layout_alignParentEnd="true"
+                    app:rv_rippleDuration="100"
+                    app:rv_type="rectangle">
+
+                    <ImageView
+                        android:id="@+id/form_einvoice_btndownload"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@string/app_name"
+                        android:paddingTop="15dp"
+                        android:src="@drawable/ic_cloud_download" />
+                </com.andexert.library.RippleView>
+
+                <com.andexert.library.RippleView
                     android:id="@+id/form_einvoice_ripplebtnfilter"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

@@ -34,6 +34,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_frame_header;
@@ -56,8 +57,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class AddCartProductActivity extends AppCompatActivity {
@@ -97,7 +96,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     ListView listPayment;
     RippleView btnChoosePayment;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
 
     AddCartHelper addCartHelper;
     List<ModelAddCart> itemCart;
@@ -123,6 +122,7 @@ public class AddCartProductActivity extends AppCompatActivity {
 
         UniversalFontComponents.init(this);
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         btn_back = findViewById(R.id.addcart_product_btnback);
         nestedDetail = findViewById(R.id.addcart_product_nestedscroll);
@@ -642,20 +642,6 @@ public class AddCartProductActivity extends AppCompatActivity {
 //                            Toasty.success(getApplicationContext(), "Success, masuk ke metode pembayaran", Toast.LENGTH_SHORT).show();
 
             Log.d("INFO FRAME", "Order telah dihapus");
-        }
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(AddCartProductActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if (!isFinishing()){
-            loading.show();
         }
     }
 
@@ -1361,12 +1347,14 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void postBillingQR(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -1394,7 +1382,8 @@ public class AddCartProductActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
 //                loading.dismiss();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1508,12 +1497,14 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void postBillingVA(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if(jsonObject.length() > 0)
@@ -1655,12 +1646,14 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void createBillingCC(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLCC, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -1747,12 +1740,14 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void postBillingLoan(final String paymentType, final String grossAmount, final String order)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -1890,12 +1885,14 @@ public class AddCartProductActivity extends AppCompatActivity {
 
     private void createBillingDeposit(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLDEPOSIT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))

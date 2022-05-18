@@ -16,6 +16,7 @@ import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
@@ -25,7 +26,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentLoanSaldo extends AppCompatActivity {
@@ -36,7 +36,7 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
     Button btnNext, btnPrev;
     UniversalFontTextView txtSisaSaldo, txtBillingId;
     TextView txtTotalBilling;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
 
     String nomorHp, billingId, totalBill, orderNumber, username, sisaSaldo;
 
@@ -46,6 +46,7 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
         setContentView(R.layout.activity_form_payment_loan_saldo);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         btnNext = findViewById(R.id.form_paymentloan_saldo_btnNext);
         btnPrev = findViewById(R.id.form_paymentloan_saldo_btnBack);
@@ -122,23 +123,10 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
         txtTotalBilling.setText(totalBill);
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentLoanSaldo.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
-    }
-
     private void getKonfirmOrder(final String billingId, final String nomorHandphone, final String nominal)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest request = new StringRequest(Request.Method.POST, URLLOANKONFIRM, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -170,13 +158,15 @@ public class FormPaymentLoanSaldo extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                loading.dismiss();
+                customLoading.dismissLoadingDialog();
+//                loading.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

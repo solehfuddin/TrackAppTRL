@@ -66,6 +66,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.LoginSession;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
@@ -101,7 +102,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
@@ -134,9 +134,8 @@ public class MainActivity extends AppCompatActivity
     TextView txt_title, txt_countwishlist, txt_countcart;
     RelativeLayout rl_viewprize;
     ImageView img_closeprize;
-    ACProgressCustom loading;
     LovelyCustomDialog dialog;
-    Dialog dialogCustom;
+    Dialog dialogCustom, dialogLoading;
     private DrawerLayout drawer;
     private MaterialSearchView searchView;
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
@@ -157,6 +156,7 @@ public class MainActivity extends AppCompatActivity
     boolean isForceUpdate = true;
     AddCartHelper addCartHelper;
     WishlistHelper wishlistHelper;
+    CustomLoading customLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,9 @@ public class MainActivity extends AppCompatActivity
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_main);
 
+//        showDialogLoading();
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         TypefaceProvider.registerDefaultIconSets();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -358,7 +360,8 @@ public class MainActivity extends AppCompatActivity
             txt_message.setText(message);
             btn_ok.setBootstrapBrand(defaultcolorbtn);
 
-            showLoading();
+//            showLoading();
+//            showDialogLoading();
 
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -714,6 +717,12 @@ public class MainActivity extends AppCompatActivity
                     txt_pass.setError("Password is required");
                 }
                 else {
+//                    showDialogLoading();
+                    if (!isFinishing())
+                    {
+                        customLoading.showLoadingDialog();
+                    }
+
                     loginApp(user, pass);
                 }
             }
@@ -743,6 +752,21 @@ public class MainActivity extends AppCompatActivity
             }
         });
         dialog.show();
+    }
+
+    private void showDialogLoading()
+    {
+        dialogLoading = new Dialog(this);
+        inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_loading_all, null);
+        dialogLoading.setContentView(view);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.show();
+    }
+
+    private void hideDialogLoading()
+    {
+        dialogLoading.dismiss();
     }
 
     private void showDialogLoginCustom()
@@ -924,6 +948,8 @@ public class MainActivity extends AppCompatActivity
                     String customer = MCrypt.bytesToHex(mCrypt.encrypt(data1));
                     String idparty  = MCrypt.bytesToHex(mCrypt.encrypt(data2));
                     try {
+//                        hideDialogLoading();
+                        customLoading.dismissLoadingDialog();
                         JSONObject jsonObject = new JSONObject(response);
 
                         if (jsonObject.names().get(0).equals(failed)) {
@@ -943,7 +969,8 @@ public class MainActivity extends AppCompatActivity
                         else {
                             String user = new String(mCrypt.decrypt(jsonObject.getString(customer)));
                             String id   = new String(mCrypt.decrypt(jsonObject.getString(idparty)));
-                            showLoading();
+//                            showLoading();
+
                             Toasty.info(getApplicationContext(), "welcome " + user, Toast.LENGTH_SHORT, true).show();
                             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                             intent.putExtra("username", user);
@@ -963,7 +990,7 @@ public class MainActivity extends AppCompatActivity
                             updateIsLogin(id);
 
                             //Open dashboard
-                            loading.dismiss();
+//                            loading.dismiss();
                             startActivity(intent);
                             dialog.dismiss();
                             finish();
@@ -971,16 +998,22 @@ public class MainActivity extends AppCompatActivity
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
+//                        hideDialogLoading();
+                        customLoading.dismissLoadingDialog();
                     }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
+//                    hideDialogLoading();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.warning(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+//                hideDialogLoading();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1069,21 +1102,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(MainActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing())
-        {
-            loading.show();
-        }
     }
 
     @Override

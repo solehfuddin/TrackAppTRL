@@ -30,6 +30,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.R;
 
@@ -50,7 +51,6 @@ import java.util.concurrent.TimeUnit;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentQR extends AppCompatActivity {
@@ -61,7 +61,7 @@ public class FormPaymentQR extends AppCompatActivity {
     String URLCHECKREMINDER    = config.Ip_address + config.orderlens_check_reminder;
 
     Adapter_panduantransfer adapter_panduantransfer;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     ImageView imgQrcode, btnBack;
     Button btnCancel;
     UniversalFontTextView txtOrderNumber, txtAmount, txtTimer, txtDate, txtKodeBilling, txtCopyKode;
@@ -74,9 +74,11 @@ public class FormPaymentQR extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_qr);
-        showLoading();
+//        showLoading();
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
+        customLoading.showLoadingDialog();
 
         final ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
@@ -193,20 +195,6 @@ public class FormPaymentQR extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentQR.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
     }
 
     private void cancelPayment(String id) {
@@ -328,7 +316,8 @@ public class FormPaymentQR extends AppCompatActivity {
             }
         }.start();
 
-        loading.dismiss();
+//        loading.dismiss();
+        customLoading.dismissLoadingDialog();
     }
 
     private void getDetailAccount(final String username)

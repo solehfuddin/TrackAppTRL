@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -81,6 +84,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_banner_custom;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.LoginSession;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
@@ -135,6 +139,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -147,7 +152,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 import in.aabhasjindal.otptextview.OTPListener;
 import in.aabhasjindal.otptextview.OtpTextView;
@@ -185,7 +189,6 @@ public class DashboardActivity extends AppCompatActivity
     ImageView imgAction;
     TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo;
     //UniversalFontTextView btn_orderframe, btn_orderbulk;
-    ACProgressCustom loading;
     BottomDialog bottomDialogInput;
     private DrawerLayout drawer;
     private MaterialSearchView searchViews;
@@ -228,6 +231,7 @@ public class DashboardActivity extends AppCompatActivity
 
     WishlistHelper wishlistHelper;
     AddCartHelper addCartHelper;
+    CustomLoading customLoading;
 
 //    private Adapter_banner_custom mAdapter;
 //
@@ -241,6 +245,7 @@ public class DashboardActivity extends AppCompatActivity
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_dashboard);
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -1281,24 +1286,6 @@ public class DashboardActivity extends AppCompatActivity
         mi.setTitle(mNewTitle);
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(DashboardActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-        if (!isFinishing()){
-            loading.show();
-        }
-    }
-
-    private void hideLoading()
-    {
-        loading.dismiss();
-    }
-
     private void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
     {
         ImageView img_status;
@@ -1408,7 +1395,8 @@ public class DashboardActivity extends AppCompatActivity
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         final String datetime = sdf.format(calendar.getTime());
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, logout_URL, new Response.Listener<String>() {
             @Override
@@ -1430,17 +1418,20 @@ public class DashboardActivity extends AppCompatActivity
                         {
                             String msg = "0";
                             createTemp(msg);
-                            hideLoading();
+//                            hideLoading();
+                            customLoading.dismissLoadingDialog();
                             finish();
                         }
                         else if (jsonObject.names().get(0).equals(invalid))
                         {
-                            hideLoading();
+//                            hideLoading();
+                            customLoading.dismissLoadingDialog();
                             Toasty.warning(getApplicationContext(), "Update data failed", Toast.LENGTH_SHORT, true).show();
                         }
                         else if (jsonObject.names().get(0).equals(failure))
                         {
-                            hideLoading();
+//                            hideLoading();
+                            customLoading.dismissLoadingDialog();
                             Toasty.error(getApplicationContext(), "Account not found", Toast.LENGTH_SHORT, true).show();
                         }
                     }
@@ -1604,14 +1595,17 @@ public class DashboardActivity extends AppCompatActivity
                     {
                         Toasty.warning(getApplicationContext(), jsonObject.getString(error), Toast.LENGTH_SHORT, true).show();
                     }
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), "Please check connection", Toast.LENGTH_SHORT, true).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1703,8 +1697,14 @@ public class DashboardActivity extends AppCompatActivity
                     if (isValidPhone(phone))
                     {
                         phone_number = phone;
-                        showLoading();
-                        sendVerifyPhone(data, phone);
+//                        showLoading();
+                        customLoading.showLoadingDialog();
+                        //tampil otp
+//                        sendVerifyPhone(data, phone);
+
+                        //by pass otp
+                        updateEmailAddress(data1, email_address);
+                        updatePhoneNumber(data1, phone_number);
                         dialog.dismiss();
 
                         /*if (email_address.equals("-") || email_address.isEmpty())
@@ -2769,7 +2769,7 @@ public class DashboardActivity extends AppCompatActivity
         final BootstrapButton btn_resend, btn_confirm;
         smsFlag = 1;
 
-        hideLoading();
+//        hideLoading();
         final Dialog dialog = new Dialog(DashboardActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.form_auth_order);
@@ -2865,7 +2865,7 @@ public class DashboardActivity extends AppCompatActivity
         final VerificationCodeEditText txt_pin;
         final BootstrapButton btn_resend, btn_confirm;
 
-        hideLoading();
+//        hideLoading();
         final Dialog dialog = new Dialog(DashboardActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.form_auth_order);
@@ -2947,7 +2947,16 @@ public class DashboardActivity extends AppCompatActivity
 
     private void readLogsms(String filename)
     {
-        File pathfile = new File(Environment.getExternalStorageDirectory(), "TRLAPP/smslog/" + filename);
+        File pathfile;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            pathfile = new File("/storage/emulated/0/Documents/", "/smslog/" + filename);
+            Log.d(DashboardActivity.class.getSimpleName(), "File location" + pathfile.getAbsolutePath());
+        }
+        else
+        {
+            pathfile = new File(Environment.getExternalStorageDirectory(), "TRLAPP/smslog/" + filename);
+        }
 
         if (pathfile.exists())
         {
@@ -2962,22 +2971,45 @@ public class DashboardActivity extends AppCompatActivity
         File rootFolder, childFolder;
 
         try {
-            rootFolder = new File(Environment.getExternalStorageDirectory(), "TRLAPP");
-            childFolder= new File(Environment.getExternalStorageDirectory(), "TRLAPP/smslog");
-
-            if (!rootFolder.exists())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             {
-                rootFolder.mkdirs();
-            }
+                ContentValues values = new ContentValues();
+                Context context = getApplicationContext();
+                OutputStream outputStream;
 
-            if (!childFolder.exists())
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);   // file name
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/smslog/");
+
+                Uri extVolumeUri = MediaStore.Files.getContentUri("external");
+                Uri fileUri = context.getContentResolver().insert(extVolumeUri, values);
+
+                outputStream = context.getContentResolver().openOutputStream(fileUri);
+                byte[] bytes = msg.getBytes();
+                outputStream.write(bytes);
+                outputStream.close();
+
+
+            }
+            else
             {
-                childFolder.mkdirs();
-            }
+                rootFolder = new File(Environment.getExternalStorageDirectory(), "TRLAPP");
+                childFolder= new File(Environment.getExternalStorageDirectory(), "TRLAPP/smslog");
 
-            fileOutputStream = new FileOutputStream(childFolder + "/" + filename);
-            fileOutputStream.write(msg.getBytes());
-            fileOutputStream.close();
+                if (!rootFolder.exists())
+                {
+                    rootFolder.mkdirs();
+                }
+
+                if (!childFolder.exists())
+                {
+                    childFolder.mkdirs();
+                }
+
+                fileOutputStream = new FileOutputStream(childFolder + "/" + filename);
+                fileOutputStream.write(msg.getBytes());
+                fileOutputStream.close();
+            }
         }
         catch (Exception ex)
         {

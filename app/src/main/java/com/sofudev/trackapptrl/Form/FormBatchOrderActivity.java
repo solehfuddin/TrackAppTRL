@@ -42,6 +42,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_power_cyl;
 import com.sofudev.trackapptrl.Adapter.Adapter_power_sph;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_lenstype;
@@ -67,7 +68,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 import viethoa.com.snackbar.BottomSnackBarMessage;
 
@@ -108,7 +108,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     String URL_INSERTSAMTEMP        = config.Ip_address + config.ordersp_insert_samTemp;
 
     ConstraintLayout constraintLayoutOpticName;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     ImageView btnBack, btnAddItem;
     BootstrapEditText txtlenstype, txtlensdescription;
     RippleView btnlenstype, btnSph, btnCyl, btnAdd;
@@ -166,8 +166,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
         UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_batch_order);
 
-
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         lensPartaiHelper = LensPartaiHelper.getINSTANCE(getApplicationContext());
         lensPartaiHelper.open();
@@ -1416,20 +1416,6 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormBatchOrderActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-                if (!isFinishing()){
-                    loading.show();
-                }
     }
 
     private String CurencyFormat(String Rp){
@@ -3015,12 +3001,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void postBillingQR(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -3040,6 +3028,7 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
 //                loading.dismiss();
             }
@@ -3048,7 +3037,8 @@ public class FormBatchOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
 //                loading.dismiss();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -3066,12 +3056,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void postBillingVA(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -3090,12 +3082,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -3114,11 +3108,13 @@ public class FormBatchOrderActivity extends AppCompatActivity {
     private void postBillingLoan(final String paymentType, final String grossAmount, final String order)
     {
         //showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     //loading.hide();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     String statusCode   = jsonObject.getString("responseCode");
@@ -3138,12 +3134,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -3242,12 +3240,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void createBillingCC(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLCC, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -3261,12 +3261,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -3323,12 +3325,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
 
     private void createBillingDeposit(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLDEPOSIT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -3343,12 +3347,14 @@ public class FormBatchOrderActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

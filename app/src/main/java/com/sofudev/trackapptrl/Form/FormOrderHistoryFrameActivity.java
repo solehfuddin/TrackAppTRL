@@ -30,6 +30,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_frame;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
@@ -48,7 +49,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormOrderHistoryFrameActivity extends AppCompatActivity {
@@ -75,7 +75,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
     MaterialEditText txt_startdate, txt_enddate;
     Button btn_filterdate;
     RippleView rp_filterdate;
-    ACProgressCustom loader;
+    CustomLoading customLoading;
 
     Adapter_orderhistory_frame adapter_orderhistory_frame;
     List<Data_orderhistory_optic> itemHistory = new ArrayList<>();
@@ -89,9 +89,11 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_order_history_frame);
-        showLoader();
+//        showLoader();
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
+        customLoading.showLoadingDialog();
 
         btnBack = findViewById(R.id.activity_orderhistory_frame_btnBack);
         btnOption = findViewById(R.id.activity_orderhistory_frame_btnDaterange);
@@ -144,17 +146,6 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
 //        getAllFrame(idParty);
     }
 
-    private void showLoader() {
-        loader = new ACProgressCustom.Builder(FormOrderHistoryFrameActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-        loader.show();
-    }
-
     private void getInfo()
     {
         Bundle bundle = getIntent().getExtras();
@@ -203,7 +194,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                            loader.dismiss();
+//                            loader.dismiss();
+                            customLoading.dismissLoadingDialog();
                         }
                         else
                         {
@@ -218,18 +210,21 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             {
                                 checkStatusPayment(transNumber, transStatus);
                             }
+                            customLoading.dismissLoadingDialog();
                         }
                     }
 
                     getAllFrameResult(idParty);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -286,19 +281,22 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    loader.dismiss();
+//                    loader.dismiss();
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     imgError.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
-                    loader.dismiss();
+//                    loader.dismiss();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                loader.dismiss();
+//                loader.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -317,7 +315,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
     {
         //progressBar.setVisibility(View.VISIBLE);
         itemHistory.clear();
-        showLoader();
+//        showLoader();
+        customLoading.showLoadingDialog();
 
         StringRequest request = new StringRequest(Request.Method.POST, URLGETFRAMERANGE, new Response.Listener<String>() {
             @Override
@@ -334,7 +333,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             //progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
-                            loader.dismiss();
+//                            loader.dismiss();
+                            customLoading.dismissLoadingDialog();
                         }
                         else
                         {
@@ -349,6 +349,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             {
                                 checkStatusPayment(transNumber, transStatus);
                             }
+                            customLoading.dismissLoadingDialog();
                         }
                     }
 
@@ -356,12 +357,14 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                     getAllFrameByRangeResult(id, dateFrom, dateUntil);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -399,7 +402,8 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
 
-                            loader.dismiss();
+//                            loader.dismiss();
+                            customLoading.dismissLoadingDialog();
                         }
                         else
                         {
@@ -419,19 +423,22 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
                             data.setStatusOrder(transStatus);
 
                             itemHistory.add(data);
+                            customLoading.dismissLoadingDialog();
                         }
                     }
 
                     adapter_orderhistory_frame.notifyDataSetChanged();
-                    loader.dismiss();
+//                    loader.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override

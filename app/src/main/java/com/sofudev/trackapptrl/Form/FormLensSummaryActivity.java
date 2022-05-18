@@ -32,6 +32,7 @@ import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
 import com.sofudev.trackapptrl.Adapter.Adapter_paymentmethod;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_lensorderweb;
@@ -59,7 +60,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormLensSummaryActivity extends AppCompatActivity {
@@ -99,7 +99,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_INSERTDURATION = config.Ip_address + config.ordersp_insert_duration;
 
     ConstraintLayout constraintLayoutOpticName;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     Button btnCheckout;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceDiscSale ,txtPriceFacet, txtPriceTinting, txtPriceShipping,
                             txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping, txtOpticName;
@@ -160,9 +160,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         UniversalFontComponents.init(this);
 
         setContentView(R.layout.activity_form_lens_summary);
-        showLoading();
+//        showLoading();
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
+        customLoading.showLoadingDialog();
 
         scalableCourier =  findViewById(R.id.activity_lenssummary_scalableCourier);
         recyclerCourier =  findViewById(R.id.activity_lenssummary_recyclerCourier);
@@ -1018,7 +1020,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                 }
 
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         });
 
@@ -1080,7 +1083,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 //            }
 //        });
 
-        loading.dismiss();
+//        loading.dismiss();
+        customLoading.dismissLoadingDialog();
     }
 
 //    @Override
@@ -1100,23 +1104,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         btnCheckout.setTextColor(Color.BLACK);
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormLensSummaryActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if (!isFinishing()){
-            loading.show();
-        }
-    }
-
     private void postBillingQR(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1139,8 +1130,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     {
                         Toasty.error(getApplicationContext(), description + " (" + statusCode + ")", Toast.LENGTH_SHORT).show();
                     }
+
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
                 //loading.dismiss();
             }
@@ -1148,7 +1142,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1206,7 +1201,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void postBillingVA(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1230,15 +1226,18 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         Toasty.error(getApplicationContext(), description + " (" + statusCode + ")", Toast.LENGTH_SHORT).show();
                     }
                     //loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1299,7 +1298,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void createBillingCC(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLCC, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1318,15 +1318,18 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         Toasty.warning(getApplicationContext(), "Data harus diisi", Toast.LENGTH_SHORT).show();
                     }
                     //loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1343,7 +1346,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void postBillingLoan(final String paymentType, final String grossAmount, final String orderId)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1368,15 +1372,18 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                         Toasty.error(getApplicationContext(), description + " (" + statusCode + ")", Toast.LENGTH_SHORT).show();
                     }
                     //loading.dismiss();
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1434,12 +1441,13 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void createBillingDeposit(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLDEPOSIT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    loading.dismiss();
+//                    loading.dismiss();
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.names().get(0).equals("success"))
@@ -1452,14 +1460,17 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     {
                         Toasty.warning(getApplicationContext(), "Data harus diisi", Toast.LENGTH_SHORT).show();
                     }
+                    customLoading.dismissLoadingDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                customLoading.dismissLoadingDialog();
             }
         }){
             @Override
@@ -1476,7 +1487,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void createBillingKP(final String orderNumber, final String paymentType)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INSERTBILLKP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

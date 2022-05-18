@@ -27,6 +27,7 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.App.AppController;
@@ -114,6 +115,7 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_category, container, false);
+        TypefaceProvider.registerDefaultIconSets();
         linearLensorder = view.findViewById(R.id.layout_custom_lensorder);
         linearStockorder= view.findViewById(R.id.layout_custom_stockorder);
         linearSporder   = view.findViewById(R.id.layout_custom_sporder);

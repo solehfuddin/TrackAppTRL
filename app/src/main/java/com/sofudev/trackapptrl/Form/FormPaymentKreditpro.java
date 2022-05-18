@@ -50,6 +50,7 @@ import com.android.volley.toolbox.Volley;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
@@ -69,7 +70,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentKreditpro extends AppCompatActivity {
@@ -77,7 +77,7 @@ public class FormPaymentKreditpro extends AppCompatActivity {
     Config config = new Config();
 
     AlertDialog dialog3ds;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
     ImageView btnBack;
     UniversalFontTextView txtOrderNumber, txtTimer, txtDate, txtAmount;
     Button btnPay, btnCancel;
@@ -102,8 +102,10 @@ public class FormPaymentKreditpro extends AppCompatActivity {
         setContentView(R.layout.activity_form_payment_kreditpro);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
 
         btnBack = findViewById(R.id.form_paymentkp_btn_back);
         txtOrderNumber = findViewById(R.id.form_paymentkp_txtOrderNumber);
@@ -344,21 +346,8 @@ public class FormPaymentKreditpro extends AppCompatActivity {
             }
         }.start();
 
-        loading.dismiss();
-    }
-
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentKreditpro.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
+//        loading.dismiss();
+        customLoading.dismissLoadingDialog();
     }
 
     private void showPanduan() {

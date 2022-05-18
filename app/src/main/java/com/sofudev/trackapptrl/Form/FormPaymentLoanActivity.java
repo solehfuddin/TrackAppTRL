@@ -27,6 +27,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_panduantransfer;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
@@ -42,7 +43,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import es.dmoral.toasty.Toasty;
 
 public class FormPaymentLoanActivity extends AppCompatActivity {
@@ -59,7 +59,7 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
     UniversalFontTextView txtOrderNumber, txtTimer, txtDate, txtBillingId, txtAmount;
     Button btnPay, btnCancel;
     ListView listTransfer;
-    ACProgressCustom loading;
+    CustomLoading customLoading;
 
     Adapter_panduantransfer adapter_panduantransfer;
     List<String> list_panduantransfer = new ArrayList<>();
@@ -69,9 +69,11 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_payment_loan);
-        showLoading();
+//        showLoading();
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
+        customLoading.showLoadingDialog();
 
         btnBack         = findViewById(R.id.form_paymentloan_btn_back);
         txtOrderNumber  = findViewById(R.id.form_paymentloan_txtOrderNumber);
@@ -194,20 +196,6 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void showLoading() {
-        loading = new ACProgressCustom.Builder(FormPaymentLoanActivity.this)
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(60)
-                .build();
-
-        if(!isFinishing()){
-            loading.show();
-        }
-    }
-
     private void showBankTransfer()
     {
         adapter_panduantransfer = new Adapter_panduantransfer(getApplicationContext(), list_panduantransfer);
@@ -238,7 +226,8 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
             }
         }.start();
 
-        loading.dismiss();
+//        loading.dismiss();
+        customLoading.dismissLoadingDialog();
     }
 
     private void cancelPayment(String id) {
@@ -279,7 +268,8 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
 
     private void getSaldoLoan(final String billingId, final String nomorHp)
     {
-        showLoading();
+//        showLoading();
+        customLoading.showLoadingDialog();
         StringRequest request = new StringRequest(Request.Method.POST, URLGETSALDO, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -314,13 +304,15 @@ public class FormPaymentLoanActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                loading.dismiss();
+//                loading.dismiss();
+                customLoading.dismissLoadingDialog();
 
                 Log.d(FormLensSummaryActivity.class.getSimpleName(), "Loan step1 : " + error);
             }

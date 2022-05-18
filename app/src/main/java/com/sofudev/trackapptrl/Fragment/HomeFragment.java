@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
@@ -63,7 +64,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 import cn.iwgang.countdownview.CountdownView;
 import es.dmoral.toasty.Toasty;
 import ss.com.bannerslider.banners.Banner;
@@ -106,7 +106,6 @@ public class HomeFragment extends Fragment {
     List<Data_fragment_bestproduct> list_brandrandom = new ArrayList<>();
     List<Data_fragment_bestproduct> list_hotsale = new ArrayList<>();
 
-    ACProgressCustom loading;
     String ACTIVITY_TAG, banner_promo;
 
     public HomeFragment() {
@@ -253,7 +252,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+       // TypefaceProvider.registerDefaultIconSets();
 //        getActivity().setTitle("");
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(getContext()));
@@ -363,7 +362,6 @@ public class HomeFragment extends Fragment {
 
         //adapter_brand_product = new Adapter_framefragment_brand(getContext(), list_brandavail);
 
-        showLoading();
         showBannerFromDb();
 //        showFromDb();
         //showProduct();
@@ -532,7 +530,6 @@ public class HomeFragment extends Fragment {
                     }
 
                     banner_header.setBanners(banners);
-                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -648,7 +645,6 @@ public class HomeFragment extends Fragment {
                         list_hotsale.add(item);
                     }
 
-                    hideLoading();
                     adapter_hotsale_product.notifyDataSetChanged();
                     recyclerView_category.setAdapter(adapter_hotsale_product);
 
@@ -773,26 +769,6 @@ public class HomeFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-    private void showLoading()
-    {
-        loading = new ACProgressCustom.Builder(getActivity())
-                .useImages(R.drawable.loadernew0, R.drawable.loadernew1, R.drawable.loadernew2,
-                        R.drawable.loadernew3, R.drawable.loadernew4, R.drawable.loadernew5,
-                        R.drawable.loadernew6, R.drawable.loadernew7, R.drawable.loadernew8, R.drawable.loadernew9)
-                /*.useImages(R.drawable.cobaloader)*/
-                .speed(40)
-                .build();
-
-        if(getActivity().isFinishing()){
-            loading.show();
-        }
-    }
-
-    private void hideLoading()
-    {
-        loading.dismiss();
-    }
-
     public void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
     {
         ImageView img_status;
@@ -817,8 +793,6 @@ public class HomeFragment extends Fragment {
             txt_information.setText(info);
             txt_message.setText(message);
             btn_ok.setBootstrapBrand(defaultcolorbtn);
-
-            showLoading();
 
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override

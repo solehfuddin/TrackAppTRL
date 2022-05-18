@@ -58,6 +58,8 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_lenstype;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
+import com.sofudev.trackapptrl.Custom.CustomLoading;
+import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.Data.Data_lenstype;
 import com.sofudev.trackapptrl.Data.Data_partai_header;
@@ -85,9 +87,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressConstant;
-import cc.cloudist.acplibrary.ACProgressCustom;
-import cc.cloudist.acplibrary.ACProgressFlower;
 import es.dmoral.toasty.Toasty;
 
 public class FormLensaPartaiActivity extends AppCompatActivity {
@@ -101,11 +100,11 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
     String URL_INSERTSPHEADER  = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTSAMTEMP   = config.Ip_address + config.ordersp_insert_samTemp;
     String URL_UPDATEEXCEL     = config.Ip_address + config.ordersp_update_excel;
-    String URL_GETACTIVESALE        = config.Ip_address + config.flashsale_getActiveSale;
+    String URL_GETACTIVESALE   = config.Ip_address + config.flashsale_getActiveSale;
     String URL_GETPARTAIPRICE  = config.Ip_address + config.orderpartai_getPrice;
 
     ConstraintLayout constraintLayoutOpticName;
-    ACProgressFlower loading;
+    CustomLoading customLoading;
     ImageView btnBack;
     UniversalFontTextView txtPrice, txtDisc, txtTotal;
     Spinner spinPilihPembayaran, spinCicilan, spinMulaiCicilan;
@@ -140,6 +139,9 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form_lensa_partai);
 
         UniversalFontComponents.init(this);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
+        customLoading = new CustomLoading(this);
 
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         btnBack         = findViewById(R.id.form_lensapartai_btnback);
@@ -307,7 +309,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
                 if (isQty && isLens && isFile && isDp)
                 {
 //                    Toasty.info(getApplicationContext(), "Upload dan simpan data", Toast.LENGTH_SHORT).show();
-                    showLoading();
+//                    showLoading();
+                    customLoading.showLoadingDialog();
                     updateExcel(fileString);
                 }
                 else
@@ -633,7 +636,8 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
 
         try {
             Thread.sleep(2500);
-            hideLoading();
+//            hideLoading();
+            customLoading.dismissLoadingDialog();
             successDialog();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -1190,24 +1194,6 @@ public class FormLensaPartaiActivity extends AppCompatActivity {
     {
         isFile = fileString != null;
         Log.i("File check : ", isFile.toString());
-    }
-
-    private void showLoading()
-    {
-        loading = new ACProgressFlower.Builder(FormLensaPartaiActivity.this)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.GREEN)
-                .text("Please wait ...")
-                .fadeColor(Color.DKGRAY).build();
-
-        if (!isFinishing()){
-            loading.show();
-        }
-    }
-
-    private void hideLoading()
-    {
-        loading.dismiss();
     }
 
     private void successDialog()

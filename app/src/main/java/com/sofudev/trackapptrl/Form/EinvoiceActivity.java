@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
@@ -82,6 +83,7 @@ public class EinvoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UniversalFontComponents.init(this);
+       // TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_einvoice);
 
         txtOpticName = findViewById(R.id.form_einvoice_txtopticname);
