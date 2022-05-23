@@ -3926,22 +3926,26 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 //emailVerification(txt_orderNumber.getText().toString(), emailaddress, userinfo, custom_opticname,
                        //txt_lensdesc.getText().toString(), txt_patientName.getText().toString());
 
-                if (opticLevel.equals("0"))
-                {
-                    if (mobNumber.equals("0"))
-                    {
-                        smsVerification(userinfo, mobilenumber, txt_orderNumber.getText().toString());
-                    }
-                    else
-                    {
-                        smsVerification(userinfo, mobNumber, txt_orderNumber.getText().toString());
-                    }
-                }
-                else
-                {
-                    checkCity(opticUsername);
-                    dialogUpload.dismiss();
-                }
+                //disable otp verification
+//                if (opticLevel.equals("0"))
+//                {
+//                    if (mobNumber.equals("0"))
+//                    {
+//                        smsVerification(userinfo, mobilenumber, txt_orderNumber.getText().toString());
+//                    }
+//                    else
+//                    {
+//                        smsVerification(userinfo, mobNumber, txt_orderNumber.getText().toString());
+//                    }
+//                }
+//                else
+//                {
+//                    checkCity(opticUsername);
+//                    dialogUpload.dismiss();
+//                }
+
+                checkCity(opticUsername);
+                dialogUpload.dismiss();
             }
         });
 

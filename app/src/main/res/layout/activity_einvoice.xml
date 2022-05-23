@@ -59,7 +59,7 @@
                 <com.andexert.library.RippleView
                     android:id="@+id/form_einvoice_ripplebtndownload"
                     android:layout_width="40dp"
-                    android:layout_height="110dp"
+                    android:layout_height="55dp"
                     android:layout_alignParentEnd="true"
                     app:rv_rippleDuration="100"
                     app:rv_type="rectangle">
@@ -107,7 +107,7 @@
                 <com.andexert.library.RippleView
                     android:id="@+id/form_einvoice_ripplebtnsetting"
                     android:layout_width="40dp"
-                    android:layout_height="110dp"
+                    android:layout_height="55dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     app:rv_rippleDuration="100"

@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,7 +64,7 @@ public class EinvoiceActivity extends AppCompatActivity {
     private String username;
 
     UniversalFontTextView txtOpticName, txtPeriod, txtCounter;
-    RippleView rpBack, rpSetting, rpFilter;
+    RippleView rpBack, rpSetting, rpFilter, rpExport;
     RecyclerView recyclerView;
     ShimmerRecyclerView shimmer;
     ImageView imgNotFound;
@@ -91,6 +92,7 @@ public class EinvoiceActivity extends AppCompatActivity {
         txtCounter  = findViewById(R.id.form_einvoice_txtCounter);
         rpBack = findViewById(R.id.form_einvoice_ripplebtnback);
         rpSetting = findViewById(R.id.form_einvoice_ripplebtnsetting);
+        rpExport = findViewById(R.id.form_einvoice_ripplebtndownload);
         rpFilter = findViewById(R.id.form_einvoice_ripplebtnfilter);
         recyclerView = findViewById(R.id.form_einvoice_recyclerview);
         shimmer = findViewById(R.id.form_einvoice_shimmerview);
@@ -131,6 +133,12 @@ public class EinvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                dialogFilter();
+            }
+        });
+        rpExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogExport();
             }
         });
 
@@ -302,6 +310,67 @@ public class EinvoiceActivity extends AppCompatActivity {
                 .show(getSupportFragmentManager(), "TAG_SLYCALENDAR");
     }
 
+    private void dialogExport(){
+        limiter = 0;
+        new SlyCalendarDialog()
+                .setSingle(false)
+                .setCallback(new SlyCalendarDialog.Callback() {
+                    @Override
+                    public void onCancelled() {
+
+                    }
+
+                    @Override
+                    public void onDataSelected(Calendar firstDate, Calendar secondDate, int hours, int minutes) {
+                        if (firstDate != null)
+                        {
+                            if (secondDate != null)
+                            {
+                                txtPeriod.setText("");
+                                firstDate.set(Calendar.HOUR_OF_DAY, hours);
+                                firstDate.set(Calendar.MINUTE, minutes);
+                                secondDate.set(Calendar.HOUR_OF_DAY, hours);
+                                secondDate.set(Calendar.MINUTE, minutes);
+
+                                String date1 = new SimpleDateFormat(getString(R.string.titleDateStatement),
+                                        Locale.getDefault()).format(firstDate.getTime());
+                                String date = new SimpleDateFormat(getString(R.string.titleDateStatement),
+                                        Locale.getDefault()).format(secondDate.getTime());
+
+                                String[] monAwal = date1.split("-");
+                                String[] monAkhir = date.split("-");
+
+                                tgAwal = customDateFormat.ValueUserDate(Integer.parseInt(monAwal[0]),
+                                        Integer.parseInt(monAwal[1]) - 1, Integer.parseInt(monAwal[2]));
+                                tgAkhir = customDateFormat.ValueUserDate(Integer.parseInt(monAkhir[0]),
+                                        Integer.parseInt(monAkhir[1]) - 1, Integer.parseInt(monAkhir[2]));
+
+                                awal = customDateFormat.ValueDbDate(Integer.parseInt(monAwal[0]),
+                                        Integer.parseInt(monAwal[1]) - 1, Integer.parseInt(monAwal[2]));
+                                akhir = customDateFormat.ValueDbDate(Integer.parseInt(monAkhir[0]),
+                                        Integer.parseInt(monAkhir[1]) - 1, Integer.parseInt(monAkhir[2]));
+
+                                Log.d("Choose date : ", date1 + " / " + date);
+                                Log.d("Cek db date : ", awal + " / " + akhir);
+                                checkInvoice(username, awal, akhir, divisi, String.valueOf(limiter));
+                            }
+                            else
+                            {
+                                Toasty.error(getApplicationContext(), "Harap pilih tanggal", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else
+                        {
+                            Toasty.error(getApplicationContext(), "Harap pilih tanggal", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setBackgroundColor(Color.parseColor("#ffffff"))
+                .setSelectedTextColor(Color.parseColor("#93c6fd"))
+                .setSelectedColor(Color.parseColor("#3395ff"))
+                .show(getSupportFragmentManager(), "TAG_SLYCALENDAR");
+    }
+
     private void dialogSorting(List<String> allSort) {
         if(getApplicationContext() != null){
             limiter = 0;
@@ -399,6 +468,122 @@ public class EinvoiceActivity extends AppCompatActivity {
                         }
                         else
                         {
+                            JSONArray dataArr = object.getJSONArray("data");
+
+                            String totalRec = object.getString("total_row");
+                            String startRec = object.getString("start");
+                            String untilRec = object.getString("until");
+
+                            String output = "Show " + startRec + " - " + untilRec + " from " + totalRec + " data";
+                            txtCounter.setText(output);
+
+                            boolean isPrev = object.getBoolean("prev");
+                            boolean isNext = object.getBoolean("next");
+
+                            if (isPrev) {
+                                btnPrev.setEnabled(true);
+                            } else {
+                                btnPrev.setEnabled(false);
+                            }
+
+                            if (isNext) {
+                                btnNext.setEnabled(true);
+                            } else {
+                                btnNext.setEnabled(false);
+                            }
+
+                            isDataFound = true;
+
+                            for (int j = 0; j < dataArr.length(); j++)
+                            {
+                                JSONObject obj = dataArr.getJSONObject(j);
+
+                                Data_einvoice item = new Data_einvoice();
+                                item.setInv_category(obj.getString("name"));
+                                item.setInv_date(obj.getString("inv_date"));
+                                item.setInv_number(obj.getString("trx_number"));
+                                item.setSales_name(obj.getString("sales_person").trim());
+                                item.setInv_totalprice(obj.getInt("total_price"));
+
+                                data_einvoices.add(item);
+                            }
+                        }
+                    }
+
+                    if (isDataFound){
+                        shimmer.hideShimmerAdapter();
+                        shimmer.setVisibility(View.GONE);
+                        imgNotFound.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        imgNotFound.setVisibility(View.VISIBLE);
+                        shimmer.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+
+                        btnPrev.setEnabled(false);
+                        btnNext.setEnabled(false);
+                    }
+
+                    adapter_einvoice.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("username", username);
+                map.put("startmon", awal + " 00:00:00");
+                map.put("endmon", akhir + " 23:59:59");
+                map.put("divisi", div);
+                map.put("limit", limit);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkInvoice(final String username, final String awal, final String akhir, final String div, final String limit) {
+        data_einvoices.clear();
+        Log.d(EinvoiceActivity.class.getSimpleName(), "Username : " + username);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "Awal : " + awal);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "akhir : " + akhir);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "div : " + div);
+        Log.d(EinvoiceActivity.class.getSimpleName(), "limit : " + limit);
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, URLGETDATA, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    boolean isDataFound = false;
+
+                    for (int i = 0; i < jsonArray.length(); i++){
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        if (object.names().get(0).equals("invalid"))
+                        {
+                            Toast.makeText(getApplicationContext(), "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            //Proses download excel
+                            Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_SHORT).show();
+                            String link = "https://timurrayalab.com/download/mobExcel?child="+ username + "&trx_number=&datefrom=" + awal + "&dateto=" + akhir;
+                            Log.i(TAG, "Url : " + link);
+                            Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                            startActivity(openBrowser);
+
                             JSONArray dataArr = object.getJSONArray("data");
 
                             String totalRec = object.getString("total_row");
