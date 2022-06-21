@@ -46,6 +46,7 @@
                 </com.andexert.library.RippleView>
 
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_einvoice_txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/e_invoice"

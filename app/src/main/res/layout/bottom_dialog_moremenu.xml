@@ -595,6 +595,38 @@
                     app:customFont="RobotoMedium.ttf"
                     tools:ignore="SmallSp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_custom_featureinvoicepaid"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/layout_custom_icfeatureinvoicepaid"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/invoicepaid" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtfeatureinvoicepaid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/invoice_paid"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
         </LinearLayout>
 
         <View

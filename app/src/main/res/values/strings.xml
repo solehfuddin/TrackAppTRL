@@ -204,4 +204,6 @@
     <string name="e_invoice">E-Invoice</string>
     <string name="nama_optik">Nama Optik</string>
     <string name="periode_einvoice">Periode 1 Okt 2021 s/d 31 Okt 2021</string>
+    <string name="invoice_paid">Invoice Lunas</string>
+    <string name="lunas">Lunas</string>
 </resources>

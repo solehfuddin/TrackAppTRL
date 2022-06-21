@@ -59,11 +59,11 @@ public class EinvoiceActivity extends AppCompatActivity {
     private String TAG = EinvoiceActivity.class.getSimpleName();
     private String URLGETDATA = config.Ip_address + config.einvoice_getdata;
     private String URLGETCATEGORY = config.Ip_address + config.einvoice_getcategory;
-//    private String URLGETDATA = config.Ip_addressdev + config.einvoice_getdata;
-//    private String URLGETCATEGORY = config.Ip_addressdev + config.einvoice_getcategory;
+    private String URLGETDATAPAID = config.Ip_address + config.einvoicepaid_getdata;
+    private String URLGETCATEGORYPAID = config.Ip_address + config.einvoicepaid_getcategory;
     private String username;
 
-    UniversalFontTextView txtOpticName, txtPeriod, txtCounter;
+    UniversalFontTextView txtOpticName, txtPeriod, txtCounter, txtTitle;
     RippleView rpBack, rpSetting, rpFilter, rpExport;
     RecyclerView recyclerView;
     ShimmerRecyclerView shimmer;
@@ -78,6 +78,7 @@ public class EinvoiceActivity extends AppCompatActivity {
     String tgAwal, tgAkhir, awal, akhir;
     String divisi   = "";
     String filterby = "All Data";
+    Boolean isPaid = false;
     int limiter, pos;
 
     @Override
@@ -87,6 +88,7 @@ public class EinvoiceActivity extends AppCompatActivity {
        // TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_einvoice);
 
+        txtTitle = findViewById(R.id.form_einvoice_txtTitle);
         txtOpticName = findViewById(R.id.form_einvoice_txtopticname);
         txtPeriod   = findViewById(R.id.form_einvoice_txtPeriod);
         txtCounter  = findViewById(R.id.form_einvoice_txtCounter);
@@ -111,6 +113,7 @@ public class EinvoiceActivity extends AppCompatActivity {
             public void onItemClick(View view, int pos, String id) {
                 Intent intent = new Intent(getApplicationContext(), DetailEinvoiceActivity.class);
                 intent.putExtra("INVNUMBER", id);
+                intent.putExtra("ispaid", isPaid);
                 startActivity(intent);
             }
         });
@@ -148,6 +151,12 @@ public class EinvoiceActivity extends AppCompatActivity {
                 getCategory(username, awal, akhir);
             }
         });
+
+        if(isPaid){
+            txtTitle.setText("Einvoice Lunas");
+        }else {
+            txtTitle.setText("Einvoice");
+        }
 
         limiter = 0;
         btnPrev.setEnabled(false);
@@ -194,6 +203,7 @@ public class EinvoiceActivity extends AppCompatActivity {
         if (bundle != null){
             username = bundle.getString("username");
             String opticname = bundle.getString("custname");
+            isPaid = bundle.getBoolean("ispaid", false);
 
             txtOpticName.setText(opticname);
 
@@ -445,8 +455,14 @@ public class EinvoiceActivity extends AppCompatActivity {
         Log.d(EinvoiceActivity.class.getSimpleName(), "div : " + div);
         Log.d(EinvoiceActivity.class.getSimpleName(), "limit : " + limit);
 
+        String url;
+        if(isPaid){
+            url = URLGETDATAPAID;
+        }else {
+            url = URLGETDATA;
+        }
 
-        StringRequest request = new StringRequest(Request.Method.POST, URLGETDATA, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -497,13 +513,21 @@ public class EinvoiceActivity extends AppCompatActivity {
                             for (int j = 0; j < dataArr.length(); j++)
                             {
                                 JSONObject obj = dataArr.getJSONObject(j);
-
                                 Data_einvoice item = new Data_einvoice();
-                                item.setInv_category(obj.getString("name"));
-                                item.setInv_date(obj.getString("inv_date"));
-                                item.setInv_number(obj.getString("trx_number"));
-                                item.setSales_name(obj.getString("sales_person").trim());
-                                item.setInv_totalprice(obj.getInt("total_price"));
+
+                                if(isPaid){
+                                    item.setInv_category(obj.getString("product_div"));
+                                    item.setInv_date(obj.getString("invoice_date"));
+                                    item.setInv_number(obj.getString("inv_number"));
+                                    item.setSales_name(obj.getString("username").trim());
+                                    item.setInv_totalprice(obj.getInt("ammount_inv"));
+                                }else {
+                                    item.setInv_category(obj.getString("name"));
+                                    item.setInv_date(obj.getString("inv_date"));
+                                    item.setInv_number(obj.getString("trx_number"));
+                                    item.setSales_name(obj.getString("sales_person").trim());
+                                    item.setInv_totalprice(obj.getInt("total_price"));
+                                }
 
                                 data_einvoices.add(item);
                             }
@@ -559,8 +583,14 @@ public class EinvoiceActivity extends AppCompatActivity {
         Log.d(EinvoiceActivity.class.getSimpleName(), "div : " + div);
         Log.d(EinvoiceActivity.class.getSimpleName(), "limit : " + limit);
 
+        String url;
+        if(isPaid){
+            url = URLGETDATAPAID;
+        }else {
+            url = URLGETDATA;
+        }
 
-        StringRequest request = new StringRequest(Request.Method.POST, URLGETDATA, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -579,7 +609,15 @@ public class EinvoiceActivity extends AppCompatActivity {
                         {
                             //Proses download excel
                             Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_SHORT).show();
-                            String link = "https://timurrayalab.com/download/mobExcel?child="+ username + "&trx_number=&datefrom=" + awal + "&dateto=" + akhir;
+                            String link;
+
+                            if (isPaid){
+                                link = "https://timurrayalab.com/download/mobExcelPaid?child="+ username + "&trx_number=&datefrom=" + awal + "&dateto=" + akhir;
+                            }
+                            else{
+                                link = "https://timurrayalab.com/download/mobExcel?child="+ username + "&trx_number=&datefrom=" + awal + "&dateto=" + akhir;
+                            }
+
                             Log.i(TAG, "Url : " + link);
                             Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                             startActivity(openBrowser);
@@ -613,13 +651,21 @@ public class EinvoiceActivity extends AppCompatActivity {
                             for (int j = 0; j < dataArr.length(); j++)
                             {
                                 JSONObject obj = dataArr.getJSONObject(j);
-
                                 Data_einvoice item = new Data_einvoice();
-                                item.setInv_category(obj.getString("name"));
-                                item.setInv_date(obj.getString("inv_date"));
-                                item.setInv_number(obj.getString("trx_number"));
-                                item.setSales_name(obj.getString("sales_person").trim());
-                                item.setInv_totalprice(obj.getInt("total_price"));
+
+                                if(isPaid){
+                                    item.setInv_category(obj.getString("product_div"));
+                                    item.setInv_date(obj.getString("invoice_date"));
+                                    item.setInv_number(obj.getString("inv_number"));
+                                    item.setSales_name(obj.getString("username").trim());
+                                    item.setInv_totalprice(obj.getInt("ammount_inv"));
+                                }else {
+                                    item.setInv_category(obj.getString("name"));
+                                    item.setInv_date(obj.getString("inv_date"));
+                                    item.setInv_number(obj.getString("trx_number"));
+                                    item.setSales_name(obj.getString("sales_person").trim());
+                                    item.setInv_totalprice(obj.getInt("total_price"));
+                                }
 
                                 data_einvoices.add(item);
                             }
@@ -668,7 +714,15 @@ public class EinvoiceActivity extends AppCompatActivity {
     }
 
     private void getCategory(final String username, final String awal, final String akhir) {
-        StringRequest request = new StringRequest(Request.Method.POST, URLGETCATEGORY, new Response.Listener<String>() {
+        String url;
+
+        if (isPaid){
+            url = URLGETCATEGORYPAID;
+        }else {
+            url = URLGETCATEGORY;
+        }
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {

@@ -765,6 +765,7 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
                         startActivity(intent);
                     }
                     else
@@ -772,6 +773,7 @@ public class CategoryFragment extends Fragment {
                         Intent intent = new Intent(myContext, EinvoiceActivity.class);
                         intent.putExtra("username", USERNAME);
                         intent.putExtra("custname", CUSTNAME);
+                        intent.putExtra("ispaid", false);
                         startActivity(intent);
                     }
                 }
@@ -783,6 +785,7 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
                     startActivity(intent);
                 }
             }
@@ -791,6 +794,61 @@ public class CategoryFragment extends Fragment {
                 Intent intent = new Intent(myContext, EinvoiceActivity.class);
                 intent.putExtra("username", USERNAME);
                 intent.putExtra("custname", CUSTNAME);
+                intent.putExtra("ispaid", false);
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void handlerInvoicePaid()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 0)
+                {
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(myContext, FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "EINVOICE");
+                        intent.putExtra("sales", USERNAME);
+                        intent.putExtra("havingChild", isHavingChild);
+                        intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", true);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(myContext, EinvoiceActivity.class);
+                        intent.putExtra("username", USERNAME);
+                        intent.putExtra("custname", CUSTNAME);
+                        intent.putExtra("ispaid", true);
+                        startActivity(intent);
+                    }
+                }
+                else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(myContext, FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "EINVOICE");
+                    intent.putExtra("sales", USERNAME);
+                    intent.putExtra("havingChild", isHavingChild);
+                    intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", true);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, EinvoiceActivity.class);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("custname", CUSTNAME);
+                intent.putExtra("ispaid", true);
                 startActivity(intent);
             }
         }
@@ -822,6 +880,7 @@ public class CategoryFragment extends Fragment {
         LinearLayout linStatement = custom.findViewById(R.id.layout_custom_estatement);
         LinearLayout linWarranty = custom.findViewById(R.id.layout_custom_ewarranty);
         LinearLayout linInvoice = custom.findViewById(R.id.layout_custom_featureinvoice);
+        LinearLayout linInvoicePaid = custom.findViewById(R.id.layout_custom_featureinvoicepaid);
         LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
 
         final BottomDialog bottomDialog = new BottomDialog.Builder(myContext)
@@ -937,6 +996,14 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 handlerEInvoice();
+                bottomDialog.dismiss();
+            }
+        });
+
+        linInvoicePaid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerInvoicePaid();
                 bottomDialog.dismiss();
             }
         });

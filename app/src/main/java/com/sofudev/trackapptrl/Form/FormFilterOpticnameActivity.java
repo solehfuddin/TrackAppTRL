@@ -73,7 +73,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     MCrypt mCrypt;
 
     String idparty, condition, sActive, sPast, opticName, salesName;
-    Boolean isHavingChild;
+    Boolean isHavingChild, isPaid;
     int sTotal;
     Integer req_start = 0, totalrow, lastitem, item;
     long lastclick = 0;
@@ -138,6 +138,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
             salesName = bundle.getString("sales");
             isHavingChild = bundle.getBoolean("havingChild");
             customerId = bundle.getInt("customerId", 0);
+            isPaid = bundle.getBoolean("ispaid", false);
 
             Log.d("Sales Name chooseopt : ", salesName);
         }
@@ -517,6 +518,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), EinvoiceActivity.class);
                     intent.putExtra("username", idparty);
                     intent.putExtra("custname", opticName);
+                    intent.putExtra("ispaid", isPaid);
                     startActivity(intent);
                 }
             }

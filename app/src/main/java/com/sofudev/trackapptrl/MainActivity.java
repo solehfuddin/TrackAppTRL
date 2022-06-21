@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -34,6 +36,7 @@ import android.text.SpannableString;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity
     Config config = new Config();
     String BANNER_URL = config.Ip_address + config.dashboard_banner_slide;
 
+    private String VersioningURL = config.Ip_address + config.version_apps;
     private String LoginURL = config.Ip_address + config.login_apps;
     private String UpdateIsOnlineURL = config.Ip_address + config.login_update_isOnline;
     private String ViewPdfURL = config.Ip_address + config.view_pdf_showAllDataByFilter;
@@ -158,6 +162,8 @@ public class MainActivity extends AppCompatActivity
     WishlistHelper wishlistHelper;
     CustomLoading customLoading;
 
+    int versionCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,6 +192,18 @@ public class MainActivity extends AppCompatActivity
         imgTop = findViewById(R.id.appbarmain_buttonTop);
         scrollView = findViewById(R.id.main_scrollview);
         session = new LoginSession(getApplicationContext());
+
+        getVersion();
+
+        PackageManager pm = this.getPackageManager();
+        try {
+            PackageInfo pi = pm.getPackageInfo(this.getPackageName(), PackageManager.GET_ACTIVITIES);
+            versionCode = pi.versionCode;
+            Log.i(MainActivity.class.getSimpleName(), "Versi Aplikasi Saat ini : " + versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
 //        img_closeprize.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -927,6 +945,38 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void getVersion() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, VersioningURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int versionPs = jsonObject.getInt("version_code");
+
+                    Log.i(MainActivity.class.getSimpleName(), "Versi Aplikasi Playstore : " + versionPs);
+
+                    if (versionCode < versionPs)
+                    {
+                        showUpdateDialog();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+                customLoading.dismissLoadingDialog();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
     private void loginApp(final String username, final String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LoginURL, new Response.Listener<String>() {
             @Override
@@ -1107,7 +1157,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onGetResponse(boolean isUpdateAvailable) {
         if (isUpdateAvailable) {
-            showUpdateDialog();
+//            showUpdateDialog();
         }
     }
 

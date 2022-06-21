@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.andexert.library.RippleView;
@@ -26,6 +28,7 @@ import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.DateFormat;
 import com.sofudev.trackapptrl.Data.Data_item_einvoice;
 import com.sofudev.trackapptrl.R;
+import com.vipulasri.ticketview.TicketView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,17 +46,20 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
 
     private Config config = new Config();
     private String URLDETAIL = config.Ip_address + config.einvoice_getDetail;
-//    private String URLDETAIL = config.Ip_addressdev + config.einvoice_getDetail;
+    private String URLDETAILPAID = config.Ip_address + config.einvoicepaid_getDetail;
     private String TAG = DetailEinvoiceActivity.class.getSimpleName();
 
+    TicketView ticketView;
     RelativeLayout rlInvNumber, rlPriceTotal, rlPurchaseOrder, rlInvDate, rlShipAmount, rlTotalAmount;
-    UniversalFontTextView txtInvNumber, txtInvDate, txtTotalPrice, txtTotalAmount, txtPurchaseOrder, txtShipAmount;
+    UniversalFontTextView txtInvNumber, txtInvDate, txtTotalPrice, txtTotalAmount, txtPurchaseOrder,
+            txtShipAmount, txtPaid, txtKeterangan, txtTitle;
     RippleView rpBack, rpDownload;
     ShimmerRecyclerView shimmer;
     RecyclerView recyclerView;
 
     DateFormat tglFormat = new DateFormat();
     String invNumber;
+    Boolean isPaid = false;
 
     Adapter_detail_einvoice adapter_detail_einvoice;
     List<Data_item_einvoice> list = new ArrayList<>();
@@ -64,12 +70,16 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
         UniversalFontComponents.init(this);
         setContentView(R.layout.activity_detail_einvoice);
 
+        ticketView = findViewById(R.id.ticketView);
+        txtTitle = findViewById(R.id.form_detaileinv_txttitle);
         txtInvNumber = findViewById(R.id.form_detaileinv_txtinvnumber);
         txtInvDate = findViewById(R.id.form_detaileinv_txtinvdate);
         txtPurchaseOrder = findViewById(R.id.form_detaileinv_txtpurchaseorder);
         txtTotalPrice = findViewById(R.id.form_detaileinv_txtpricetotal);
         txtTotalAmount = findViewById(R.id.form_detaileinv_txttotalamount);
         txtShipAmount = findViewById(R.id.form_detaileinv_txtshipamount);
+        txtPaid = findViewById(R.id.form_detaileinv_txtpaid);
+        txtKeterangan = findViewById(R.id.form_detaileinv_txtketerangan);
         rpBack = findViewById(R.id.form_detaileinv_ripplebtnback);
         rpDownload = findViewById(R.id.form_detaileinv_ripplebtndownload);
         rlInvNumber = findViewById(R.id.form_detaileinv_progressinv);
@@ -90,6 +100,16 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter_detail_einvoice);
 
         getDataIntent();
+
+        if (isPaid) {
+            txtPaid.setVisibility(View.VISIBLE);
+            txtTitle.setText("Einvoice Lunas");
+            ticketView.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.ticket_einvoice_paid_height);
+        } else {
+            txtPaid.setVisibility(View.GONE);
+            txtTitle.setText("Einvoice");
+            ticketView.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.ticket_einvoice_height);
+        }
 
         rlInvNumber.setVisibility(View.VISIBLE);
         rlPriceTotal.setVisibility(View.VISIBLE);
@@ -113,7 +133,14 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
         rpDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String link = "http://180.250.96.154/trl-webs/index.php/PrintReceipt/einvoice/" + invNumber;
+                String link;
+                if (isPaid){
+                    link = "http://180.250.96.154/trl-webs/index.php/PrintReceipt/einvoicelunas/" + invNumber;
+                }else
+                {
+                    link = "http://180.250.96.154/trl-webs/index.php/PrintReceipt/einvoice/" + invNumber;
+                }
+
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                 startActivity(openBrowser);
             }
@@ -124,6 +151,8 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
             invNumber = bundle.getString("INVNUMBER");
+            isPaid = bundle.getBoolean("ispaid", false);
+            Log.d(TAG, "USERNAME : " + invNumber);
             Log.d(TAG, "USERNAME : " + invNumber);
 
             getDetailInv(invNumber);
@@ -144,7 +173,14 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
 
     private void getDetailInv(final String invNumber){
         list.clear();
-        StringRequest request = new StringRequest(Request.Method.POST, URLDETAIL, new Response.Listener<String>() {
+        String url;
+        if (isPaid){
+            url = URLDETAILPAID;
+        }else {
+            url = URLDETAIL;
+        }
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -203,6 +239,18 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
                             String invDate = singleObj.getString("inv_date");
                             String purcOrder = singleObj.getString("purchase_order");
                             String totalPrice = singleObj.getString("total_price");
+
+                            if (isPaid){
+                                String[] temp = singleObj.getString("receipt_date").split("-");
+                                String receiptDate = tglFormat.ValueUserDate(Integer.parseInt(temp[2]),
+                                        Integer.parseInt(temp[1]) - 1, Integer.parseInt(temp[0]));
+
+                                String keterangan = singleObj.getString("bank_name") + " (" + receiptDate + ")";
+                                txtKeterangan.setVisibility(View.VISIBLE);
+                                txtKeterangan.setText(keterangan);
+                            }else {
+                                txtKeterangan.setVisibility(View.GONE);
+                            }
 
                             String[] temp = invDate.split("-");
                             invDate = tglFormat.ValueUserDate(Integer.parseInt(temp[2]),

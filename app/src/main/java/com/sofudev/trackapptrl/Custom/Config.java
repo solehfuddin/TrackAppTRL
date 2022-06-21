@@ -20,6 +20,9 @@ public class Config {
     public String UsernameTiki = "TIMURRAYA";
     public String PasswordTiki = "RAYALES785";
 
+    /* Area App Setting */
+    public String version_apps = "index.php/android_appsetting/getVersion";
+
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
     public String login_update_isOnline = "index.php/android_main/updateInfoLogin";
@@ -378,6 +381,11 @@ public class Config {
     public String einvoice_getdata                = "index.php/Android_einvoice/showInvoice";
     public String einvoice_getcategory            = "index.php/Android_einvoice/showCategory";
     public String einvoice_getDetail              = "index.php/Android_einvoice/showDetailData";
+
+    /* AREA EINVOICE PAID */
+    public String einvoicepaid_getdata            = "index.php/Android_einvoice_paid/showInvoice";
+    public String einvoicepaid_getcategory        = "index.php/Android_einvoice_paid/showCategory";
+    public String einvoicepaid_getDetail          = "index.php/Android_einvoice_paid/showDetailData";
 
     /* AREA DELIVERY TRACK */
     public String deliverytrack_bydate            = "index.php/Android_deliverytrack/showDataByDate";
