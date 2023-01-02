@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.LocalDb.Db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -66,6 +67,7 @@ public class AddCartHelper {
         }
     }
 
+    @SuppressLint("Range")
     public List<ModelAddCart> getAllCart() {
         List<ModelAddCart> arrayList = new ArrayList<>();
         Cursor cursor = database.query(DATABASE_TABLE, null,
@@ -102,6 +104,7 @@ public class AddCartHelper {
         return arrayList;
     }
 
+    @SuppressLint("Range")
     public ModelAddCart getAddCart(int id)
     {
         Cursor cursor = null;

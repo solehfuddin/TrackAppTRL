@@ -132,6 +132,39 @@
                     tools:ignore="SmallSp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_custom_spapproval"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/layout_custom_icspapproval"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/spapproval" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtspapproval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/sp_approval"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    android:textSize="12sp"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -263,13 +296,141 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view9"
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/colorContent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout8" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/courier"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view9" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView14"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/layout_custom_couriertask"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/layout_custom_iccouriertask"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/courier" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtcouriertask"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/delivery_process"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_custom_courierhistory"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/layout_custom_iccourierhistory"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/completed" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtcourierhistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/delivery_history"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_custom_couriertracking"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/layout_custom_iccouriertracking"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/courier_optic" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtcouriertracking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/courier_track"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
             android:id="@+id/view6"
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
             android:background="@color/colorContent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout8"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout14"
             />
 
         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView

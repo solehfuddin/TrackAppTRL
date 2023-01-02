@@ -13,17 +13,19 @@ android {
         exclude 'META-INF/MANIFEST.MF'
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
-    compileSdkVersion 30
+//    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.sofudev.trackapptrl"
 //        minSdkVersion 21
         minSdkVersion 17
-        targetSdkVersion 30
-//        versionCode 53
-//        versionName "2.0.1"
-        versionCode 54
-        versionName "2.0.2"
+//        targetSdkVersion 30
+        targetSdkVersion 31
+//        versionCode 59
+//        versionName "2.0.7"
+        versionCode 60
+        versionName "2.0.8"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
@@ -37,6 +39,8 @@ android {
             //minifyEnabled true
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //multiDexKeepFile file('multidex-config.txt')
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     configurations.all {
@@ -221,6 +225,10 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.7'
     compile 'com.github.viethoa:snackbar:1.0.0'
     compile 'net.igenius:customcheckbox:1.3'
+//    // Add this line.
+//    implementation 'com.google.firebase:firebase-core:16.0.1'
+//    // Firebase Messaging library for sending push notifications. Add this line.
+//    implementation 'com.google.firebase:firebase-messaging:17.3.3'
     //compile 'com.google.firebase:firebase-core:9.2.0'
     //compile 'com.google.firebase:firebase-messaging:10.2.1'
     //compile 'com.google.firebase:firebase-crash:9.2.0'

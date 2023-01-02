@@ -31,6 +31,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -115,6 +116,7 @@ import com.sofudev.trackapptrl.Form.WishlistProductActivity;
 import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
 import com.sofudev.trackapptrl.Fragment.CategoryFragment;
+import com.sofudev.trackapptrl.Fragment.CourierFragment;
 import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
@@ -187,7 +189,7 @@ public class DashboardActivity extends AppCompatActivity
 
     ImageView imgWishlist, imgCart;
     ImageView imgAction;
-    TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo;
+    TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo, txt_titlesaldo;
     //UniversalFontTextView btn_orderframe, btn_orderbulk;
     BottomDialog bottomDialogInput;
     private DrawerLayout drawer;
@@ -205,10 +207,11 @@ public class DashboardActivity extends AppCompatActivity
 
     CardView cardHide1, cardHide2, cardHide3, cardHide4, cardHide5, cardHide6;
     CardView cardShow1, cardShow2, cardShow3, cardShow4, cardShow5, cardShow6;
-    LinearLayout linKode1, linKode2, linKode3, linKode4, linKode5, linKode6;
+    LinearLayout linKode1, linKode2, linKode3, linKode4, linKode5, linKode6, linearSaldo;
     UniversalFontTextView txtKode1, txtKode2, txtKode3, txtKode4, txtKode5, txtKode6;
     RippleView pinBtn1, pinBtn2, pinBtn3, pinBtn4, pinBtn5, pinBtn6, pinBtn7, pinBtn8, pinBtn9, pinBtn0;
     List<Integer> pinnumber = new ArrayList<>();
+    FrameLayout frameSaldo, frameCategory, frameCourier;
 
     CardView cardTop;
     ImageView imgTop;
@@ -257,8 +260,11 @@ public class DashboardActivity extends AppCompatActivity
         permission.checkPermission(DashboardActivity.this, Manifest.permission.READ_SMS, 0);
         permission.checkPermission(DashboardActivity.this, Manifest.permission.RECEIVE_SMS, 0);*/
 
+        linearSaldo = findViewById(R.id.navdash_linearSaldo);
         imgWishlist = findViewById(R.id.appbardashboard_btn_wishlist);
         imgCart = findViewById(R.id.appbardashboard_btn_addcart);
+        frameSaldo = findViewById(R.id.appbardashboard_balance);
+        frameCategory = findViewById(R.id.appbardashboard_category);
         txt_title = (TextView) findViewById(R.id.appbardashboard_txt_titleheader);
         txt_countwishlist = findViewById(R.id.appbardashboard_badge_wishlist);
         txt_countCart = findViewById(R.id.appbardashboard_badge_cart);
@@ -334,6 +340,7 @@ public class DashboardActivity extends AppCompatActivity
         navdash_username = (TextView) header.findViewById(R.id.navdash_username);
         navdash_id       = (TextView) header.findViewById(R.id.navdash_id);
         txt_saldo = header.findViewById(R.id.navdash_txtSisaSaldo);
+        txt_titlesaldo = header.findViewById(R.id.navdash_txtTitleSaldo);
         btn_topup = header.findViewById(R.id.navdash_btntopup);
         btn_profile = (Button) header.findViewById(R.id.navdash_btnprofile);
         img_profile = (BootstrapCircleThumbnail) header.findViewById(R.id.navdash_imageProfile);
@@ -378,8 +385,23 @@ public class DashboardActivity extends AppCompatActivity
 //        homeProduk();
         isHomeActive();
         showBanner();
-        showBalance();
-        showCategory();
+//        showBalance();
+
+        if (data1.length() == 3)
+        {
+            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
+            lp.topMargin = -20;
+            lp.bottomMargin = 10;
+
+            frameCategory.setLayoutParams(lp);
+
+            showCourier();
+        }
+        else
+        {
+            showCategory();
+        }
+
         showPromoFrame();
         showSpesialProduk();
         showAnotherProduk();
@@ -389,6 +411,16 @@ public class DashboardActivity extends AppCompatActivity
 //        setupSlider();
 
         dt_time = new Date();
+
+        if (data1.length() == 3){
+           imgWishlist.setVisibility(View.GONE);
+           imgCart.setVisibility(View.GONE);
+           frameSaldo.setVisibility(View.GONE);
+
+//           txt_titlesaldo.setVisibility(View.GONE);
+//           txt_saldo.setVisibility(View.GONE);
+//           btn_topup.setVisibility(View.GONE);
+        }
 
         imgWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -588,6 +620,11 @@ public class DashboardActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.dashboard, menu);
 
         MenuItem item = menu.findItem(R.id.action_searchs);
+
+        if (data1.length() == 3)
+        {
+            item.setVisible(false);
+        }
 
         //searchViews.setMenuItem(item);
 
@@ -1358,6 +1395,10 @@ public class DashboardActivity extends AppCompatActivity
         if (bundle != null){
             data    = bundle.getString("username");
             data1   = bundle.getString("idparty");
+
+            showBalance();
+
+            Log.d(DashboardActivity.class.getSimpleName(), "Username : " + data);
         }
     }
 
@@ -1502,6 +1543,9 @@ public class DashboardActivity extends AppCompatActivity
                         if (Integer.parseInt(level_user) == 0) {
                             hideMenu();
                             countData(navdash_username.getText().toString());
+                        }
+                        else if (Integer.parseInt(level_user) == 2){
+                            hideMenuKurir();
                         }
 
                         image_user = image_user.replaceAll(" ", "%20");
@@ -3051,6 +3095,16 @@ public class DashboardActivity extends AppCompatActivity
         menu.findItem(R.id.nav_options).setVisible(false);
     }
 
+    private void hideMenuKurir(){
+        menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_order).setVisible(false);
+        menu.findItem(R.id.nav_options).setVisible(false);
+        menu.findItem(R.id.group_product).setVisible(false);
+        menu.findItem(R.id.group_support).setVisible(false);
+        menu.findItem(R.id.nav_guide).setVisible(false);
+        menu.findItem(R.id.action_searchs).setVisible(false);
+    }
+
     private void openUpdateProfile() {
         Intent intent = new Intent(getApplicationContext(), FormProfileActivity.class);
         intent.putExtra("idparty", navdash_id.getText().toString());
@@ -3100,6 +3154,18 @@ public class DashboardActivity extends AppCompatActivity
         categoryFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_category, categoryFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showCourier() {
+        CourierFragment courierFragment = new CourierFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        bundle.putString("partySiteId", data1);
+        bundle.putString("username", data);
+        courierFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_category, courierFragment);
         fragmentTransaction.commit();
     }
 

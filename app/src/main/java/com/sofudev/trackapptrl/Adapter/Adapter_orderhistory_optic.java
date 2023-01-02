@@ -73,6 +73,20 @@ public class Adapter_orderhistory_optic extends RecyclerView.Adapter<Adapter_ord
             holder.txt_status.setText("Failure");
             holder.txt_status.setTextColor(Color.parseColor("#ffcc0000"));
         }
+        else if (status.equals("Waiting Order to Complete") || status.contains("Waiting Order to Complete") || status.contentEquals("Waiting Order to Complete"))
+        {
+            holder.txt_status.setText("Waiting Complete");
+            holder.txt_status.setTextColor(Color.parseColor("#ffcc0000"));
+        }
+        else if (status.equals("Waiting Payment Method") || status.contains("Waiting Payment Method") || status.contentEquals("Waiting Payment Method"))
+        {
+            holder.txt_status.setText("Waiting Payment");
+            holder.txt_status.setTextColor(Color.parseColor("#ffcc0000"));
+        }
+        else
+        {
+            holder.txt_status.setTextColor(Color.parseColor("#33cc00"));
+        }
 
         orderNumber = item.get(position).getNomorOrder();
 
@@ -151,6 +165,7 @@ public class Adapter_orderhistory_optic extends RecyclerView.Adapter<Adapter_ord
             int pos = getAdapterPosition();
 
             itemClick.onItemClick(v, this.getLayoutPosition(), item.get(pos).getNomorOrder(), item.get(pos).getStatusOrder(),
+                    item.get(pos).getNamaPasien(),
                     item.get(pos).getPaymentType());
         }
     }

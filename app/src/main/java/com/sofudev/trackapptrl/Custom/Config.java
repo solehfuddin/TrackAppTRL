@@ -2,8 +2,14 @@ package com.sofudev.trackapptrl.Custom;
 
 public class Config {
     /* Area Ip */
+    //New Production Server
+//    public String Ip_address = "https://leinz.org/trl-webs/"; /* IP Public */
+//    public String Ip_21express = "https://leinz.org/trl_ds_exp/";
+//    public String Ip_tiki    = "https://leinz.org/trl_tiki/";
+
     //Production Server
     public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+//    public String Ip_address = "http://180.250.96.154/trl-dev/"; /* IP Public */
     public String Ip_21express = "http://180.250.96.154/trl_ds_exp/";
     public String Ip_tiki    = "http://180.250.96.154/trl_tiki/";
 
@@ -26,12 +32,12 @@ public class Config {
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
     public String login_update_isOnline = "index.php/android_main/updateInfoLogin";
-    public String get_sic_code = "index.php/Android_Main/getSicCode";
-    public String set_sic_code = "index.php/Android_Main/setSicCode";
-    public String verify_siccode = "index.php/Android_Main/verifySicCode";
-    public String status_user  = "index.php/Android_Main/cekStatusUser";
-    public String get_user_byid= "index.php/Android_Main/getUserById";
-    public String get_user_bycustname= "index.php/Android_Main/getUserByCustname";
+    public String get_sic_code = "index.php/android_main/getSicCode";
+    public String set_sic_code = "index.php/android_main/setSicCode";
+    public String verify_siccode = "index.php/android_main/verifySicCode";
+    public String status_user  = "index.php/android_main/cekStatusUser";
+    public String get_user_byid= "index.php/android_main/getUserById";
+    public String get_user_bycustname= "index.php/android_main/getUserByCustname";
 
     /* Area Dashboard*/
     public String dashboard_user_detail = "index.php/android_dashboard/userDetail";
@@ -53,8 +59,8 @@ public class Config {
     public String dashboard_search_product = "index.php/android_dashboard/searchProduct";
     public String dashboard_search_producttitle = "index.php/android_dashboard/searchProductTitle";
     public String dashboard_getpromo_banner= "index.php/Android_dashboard/getPromoBanner";
-    public String dashboard_another_product= "index.php/Android_Dashboard/show_anotherproduct";
-    public String dashboard_popular_frame  = "index.php/Android_Dashboard/show_popularframe";
+    public String dashboard_another_product= "index.php/Android_dashboard/show_anotherproduct";
+    public String dashboard_popular_frame  = "index.php/Android_dashboard/show_popularframe";
 
     /* Area Profile */
     public String profile_user_detail       = "index.php/android_profile/userProfileDetail";
@@ -84,7 +90,7 @@ public class Config {
     /* Area Filter Optic Name*/
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
     public String filter_optic_showbyname   = "index.php/Android_filteroptic/showOpticByFilter/8/";
-    public String filter_optic_getbyshipnumber = "index.php/Android_Filteroptic/showOpticByShipname";
+    public String filter_optic_getbyshipnumber = "index.php/Android_filteroptic/showOpticByShipname";
 
     /* Area Info Order History */
     public String info_order_history    = "index.php/Android_checkorder/getOrderHistoryByStatus";
@@ -122,6 +128,7 @@ public class Config {
     public String orderlens_autoreplyorder        = "index.php/Android_lensorder_new/autoreplyorder";
     public String orderlens_autoreplyorderpayment = "index.php/Android_lensorder_new/autoreplyorderpayment";
     public String orderlens_get_corridorinfo      = "index.php/Android_lensorder_new/getCorridorInfo";
+    public String orderlens_get_corridorinfoAlias = "index.php/Android_lensorder_new/getCorridorInfoAlias";
     public String orderlens_get_tintgroup         = "index.php/Android_lensorder_new/getTintingGroup";
     public String orderlens_get_tinting           = "index.php/Android_lensorder_new/getTinting";
     public String orderlens_verifyorder_sms       = "index.php/Android_lensorder_new/verifyOrderBySMS";
@@ -138,8 +145,8 @@ public class Config {
     /* Area Frame */
     public String frame_bestproduct_showAllData   = "index.php/Android_frameproduct/apiFrameWithLimit";
     public String frame_filterby_group            = "index.php/Android_frameproduct/apiFrameWithGroup";
-    public String frame_filterby_category         = "index.php/Android_Frameproduct/apiFrameWithCategory";
-    public String frame_filterby_keyword          = "index.php/Android_Frameproduct/apiFrameWithSearch";
+    public String frame_filterby_category         = "index.php/Android_frameproduct/apiFrameWithCategory";
+    public String frame_filterby_keyword          = "index.php/Android_frameproduct/apiFrameWithSearch";
     public String frame_filterby_price            = "index.php/Android_frameproduct/apiFrameWithPrice";
     public String frame_filterwith_sort           = "index.php/Android_frameproduct/apiFrameWithFilter";
     public String frame_showcolor_filter          = "index.php/android_frameproduct/showColorList";
@@ -298,6 +305,10 @@ public class Config {
     public String orderlens_insert_lensorder      = "index.php/Android_lensorder_web/insertLensorder";
     public String orderlens_insert_lensorderitem  = "index.php/Android_lensorder_web/insertLensorderItem";
     public String orderlens_insert_statusentry    = "index.php/Android_lensorder_web/insertStatusEntry";
+    public String orderlens_confirm_entrynonpay   = "index.php/Android_lensorder_web/confirmEntryNonPayment";
+    public String orderlens_confirm_entrypay      = "index.php/Android_lensorder_web/confirmEntryPayment";
+    public String orderlens_complete_info         = "index.php/Android_lensorder_web/checkCompleteInfo";
+    public String orderlens_insert_checkstatus    = "index.php/Android_lensorder_web/checkStatusEntry";
     public String orderlens_get_orderid           = "index.php/Android_lensorder_web/getOrderId";
     public String orderlens_get_infolens          = "index.php/Android_lensorder_web/getInfoLens";
     public String orderlens_get_sidelensrx        = "index.php/Android_lensorder_web/getSideLensRX";
@@ -335,6 +346,11 @@ public class Config {
     public String ordersp_get_detailSp            = "index.php/Android_apisp/trackingSp";
     public String ordersp_get_inv                 = "index.php/Android_apisp/getInv";
     public String ordersp_insert_duration         = "index.php/Android_apisp/insertDuration";
+    public String ordersp_get_approvalsp          = "index.php/Android_apisp/getApprovalSp/8/";
+    public String ordersp_search_approvalsp       = "index.php/Android_apisp/getSpApprovalSearch/1/";
+    public String ordersp_update_approvalsp       = "index.php/Android_apisp/approvalByAreaManager";
+    public String ordersp_update_rejectsp         = "index.php/Android_apisp/rejectByAreaManager";
+    public String ordersp_item_detailsp           = "index.php/Android_apisp/getItemSpFrame";
 
     /* AREA FLASH SALE */
     public String flashsale_getActiveSale         = "index.php/Android_flashsale/getActiveSale";
@@ -360,6 +376,7 @@ public class Config {
     public String spframe_get_framebrand          = "index.php/Android_apispframe/getBrand";
     public String spframe_get_byframe             = "index.php/Android_apispframe/getFrameByBrand";
     public String spframe_get_searchframe         = "index.php/Android_apispframe/getFrameBySearch";
+    public String spframe_get_searchframebrand    = "index.php/Android_apispframe/getFrameBrandBySearch";
     public String spframe_get_searchbarcode       = "index.php/Android_apispframe/getFrameByBarcode";
     public String spframe_get_byitemid            = "index.php/Android_apispframe/getFrameByItemId";
 
@@ -406,4 +423,22 @@ public class Config {
     public String getparent_info                  = "index.php/Android_parentchild/getParent";
     public String getchild_data                   = "index.php/Android_parentchild/showChild";
     public String searchchild_data                = "index.php/Android_parentchild/searchChild";
+
+    /* AREA TRACKING DPODK  */
+    public String dpodk_getcourierbydate          = "index.php/Android_apidpodk/getCourierByDate";
+    public String dpodk_getcourierbydaterange     = "index.php/Android_apidpodk/getCourierByDateRange";
+    public String dpodk_getcourierbysearch        = "index.php/Android_apidpodk/getCourierBySearch";
+    public String dpodk_getinvbyidtrx             = "index.php/Android_apidpodk/getInvproccessByDpodk";
+    public String dpodk_changestatus              = "index.php/Android_apidpodk/changeStatusCourier";
+    public String dpodk_searchbyinvnumber         = "index.php/Android_apidpodk/getCourierBySearchNoTrx";
+    public String dpodk_historybydaterange        = "index.php/Android_apidpodk/getHistoryByDateRange";
+    public String dpodk_historybysearchidtrx      = "index.php/Android_apidpodk/getHistoryBySearcNoinv";
+    public String dpodk_historybyidtrx            = "index.php/Android_apidpodk/getHistoryByNotrx";
+    public String dpodk_historybysearchinvnumber  = "index.php/Android_apidpodk/getHistoryBySearcNoinv";
+    public String dpodk_statuscheckbyoptic        = "index.php/Android_apidpodk/getProcessCourierByOptic";
+    public String dpodk_statuscounterbyoptic      = "index.php/Android_apidpodk/countProcessCourierByOptic";
+    public String dpodk_getprocessbyoptic         = "index.php/Android_apidpodk/getProcessByOptic";
+    public String dpodk_getdeliveredbyoptic       = "index.php/Android_apidpodk/getDeliveredByOptic";
+    public String dpodk_processcounterbyoptic     = "index.php/Android_apidpodk/countProcessByOptic";
+    public String dpodk_deliveredcounterbyoptic   = "index.php/Android_apidpodk/countDeliveredByOptic";
 }

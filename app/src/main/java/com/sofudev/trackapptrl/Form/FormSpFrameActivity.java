@@ -2,18 +2,30 @@ package com.sofudev.trackapptrl.Form;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -28,6 +40,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +48,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,13 +57,19 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.nj.imagepicker.ImagePicker;
+import com.nj.imagepicker.listener.ImageMultiResultListener;
+import com.nj.imagepicker.result.ImageResult;
+import com.nj.imagepicker.utils.DialogConfiguration;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
@@ -76,6 +96,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -84,9 +106,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
+
+import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
 
 public class FormSpFrameActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = FormSpFrameActivity.class.getSimpleName();
@@ -107,14 +132,18 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String URL_GETBRANDFRAME     = config.Ip_address + config.spframe_get_framebrand;
     String URL_GETFRAMEBYBRAND   = config.Ip_address + config.spframe_get_byframe;
     String URL_GETFRAMESEARCH    = config.Ip_address + config.spframe_get_searchframe;
+    String URL_GETFRAMESEARCHBRAND = config.Ip_address + config.spframe_get_searchframebrand;
     String URL_GETFRAMEBARCODE   = config.Ip_address + config.spframe_get_searchbarcode;
     String URL_GETFRAMEBYITEMID  = config.Ip_address + config.spframe_get_byitemid;
+    String URL_UPDATESIGNED   = config.Ip_address + config.ordersp_update_digitalsigned;
+    String URL_UPDATEPHOTO    = config.Ip_address + config.ordersp_update_photo;
 
     Adapter_framesp adapter_framesp;
     Adapter_frame_brand adapter_frame_brand;
     Adapter_framesp_qty adapter_framesp_qty;
     Adapter_sorting_onhand adapter_sorting_onhand;
 
+    private BottomDialog payBottomDialog;
     private View custom;
     ConstraintLayout constraintLayoutOpticName;
     LinearLayout progressLayout;
@@ -131,12 +160,15 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     Button btnSave;
     UniversalFontTextView txtPrice, txtDisc, txtShipping, txtTotalPrice, txtOpticName;
     UniversalFontTextView txtPriceBottom, txtDiscBottom, txtTotalBottom;
-    BootstrapEditText edDiscBottom;
+    BootstrapEditText edDiscBottom, edCustomDisc, edNotes, edNamaCustomer;
     EditText txtSearch;
     View animateView;
     RelativeLayout animateCard;
     ImageView animateImg;
     Boolean isUp;
+    boolean isDigitalSigned;
+    Uri img_uri, signed_uri;
+    String filesigned, signedpath;
 
     List<ModelFrameSp> modelFrameSpList = new ArrayList<>();
     List<Data_sortingonhand> itemSorting = new ArrayList<>();
@@ -147,7 +179,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String scanContent;
     Integer limit, from, hasil;
     int pos = 0, isLoad = 0, isInvalid = 0;
-    int totalPrice, totalDisc, priceDisc, totalAllPrice, shippingId, flagPayment, headerDp;
+    int priceDisc, shippingId, flagPayment, headerDp;
+    double totalDisc, totalPrice, totalAllPrice;
     String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, subcustId, subcustLocId, idSp;
     String headerNoSp;
     String headerTipeSp;
@@ -156,14 +189,14 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String headerAddress;
     String headerCity;
     String headerOrderVia;
-    String headerDisc;
+    String headerDisc, headerCustomDisc;
     String headerCondition;
     String headerInstallment;
     String headerStartInstallment;
     String headerShippingAddress;
     String headerStatus;
-    String headerImage, headerSignedPath;
-    Boolean check, isBarcode, isClear;
+    String headerImage, headerSignedPath, filename, imgpath;
+    Boolean check, isBarcode, isClear, isImage;
     IntentResult scanningResult;
 
     AddFrameSpHelper addFrameSpHelper;
@@ -355,6 +388,96 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private static Bitmap convertToPng(Bitmap bitmap){
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] src = baos.toByteArray();
+            return BitmapFactory.decodeByteArray(src, 0, src.length);
+        }finally {
+            if(baos != null){
+                try {
+                    baos.close();
+                } catch (IOException e) {
+                    Log.e("Error convert", "ByteArrayOutputStream was not closed");
+                }
+            }
+        }
+    }
+
+    public Uri getImageUrl(Context context, Bitmap bitmap)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+//        String timeStamp = new SimpleDateFormat("yyMMdd", Locale.US).format(new Date());
+
+        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,
+                headerSales + "_" +  idSp + "_" + timeStamp, null);
+
+        return Uri.parse(path);
+    }
+
+    private String getPath(Uri content) {
+        String[] data = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(getApplicationContext(), content, data, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+
+    private void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
+    {
+        ImageView img_status;
+        UniversalFontTextView txt_information, txt_message;
+        final BootstrapButton btn_ok;
+
+        final Dialog dialog = new Dialog(FormSpFrameActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.info_status);
+        dialog.setCancelable(false);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME ||
+                        keyCode == KeyEvent.KEYCODE_APP_SWITCH)
+                {
+                    //donothing
+                }
+                return false;
+            }
+        });
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        img_status      =  dialog.findViewById(R.id.info_status_imageview);
+        txt_information =  dialog.findViewById(R.id.info_status_txtInformation);
+        txt_message     =  dialog.findViewById(R.id.info_status_txtMessage);
+        btn_ok          =  dialog.findViewById(R.id.info_status_btnOk);
+
+        img_status.setImageResource(resource);
+        txt_information.setText(info);
+        txt_message.setText(message);
+        btn_ok.setBootstrapBrand(defaultcolorbtn);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+//                finish();
+            }
+        });
+
+        if (!isFinishing()){
+            dialog.show();
+        }
+    }
+
     @SuppressLint("InflateParams")
     @Override
     public void onClick(View v) {
@@ -421,33 +544,127 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 }
                 else
                 {
-//                    saveOrder();
                     custom = LayoutInflater.from(this).inflate(R.layout.bottom_dialog_payment_sp, null);
-
                     UniversalFontComponents.init(this);
 
                     txtPriceBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemprice);
                     txtDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtitemdisc);
                     txtTotalBottom = custom.findViewById(R.id.bottom_dialog_paysp_txttotalprice);
+                    edNotes = custom.findViewById(R.id.bottom_dialog_paysp_edtNote);
+                    edNamaCustomer = custom.findViewById(R.id.bottom_dialog_paysp_txtNamaCustomer);
                     final Spinner spinPilihBayarBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtPembayaran);
                     final Spinner spinCicilanBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinCicilan);
                     final Spinner spinMulaiCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_spinMulaiCicilan);
                     LinearLayout linearTitleCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearTitleCicilan);
                     LinearLayout linearContentCicilBottom = custom.findViewById(R.id.bottom_dialog_paysp_linearContentCicilan);
+                    final SignaturePad digitalSignature = custom.findViewById(R.id.bottom_dialog_paysp_imgdigitalsign);
+                    final ImageView imgPhoto = custom.findViewById(R.id.bottom_dialog_paysp_imgPhoto);
+                    final TextView txtImgLoc = custom.findViewById(R.id.bottom_dialog_paysp_imglocation);
+                    Button btnTakePicture = custom.findViewById(R.id.bottom_dialog_paysp_btnPicture);
+                    Button btnClearSign = custom.findViewById(R.id.bottom_dialog_paysp_btndigitalsign);
                     final BootstrapEditText edJmlDpBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtJumlahDp);
+                    edCustomDisc = custom.findViewById(R.id.bottom_dialog_paysp_txtDiskonValue);
                     edDiscBottom = custom.findViewById(R.id.bottom_dialog_paysp_txtDiskon);
                     RippleView btnSave = custom.findViewById(R.id.bottom_dialog_paysp_btndetail);
+                    Switch swDisc = custom.findViewById(R.id.bottom_dialog_paysp_checkDiskon);
+                    final UniversalFontTextView txtPercent = custom.findViewById(R.id.bottom_dialog_paysp_txtPercent);
+                    final UniversalFontTextView txtTitleDisc = custom.findViewById(R.id.bottom_dialog_paysp_txtTitleDiskon);
 
-                    BottomDialog bottomDialog = new BottomDialog.Builder(this)
+                    payBottomDialog = new BottomDialog.Builder(this)
                             .setTitle("Payment Info")
                             .setCustomView(custom)
                             .build();
 
                     choosePaymentSp(spinPilihBayarBottom, linearTitleCicilBottom, linearContentCicilBottom);
                     setDp(edJmlDpBottom);
+                    setDiscCustom(edCustomDisc);
                     setDisc(edDiscBottom);
                     chooseDurasiCicil(spinCicilanBottom);
                     chooseStartInstallment(spinMulaiCicilBottom);
+
+                    swDisc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b)
+                            {
+                                txtPercent.setVisibility(View.GONE);
+                                edDiscBottom.setVisibility(View.GONE);
+                                edCustomDisc.setVisibility(View.VISIBLE);
+
+                                edDiscBottom.setText("");
+                            }
+                            else
+                            {
+                                txtPercent.setVisibility(View.VISIBLE);
+                                edDiscBottom.setVisibility(View.VISIBLE);
+                                edCustomDisc.setVisibility(View.GONE);
+
+                                edCustomDisc.setText("");
+                            }
+                        }
+                    });
+
+                    btnTakePicture.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImagePicker.build(new DialogConfiguration()
+                                            .setTitle("Choose")
+                                            .setOptionOrientation(LinearLayoutCompat.HORIZONTAL)
+                                            .setResultImageDimension(719,  1089)
+                                    , new ImageMultiResultListener() {
+                                        @Override
+                                        public void onImageResult(ArrayList<ImageResult> imageResult) {
+                                            Log.e(LOG_TAG, "onImageResult:Number of image picked " + imageResult.size());
+                                            Log.d("Image path : ", imageResult.get(0).getPath());
+
+//                                            Toasty.info(getApplicationContext(), imageResult.get(0).getPath(), Toast.LENGTH_LONG).show();
+
+                                            imgPhoto.setImageBitmap(imageResult.get(0).getBitmap());
+
+                                            img_uri = getImageUrl(getApplicationContext(), imageResult.get(0).getBitmap());
+
+                                            filename = getPath(img_uri);
+//
+                                            String[] delimit = filename.split("/");
+//
+                                            imgpath  = delimit[delimit.length - 1];
+
+                                            txtImgLoc.setVisibility(View.GONE);
+                                            txtImgLoc.setText(img_uri.getPath());
+                                        }
+                                    }).show(getSupportFragmentManager());
+                        }
+                    });
+
+                    digitalSignature.setOnSignedListener(new SignaturePad.OnSignedListener() {
+                        @Override
+                        public void onStartSigning() {
+
+                        }
+
+                        @Override
+                        public void onSigned() {
+                            isDigitalSigned = true;
+                            Bitmap bitmap = convertToPng(digitalSignature.getSignatureBitmap());
+                            signed_uri = getImageUrl(getApplicationContext(), bitmap);
+                            filesigned = getPath(signed_uri);
+
+                            String[] delimit = filesigned.split("/");
+                            signedpath  = delimit[delimit.length - 1];
+                        }
+
+                        @Override
+                        public void onClear() {
+                            isDigitalSigned = false;
+                        }
+                    });
+
+                    btnClearSign.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            digitalSignature.clear();
+                        }
+                    });
 
                     btnSave.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -458,16 +675,105 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             headerCondition = spinPilihBayarBottom.getSelectedItem().toString();
                             headerInstallment = spinCicilanBottom.getSelectedItem().toString();
                             headerStartInstallment = cekBulanCicil(spinPilihBayarBottom, spinMulaiCicilBottom);
-                            saveOrder();
+
+                            headerImage = imgpath;
+                            headerSignedPath = signedpath;
+
+                            if (imgpath == null)
+                            {
+                                isImage = false;
+//                                information("Pemberitahuan", "Mohon masukkan gambar/foto SP", R.drawable.failed_outline, DefaultBootstrapBrand.DANGER);
+                            }
+                            else
+                            {
+                                isImage = true;
+                            }
+
+                            if (isDigitalSigned)
+                            {
+                                saveOrder();
+                            }
+                            else
+                            {
+                                Toasty.warning(getApplicationContext(), "Harap lengkapi tanda tangan digital", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
                     calcPrice();
 
-                    bottomDialog.show();
+                    payBottomDialog.show();
                 }
                 break;
         }
+    }
+
+    private void updatePhoto(Data_spheader item, final String url) {
+        SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error") || object.names().get(0).equals("invalid"))
+                    {
+                        Toasty.error(getApplicationContext(), "Data failed save", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (object.names().get(0).equals("info")) {
+                        Toasty.warning(getApplicationContext(), "Gambar sudah pernah diupload", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Log.d("Return image : ", object.getString("path"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        smr.addFile("image", filename);
+
+        AppController.getInstance().addToRequestQueue(smr);
+    }
+
+    private void updateSigned() {
+        SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, URL_UPDATESIGNED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("error") || object.names().get(0).equals("invalid"))
+                    {
+                        Toasty.error(getApplicationContext(), "Data failed save", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (object.names().get(0).equals("info")) {
+                        Toasty.warning(getApplicationContext(), "Tanda tangan digital sudah pernah diupload", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Log.d("Return image : ", object.getString("path"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        smr.addFile("image", filesigned);
+
+        AppController.getInstance().addToRequestQueue(smr);
     }
 
     private String cekBulanCicil(Spinner spinPilihPembayaran, Spinner spinMulaiCicilan)
@@ -503,7 +809,16 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         headerDisc = edDiscBottom.getText().toString().length() > 0
                 ? Double.parseDouble(edDiscBottom.getText().toString()) >= 90 ? "0" : edDiscBottom.getText().toString()
                 : "0";
-        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+        headerCustomDisc = edCustomDisc.getText().toString().length() > 0
+                            ? edCustomDisc.getText().toString().replace(".", "")
+                            : "0";
+
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Custom disc val : " + headerCustomDisc);
+
+//        totalDisc = Integer.parseInt(headerDisc) * totalPrice / 100;
+        totalDisc = edDiscBottom.getText().toString().length() > 0
+                        ? Double.parseDouble(headerDisc) * totalPrice / 100
+                        : Double.parseDouble(headerCustomDisc);
         txtDiscBottom.setText("- Rp. " + CurencyFormat(String.valueOf(totalDisc)));
         totalAllPrice = totalPrice - totalDisc;
         txtTotalBottom.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
@@ -601,8 +916,27 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.toString().indexOf(".") == 1){
+                    edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                }
+                else if (s.toString().indexOf(".") == 2)
+                {
+                    edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+                }
+                else
+                {
+                    edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                    String data = edDiscount.getText().toString();
 
+                    if (edDiscount.getText().length() > 2)
+                    {
+                        double amount = Double.parseDouble(data);
+                        amount = amount / 10;
+
+                        edDiscount.setText(String.valueOf(amount));
+                    }
+                }
             }
 
             @Override
@@ -610,25 +944,64 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 edDiscount.removeTextChangedListener(this);
                 if (!editable.toString().equals(""))
                 {
-                    String data = edDiscount.getText().toString().replace(".", "");
-
-                    if(edDiscount.getText().length() > 2)
-                    {
-                        double amount = Double.valueOf(data);
-
-                        amount = amount / 10;
-                        edDiscount.setText(String.valueOf(amount));
-                        edDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-                    }
-                    else
-                    {
-                        edDiscount.setText(data);
-                    }
-
                     edDiscount.setSelection(edDiscount.length());
                 }
                 calcPrice();
                 edDiscount.addTextChangedListener(this);
+            }
+        });
+    }
+
+    private void setDiscCustom(final BootstrapEditText edDiscount){
+        edDiscount.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().equals(current)) {
+                    edDiscount.removeTextChangedListener(this);
+
+                    Locale local = new Locale("id", "id");
+                    String replaceable = String.format("[Rp,.\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String cleanString = editable.toString().replaceAll(replaceable,
+                            "");
+
+                    double parsed;
+                    try {
+                        parsed = Double.parseDouble(cleanString);
+                    } catch (NumberFormatException e) {
+                        parsed = 0.00;
+                    }
+
+                    NumberFormat formatter = NumberFormat
+                            .getCurrencyInstance(local);
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setParseIntegerOnly(true);
+                    String formatted = formatter.format((parsed));
+
+                    String replace = String.format("[Rp\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String clean = formatted.replaceAll(replace, "");
+
+                    current = formatted;
+                    edDiscount.setText(clean);
+                    edDiscount.setSelection(clean.length());
+                    edDiscount.addTextChangedListener(this);
+                }
+                calcPrice();
             }
         });
     }
@@ -661,6 +1034,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void saveOrder() {
+        String discCustom = edCustomDisc.getText().length() > 0 ? edCustomDisc.getText().toString().replace(".", "") : "0";
+        String ownerName  = edNamaCustomer.getText().toString().trim();
+        String notesSp    = edNotes.getText().toString().trim();
+
         dataFrameHeader = new Data_frame_header();
         dataFrameHeader.setOrderId(idSp);
         dataFrameHeader.setIdParty(Integer.valueOf(opticId));
@@ -674,6 +1051,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dataFrameHeader.setOpticName(opticName);
         dataFrameHeader.setOpticAddress(opticAddress);
         dataFrameHeader.setPaymentCashCarry("Non Payment Method");
+        dataFrameHeader.setCustomDisc(discCustom);
 
         insertHeader(dataFrameHeader, subcustId, subcustLocId, "");
         insertNonPaymentStatus(idSp);
@@ -689,10 +1067,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             dataFrameItem.setFrameQty(modelFrameSpList.get(i).getProductQty());
             dataFrameItem.setFrameRealPrice(modelFrameSpList.get(i).getProductPrice());
 //            dataFrameItem.setFrameDisc(modelFrameSpList.get(i).getProductDisc());
-            dataFrameItem.setFrameDisc(Integer.parseInt(headerDisc));
+            dataFrameItem.setFrameDisc(Double.parseDouble(headerDisc));
             dataFrameItem.setFrameDiscPrice(modelFrameSpList.get(i).getNewProductDiscPrice());
 
-            Log.d("Diskon : ", String.valueOf(modelFrameSpList.get(i).getProductDisc()));
+            Log.d("Diskon : ", String.valueOf(headerDisc));
             Log.d("Amount : ", String.valueOf(modelFrameSpList.get(i).getNewProductDiscPrice()));
 
             insertLineItem(dataFrameItem);
@@ -715,19 +1093,20 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dataSpHeader.setPhoto(headerImage);
         dataSpHeader.setStatus(headerStatus);
         dataSpHeader.setSignedPath(headerSignedPath);
+        dataSpHeader.setCustomdisc(discCustom);
+        dataSpHeader.setOwnerOptic(ownerName);
+        dataSpHeader.setNotes(notesSp);
 
-        Log.d("Photo Path : ", headerImage);
-        Log.d("Signed Path : ", headerSignedPath);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Out disc value : " + discCustom);
+
+        updateSigned();
+        if (isImage)
+        {
+            updatePhoto(dataSpHeader, URL_UPDATEPHOTO);
+        }
 
         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
         insertSpHeader(dataSpHeader);
-
-        Toasty.success(getApplicationContext(), "Data Berhasil disimpan", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent("finishFr");
-        sendBroadcast(intent);
-
-        finish();
     }
 
     private boolean isAngka(String input)
@@ -761,8 +1140,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dialog.getWindow().setAttributes(layoutParams);
 
         addpos = pref.getString("DIALOGSP_ADDPOS", "LEINZ");
-        itemSortDesc = pref.getString("DIALOGSP_ITEMSORTDESC","ASC");
-        newpos = pref.getString("DIALOGSP_NEWPOS","Qty Terendah");
+        itemSortDesc = pref.getString("DIALOGSP_ITEMSORTDESC","DESC");
+        newpos = pref.getString("DIALOGSP_NEWPOS","Qty Tertinggi");
         getItemByBrand(addpos, itemSortDesc);
 
         rpFilter      = dialog.findViewById(R.id.dialog_chooseframe_rpfilter);
@@ -1123,13 +1502,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         };
 
                         AppController.getInstance().addToRequestQueue(request);
-
-//                        Toast.makeText(getApplicationContext(), "Angka", Toast.LENGTH_LONG).show();
                     }
                     else
                     {
 //                        adapter_framesp_qty.notifyDataSetChanged();
-                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+//                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 //                            loader.setVisibility(View.GONE);
@@ -1209,6 +1587,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 HashMap<String, String> hashMap = new HashMap<>();
                                 hashMap.put("key", txtSearch.getText().toString());
                                 hashMap.put("sort", itemSortDesc);
+                                hashMap.put("brand", addpos);
                                 return hashMap;
                             }
                         };
@@ -1300,7 +1679,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 itemSortDesc = "ASC";
                                 storingPref();
                                 itemBestProduct.clear();
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+//                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
 //                                        loader.setVisibility(View.GONE);
@@ -1381,6 +1761,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         HashMap<String, String> hashMap = new HashMap<>();
                                         hashMap.put("key", txtSearch.getText().toString());
                                         hashMap.put("sort", itemSortDesc);
+                                        hashMap.put("brand", addpos);
                                         return hashMap;
                                     }
                                 };
@@ -1392,7 +1773,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 itemSortDesc = "DESC";
                                 storingPref();
                                 itemBestProduct.clear();
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+//                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
 //                                        loader.setVisibility(View.GONE);
@@ -1473,6 +1855,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         HashMap<String, String> hashMap = new HashMap<>();
                                         hashMap.put("key", txtSearch.getText().toString());
                                         hashMap.put("sort", itemSortDesc);
+                                        hashMap.put("brand", addpos);
                                         return hashMap;
                                     }
                                 };
@@ -1578,7 +1961,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 };
 
                                 AppController.getInstance().addToRequestQueue(request);
-                            } else {
+                            }
+                            else {
 //                                progressLayout.setVisibility(View.VISIBLE);
                                 itemSortDesc = "DESC";
                                 storingPref();
@@ -1745,95 +2129,191 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
 //                }
 //                        getSuggestion(itemOrgId);
 
-                        itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
+                        if (txtSearch.getText().length() > 0)
+                        {
+                            itemBestProduct.clear();
+//                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
+                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+//                                        loader.setVisibility(View.GONE);
+                                    progressLayout.setVisibility(View.GONE);
+                                    recyclerFrame.setVisibility(View.VISIBLE);
+
+                                    try {
+                                        JSONArray jsonArray = new JSONArray(response);
+
+                                        for (int i = 0; i < jsonArray.length(); i++)
+                                        {
+                                            JSONObject object = jsonArray.getJSONObject(i);
+
+                                            if (object.names().get(0).equals("invalid")) {
+                                                check = false;
+
+                                                recyclerFrame.setVisibility(View.GONE);
+                                                txtCounter.setVisibility(View.GONE);
+                                                imgFrameNotFound.setVisibility(View.VISIBLE);
+                                            }
+                                            else
+                                            {
+                                                check = true;
+
+                                                recyclerFrame.setVisibility(View.VISIBLE);
+                                                txtCounter.setVisibility(View.VISIBLE);
+                                                imgFrameNotFound.setVisibility(View.GONE);
+
+                                                String id = object.getString("frame_id");
+                                                String title = object.getString("frame_name");
+                                                String sku   = object.getString("frame_sku");
+                                                String image = object.getString("frame_img");
+                                                String price = object.getString("frame_price");
+                                                String discperc = object.getString("frame_disc");
+                                                String brandName = object.getString("frame_brand");
+                                                String frameQty = object.getString("frame_qty");
+                                                String frameWeight = object.getString("frame_weight");
+                                                String tempPrice = CurencyFormat(price);
+                                                totalData = object.getString("total_output");
+
+                                                Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                                                data.setProduct_id(id);
+                                                data.setProduct_name(title);
+                                                data.setProduct_code(sku);
+                                                data.setProduct_image(image);
+                                                data.setProduct_realprice("Rp " + tempPrice);
+                                                data.setProduct_discpercent(discperc);
+                                                data.setProduct_brand(brandName);
+                                                data.setProduct_qty(frameQty);
+                                                data.setProduct_weight(frameWeight);
+
+                                                itemBestProduct.add(data);
+                                            }
+                                        }
+
+                                        txtCounter.setText(itemBestProduct.size() + " Data Ditemukan");
+//                                adapter_framesp_qty.notifyDataSetChanged();
+//                                handleRecyclerQty(itemBestProduct);
+
+                                        List<Data_fragment_bestproduct> newItem = new ArrayList<>();
+                                        newItem.addAll(itemBestProduct);
+                                        itemBestProduct.clear();
+                                        itemBestProduct.addAll(newItem);// add new data
+                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+                                        adapter_framesp_qty.notifyDataSetChanged();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> hashMap = new HashMap<>();
+                                    hashMap.put("key", txtSearch.getText().toString());
+                                    hashMap.put("sort", itemSortDesc);
+                                    hashMap.put("brand", addpos);
+                                    return hashMap;
+                                }
+                            };
+
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+                        else
+                        {
+                            itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
 //        adapter_framesp_qty.notifyDataSetChanged();
-                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
+                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
 //                loader.setVisibility(View.GONE);
-                                progressLayout.setVisibility(View.GONE);
+                                    progressLayout.setVisibility(View.GONE);
 //                recyclerFrame.setVisibility(View.VISIBLE);
 
-                                try {
-                                    JSONArray jsonArray = new JSONArray(response);
+                                    try {
+                                        JSONArray jsonArray = new JSONArray(response);
 
-                                    for (int i = 0; i < jsonArray.length(); i++)
-                                    {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        if (object.names().get(0).equals("invalid"))
+                                        for (int i = 0; i < jsonArray.length(); i++)
                                         {
-                                            check = false;
+                                            JSONObject object = jsonArray.getJSONObject(i);
 
-                                            recyclerFrame.setVisibility(View.GONE);
-                                            txtCounter.setVisibility(View.GONE);
-                                            imgFrameNotFound.setVisibility(View.VISIBLE);
+                                            if (object.names().get(0).equals("invalid"))
+                                            {
+                                                check = false;
+
+                                                recyclerFrame.setVisibility(View.GONE);
+                                                txtCounter.setVisibility(View.GONE);
+                                                imgFrameNotFound.setVisibility(View.VISIBLE);
+                                            }
+                                            else
+                                            {
+                                                check = true;
+
+                                                recyclerFrame.setVisibility(View.VISIBLE);
+                                                txtCounter.setVisibility(View.VISIBLE);
+                                                imgFrameNotFound.setVisibility(View.GONE);
+
+                                                String id = object.getString("frame_id");
+                                                String title = object.getString("frame_name");
+                                                String sku   = object.getString("frame_sku");
+                                                String image = object.getString("frame_img");
+                                                String price = object.getString("frame_price");
+                                                String discperc = object.getString("frame_disc");
+                                                String brandName = object.getString("frame_brand");
+                                                String frameQty = object.getString("frame_qty");
+                                                String frameWeight = object.getString("frame_weight");
+                                                String tempPrice = CurencyFormat(price);
+                                                totalData = object.getString("total_output");
+
+                                                Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                                                data.setProduct_id(id);
+                                                data.setProduct_name(title);
+                                                data.setProduct_code(sku);
+                                                data.setProduct_image(image);
+                                                data.setProduct_realprice("Rp " + tempPrice);
+                                                data.setProduct_discpercent(discperc);
+                                                data.setProduct_brand(brandName);
+                                                data.setProduct_qty(frameQty);
+                                                data.setProduct_weight(frameWeight);
+
+                                                itemBestProduct.add(data);
+                                            }
                                         }
-                                        else
-                                        {
-                                            check = true;
-
-                                            recyclerFrame.setVisibility(View.VISIBLE);
-                                            txtCounter.setVisibility(View.VISIBLE);
-                                            imgFrameNotFound.setVisibility(View.GONE);
-
-                                            String id = object.getString("frame_id");
-                                            String title = object.getString("frame_name");
-                                            String sku   = object.getString("frame_sku");
-                                            String image = object.getString("frame_img");
-                                            String price = object.getString("frame_price");
-                                            String discperc = object.getString("frame_disc");
-                                            String brandName = object.getString("frame_brand");
-                                            String frameQty = object.getString("frame_qty");
-                                            String frameWeight = object.getString("frame_weight");
-                                            String tempPrice = CurencyFormat(price);
-                                            totalData = object.getString("total_output");
-
-                                            Data_fragment_bestproduct data = new Data_fragment_bestproduct();
-                                            data.setProduct_id(id);
-                                            data.setProduct_name(title);
-                                            data.setProduct_code(sku);
-                                            data.setProduct_image(image);
-                                            data.setProduct_realprice("Rp " + tempPrice);
-                                            data.setProduct_discpercent(discperc);
-                                            data.setProduct_brand(brandName);
-                                            data.setProduct_qty(frameQty);
-                                            data.setProduct_weight(frameWeight);
-
-                                            itemBestProduct.add(data);
-                                        }
-                                    }
 //                    adapter_framesp_qty.notifyDataSetChanged();
 //                    handleRecyclerQty(itemBestProduct);
 
-                                    List<Data_fragment_bestproduct> newItem = new ArrayList<>();
-                                    newItem.addAll(itemBestProduct);
-                                    itemBestProduct.clear();
-                                    itemBestProduct.addAll(newItem);// add new data
+                                        List<Data_fragment_bestproduct> newItem = new ArrayList<>();
+                                        newItem.addAll(itemBestProduct);
+                                        itemBestProduct.clear();
+                                        itemBestProduct.addAll(newItem);// add new data
 
-                                    txtCounter.setText(newItem.size() + " Data Ditemukan");
-                                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                    adapter_framesp_qty.notifyDataSetChanged();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                        txtCounter.setText(newItem.size() + " Data Ditemukan");
+                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+                                        adapter_framesp_qty.notifyDataSetChanged();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }){
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                HashMap<String, String> hashMap = new HashMap<>();
-                                hashMap.put("category", addpos);
-                                hashMap.put("sort", itemSortDesc);
-                                return hashMap;
-                            }
-                        };
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    HashMap<String, String> hashMap = new HashMap<>();
+                                    hashMap.put("category", addpos);
+                                    hashMap.put("sort", itemSortDesc);
+                                    return hashMap;
+                                }
+                            };
 
-                        AppController.getInstance().addToRequestQueue(request);
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+
                         dialog.dismiss();
                     }
                 });
@@ -2282,8 +2762,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("installment", item.getInstallment());
                 hashMap.put("start_installment", item.getStartInstallment());
                 hashMap.put("shipping_address", item.getShipAddress());
-                hashMap.put("photo", "\\\\192.168.44.21\\ordertxt\\orderandroid\\Foto SP\\foto\\" + item.getPhoto());
+                hashMap.put("photo",  item.getPhoto() != null ? "\\\\192.168.44.21\\ordertxt\\orderandroid\\Foto SP\\foto\\" + item.getPhoto() : "");
                 hashMap.put("status", item.getStatus());
+                hashMap.put("custom_discount", item.getCustomdisc());
                 return hashMap;
             }
         };
@@ -2374,6 +2855,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("subcust_id", subcustid);
                 hashMap.put("subcust_loc_id", subcustlocid);
                 hashMap.put("salesname", headerSales);
+                hashMap.put("custom_discount", item.getCustomDisc());
 //                hashMap.put("flashSaleInfo", flashSale);
 
                 return hashMap;
@@ -2511,6 +2993,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         Data_frame_brand dt = new Data_frame_brand();
                         dt.setItem(item);
 
+                        Log.d(FormSpFrameActivity.class.getSimpleName(), "Brand : " + item);
+
                         itemCategory.add(dt);
                     }
                 } catch (JSONException e) {
@@ -2535,7 +3019,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onResponse(String response) {
 //                loader.setVisibility(View.GONE);
-                progressLayout.setVisibility(View.GONE);
+//                progressLayout.setVisibility(View.GONE);
 //                recyclerFrame.setVisibility(View.VISIBLE);
 
                 try {
@@ -2631,6 +3115,14 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     {
                         Log.d("INSERT SP", "Success");
 
+                        Toasty.success(getApplicationContext(), "Data Berhasil disimpan", Toast.LENGTH_SHORT).show();
+
+                        payBottomDialog.dismiss();
+
+                        Intent intent = new Intent("finishFr");
+                        sendBroadcast(intent);
+
+                        finish();
 //                        updatePhoto(dataHeader, URL_UPDATEPHOTO);
                     }
                     else if (object.names().get(0).equals("error"))
@@ -2667,11 +3159,14 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("installment", item.getInstallment());
                 hashMap.put("start_installment", item.getStartInstallment());
                 hashMap.put("shipping_address", item.getShipAddress());
-                hashMap.put("photo", config.Ip_address + "assets/images/ordersp/" + item.getPhoto());
+                hashMap.put("photo", item.getPhoto() != null ? config.Ip_address + "assets/images/ordersp/" + item.getPhoto() : "");
                 hashMap.put("path", item.getPhoto());
                 hashMap.put("status", item.getStatus());
-                hashMap.put("signedurl", config.Ip_address + "assets/images/signedsp/" + item.getSignedPath());
+                hashMap.put("signedurl", item.getSignedPath() != null ? config.Ip_address + "assets/images/signedsp/" + item.getSignedPath() : "");
                 hashMap.put("signedpath", item.getSignedPath());
+                hashMap.put("custom_discount", item.getCustomdisc());
+                hashMap.put("notes", item.getNotes());
+                hashMap.put("nama_owner", item.getOwnerOptic());
                 return hashMap;
             }
         };

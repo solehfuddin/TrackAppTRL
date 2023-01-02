@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Form.CourierHistoryActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/courier_history_ripplebtnback"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/courier_history_btnback"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/courier_history_ripplebtnfilter"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/courier_history_btnfilter"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_filter" />
+            </com.andexert.library.RippleView>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/history_pickup"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                app:customFont="DroidBold.ttf" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <Switch
+        android:id="@+id/courier_history_swType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/invoice_type"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout12" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/courier_history_cards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="4dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courier_history_swType">
+
+        <RelativeLayout
+            android:id="@+id/courier_history_linearseacrh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/courier_history_rpsearch"
+                android:layout_width="40dp"
+                android:layout_height="38dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
+                app:rv_rippleDuration="100"
+                app:rv_type="rectangle">
+
+                <ImageButton
+                    android:id="@+id/courier_history_btnsearch"
+                    android:layout_width="40dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/colorToolbar"
+                    android:src="@drawable/ic_search" />
+            </com.andexert.library.RippleView>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/courier_history_txtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="55dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/neutral"
+                android:hint="@string/cari_berdasarkan_nomor_dpodk"
+                android:inputType="textPersonName"
+                app:met_hideUnderline="true" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/courier_history_rl_tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courier_history_cards">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/courier_history_btnprev"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1.3"
+            android:textSize="20sp"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="md"
+            app:bootstrapText="&lt;" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/courier_history_btnnext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:textSize="20sp"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="md"
+            app:bootstrapText="&gt;" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/courier_history_txtCounter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_weight="7.4"
+            android:gravity="right"
+            android:text="Data count"
+            android:textColor="#333b3e"
+            android:textSize="15sp"
+            app:customFont="RobotoMedium.ttf" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/courier_history_recycleview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courier_history_rl_tool" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/courier_history_recycleviewinv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courier_history_rl_tool" />
+
+    <ImageView
+        android:id="@+id/courier_history_imgnotfound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/notfound"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+        android:id="@+id/courier_history_progressBar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:mlpb_arrow_height="5dp"
+        app:mlpb_arrow_width="10dp"
+        app:mlpb_enable_circle_background="true"
+        app:mlpb_progress_color="@color/colorToolbar"
+        app:mlpb_show_arrow="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

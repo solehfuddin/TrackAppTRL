@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.LocalDb.Db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -66,6 +67,7 @@ public class AddFrameSpHelper {
         }
     }
 
+    @SuppressLint("Range")
     public List<ModelFrameSp> getAllFrameSp() {
         List<ModelFrameSp> arrayList = new ArrayList<>();
         Cursor cursor = database.query(DATABASE_TABLE, null,
@@ -102,6 +104,7 @@ public class AddFrameSpHelper {
         return arrayList;
     }
 
+    @SuppressLint("Range")
     public ModelFrameSp getAddFrameSp(int id)
     {
         Cursor cursor = null;

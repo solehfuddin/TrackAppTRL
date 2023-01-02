@@ -155,7 +155,21 @@
                             android:layout_height="34dp"
                             android:textSize="12sp"
                             android:focusable="true"
-                            android:hint="Masukkan kode barcode"
+                            android:hint="Pilih Frame"
+                            android:visibility="gone"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="5dp"/>
+
+                        <TextView
+                            android:id="@+id/form_spframe_txtTitleframe"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.98"
+                            android:layout_height="30dp"
+                            android:textSize="14sp"
+                            android:focusable="true"
+                            android:hint="Silahkan pilih frame"
+                            android:gravity="center|start"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="5dp"/>

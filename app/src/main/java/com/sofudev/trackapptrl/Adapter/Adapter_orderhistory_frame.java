@@ -86,7 +86,7 @@ public class Adapter_orderhistory_frame extends RecyclerView.Adapter<Adapter_ord
             int pos = getAdapterPosition();
 
             itemClick.onItemClick(view, this.getLayoutPosition(), itemOrder.get(pos).getNomorOrder(),
-                    itemOrder.get(pos).getStatusOrder(), itemOrder.get(pos).getPaymentType());
+                    itemOrder.get(pos).getStatusOrder(), itemOrder.get(pos).getNamaPasien(), itemOrder.get(pos).getPaymentType());
         }
     }
 }

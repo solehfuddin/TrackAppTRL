@@ -94,6 +94,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
@@ -297,6 +299,60 @@ public class FormOrderLensActivity extends AppCompatActivity {
         setAutoDecimal(txt_addr);
         setAutoDecimal(txt_addl);
 
+        txt_sphr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                   txt_sphr.setText(handleDecimal(txt_sphr.getText().toString()));
+                }
+            }
+        });
+
+        txt_sphl.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    txt_sphl.setText(handleDecimal(txt_sphl.getText().toString()));
+                }
+            }
+        });
+
+        txt_cylr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    txt_cylr.setText(handleDecimal(txt_cylr.getText().toString()));
+                }
+            }
+        });
+
+        txt_cyll.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    txt_cyll.setText(handleDecimal(txt_cyll.getText().toString()));
+                }
+            }
+        });
+
+        txt_addr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    txt_addr.setText(handleDecimal(txt_addr.getText().toString()));
+                }
+            }
+        });
+
+        txt_addl.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    txt_addl.setText(handleDecimal(txt_addl.getText().toString()));
+                }
+            }
+        });
+
         txt_orderNumber.setEnabled(false);
         txt_patientName.requestFocus();
 
@@ -331,8 +387,24 @@ public class FormOrderLensActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!data_corridor.isEmpty())
                 {
-                    //Toasty.info(getApplicationContext(), data_corridor.get(position), Toast.LENGTH_SHORT, true).show();
-                    corridor = data_corridor.get(position);
+//                    String corr = "";
+//                    corridor = data_corridor.get(position);
+
+//                    Pattern p = Pattern.compile("\\d+");
+//                    Matcher m = p.matcher(data_corridor.get(position));
+//                    while (m.find())
+//                    {
+//                       corr = m.group();
+//                    }
+//
+//                    corridor = corr.trim();
+
+                    corridor = data_corridor.get(position)
+                            .replace("(Short)", "")
+                            .replace("(Regular)", "")
+                            .replace("(Long)", "").trim();
+
+                    Log.d(FormOrderLensActivity.class.getSimpleName(), "Corridor : " + corridor);
                 }
                 else
                 {
@@ -699,16 +771,59 @@ public class FormOrderLensActivity extends AppCompatActivity {
         todayDate= sdf3.format(calendar.getTime());
     }
 
+    private String handleDecimal(String text)
+    {
+        if (text.length() > 0)
+        {
+            if (text.contains(","))
+            {
+                return text.replace(',', '.');
+            }
+
+            if (!text.contains("."))
+            {
+                double tmp =  Integer.parseInt(text);
+                tmp = tmp / 100;
+
+                return String.valueOf(tmp);
+            }
+        }
+
+        return text;
+    }
+
     private void setAutoDecimal(final BootstrapEditText editText)
     {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().indexOf("-") == 0)
+                {
+                    if (s.toString().indexOf(".") == 2)
+                    {
+                        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+                    }
+                    else
+                    {
+                        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                    }
+                }
+                else if (s.toString().indexOf(".") == 1)
+                {
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                }
+                else if (s.toString().indexOf(".") == 2)
+                {
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+                }
+                else
+                {
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+                }
             }
 
             @Override
@@ -717,43 +832,92 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                 Selection.setSelection(editText.getText(), editText.length());
 
-                if (s.toString().matches("[0-9]"))
-                {
-                    editText.setText(delimit);
-                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
-                }
-                else if (s.toString().matches("^-?[0-9]"))
-                {
-                    editText.setText(delimit);
-                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
-                }
+//                if (s.toString().matches("[0-9]"))
+//                {
+////                    editText.setText(delimit);
+////                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+//                    if (s.toString().indexOf(".") == 1)
+//                    {
+//                        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+//                    }
+//                    else
+//                    {
+//                        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+//                    }
+////                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+//                }
+//                else if (s.toString().matches("^-?[0-9]"))
+//                {
+////                    editText.setText(delimit);
+////                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+//                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+//                }
 
-                if (s.toString().length() == 3)
-                {
-                    if (s.toString().charAt(2) == '0' || s.toString().charAt(2) == '5')
-                    {
-                        String addZ = s.toString() + "0";
-                        editText.setText(addZ);
-                    }
-                    else if (s.toString().charAt(2) == '2' || s.toString().charAt(2) == '7')
-                    {
-                        String addF = s.toString() + "5";
-                        editText.setText(addF);
-                    }
-                }
-                else if (s.toString().length() == 4)
+                if (s.toString().length() > 0)
                 {
                     if (s.charAt(0) == '-')
                     {
-                        if (s.toString().charAt(3) == '0' || s.toString().charAt(3) == '5')
-                        {
-                            String addZ = s.toString() + "0";
-                            editText.setText(addZ);
+                        if (s.toString().length() == 4){
+                            if (s.charAt(2) == '.')
+                            {
+                                if (s.toString().charAt(3) == '0' || s.toString().charAt(3) == '5')
+                                {
+                                    String addZ = s.toString() + "0";
+                                    editText.setText(addZ);
+                                }
+                                else if (s.toString().charAt(3) == '2' || s.toString().charAt(3) == '7')
+                                {
+                                    String addF = s.toString() + "5";
+                                    editText.setText(addF);
+                                }
+                            }
                         }
-                        else if (s.toString().charAt(3) == '2' || s.toString().charAt(3) == '7')
-                        {
-                            String addF = s.toString() + "5";
-                            editText.setText(addF);
+                        else if (s.toString().length() == 5) {
+                            if (s.charAt(3) == '.')
+                            {
+                                if (s.toString().charAt(4) == '0' || s.toString().charAt(4) == '5')
+                                {
+                                    String addZ = s.toString() + "0";
+                                    editText.setText(addZ);
+                                }
+                                else if (s.toString().charAt(4) == '2' || s.toString().charAt(4) == '7')
+                                {
+                                    String addF = s.toString() + "5";
+                                    editText.setText(addF);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (s.toString().length() == 3){
+                            if (s.charAt(1) == '.')
+                            {
+                                if (s.toString().charAt(2) == '0' || s.toString().charAt(2) == '5')
+                                {
+                                    String addZ = s.toString() + "0";
+                                    editText.setText(addZ);
+                                }
+                                else if (s.toString().charAt(2) == '2' || s.toString().charAt(2) == '7')
+                                {
+                                    String addF = s.toString() + "5";
+                                    editText.setText(addF);
+                                }
+                            }
+                        }
+                        else if (s.toString().length() == 4) {
+                            if (s.charAt(2) == '.') {
+                                if (s.toString().charAt(3) == '0' || s.toString().charAt(3) == '5')
+                                {
+                                    String addZ = s.toString() + "0";
+                                    editText.setText(addZ);
+                                }
+                                else if (s.toString().charAt(3) == '2' || s.toString().charAt(3) == '7')
+                                {
+                                    String addF = s.toString() + "5";
+                                    editText.setText(addF);
+                                }
+                            }
                         }
                     }
                 }
@@ -792,6 +956,13 @@ public class FormOrderLensActivity extends AppCompatActivity {
                 if (koridor.equals("Select Corridor"))
                 {
                     koridor = "";
+                }
+                else
+                {
+                    koridor = spin_corridor.getSelectedItem().toString()
+                            .replace("(Short)", "")
+                            .replace("(Regular)", "")
+                            .replace("(Long)", "").trim();
                 }
 
                 String frameType = spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString();
@@ -3716,6 +3887,13 @@ public class FormOrderLensActivity extends AppCompatActivity {
             {
                 koridor = "";
             }
+            else
+            {
+                koridor = spin_corridor.getSelectedItem().toString()
+                        .replace("(Short)", "")
+                        .replace("(Regular)", "")
+                        .replace("(Long)", "").trim();
+            }
 
             if (!sphr.isEmpty() | !addr.isEmpty())
             {
@@ -5846,20 +6024,23 @@ public class FormOrderLensActivity extends AppCompatActivity {
     {
         Config config = new Config();
         String URL = config.Ip_address + config.orderlens_get_corridorinfo;
+        String URLALIAS = config.Ip_address + config.orderlens_get_corridorinfoAlias;
         mCrypt = new MCrypt();
 
         data_corridor.clear();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLALIAS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 String info1 = "id_lensa";
                 String info2 = "corridor";
                 String info3 = "invalid";
+                String info4 = "alias";
 
                 try {
                     String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
                     String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
                     String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                    String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
 
                     try {
                         JSONArray jsonArray = new JSONArray(response);
@@ -5871,6 +6052,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             String data = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                            String alias = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
 
                             boolean checkwhitespace = data.matches("^\\s*$");
 
@@ -5883,7 +6065,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                 spin_corridor.setEnabled(false);
                             }
 
-                            data_corridor.add(data);
+                            data_corridor.add(data + " (" + alias + ")");
+//                            data_corridor.add(data);
                         }
 
                         spin_corridor.setAdapter(new ArrayAdapter<>(FormOrderLensActivity.this, R.layout.spin_framemodel_item, data_corridor));
@@ -6545,6 +6728,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     powerR      = "SPH " + itemSphR + " CYL " + itemCylR + " AXS " + itemAxsR + " ADD " + itemAddR;
                     itemQtyR    = "1";
 
+                    Log.d(FormOrderLensActivity.class.getSimpleName(), "Item Id R : " + itemIdR);
 
                     getItemPriceR(itemIdR);
                     getStbStockItemR(itemIdR);
@@ -6610,6 +6794,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     }
                     powerL      = "SPH " + itemSphL + " CYL " + itemCylL + " AXS " + itemAxsL + " ADD " + itemAddL;
                     itemQtyL    = "1";
+
+                    Log.d(FormOrderLensActivity.class.getSimpleName(), "Item Id L : " + itemIdL);
 
                     getItemPriceL(itemIdL);
                     getStbStockItemL(itemIdL);
@@ -6945,6 +7131,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
 
                     itemTotalPriceR = Integer.parseInt(itemQtyR) * itemPriceR;
 
+                    Log.d(FormOrderLensActivity.class.getSimpleName(), "Price R : " + itemPriceR);
+
                     //Toasty.info(getApplicationContext(), "Lens R Price = Rp" + itemPriceR.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -6985,6 +7173,8 @@ public class FormOrderLensActivity extends AppCompatActivity {
                     divName    = jsonObject.getString("div_name");
 
                     itemTotalPriceL = Integer.parseInt(itemQtyL) * itemPriceL;
+
+                    Log.d(FormOrderLensActivity.class.getSimpleName(), "Price L : " + itemPriceL);
 
                     //Toasty.info(getApplicationContext(), "Lens L Price = Rp" + itemPriceL.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {

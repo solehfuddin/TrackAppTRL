@@ -1,7 +1,15 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_sp_history {
-    private String tipesp, dateout, status, approve, reject, durationunit;
+    private String tipesp, dateout, status, approve, reject, durationunit, approvalName;
+
+    public String getApprovalName() {
+        return approvalName;
+    }
+
+    public void setApprovalName(String approvalName) {
+        this.approvalName = approvalName;
+    }
 
     public String getTipesp() {
         return tipesp;

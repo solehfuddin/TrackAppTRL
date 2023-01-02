@@ -35,10 +35,13 @@ import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.DateFormat;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
+import com.sofudev.trackapptrl.Form.CourierHistoryActivity;
+import com.sofudev.trackapptrl.Form.CourierTaskActivity;
 import com.sofudev.trackapptrl.Form.EinvoiceActivity;
 import com.sofudev.trackapptrl.Form.EstatementActivity;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormBatchOrderActivity;
+import com.sofudev.trackapptrl.Form.FormCourierTrackingActivity;
 import com.sofudev.trackapptrl.Form.FormDeliveryTrackingActivity;
 import com.sofudev.trackapptrl.Form.FormFilterOpticnameActivity;
 import com.sofudev.trackapptrl.Form.FormOrderHistoryActivity;
@@ -48,6 +51,7 @@ import com.sofudev.trackapptrl.Form.FormOrderLensActivity;
 import com.sofudev.trackapptrl.Form.FormOrderSpActivity;
 import com.sofudev.trackapptrl.Form.FormTrackOrderActivity;
 import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
+import com.sofudev.trackapptrl.Form.SpApprovalActivity;
 import com.sofudev.trackapptrl.OnHandActivity;
 import com.sofudev.trackapptrl.R;
 
@@ -88,9 +92,9 @@ public class CategoryFragment extends Fragment {
     RippleView pinBtn1, pinBtn2, pinBtn3, pinBtn4, pinBtn5, pinBtn6, pinBtn7, pinBtn8, pinBtn9, pinBtn0;
     List<Integer> pinnumber = new ArrayList<>();
 
-    String ACTIVITY_TAG, PARTYSITEID, USERNAME, CUSTNAME, STATUS, LEVEL, ADDRESS, CITY, PROVINCE, EMAIL, MOBNUMBER, MEMBERFLAG;
+    String ACTIVITY_TAG, PARTYSITEID, USERNAME, CUSTNAME, STATUS, LEVEL, ADDRESS, CITY, PROVINCE, EMAIL, MOBNUMBER, MEMBERFLAG, SALESAREA, ISMANAGER;
     String sActive, sPast, sic_code;
-    int sTotal;
+    int sTotal, cTotal;
     int customerId = 0;
     Boolean isHide = true;
     Boolean isHavingChild = false;
@@ -366,6 +370,28 @@ public class CategoryFragment extends Fragment {
         }
     }
 
+    private void handlerSpApproval()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (Integer.parseInt(ISMANAGER) == 1)
+            {
+                Intent intent = new Intent(myContext, SpApprovalActivity.class);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("salesarea", SALESAREA);
+                startActivity(intent);
+            }
+            else
+            {
+                showAccessDenied();
+            }
+        }
+    }
+
     private void handlerOnhand()
     {
         if (ACTIVITY_TAG.equals("main"))
@@ -483,6 +509,134 @@ public class CategoryFragment extends Fragment {
                 intent.putExtra("activetitle", sActive);
                 intent.putExtra("pasttitle", sPast);
                 intent.putExtra("totalprocess", String.valueOf(sTotal));
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void handlerCourierPending()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 0)
+                {
+                    if (isHavingChild)
+                    {
+                        showAccessDeniedCustom("Mohon maaf fitur ini hanya dapat digunakan untuk user kurir");
+                    }
+                    else
+                    {
+                        showAccessDeniedCustom("Mohon maaf fitur ini hanya dapat digunakan untuk user kurir");
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(myContext, CourierTaskActivity.class);
+                    intent.putExtra("idparty", PARTYSITEID);
+                    intent.putExtra("username", USERNAME);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, CourierTaskActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void handlerCourierHistory()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 0)
+                {
+                    if (isHavingChild)
+                    {
+                        showAccessDeniedCustom("Mohon maaf fitur ini hanya dapat digunakan untuk user kurir");
+                    }
+                    else
+                    {
+                        showAccessDeniedCustom("Mohon maaf fitur ini hanya dapat digunakan untuk user kurir");
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                    intent.putExtra("idparty", PARTYSITEID);
+                    intent.putExtra("username", USERNAME);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void handlerCouriertrack()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 0)
+                {
+                    if (isHavingChild)
+                    {
+                        Intent intent = new Intent(myContext, FormFilterOpticnameActivity.class);
+                        intent.putExtra("cond", "COURIERTRACK");
+                        intent.putExtra("sales", USERNAME);
+                        intent.putExtra("havingChild", isHavingChild);
+                        intent.putExtra("customerId", customerId);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(myContext, FormCourierTrackingActivity.class);
+                        intent.putExtra("username", USERNAME);
+                        startActivity(intent);
+                    }
+                }
+                else
+                {
+                    //Toast.makeText(getApplicationContext(), "INI ADMINISTRATOR", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(myContext, FormFilterOpticnameActivity.class);
+                    intent.putExtra("cond", "COURIERTRACK");
+                    intent.putExtra("sales", USERNAME);
+                    intent.putExtra("havingChild", isHavingChild);
+                    intent.putExtra("customerId", customerId);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, FormCourierTrackingActivity.class);
+                intent.putExtra("username", USERNAME);
+
+                Log.d(CategoryFragment.class.getSimpleName(), "Username : " + USERNAME);
                 startActivity(intent);
             }
         }
@@ -872,6 +1026,9 @@ public class CategoryFragment extends Fragment {
         LinearLayout linTrackOrder = custom.findViewById(R.id.layout_custom_ordertrack);
         LinearLayout linTrackDelivery = custom.findViewById(R.id.layout_custom_deliverytracking);
         LinearLayout linTrackSp = custom.findViewById(R.id.layout_custom_sptracking);
+        LinearLayout linPendingCourier = custom.findViewById(R.id.layout_custom_couriertask);
+        LinearLayout linHistoryCourier = custom.findViewById(R.id.layout_custom_courierhistory);
+        LinearLayout linTrackCourier = custom.findViewById(R.id.layout_custom_couriertracking);
         LinearLayout linLensTrack = custom.findViewById(R.id.layout_custom_historylens);
         LinearLayout linFrameTrack = custom.findViewById(R.id.layout_custom_historyframe);
         LinearLayout linStockTrack = custom.findViewById(R.id.layout_custom_historystock);
@@ -882,6 +1039,7 @@ public class CategoryFragment extends Fragment {
         LinearLayout linInvoice = custom.findViewById(R.id.layout_custom_featureinvoice);
         LinearLayout linInvoicePaid = custom.findViewById(R.id.layout_custom_featureinvoicepaid);
         LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
+        LinearLayout linSpApproval = custom.findViewById(R.id.layout_custom_spapproval);
 
         final BottomDialog bottomDialog = new BottomDialog.Builder(myContext)
                 .setTitle("More Menu")
@@ -912,6 +1070,14 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        linSpApproval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSpApproval();
+                bottomDialog.dismiss();
+            }
+        });
+
         linTrackOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -924,6 +1090,29 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 handlerDeliverytrack();
+                bottomDialog.dismiss();
+            }
+        });
+
+        linPendingCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierPending();
+                bottomDialog.dismiss();
+            }
+        });
+
+        linHistoryCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierHistory();
+                bottomDialog.dismiss();
+            }
+        });
+        linTrackCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCouriertrack();
                 bottomDialog.dismiss();
             }
         });
@@ -1047,6 +1236,37 @@ public class CategoryFragment extends Fragment {
         dialog.show();
     }
 
+    private void showAccessDeniedCustom(String caption)
+    {
+        BootstrapButton btn_close;
+        UniversalFontTextView txt_title;
+
+        final Dialog dialog = new Dialog(myContext);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_access_denied);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lp);
+
+        txt_title  = dialog.findViewById(R.id.dialog_accessdenied_txtcaption);
+        btn_close  = dialog.findViewById(R.id.dialog_accessdenied_btnsave);
+
+        txt_title.setText(caption);
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private void getUserById(final String id)
     {
         StringRequest request = new StringRequest(Request.Method.POST, URLGETUSERBYID, new Response.Listener<String>() {
@@ -1119,7 +1339,8 @@ public class CategoryFragment extends Fragment {
                         EMAIL = jsonObject.getString("email");
                         MOBNUMBER = jsonObject.getString("mobnumber");
                         MEMBERFLAG = jsonObject.getString("memberflag");
-
+                        SALESAREA  = jsonObject.getString("salesarea");
+                        ISMANAGER  = jsonObject.getString("ismanager");
 //                        countData(CUSTNAME);
                     }
                 } catch (JSONException e) {

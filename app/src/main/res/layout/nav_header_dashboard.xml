@@ -74,6 +74,7 @@
             android:background="@color/colorPrimary" />
 
         <LinearLayout
+            android:id="@+id/navdash_linearSaldo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

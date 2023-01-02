@@ -553,6 +553,7 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
                         String approve= object.getString("approve");
                         String reject = object.getString("reason");
                         String duration = object.getString("duration_unit");
+                        String approvalName = object.getString("approval_name");
 
                         Data_sp_history item = new Data_sp_history();
                         item.setTipesp(tipeSp);
@@ -561,6 +562,7 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
                         item.setApprove(approve);
                         item.setReject(reject);
                         item.setDurationunit(duration);
+                        item.setApprovalName(approvalName);
 
                         lisSp.add(item);
                     }

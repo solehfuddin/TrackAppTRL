@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.Form;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import androidx.annotation.LongDef;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_courier_service;
@@ -35,6 +39,7 @@ import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
+import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.Data.Data_lensorderweb;
 import com.sofudev.trackapptrl.Data.Data_lensorderweb_item;
 import com.sofudev.trackapptrl.Data.Data_paymentmethod;
@@ -45,6 +50,7 @@ import com.sofudev.trackapptrl.LocalDb.Model.ModelOrderHistory;
 import com.sofudev.trackapptrl.R;
 import com.squareup.picasso.Picasso;
 import com.ssomai.android.scalablelayout.ScalableLayout;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,6 +94,9 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     String URL_INSERTLENSITEM  = config.Ip_address + config.orderlens_insert_lensorderitem;
     String URL_UPDATESTOCK     = config.Ip_address + config.orderlens_update_stock;
     String URL_INSERTORDERENTRY= config.Ip_address + config.orderlens_insert_statusentry;
+    String URL_CONFIRMNONPAY   = config.Ip_address + config.orderlens_confirm_entrynonpay;
+    String URL_CONFIRMPAY      = config.Ip_address + config.orderlens_confirm_entrypay;
+    String URL_CHECKSTATUSENTRY= config.Ip_address + config.orderlens_insert_checkstatus;
     String URL_GETSIDERX       = config.Ip_address + config.orderlens_get_sidelensrx;
     String URL_GETSIDESTOCK    = config.Ip_address + config.orderlens_get_sidelensstock;
     String URL_GETMEMBERFLAG   = config.Ip_address + config.memberflag_getStatus;
@@ -100,7 +109,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     ConstraintLayout constraintLayoutOpticName;
     CustomLoading customLoading;
-    Button btnCheckout;
+    Button btnCheckout, btnTest;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceDiscSale ,txtPriceFacet, txtPriceTinting, txtPriceShipping,
                             txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping, txtOpticName;
     ScalableLayout scalableCourier;
@@ -130,7 +139,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             sideR, sideL, itemIdR, itemIdL, discOperandR, discNameR, discOperandL, discNameL, prod_attr_valR, prod_attr_valL,
             divName, categoryLens;
 
-    Integer pr, ptr, pl, ptl, tintp;
+    Integer pr, ptr, pl, ptl, tintp, isHasInsert;
     int flagPayment, discSaleR, discSaleL, headerDp;
     Double disR, disL, valTotalDiscSale;
     Double valDiscSaleR = 0d;
@@ -164,11 +173,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
         customLoading = new CustomLoading(this);
-        customLoading.showLoadingDialog();
 
         scalableCourier =  findViewById(R.id.activity_lenssummary_scalableCourier);
         recyclerCourier =  findViewById(R.id.activity_lenssummary_recyclerCourier);
         btnCheckout     =  findViewById(R.id.activity_lenssummary_btn_checkout);
+        btnTest         =  findViewById(R.id.activity_lenssummary_btn_test);
         txtLensDescr    =  findViewById(R.id.activity_lenssummary_txt_lensdesc);
         txtPriceLens    =  findViewById(R.id.activity_lenssummary_txt_pricelens);
         txtPriceDisc    =  findViewById(R.id.activity_lenssummary_txt_pricedisc);
@@ -183,7 +192,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         txtSide         =  findViewById(R.id.activity_lenssummary_txt_side);
         txtShippingMethod =  findViewById(R.id.activity_lenssummary_txt_shippingmethod);
         txtOpticName    =  findViewById(R.id.form_lensorder_txtopticname);
-//        spinShipment    =  findViewById(R.id.activity_lenssummary_spin_shipment);
         imgLensModel    =  findViewById(R.id.activity_lenssummary_img_logo);
         listPayment     =  findViewById(R.id.activity_lenssummary_listview_paymentMethod);
         cardPayment     =  findViewById(R.id.activity_lenssummary_card_payment);
@@ -203,17 +211,12 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         getActiveSale();
         getAllKurir(cityOptic, province);
 
-        //adapterListShipment = new ArrayAdapter(this, R.layout.listview_payment, payment);
-
         txtLensDescr.setText(deskripsiLensa);
         txtPriceLens.setText(hargaLensa);
         txtPriceDisc.setText(" - " + diskonLensa);
-//        txtPriceDiscSale.setText(" - " + valTotalDiscSale);
         txtPriceFacet.setText(facetLensa);
         txtPriceTinting.setText(tintingLensa);
         txtItemWeight.setText(itemWeight + " gram");
-
-//        txtPriceTotal.setText("Rp " + totalPrice);
 
         listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -271,45 +274,55 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             }
         });
 
-//        if (opticFlag.equals("0"))
-//        try {
-//            Thread.sleep(1000);
-//
-//            if (flagPayment == 0)
-//            {
-//                scalableCourier.setVisibility(View.GONE);
-//                txtInfoShipping.setText("Belum termasuk ongkos kirim. Kurir dan tarif pengiriman sesuai kebijakan Timur Raya");
-//
-//                shipPrice = "0";
-//                String price = CurencyFormat(shipPrice.toString());
-//                Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipPrice) - valTotalDiscSale;
-//                addTemp = CurencyFormat(addNew.toString());
-//                txtPriceShipping.setText(String.valueOf(price));
-//                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
-//            }
-//            else
-//            {
-//                getAllKurir(cityOptic, province);
-//                scalableCourier.setVisibility(View.VISIBLE);
-//                txtInfoShipping.setVisibility(View.GONE);
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
+        adapterCourierService = new Adapter_courier_service(this, shipmentList, new RecyclerViewOnClickListener() {
+            @Override
+            public void onItemClick(View view, int pos, String id) {
+                shipPrice   = shipmentList.get(pos).getPrice();
+                shipId      = String.valueOf(shipmentList.get(pos).getId());
+                shipCourier = shipmentList.get(pos).getKurir();
+                shipService = shipmentList.get(pos).getService();
+                shipPrice   = shipmentList.get(pos).getPrice();
+
+                String price = CurencyFormat(shipPrice.toString());
+
+                Log.d("Callback Price", "Shipment : " + shipPrice);
+
+                Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
+                addTemp = CurencyFormat(addNew.toString());
+                txtPriceShipping.setText(String.valueOf(price));
+                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+            }
+        });
+
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFinishing())
+                {
+                    customLoading.showLoadingDialog();
+                }
+            }
+        });
 
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Checkout Klik", "Checkout jangan force close");
-                //showLoading();
                 DecimalFormat toDecimal = new DecimalFormat("#.##");
 
-//                if (memberFlag.contentEquals("1"))
+                if (!isFinishing())
+                {
+                    customLoading.showLoadingDialog();
+                }
+
                 if (flagPayment == 1)
                 {
                     Log.d("Checkout Klik", "Order With Payment");
-//                    insertLokalDb();
-//
+
+                    String totalAlla = removeRupiah(txtPriceTotal.getText().toString()).replace(",", ".");
+                    confirmEntryPayment(orderNumber, shipId, shipCourier, cityOptic, province, shipService, shipPrice, totalAlla);
+
                     if (selectedItem.contentEquals("QR Code") || selectedItem.equals("QR Code") || selectedItem.contains("QR Code"))
                     {
                         String paymentType = "internetBanking";
@@ -340,14 +353,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     else if (selectedItem.contentEquals("Loan") || selectedItem.equals("Loan") ||
                             selectedItem.contains("Loan"))
                     {
-//                    createBillingLoan(orderNumber, "loanKS");
                         String paymentType = "loanKS";
                         String grossAmount = removeRupiah(txtPriceTotal.getText().toString());
-//                        grossAmount = grossAmount.replace(",00", "");
                         grossAmount = grossAmount.replace(",", ".");
                         String orderId     = orderNumber;
-
-//                    Toasty.info(getApplicationContext(), "Total amount : " + grossAmount, Toast.LENGTH_SHORT).show();
 
                         postBillingLoan(paymentType, grossAmount, orderId);
                     }
@@ -356,741 +365,584 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     {
                         createBillingDeposit(orderNumber, "deposit");
                     }
-//                    else if (selectedItem.contentEquals("Kreditpro") || selectedItem.equals("Kreditpro") ||
-//                            selectedItem.contains("Kreditpro"))
-//                    {
-////                    Intent intent = new Intent(FormLensSummaryActivity.this, FormPaymentKreditpro.class);
-////                    startActivity(intent);
-//
-//                        createBillingKP(orderNumber, "kreditPro");
-//                    }
-//
-                    dataHeader.setOrderNumber(orderNumber);
-                    dataHeader.setCustomerId(Integer.valueOf(idParty));
-                    dataHeader.setOpticName(opticName);
-                    dataHeader.setOpticAddress(opticAddress);
-                    dataHeader.setOpticCity(cityOptic);
-                    dataHeader.setPatientName(patientName);
-                    dataHeader.setPhoneNumber(phoneNumber);
-                    dataHeader.setNote(note);
-                    dataHeader.setProdDivType(divName);
-                    dataHeader.setIdLensa(lenstype);
-                    dataHeader.setDescription(lensdesc);
-//
-                    String sphr, sphl, cylr, cyll;
-
-                    if (!sphR.isEmpty())
-                    {
-                        if (Double.valueOf(sphR) > 0)
-                        {
-                            sphr = "+" + String.valueOf(sphR);
-                        }
-                        else
-                        {
-                            sphr = String.valueOf(sphR);
-                        }
-                    }
-                    else
-                    {
-                        sphr = "";
-                    }
-
-                    if (!sphL.isEmpty())
-                    {
-                        if (Double.valueOf(sphL) > 0)
-                        {
-                            sphl = "+" + String.valueOf(sphL);
-                        }
-                        else
-                        {
-                            sphl = String.valueOf(sphL);
-                        }
-                    }
-                    else
-                    {
-                        sphl = "";
-                    }
-
-                    if (!cylR.isEmpty())
-                    {
-                        if (Double.valueOf(cylR) > 0)
-                        {
-                            cylr = "+" + String.valueOf(cylR);
-                        }
-                        else
-                        {
-                            cylr = String.valueOf(cylR);
-                        }
-                    }
-                    else
-                    {
-                        cylr = "";
-                    }
-
-                    if (!cylL.isEmpty())
-                    {
-                        if (Double.valueOf(cylL) > 0)
-                        {
-                            cyll = "+" + String.valueOf(cylL);
-                        }
-                        else
-                        {
-                            cyll = String.valueOf(cylL);
-                        }
-                    }
-                    else
-                    {
-                        cyll = "";
-                    }
-
-                    if (corridor != null)
-                    {
-                        if (corridor.equals("None") || corridor.contains("None"))
-                        {
-                            corridor = "";
-                        }
-                    }
-                    else
-                    {
-                        corridor = "";
-                    }
-
-                    if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
-                            || frameModel.equals("-- Model --"))
-                    {
-                        frameModel = "";
-                    }
-
-                    dataHeader.setSphR(sphr);
-                    dataHeader.setSphL(sphl);
-                    dataHeader.setCylR(cylr);
-                    dataHeader.setCylL(cyll);
-                    dataHeader.setAxsR(axsR);
-                    dataHeader.setAxsL(axsL);
-                    dataHeader.setAddR(addR);
-                    dataHeader.setAddL(addL);
-                    dataHeader.setPrisR("-");
-                    dataHeader.setPrisL("-");
-//
-                    dataHeader.setCoatCode(coatCode);
-                    dataHeader.setCoatDesc(coatDesc);
-                    dataHeader.setTintCode(tintCode);
-                    dataHeader.setTintDesc(tintDesc);
-                    dataHeader.setCorridor(corridor);
-                    Log.d("HEADER Corridor : ", dataHeader.getCorridor());
-                    dataHeader.setMpdR(mpdR);
-                    dataHeader.setMpdL(mpdL);
-                    dataHeader.setPv(pv);
-                    dataHeader.setWrap(wrap);
-                    dataHeader.setPanto(panto);
-                    dataHeader.setVd(vd);
-                    dataHeader.setFacetInfo(facetInfo);
-                    dataHeader.setFrameModel(frameModel);
-                    dataHeader.setDbl(dbl);
-                    dataHeader.setHor(hor);
-                    dataHeader.setVer(ver);
-                    dataHeader.setFrameCode(frameCode);
-                    dataHeader.setShippingId(Integer.valueOf(shipId));
-                    dataHeader.setShippingCourier(shipCourier);
-                    dataHeader.setShippingService(shipService);
-                    dataHeader.setShippingCity(cityOptic);
-                    dataHeader.setShippingProvince(province);
-                    dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
-                    dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
-
-                    String totalAlla = removeRupiah(txtPriceTotal.getText().toString()).replace(",", ".");
-//                    String grandtotal = toDecimal.format(totalAlla);
-//                    Log.d("GrandTotal", " = " + grandtotal);
-                    dataHeader.setGrandTotal(totalAlla);
-
-                    dataHeader.setCash_carry("Pending");
-                    dataHeader.setFlash_note(flashsaleNote);
-                    dataHeader.setOrderSp(isSp);
-
-                    dataItemR.setOrderNumber(orderNumber);
-                    dataItemR.setItemId(itemIdR);
-                    dataItemR.setItemCode(itemCodeR);
-                    dataItemR.setDescription(descR);
-                    dataItemR.setRl(sideR);
-                    dataItemR.setQty(Integer.parseInt(qtyR));
-                    dataItemR.setUnitStandardPrice(pr);
-                    dataItemR.setUnitStandardWeight(20);
-                    dataItemR.setDiscountName(discNameR);
-                    dataItemR.setDiscount(Double.valueOf(discOperandR));
-                    dataItemR.setDiscountSale(discSaleR);
-                    dataItemR.setTotalWeight(20);
-                    dataItemR.setTintingPrice(tintp);
-                    dataItemR.setAmount(ptr);
-
-                    dataItemL.setOrderNumber(orderNumber);
-                    dataItemL.setItemId(itemIdL);
-                    dataItemL.setItemCode(itemCodeL);
-                    dataItemL.setDescription(descL);
-                    dataItemL.setRl(sideL);
-                    dataItemL.setQty(Integer.parseInt(qtyL));
-                    dataItemL.setUnitStandardPrice(pl);
-                    dataItemL.setUnitStandardWeight(20);
-                    dataItemL.setDiscountName(discNameL);
-                    dataItemL.setDiscount(Double.valueOf(discOperandL));
-                    dataItemL.setDiscountSale(discSaleL);
-                    dataItemL.setTotalWeight(20);
-                    dataItemL.setTintingPrice(tintp);
-                    dataItemL.setAmount(ptl);
-//
-                    insertLensOrderHeader(dataHeader);
-
-                    if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
-                    {
-                        dataItemR.setQty(2);
-                        int total = ptr * 2;
-                        int totalDiscFlash = dataItemR.getDiscountSale() * 2;
-                        double totalDisc      = dataItemR.getDiscount() * 2;
-                        dataItemR.setDiscount(totalDisc);
-                        dataItemR.setDiscountSale(totalDiscFlash);
-                        dataItemR.setAmount(total);
-                        insertLensOrderItem(dataItemR);
-
-                        if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
-                        {
-                            if (isSp.equals("1"))
-                            {
-                                insertItemDurr(orderNumber, itemIdR, "2");
-                            }
-                            else
-                            {
-                                potongStock(itemIdR, "2");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!itemCodeR.isEmpty())
-                        {
-                            insertLensOrderItem(dataItemR);
-
-                            if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
-                            {
-                                if (isSp.equals("1"))
-                                {
-                                    insertItemDurr(orderNumber, itemIdR, "1");
-                                }
-                                else
-                                {
-                                    potongStock(itemIdR, "1");
-                                }
-                            }
-                        }
-
-                        if (!itemCodeL.isEmpty())
-                        {
-                            insertLensOrderItem(dataItemL);
-
-                            if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
-                            {
-                                if (isSp.equals("1"))
-                                {
-                                    insertItemDurr(orderNumber, itemIdL, "1");
-                                }
-                                else
-                                {
-                                    potongStock(itemIdL, "1");
-                                }
-                            }
-                        }
-                    }
                 }
                 else
                 {
-                    Log.d("Checkout Klik", "Order Non Payment");
-////                    Toasty.info(getApplicationContext(), "Insert non payment", Toast.LENGTH_SHORT).show();
-//
-                    dataHeader.setOrderNumber(orderNumber);
-                    Log.d("HEADER OrderNumber : ", dataHeader.getOrderNumber());
-                    dataHeader.setCustomerId(Integer.valueOf(idParty));
-                    Log.d("HEADER CustomerId : ", String.valueOf(dataHeader.getCustomerId()));
-                    dataHeader.setOpticName(opticName);
-                    Log.d("HEADER OpticName : ", dataHeader.getOpticName());
-                    dataHeader.setOpticAddress(opticAddress);
-                    Log.d("HEADER OpticAddress : ", dataHeader.getOpticAddress());
-                    dataHeader.setOpticCity(cityOptic);
-                    Log.d("HEADER OpticCity : ", dataHeader.getOpticCity());
-                    dataHeader.setPatientName(patientName);
-                    Log.d("HEADER PatientName : ", dataHeader.getPatientName());
-                    dataHeader.setPhoneNumber(phoneNumber);
-                    Log.d("HEADER PhoneNumber : ", dataHeader.getPhoneNumber());
-                    dataHeader.setNote(note);
-                    Log.d("HEADER Note : ", dataHeader.getNote());
-                    dataHeader.setProdDivType(divName);
-                    Log.d("HEADER ProdDiv : ", dataHeader.getProdDivType());
-                    dataHeader.setIdLensa(lenstype);
-                    Log.d("HEADER IdLensa : ", dataHeader.getIdLensa());
-                    dataHeader.setDescription(lensdesc);
-                    Log.d("HEADER Description : ", dataHeader.getDescription());
-//
-                    String sphr, sphl, cylr, cyll;
-
-//                    if (!sphR.isEmpty())
-//                    {
-//                        if (Double.valueOf(sphR) > 0)
-//                        {
-//                            sphr = "+" + String.valueOf(sphR);
-//                        }
-//                        else
-//                        {
-//                            sphr = String.valueOf(sphR);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        sphr = "0";
-//                    }
-
-                    if (sphR != null)
-                    {
-                        sphr = "0";
-                        if (!sphR.isEmpty())
-                        {
-                            if (Double.valueOf(sphR) > 0)
-                            {
-                                sphr = "+" + String.valueOf(sphR);
-                            }
-                            else
-                            {
-                                sphr = String.valueOf(sphR);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        sphr = "0";
-                    }
-
-//                    if (!sphL.isEmpty())
-//                    {
-//                        if (Double.valueOf(sphL) > 0)
-//                        {
-//                            sphl = "+" + String.valueOf(sphL);
-//                        }
-//                        else
-//                        {
-//                            sphl = String.valueOf(sphL);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        sphl = "0";
-//                    }
-
-                    if (sphL != null)
-                    {
-                        sphl = "0";
-                        if (!sphL.isEmpty())
-                        {
-                            if (Double.valueOf(sphL) > 0)
-                            {
-                                sphl = "+" + String.valueOf(sphL);
-                            }
-                            else
-                            {
-                                sphl = String.valueOf(sphL);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        sphl = "0";
-                    }
-
-//                    if (!cylR.isEmpty())
-//                    {
-//                        if (Double.valueOf(cylR) > 0)
-//                        {
-//                            cylr = "+" + String.valueOf(cylR);
-//                        }
-//                        else
-//                        {
-//                            cylr = String.valueOf(cylR);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        cylr = "0";
-//                    }
-
-                    if (cylR != null)
-                    {
-                        cylr = "0";
-                        if (!cylR.isEmpty())
-                        {
-                            if (Double.valueOf(cylR) > 0)
-                            {
-                                cylr = "+" + String.valueOf(cylR);
-                            }
-                            else
-                            {
-                                cylr = String.valueOf(cylR);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        cylr = "0";
-                    }
-
-//                    if (!cylL.isEmpty())
-//                    {
-//                        if (Double.valueOf(cylL) > 0)
-//                        {
-//                            cyll = "+" + String.valueOf(cylL);
-//                        }
-//                        else
-//                        {
-//                            cyll = String.valueOf(cylL);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        cyll = "0";
-//                    }
-                    if (cylL != null)
-                    {
-                        cyll = "0";
-                        if (!cylL.isEmpty())
-                        {
-                            if (Double.valueOf(cylL) > 0)
-                            {
-                                cyll = "+" + String.valueOf(cylL);
-                            }
-                            else
-                            {
-                                cyll = String.valueOf(cylL);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        cyll = "0";
-                    }
-
-//                    if (axsR.isEmpty())
-//                    {
-//                        axsR = "0";
-//                    }
-
-                    if (axsR == null)
-                    {
-                        axsR = "0";
-                    }
-
-//                    if (axsL.isEmpty())
-//                    {
-//                        axsL = "0";
-//                    }
-
-                    if (axsL == null)
-                    {
-                        axsL = "0";
-                    }
-
-//                    if (addR.isEmpty())
-//                    {
-//                        addR = "0";
-//                    }
-
-                    if (addR == null)
-                    {
-                        addR = "0";
-                    }
-
-//                    if (addL.isEmpty())
-//                    {
-//                        addL = "0";
-//                    }
-
-                    if (addL == null)
-                    {
-                        addL = "0";
-                    }
-
-                    if (corridor != null)
-                    {
-                        if (corridor.equals("None") || corridor.contains("None"))
-                        {
-                            corridor = "";
-                        }
-                    }
-                    else
-                    {
-                        corridor = "";
-                    }
-
-
-                    if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
-                            || frameModel.equals("-- Model --"))
-                    {
-                        frameModel = "";
-                    }
-
-                    dataHeader.setSphR(sphr);
-                    Log.d("HEADER SphR : ", dataHeader.getSphR());
-                    dataHeader.setSphL(sphl);
-                    Log.d("HEADER SphL : ", dataHeader.getSphL());
-                    dataHeader.setCylR(cylr);
-                    Log.d("HEADER CylR : ", dataHeader.getCylR());
-                    dataHeader.setCylL(cyll);
-                    Log.d("HEADER CylL : ", dataHeader.getCylL());
-                    dataHeader.setAxsR(axsR);
-                    Log.d("HEADER AxsR : ", dataHeader.getAxsR());
-                    dataHeader.setAxsL(axsL);
-                    Log.d("HEADER AxsL : ", dataHeader.getAxsL());
-                    dataHeader.setAddR(addR);
-                    Log.d("HEADER AddR : ", dataHeader.getAddR());
-                    dataHeader.setAddL(addL);
-                    Log.d("HEADER AddL : ", dataHeader.getAddL());
-                    dataHeader.setPrisR("0");
-                    dataHeader.setPrisL("0");
-
-                    dataHeader.setCoatCode(coatCode);
-                    Log.d("HEADER CoatCode : ", dataHeader.getCoatCode());
-                    dataHeader.setCoatDesc(coatDesc);
-                    Log.d("HEADER CoatDesc : ", dataHeader.getCoatDesc());
-                    dataHeader.setTintCode(tintCode);
-                    Log.d("HEADER TintCode : ", dataHeader.getTintCode());
-                    dataHeader.setTintDesc(tintDesc);
-                    Log.d("HEADER TintDesc : ", dataHeader.getTintDesc());
-                    dataHeader.setCorridor(corridor);
-                    Log.d("HEADER Corridor : ", dataHeader.getCorridor());
-                    dataHeader.setMpdR(mpdR);
-                    Log.d("HEADER MpdR : ", dataHeader.getMpdR());
-                    dataHeader.setMpdL(mpdL);
-                    Log.d("HEADER MpdL : ", dataHeader.getMpdL());
-                    dataHeader.setPv(pv);
-                    Log.d("HEADER Pv : ", dataHeader.getPv());
-                    dataHeader.setWrap(wrap);
-                    Log.d("HEADER Wrap : ", dataHeader.getWrap());
-                    dataHeader.setPanto(panto);
-                    Log.d("HEADER Panto : ", dataHeader.getPanto());
-                    dataHeader.setVd(vd);
-                    Log.d("HEADER Vertex : ", dataHeader.getVd());
-                    dataHeader.setFacetInfo(facetInfo);
-                    Log.d("HEADER FacetInfo : ", dataHeader.getFacetInfo());
-                    dataHeader.setFrameModel(frameModel);
-                    Log.d("HEADER FrameModel : ", dataHeader.getFrameModel());
-                    dataHeader.setDbl(dbl);
-                    Log.d("HEADER Dbl : ", dataHeader.getDbl());
-                    dataHeader.setHor(hor);
-                    Log.d("HEADER hor : ", dataHeader.getHor());
-                    dataHeader.setVer(ver);
-                    Log.d("HEADER ver : ", dataHeader.getVer());
-                    dataHeader.setFrameCode(frameCode);
-                    Log.d("HEADER FrameCode : ", dataHeader.getFrameCode());
-                    dataHeader.setShippingId(0);
-                    Log.d("HEADER ShippingId : ", String.valueOf(dataHeader.getShippingId()));
-                    dataHeader.setShippingCourier("");
-                    Log.d("HEADER ShipCourier : ", dataHeader.getShippingCourier());
-                    dataHeader.setShippingService("");
-                    Log.d("HEADER ShipService : ", dataHeader.getShippingService());
-                    dataHeader.setShippingCity(cityOptic);
-                    Log.d("HEADER ShipCity : ", dataHeader.getShippingCity());
-                    dataHeader.setShippingProvince(province);
-                    Log.d("HEADER ShipProv : ", dataHeader.getShippingProvince());
-                    dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
-                    Log.d("HEADER ShipPrice : ", String.valueOf(dataHeader.getShippingPrice()));
-                    dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
-                    Log.d("HEADER FacetPrice : ", String.valueOf(dataHeader.getFacetPrice()));
-
-                    String totalAllb = removeRupiah(txtPriceTotal.getText().toString()).replace(",", ".");
-//                    double totalAllb = Double.valueOf(removeRupiah());
-//                    String grandtotal = toDecimal.format(val);
-                    dataHeader.setGrandTotal(totalAllb);
-
-                    Log.d("HEADER GrantTotal : ", String.valueOf(dataHeader.getGrandTotal()));
-                    dataHeader.setCash_carry("Non Payment Method");
-                    Log.d("HEADER CashCarry : ", dataHeader.getCash_carry());
-                    dataHeader.setFlash_note(flashsaleNote);
-                    if (dataHeader.getFlash_note() != null)
-                    {
-                        Log.d("HEADER FlashNote : ", dataHeader.getFlash_note());
-                    }
-                    dataHeader.setOrderSp(isSp);
-
-                    dataItemR.setOrderNumber(orderNumber);
-                    Log.d("ITEM OrderNumber R : ", dataItemR.getOrderNumber());
-                    dataItemR.setItemId(itemIdR);
-                    Log.d("ITEM ItemId R : ", dataItemR.getItemId());
-                    dataItemR.setItemCode(itemCodeR);
-                    Log.d("ITEM ItemCode R : ", dataItemR.getItemCode());
-                    dataItemR.setDescription(descR);
-                    Log.d("ITEM Descr R : ", dataItemR.getDescription());
-                    if (sideR == null)
-                    {
-                        sideR = "";
-                    }
-                    dataItemR.setRl(sideR);
-                    Log.d("ITEM Side R : ", dataItemR.getRl());
-                    dataItemR.setQty(Integer.parseInt(qtyR));
-                    Log.d("ITEM Qty R : ", String.valueOf(dataItemR.getQty()));
-                    dataItemR.setUnitStandardPrice(pr);
-                    Log.d("ITEM Price R : ", String.valueOf(dataItemR.getUnitStandardPrice()));
-                    dataItemR.setUnitStandardWeight(20);
-                    Log.d("ITEM Weight R : ", String.valueOf(dataItemR.getUnitStandardWeight()));
-                    dataItemR.setDiscountName(discNameR);
-//                    Log.d("ITEM DiscName R : ", dataItemR.getDiscountName());
-                    dataItemR.setDiscount(Double.parseDouble(discOperandR));
-//                    Log.d("ITEM Disc R : ", String.valueOf(dataItemR.getDiscount()));
-                    dataItemR.setDiscountSale(discSaleR);
-//                    Log.d("ITEM DiscSale R :", String.valueOf(dataItemR.getDiscountSale()));
-                    dataItemR.setTotalWeight(20);
-                    Log.d("ITEM TotalWeight R : ", String.valueOf(dataItemR.getTotalWeight()));
-                    dataItemR.setTintingPrice(tintp);
-//                    Log.d("ITEM Tinting R : ", String.valueOf(dataItemR.getTintingPrice()));
-                    dataItemR.setAmount(ptr);
-//                    Log.d("ITEM Amount R : ", String.valueOf(dataItemR.getAmount()));
-
-                    dataItemL.setOrderNumber(orderNumber);
-                    Log.d("ITEM OrderNumber L : ", dataItemL.getOrderNumber());
-                    dataItemL.setItemId(itemIdL);
-                    Log.d("ITEM ItemId L : ", dataItemL.getItemId());
-                    dataItemL.setItemCode(itemCodeL);
-                    Log.d("ITEM ItemCode L : ", dataItemL.getItemCode());
-                    dataItemL.setDescription(descL);
-                    Log.d("ITEM Descr L : ", dataItemL.getDescription());
-                    if (sideL == null)
-                    {
-                        sideL = "";
-                    }
-                    dataItemL.setRl(sideL);
-                    Log.d("ITEM Side L : ", dataItemL.getRl());
-                    dataItemL.setQty(Integer.parseInt(qtyL));
-                    Log.d("ITEM Qty L : ", String.valueOf(dataItemL.getQty()));
-                    dataItemL.setUnitStandardPrice(pl);
-                    Log.d("ITEM Price L : ", String.valueOf(dataItemL.getUnitStandardPrice()));
-                    dataItemL.setUnitStandardWeight(20);
-                    Log.d("ITEM Weigh L : ", String.valueOf(dataItemL.getUnitStandardWeight()));
-                    dataItemL.setDiscountName(discNameL);
-//                    Log.d("ITEM DiscName L : ", dataItemL.getDiscountName());
-                    dataItemL.setDiscount(Double.parseDouble(discOperandL));
-//                    Log.d("ITEM Disc L : ", String.valueOf(dataItemL.getDiscount()));
-                    dataItemL.setDiscountSale(discSaleL);
-//                    Log.d("ITEM DiscSale L :", String.valueOf(dataItemL.getDiscountSale()));
-                    dataItemL.setTotalWeight(20);
-                    Log.d("ITEM TotalWeight L : ", String.valueOf(dataItemL.getTotalWeight()));
-                    dataItemL.setTintingPrice(tintp);
-//                    Log.d("ITEM Tinting L : ", String.valueOf(dataItemL.getTintingPrice()));
-                    dataItemL.setAmount(ptl);
-//                    Log.d("ITEM Amount L : ", String.valueOf(dataItemL.getAmount()));
-
-                    insertLensOrderHeader(dataHeader);
-
-                    if (isSp.equals("1"))
-                    {
-                        insertSpHeader(dataSpHeader);
-                        insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-
-                        Intent intent = new Intent("finishLs");
-                        sendBroadcast(intent);
-                        finish();
-                    }
-
-                    if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
-                    {
-                        dataItemR.setQty(2);
-                        int total = ptr * 2;
-                        int totalDiscFlash = dataItemR.getDiscountSale() * 2;
-                        double totalDisc      = dataItemR.getDiscount() * 2;
-                        dataItemR.setDiscount(totalDisc);
-                        dataItemR.setDiscountSale(totalDiscFlash);
-                        dataItemR.setAmount(total);
-                        insertLensOrderItem(dataItemR);
-                    }
-                    else
-                    {
-                        if (!itemCodeR.isEmpty())
-                        {
-                            insertLensOrderItem(dataItemR);
-                        }
-
-                        if (!itemCodeL.isEmpty())
-                        {
-                            insertLensOrderItem(dataItemL);
-                        }
-                    }
-
-                    insertStatusEntry(orderNumber);
-
+                    confirmEntryNonPayment(orderNumber);
                 }
-
-//                loading.dismiss();
-                customLoading.dismissLoadingDialog();
             }
         });
-
-        adapterCourierService = new Adapter_courier_service(this, shipmentList, new RecyclerViewOnClickListener() {
-            @Override
-            public void onItemClick(View view, int pos, String id) {
-                shipPrice   = shipmentList.get(pos).getPrice();
-                shipId      = String.valueOf(shipmentList.get(pos).getId());
-                shipCourier = shipmentList.get(pos).getKurir();
-                shipService = shipmentList.get(pos).getService();
-                shipPrice   = shipmentList.get(pos).getPrice();
-
-                String price = CurencyFormat(shipPrice.toString());
-
-                Log.d("Callback Price", "Shipment : " + shipPrice);
-
-                Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
-                addTemp = CurencyFormat(addNew.toString());
-                txtPriceShipping.setText(String.valueOf(price));
-                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
-
-//                totalAllPrice = (totalPrice - totalDisc) + Integer.valueOf(shipmentPrice);
-//                txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(totalAllPrice)));
-            }
-        });
-
-//        spinShipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String shipmentPrice;
-//
-//                if (!shipmentList.isEmpty())
-//                {
-//                    shipId = String.valueOf(shipmentList.get(position).getId());
-//                    shipmentPrice = shipmentList.get(position).getPrice();
-//                    shipPrice = shipmentList.get(position).getPrice();
-//                    shipCourier = shipmentList.get(position).getKurir();
-//                    shippingMethod= "Tarif Pengiriman " + shipmentList.get(position).getKurir();
-//                    txtPriceShipping.setText(CurencyFormat(shipmentPrice));
-//                }
-//                else
-//                {
-//                    shipId = "0";
-//                    shipPrice = "0";
-//                    shipCourier = "";
-//                    shipmentPrice = "0,00";
-//                    shippingMethod= "Gratis Tarif Pengiriman";
-//                    txtPriceShipping.setText(shipmentPrice);
-//                }
-//
-//                Float addNew = Float.parseFloat(tempTotal) + Float.parseFloat(shipmentPrice);
-//                addTemp = CurencyFormat(addNew.toString());
-//                txtPriceTotal.setText("Rp " + addTemp);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-//        loading.dismiss();
-        customLoading.dismissLoadingDialog();
     }
 
 //    @Override
 //    public void onBackPressed() {
 ////        super.onBackPressed();
 //    }
+
+    private void handleEntryPayment()
+    {
+        dataHeader.setOrderNumber(orderNumber);
+        dataHeader.setCustomerId(Integer.valueOf(idParty));
+        dataHeader.setOpticName(opticName);
+        dataHeader.setOpticAddress(opticAddress);
+        dataHeader.setOpticCity(cityOptic);
+        dataHeader.setPatientName(patientName);
+        dataHeader.setPhoneNumber(phoneNumber);
+        dataHeader.setNote(note);
+        dataHeader.setProdDivType(divName);
+        dataHeader.setIdLensa(lenstype);
+        dataHeader.setDescription(lensdesc);
+//
+        String sphr, sphl, cylr, cyll;
+
+        if (!sphR.isEmpty())
+        {
+            if (Double.valueOf(sphR) > 0)
+            {
+                sphr = "+" + String.valueOf(sphR);
+            }
+            else
+            {
+                sphr = String.valueOf(sphR);
+            }
+        }
+        else
+        {
+            sphr = "";
+        }
+
+        if (!sphL.isEmpty())
+        {
+            if (Double.valueOf(sphL) > 0)
+            {
+                sphl = "+" + String.valueOf(sphL);
+            }
+            else
+            {
+                sphl = String.valueOf(sphL);
+            }
+        }
+        else
+        {
+            sphl = "";
+        }
+
+        if (!cylR.isEmpty())
+        {
+            if (Double.valueOf(cylR) > 0)
+            {
+                cylr = "+" + String.valueOf(cylR);
+            }
+            else
+            {
+                cylr = String.valueOf(cylR);
+            }
+        }
+        else
+        {
+            cylr = "";
+        }
+
+        if (!cylL.isEmpty())
+        {
+            if (Double.valueOf(cylL) > 0)
+            {
+                cyll = "+" + String.valueOf(cylL);
+            }
+            else
+            {
+                cyll = String.valueOf(cylL);
+            }
+        }
+        else
+        {
+            cyll = "";
+        }
+
+        if (corridor != null)
+        {
+            if (corridor.equals("None") || corridor.contains("None"))
+            {
+                corridor = "";
+            }
+        }
+        else
+        {
+            corridor = "";
+        }
+
+        if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
+                || frameModel.equals("-- Model --"))
+        {
+            frameModel = "";
+        }
+
+        dataHeader.setSphR(sphr);
+        dataHeader.setSphL(sphl);
+        dataHeader.setCylR(cylr);
+        dataHeader.setCylL(cyll);
+        dataHeader.setAxsR(axsR);
+        dataHeader.setAxsL(axsL);
+        dataHeader.setAddR(addR);
+        dataHeader.setAddL(addL);
+        dataHeader.setPrisR("-");
+        dataHeader.setPrisL("-");
+//
+        dataHeader.setCoatCode(coatCode);
+        dataHeader.setCoatDesc(coatDesc);
+        dataHeader.setTintCode(tintCode);
+        dataHeader.setTintDesc(tintDesc);
+        dataHeader.setCorridor(corridor);
+        Log.d("HEADER Corridor : ", dataHeader.getCorridor());
+        dataHeader.setMpdR(mpdR);
+        dataHeader.setMpdL(mpdL);
+        dataHeader.setPv(pv);
+        dataHeader.setWrap(wrap);
+        dataHeader.setPanto(panto);
+        dataHeader.setVd(vd);
+        dataHeader.setFacetInfo(facetInfo);
+        dataHeader.setFrameModel(frameModel);
+        dataHeader.setDbl(dbl);
+        dataHeader.setHor(hor);
+        dataHeader.setVer(ver);
+        dataHeader.setFrameCode(frameCode);
+//        dataHeader.setShippingId(Integer.valueOf(shipId));
+        dataHeader.setShippingId(0);
+//        dataHeader.setShippingCourier(shipCourier);
+        dataHeader.setShippingCourier("");
+        dataHeader.setShippingService(shipService);
+        dataHeader.setShippingCity(cityOptic);
+        dataHeader.setShippingProvince(province);
+        //dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
+        dataHeader.setShippingPrice(0);
+        dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
+
+        String totalAlla = removeRupiah(txtPriceTotal.getText().toString()).replace(",", ".");
+        double totalTmp = Double.parseDouble(totalAlla) - Integer.parseInt(shipPrice);
+//        dataHeader.setGrandTotal(totalAlla);
+        dataHeader.setGrandTotal(String.valueOf(totalTmp));
+
+        dataHeader.setCash_carry("Waiting Payment Method");
+        dataHeader.setFlash_note(flashsaleNote);
+        dataHeader.setOrderSp(isSp);
+
+        dataItemR.setOrderNumber(orderNumber);
+        dataItemR.setItemId(itemIdR);
+        dataItemR.setItemCode(itemCodeR);
+        dataItemR.setDescription(descR);
+        dataItemR.setRl(sideR);
+        dataItemR.setQty(Integer.parseInt(qtyR));
+        dataItemR.setUnitStandardPrice(pr);
+        dataItemR.setUnitStandardWeight(20);
+        dataItemR.setDiscountName(discNameR);
+        dataItemR.setDiscount(Double.valueOf(discOperandR));
+        dataItemR.setDiscountSale(discSaleR);
+        dataItemR.setTotalWeight(20);
+        dataItemR.setTintingPrice(tintp);
+        dataItemR.setAmount(ptr);
+
+        dataItemL.setOrderNumber(orderNumber);
+        dataItemL.setItemId(itemIdL);
+        dataItemL.setItemCode(itemCodeL);
+        dataItemL.setDescription(descL);
+        dataItemL.setRl(sideL);
+        dataItemL.setQty(Integer.parseInt(qtyL));
+        dataItemL.setUnitStandardPrice(pl);
+        dataItemL.setUnitStandardWeight(20);
+        dataItemL.setDiscountName(discNameL);
+        dataItemL.setDiscount(Double.valueOf(discOperandL));
+        dataItemL.setDiscountSale(discSaleL);
+        dataItemL.setTotalWeight(20);
+        dataItemL.setTintingPrice(tintp);
+        dataItemL.setAmount(ptl);
+
+        insertLensOrderHeader(dataHeader);
+
+        if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
+        {
+            dataItemR.setQty(2);
+            int total = ptr * 2;
+            int totalDiscFlash = dataItemR.getDiscountSale() * 2;
+            double totalDisc      = dataItemR.getDiscount() * 2;
+            dataItemR.setDiscount(totalDisc);
+            dataItemR.setDiscountSale(totalDiscFlash);
+            dataItemR.setAmount(total);
+            insertLensOrderItem(dataItemR);
+
+            if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+            {
+                if (isSp.equals("1"))
+                {
+                    insertItemDurr(orderNumber, itemIdR, "2");
+                }
+                else
+                {
+                    potongStock(itemIdR, "2");
+                }
+            }
+        }
+        else
+        {
+            if (!itemCodeR.isEmpty())
+            {
+                insertLensOrderItem(dataItemR);
+
+                if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+                {
+                    if (isSp.equals("1"))
+                    {
+                        insertItemDurr(orderNumber, itemIdR, "1");
+                    }
+                    else
+                    {
+                        potongStock(itemIdR, "1");
+                    }
+                }
+            }
+
+            if (!itemCodeL.isEmpty())
+            {
+                insertLensOrderItem(dataItemL);
+
+                if (categoryLens.contentEquals("S") || categoryLens.contains("S"))
+                {
+                    if (isSp.equals("1"))
+                    {
+                        insertItemDurr(orderNumber, itemIdL, "1");
+                    }
+                    else
+                    {
+                        potongStock(itemIdL, "1");
+                    }
+                }
+            }
+        }
+    }
+
+    private void handleEntryNonPayment()
+    {
+        Log.d("Checkout Klik", "Order Non Payment");
+
+        dataHeader.setOrderNumber(orderNumber);
+        Log.d("HEADER OrderNumber : ", dataHeader.getOrderNumber());
+        dataHeader.setCustomerId(Integer.valueOf(idParty));
+        Log.d("HEADER CustomerId : ", String.valueOf(dataHeader.getCustomerId()));
+        dataHeader.setOpticName(opticName);
+        Log.d("HEADER OpticName : ", dataHeader.getOpticName());
+        dataHeader.setOpticAddress(opticAddress);
+        Log.d("HEADER OpticAddress : ", dataHeader.getOpticAddress());
+        dataHeader.setOpticCity(cityOptic);
+        Log.d("HEADER OpticCity : ", dataHeader.getOpticCity());
+        dataHeader.setPatientName(patientName);
+        Log.d("HEADER PatientName : ", dataHeader.getPatientName());
+        dataHeader.setPhoneNumber(phoneNumber);
+        Log.d("HEADER PhoneNumber : ", dataHeader.getPhoneNumber());
+        dataHeader.setNote(note);
+        Log.d("HEADER Note : ", dataHeader.getNote());
+        dataHeader.setProdDivType(divName);
+        Log.d("HEADER ProdDiv : ", dataHeader.getProdDivType());
+        dataHeader.setIdLensa(lenstype);
+        Log.d("HEADER IdLensa : ", dataHeader.getIdLensa());
+        dataHeader.setDescription(lensdesc);
+        Log.d("HEADER Description : ", dataHeader.getDescription());
+
+        String sphr, sphl, cylr, cyll;
+
+        if (sphR != null)
+        {
+            sphr = "0";
+            if (!sphR.isEmpty())
+            {
+                if (Double.valueOf(sphR) > 0)
+                {
+                    sphr = "+" + String.valueOf(sphR);
+                }
+                else
+                {
+                    sphr = String.valueOf(sphR);
+                }
+            }
+        }
+        else
+        {
+            sphr = "0";
+        }
+
+        if (sphL != null)
+        {
+            sphl = "0";
+            if (!sphL.isEmpty())
+            {
+                if (Double.valueOf(sphL) > 0)
+                {
+                    sphl = "+" + String.valueOf(sphL);
+                }
+                else
+                {
+                    sphl = String.valueOf(sphL);
+                }
+            }
+        }
+        else
+        {
+            sphl = "0";
+        }
+
+        if (cylR != null)
+        {
+            cylr = "0";
+            if (!cylR.isEmpty())
+            {
+                if (Double.valueOf(cylR) > 0)
+                {
+                    cylr = "+" + String.valueOf(cylR);
+                }
+                else
+                {
+                    cylr = String.valueOf(cylR);
+                }
+            }
+        }
+        else
+        {
+            cylr = "0";
+        }
+
+        if (cylL != null)
+        {
+            cyll = "0";
+            if (!cylL.isEmpty())
+            {
+                if (Double.valueOf(cylL) > 0)
+                {
+                    cyll = "+" + String.valueOf(cylL);
+                }
+                else
+                {
+                    cyll = String.valueOf(cylL);
+                }
+            }
+        }
+        else
+        {
+            cyll = "0";
+        }
+
+        if (axsR == null)
+        {
+            axsR = "0";
+        }
+
+
+        if (axsL == null)
+        {
+            axsL = "0";
+        }
+
+        if (addR == null)
+        {
+            addR = "0";
+        }
+
+        if (addL == null)
+        {
+            addL = "0";
+        }
+
+        if (corridor != null)
+        {
+            if (corridor.equals("None") || corridor.contains("None"))
+            {
+                corridor = "";
+            }
+        }
+        else
+        {
+            corridor = "";
+        }
+
+
+        if (frameModel.contentEquals("-- Model --") || frameModel.contains("-- Model --")
+                || frameModel.equals("-- Model --"))
+        {
+            frameModel = "";
+        }
+
+        dataHeader.setSphR(sphr);
+        Log.d("HEADER SphR : ", dataHeader.getSphR());
+        dataHeader.setSphL(sphl);
+        Log.d("HEADER SphL : ", dataHeader.getSphL());
+        dataHeader.setCylR(cylr);
+        Log.d("HEADER CylR : ", dataHeader.getCylR());
+        dataHeader.setCylL(cyll);
+        Log.d("HEADER CylL : ", dataHeader.getCylL());
+        dataHeader.setAxsR(axsR);
+        Log.d("HEADER AxsR : ", dataHeader.getAxsR());
+        dataHeader.setAxsL(axsL);
+        Log.d("HEADER AxsL : ", dataHeader.getAxsL());
+        dataHeader.setAddR(addR);
+        Log.d("HEADER AddR : ", dataHeader.getAddR());
+        dataHeader.setAddL(addL);
+        Log.d("HEADER AddL : ", dataHeader.getAddL());
+        dataHeader.setPrisR("0");
+        dataHeader.setPrisL("0");
+
+        dataHeader.setCoatCode(coatCode);
+        Log.d("HEADER CoatCode : ", dataHeader.getCoatCode());
+        dataHeader.setCoatDesc(coatDesc);
+        Log.d("HEADER CoatDesc : ", dataHeader.getCoatDesc());
+        dataHeader.setTintCode(tintCode);
+        Log.d("HEADER TintCode : ", dataHeader.getTintCode());
+        dataHeader.setTintDesc(tintDesc);
+        Log.d("HEADER TintDesc : ", dataHeader.getTintDesc());
+        dataHeader.setCorridor(corridor);
+        Log.d("HEADER Corridor : ", dataHeader.getCorridor());
+        dataHeader.setMpdR(mpdR);
+        Log.d("HEADER MpdR : ", dataHeader.getMpdR());
+        dataHeader.setMpdL(mpdL);
+        Log.d("HEADER MpdL : ", dataHeader.getMpdL());
+        dataHeader.setPv(pv);
+        Log.d("HEADER Pv : ", dataHeader.getPv());
+        dataHeader.setWrap(wrap);
+        Log.d("HEADER Wrap : ", dataHeader.getWrap());
+        dataHeader.setPanto(panto);
+        Log.d("HEADER Panto : ", dataHeader.getPanto());
+        dataHeader.setVd(vd);
+        Log.d("HEADER Vertex : ", dataHeader.getVd());
+        dataHeader.setFacetInfo(facetInfo);
+        Log.d("HEADER FacetInfo : ", dataHeader.getFacetInfo());
+        dataHeader.setFrameModel(frameModel);
+        Log.d("HEADER FrameModel : ", dataHeader.getFrameModel());
+        dataHeader.setDbl(dbl);
+        Log.d("HEADER Dbl : ", dataHeader.getDbl());
+        dataHeader.setHor(hor);
+        Log.d("HEADER hor : ", dataHeader.getHor());
+        dataHeader.setVer(ver);
+        Log.d("HEADER ver : ", dataHeader.getVer());
+        dataHeader.setFrameCode(frameCode);
+        Log.d("HEADER FrameCode : ", dataHeader.getFrameCode());
+        dataHeader.setShippingId(0);
+        Log.d("HEADER ShippingId : ", String.valueOf(dataHeader.getShippingId()));
+        dataHeader.setShippingCourier("");
+        Log.d("HEADER ShipCourier : ", dataHeader.getShippingCourier());
+        dataHeader.setShippingService("");
+        Log.d("HEADER ShipService : ", dataHeader.getShippingService());
+        dataHeader.setShippingCity(cityOptic);
+        Log.d("HEADER ShipCity : ", dataHeader.getShippingCity());
+        dataHeader.setShippingProvince(province);
+        Log.d("HEADER ShipProv : ", dataHeader.getShippingProvince());
+        dataHeader.setShippingPrice(Integer.valueOf(shipPrice));
+        Log.d("HEADER ShipPrice : ", String.valueOf(dataHeader.getShippingPrice()));
+        dataHeader.setFacetPrice(Integer.valueOf(facetLensa.replace(",00", "").replace(".", "")));
+        Log.d("HEADER FacetPrice : ", String.valueOf(dataHeader.getFacetPrice()));
+
+        String totalAllb = removeRupiah(txtPriceTotal.getText().toString()).replace(",", ".");
+        dataHeader.setGrandTotal(totalAllb);
+
+        Log.d("HEADER GrantTotal : ", String.valueOf(dataHeader.getGrandTotal()));
+        dataHeader.setCash_carry("Waiting Order to Complete");
+        Log.d("HEADER CashCarry : ", dataHeader.getCash_carry());
+        dataHeader.setFlash_note(flashsaleNote);
+        if (dataHeader.getFlash_note() != null)
+        {
+            Log.d("HEADER FlashNote : ", dataHeader.getFlash_note());
+        }
+        dataHeader.setOrderSp(isSp);
+
+        dataItemR.setOrderNumber(orderNumber);
+        Log.d("ITEM OrderNumber R : ", dataItemR.getOrderNumber());
+        dataItemR.setItemId(itemIdR);
+        Log.d("ITEM ItemId R : ", dataItemR.getItemId());
+        dataItemR.setItemCode(itemCodeR);
+        Log.d("ITEM ItemCode R : ", dataItemR.getItemCode());
+        dataItemR.setDescription(descR);
+        Log.d("ITEM Descr R : ", dataItemR.getDescription());
+        if (sideR == null)
+        {
+            sideR = "";
+        }
+        dataItemR.setRl(sideR);
+        Log.d("ITEM Side R : ", dataItemR.getRl());
+        dataItemR.setQty(Integer.parseInt(qtyR));
+        Log.d("ITEM Qty R : ", String.valueOf(dataItemR.getQty()));
+        dataItemR.setUnitStandardPrice(pr);
+        Log.d("ITEM Price R : ", String.valueOf(dataItemR.getUnitStandardPrice()));
+        dataItemR.setUnitStandardWeight(20);
+        Log.d("ITEM Weight R : ", String.valueOf(dataItemR.getUnitStandardWeight()));
+        dataItemR.setDiscountName(discNameR);
+        dataItemR.setDiscount(Double.parseDouble(discOperandR));
+        dataItemR.setDiscountSale(discSaleR);
+        dataItemR.setTotalWeight(20);
+        Log.d("ITEM TotalWeight R : ", String.valueOf(dataItemR.getTotalWeight()));
+        dataItemR.setTintingPrice(tintp);
+        dataItemR.setAmount(ptr);
+
+        dataItemL.setOrderNumber(orderNumber);
+        Log.d("ITEM OrderNumber L : ", dataItemL.getOrderNumber());
+        dataItemL.setItemId(itemIdL);
+        Log.d("ITEM ItemId L : ", dataItemL.getItemId());
+        dataItemL.setItemCode(itemCodeL);
+        Log.d("ITEM ItemCode L : ", dataItemL.getItemCode());
+        dataItemL.setDescription(descL);
+        Log.d("ITEM Descr L : ", dataItemL.getDescription());
+        if (sideL == null)
+        {
+            sideL = "";
+        }
+        dataItemL.setRl(sideL);
+        Log.d("ITEM Side L : ", dataItemL.getRl());
+        dataItemL.setQty(Integer.parseInt(qtyL));
+        Log.d("ITEM Qty L : ", String.valueOf(dataItemL.getQty()));
+        dataItemL.setUnitStandardPrice(pl);
+        Log.d("ITEM Price L : ", String.valueOf(dataItemL.getUnitStandardPrice()));
+        dataItemL.setUnitStandardWeight(20);
+        Log.d("ITEM Weigh L : ", String.valueOf(dataItemL.getUnitStandardWeight()));
+        dataItemL.setDiscountName(discNameL);
+        dataItemL.setDiscount(Double.parseDouble(discOperandL));
+        dataItemL.setDiscountSale(discSaleL);
+        dataItemL.setTotalWeight(20);
+        Log.d("ITEM TotalWeight L : ", String.valueOf(dataItemL.getTotalWeight()));
+        dataItemL.setTintingPrice(tintp);
+        dataItemL.setAmount(ptl);
+
+        insertLensOrderHeader(dataHeader);
+
+        if (isSp.equals("1"))
+        {
+            insertSpHeader(dataSpHeader);
+            insertSP(URL_INSERTSAMTEMP, dataSpHeader);
+
+            Intent intent = new Intent("finishLs");
+            sendBroadcast(intent);
+            finish();
+        }
+
+        if (itemIdR.contentEquals(itemIdL) && itemIdR.contains(itemIdL))
+        {
+            dataItemR.setQty(2);
+            int total = ptr * 2;
+            int totalDiscFlash = dataItemR.getDiscountSale() * 2;
+            double totalDisc      = dataItemR.getDiscount() * 2;
+            dataItemR.setDiscount(totalDisc);
+            dataItemR.setDiscountSale(totalDiscFlash);
+            dataItemR.setAmount(total);
+            insertLensOrderItem(dataItemR);
+        }
+        else
+        {
+            if (!itemCodeR.isEmpty())
+            {
+                insertLensOrderItem(dataItemR);
+            }
+
+            if (!itemCodeL.isEmpty())
+            {
+                insertLensOrderItem(dataItemL);
+            }
+        }
+
+        insertStatusEntry(orderNumber);
+    }
 
     private void disableButton() {
         btnCheckout.setEnabled(false);
@@ -1106,7 +958,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
     private void postBillingQR(final String paymentType, final String grossAmount, final String orderId)
     {
-//        showLoading();
         customLoading.showLoadingDialog();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POSTBILLING, new Response.Listener<String>() {
             @Override
@@ -1136,13 +987,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                     e.printStackTrace();
                     customLoading.dismissLoadingDialog();
                 }
-                //loading.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//                loading.dismiss();
                 customLoading.dismissLoadingDialog();
             }
         }){
@@ -2001,6 +1850,36 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         //Toasty.info(getApplicationContext(), "Hide", Toast.LENGTH_SHORT).show();
     }
 
+    private void showAccessDenied(String msg)
+    {
+        UniversalFontTextView txt_caption;
+        BootstrapButton btn_close;
+
+        final Dialog dialog = new Dialog(FormLensSummaryActivity.this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_access_denied);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lp);
+
+        btn_close  = dialog.findViewById(R.id.dialog_accessdenied_btnsave);
+        txt_caption = dialog.findViewById(R.id.dialog_accessdenied_txtcaption);
+
+        txt_caption.setText(msg);
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     private void gettingPrice()
     {
         Bundle bundle = getIntent().getExtras();
@@ -2019,12 +1898,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             opticLevel= bundle.getString("level");
             isSp      = bundle.getString("isSp");
             salesName = bundle.getString("sales");
+            isHasInsert = bundle.getInt("isHasInsert", 0);
             Log.d("Sales Name summary : ", salesName);
 
             if (isSp.equals("1"))
             {
-//            getSp();
-
                 headerNoSp       = bundle.getString("headerNoSp");
                 headerTipeSp     = bundle.getString("headerTipeSp");
                 headerSales      = bundle.getString("headerSales");
@@ -2293,23 +2171,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             tintingMargin       = bundle.getString("margin_tinting");
             tintingExtraMargin  = bundle.getString("extra_margin_tinting");
 
-            //Toasty.info(getApplicationContext(), flagShipping, Toast.LENGTH_SHORT).show();
-//        if (flagShipping.equals("0") | flagShipping.contentEquals("0") | flagShipping.contains("0"))
-//        {
-//            txtShippingMethod.setVisibility(View.GONE);
-//            spinShipment.setVisibility(View.GONE);
-//            txtPriceShipping.setText("free");
-//            addTemp = totalPrice;
-//        }
-//        else
-//        {
-//            txtShippingMethod.setVisibility(View.VISIBLE);
-//            spinShipment.setVisibility(View.VISIBLE);
-//            txtPriceShipping.setText("0,00");
-//        }
-
-
-
             if (h.equals("2") | h.contentEquals("2") | h.contains("2"))
             {
                 txtSide.setText("RL");
@@ -2351,8 +2212,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             Toasty.info(getApplicationContext(), "Category : " + categoryLens, Toast.LENGTH_SHORT).show();
 
             getLensInformation();
-//        getInfoLensR(itemCodeR);
-//        getInfoLensL(itemCodeL);
 
             if(prod_attr_valR != null)
             {
@@ -2367,12 +2226,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             {
                 discOperandR = "0";
             }
-
-//            if (prod_attr_valR.isEmpty()) {
-//                discOperandR = "0";
-//            } else {
-//                getDiscountItemR(prod_attr_valR, opticUsername);
-//            }
 
             if (prod_attr_valL != null)
             {
@@ -2389,14 +2242,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             {
                 discOperandL = "0";
             }
-
-//            if (prod_attr_valL.isEmpty()) {
-//                discOperandL = "0";
-//            }
-//            else
-//            {
-//                getDiscountItemL(prod_attr_valL, opticUsername);
-//            }
         }
     }
 
@@ -2993,9 +2838,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                     if (object.names().get(0).equals("success"))
                     {
-                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
-
-                        finish();
+                        Log.d("Entry Header", "Success");
+//                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
+//
+//                        finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3080,9 +2926,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                     if (object.names().get(0).equals("success"))
                     {
-                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
-
-                        finish();
+                        Log.d("Entry Item : ", "Success");
+//                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3129,13 +2974,152 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 try {
                     JSONObject object = new JSONObject(response);
 
+                    if (object.names().equals("success"))
+                    {
+                        Log.d("SUCCESS STATUS ENTRY", "success");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void confirmEntryNonPayment(final String orderNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CONFIRMNONPAY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
                     if (object.names().get(0).equals("success"))
                     {
-//                        Toasty.info(getApplicationContext(), "Order has been sent", Toast.LENGTH_SHORT).show();
-//
-//                        finish();
+                        Log.d("Informasi", "success");
+                        customLoading.dismissLoadingDialog();
 
-                        Log.d("SUCCESS STATUS ENTRY", "success");
+                        finish();
+                    }
+                    else
+                    {
+                        Log.d("Informasi", "error");
+                        customLoading.dismissLoadingDialog();
+
+                        showAccessDenied("Gagal menyimpan data, silahkan coba kembali");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void confirmEntryPayment(final String orderNumber, final String shippingId, final String shippingCourier,
+                                     final String shippingCity, final String shippingProvince, final String shippingService,
+                                     final String shippingPrice, final String grandTotal)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CONFIRMPAY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Log.d("Informasi", "success");
+                        customLoading.dismissLoadingDialog();
+
+                        finish();
+                    }
+                    else
+                    {
+                        Log.d("Informasi", "error");
+                        customLoading.dismissLoadingDialog();
+
+                        showAccessDenied("Gagal menyimpan data, silahkan coba kembali");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                hashMap.put("shippingId", shippingId);
+                hashMap.put("shippingCourier", shippingCourier);
+                hashMap.put("shippingCity", shippingCity);
+                hashMap.put("shippingProvince", shippingProvince);
+                hashMap.put("shippingService", shippingService);
+                hashMap.put("shippingPrice", shippingPrice);
+                hashMap.put("grandTotal", grandTotal);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void checkStatusEntry(final String orderNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CHECKSTATUSENTRY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().equals("success"))
+                    {
+                        Log.d("DATA DITEMUKAN", "success");
+                        customLoading.dismissLoadingDialog();
+                    }
+                    else
+                    {
+                        Log.d("DATA TIDAK DITEMUKAN", "error");
+                        customLoading.dismissLoadingDialog();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3356,6 +3340,11 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                             scalableCourier.setVisibility(View.VISIBLE);
                             txtInfoShipping.setVisibility(View.GONE);
+
+                            if (isHasInsert == 0)
+                            {
+                                handleEntryPayment();
+                            }
                         }
                         else
                         {
@@ -3368,7 +3357,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                             txtPriceShipping.setText(String.valueOf(price));
                             txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
 
-
                             cardPayment.setVisibility(View.GONE);
 
                             btnCheckout.setBackgroundColor(getResources().getColor(R.color.colorFirst));
@@ -3377,6 +3365,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                             scalableCourier.setVisibility(View.GONE);
                             txtInfoShipping.setVisibility(View.VISIBLE);
+
+                            handleEntryNonPayment();
                         }
                     }
                 } catch (JSONException e) {

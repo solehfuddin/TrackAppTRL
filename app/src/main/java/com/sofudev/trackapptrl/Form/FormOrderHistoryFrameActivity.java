@@ -106,7 +106,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
 
         adapter_orderhistory_frame = new Adapter_orderhistory_frame(FormOrderHistoryFrameActivity.this, itemHistory, new CustomRecyclerOrderHistoryClick() {
             @Override
-            public void onItemClick(View view, int pos, String id, String status, String paymentType) {
+            public void onItemClick(View view, int pos, String id, String status, String info, String paymentType) {
                 if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending"))
                 {
                     checkPaymentMethod(id);

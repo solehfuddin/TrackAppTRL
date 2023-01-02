@@ -1,61 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bottom_dialog_paysp_cardview"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/bottom_dialog_paysp_cardview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/border_custom"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorHint"
-                android:orientation="horizontal">
-
-                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/lengkapi_data"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    app:customFont="RobotoRegular.ttf" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp">
+                android:layout_height="match_parent"
+                android:background="@drawable/border_custom"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/bottom_dialog_paysp_linearPembayaran"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+                    android:background="@color/colorHint"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/lengkapi_data"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:customFont="RobotoRegular.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
 
                     <LinearLayout
+                        android:id="@+id/bottom_dialog_paysp_linearPembayaran"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight=".345"
+                                android:padding="5dp"
+                                android:text="Pembayaran"
+                                android:textColor="@color/colorContent"
+                                android:textSize="12sp"
+                                app:customFont="UbuntuMedium.ttf" />
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight=".33"
+                                android:padding="5dp"
+                                android:text="Jumlah Bayar / DP"
+                                android:textColor="@color/colorContent"
+                                android:textSize="12sp"
+                                app:customFont="UbuntuMedium.ttf" />
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/bottom_dialog_paysp_txtTitleDiskon"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight=".18"
+                                android:padding="5dp"
+                                android:text="Diskon"
+                                android:textColor="@color/colorContent"
+                                android:textSize="12sp"
+                                app:customFont="UbuntuMedium.ttf" />
+
+                            <Switch
+                                android:id="@+id/bottom_dialog_paysp_checkDiskon"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".14"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1.0">
+
+                            <Spinner
+                                android:id="@+id/bottom_dialog_paysp_txtPembayaran"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".32"
+                                android:layout_centerHorizontal="true"
+                                android:text="-- Pilih --"
+                                android:textAlignment="center"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@color/bootstrap_brand_info" />
+
+                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                android:id="@+id/bottom_dialog_paysp_txtJumlahDp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight=".35"
+                                android:hint="1.000.000"
+                                android:maxLength="14"
+                                android:inputType="numberSigned"
+                                android:padding="5dp"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorHint"
+                                android:textColorHint="@color/colorContent"
+                                app:bootstrapBrand="info"
+                                app:bootstrapSize="md"
+                                app:roundedCorners="true" />
+
+                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                android:id="@+id/bottom_dialog_paysp_txtDiskon"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="3dp"
+                                android:layout_weight=".18"
+                                android:hint="10"
+                                android:inputType="numberDecimal"
+                                android:padding="5dp"
+                                android:maxLength="5"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorHint"
+                                android:textColorHint="@color/colorContent"
+                                app:bootstrapBrand="info"
+                                app:bootstrapSize="md"
+                                app:roundedCorners="true" />
+
+                            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                android:id="@+id/bottom_dialog_paysp_txtPercent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".1"
+                                android:textAlignment="center"
+                                android:paddingLeft="10dp"
+                                android:text="%"
+                                android:textColor="@color/colorContent"
+                                android:textSize="13sp"
+                                app:customFont="UbuntuMedium.ttf" />
+
+                            <com.beardedhen.androidbootstrap.BootstrapEditText
+                                android:id="@+id/bottom_dialog_paysp_txtDiskonValue"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="3dp"
+                                android:layout_weight=".31"
+                                android:hint="1.000.000"
+                                android:inputType="numberDecimal"
+                                android:padding="5dp"
+                                android:maxLength="10"
+                                android:visibility="gone"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorHint"
+                                android:textColorHint="@color/colorContent"
+                                app:bootstrapBrand="info"
+                                app:bootstrapSize="md"
+                                app:roundedCorners="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bottom_dialog_paysp_linearTitleCicilan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
                         android:orientation="horizontal"
                         android:weightSum="1.0">
 
@@ -66,7 +215,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_weight=".4"
                             android:padding="5dp"
-                            android:text="Pembayaran"
+                            android:text="Durasi Cicilan"
                             android:textColor="@color/colorContent"
                             android:textSize="12sp"
                             app:customFont="UbuntuMedium.ttf" />
@@ -76,78 +225,442 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:layout_marginRight="5dp"
-                            android:layout_weight=".35"
+                            android:layout_weight=".6"
                             android:padding="5dp"
-                            android:text="Jumlah Bayar / DP"
-                            android:textColor="@color/colorContent"
-                            android:textSize="12sp"
-                            app:customFont="UbuntuMedium.ttf" />
-
-                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginRight="5dp"
-                            android:layout_weight=".25"
-                            android:padding="5dp"
-                            android:text="Discount"
+                            android:text="Mulai Bayar"
                             android:textColor="@color/colorContent"
                             android:textSize="12sp"
                             app:customFont="UbuntuMedium.ttf" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/bottom_dialog_paysp_linearContentCicilan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal"
                         android:weightSum="1.0">
 
-                        <Spinner
-                            android:id="@+id/bottom_dialog_paysp_txtPembayaran"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".39"
-                            android:layout_centerHorizontal="true"
-                            android:text="-- Pilih --"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="5dp"
-                            android:paddingTop="3dp"
-                            android:paddingBottom="3dp"
-                            android:background="@color/bootstrap_brand_info" />
-
                         <com.beardedhen.androidbootstrap.BootstrapEditText
-                            android:id="@+id/bottom_dialog_paysp_txtJumlahDp"
+                            android:id="@+id/bottom_dialog_paysp_txtCicilan"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="5dp"
-                            android:layout_weight=".35"
-                            android:hint="1.000.000"
+                            android:layout_weight=".13"
+                            android:hint="2"
+                            android:maxLength="2"
+                            android:textAlignment="center"
                             android:inputType="numberSigned"
                             android:padding="5dp"
-                            android:textAlignment="center"
+                            android:visibility="gone"
                             android:textColor="@color/colorHint"
                             android:textColorHint="@color/colorContent"
                             app:bootstrapBrand="info"
                             app:bootstrapSize="md"
                             app:roundedCorners="true" />
 
-                        <com.beardedhen.androidbootstrap.BootstrapEditText
-                            android:id="@+id/bottom_dialog_paysp_txtDiskon"
+                        <Spinner
+                            android:id="@+id/bottom_dialog_paysp_spinCicilan"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_weight=".18"
-                            android:hint="10"
-                            android:inputType="numberDecimal"
-                            android:padding="5dp"
-                            android:maxLength="5"
+                            android:layout_weight=".13"
+                            android:layout_centerHorizontal="true"
+                            android:text="1"
                             android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="10dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:background="@color/bootstrap_brand_info" />
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight=".23"
+                            android:padding="5dp"
+                            android:text="Bulan"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="UbuntuMedium.ttf" />
+
+                        <Spinner
+                            android:id="@+id/bottom_dialog_paysp_spinMulaiCicilan"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".635"
+                            android:layout_centerHorizontal="true"
+                            android:text="-- Pilih Bulan --"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="10dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            android:background="@color/bootstrap_brand_info" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bottom_dialog_paysp_linearTitleNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight=".4"
+                            android:padding="5dp"
+                            android:text="Catatan"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="UbuntuMedium.ttf" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bottom_dialog_paysp_linearContentNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/bottom_dialog_paysp_edtNote"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:inputType="textMultiLine"
+                            android:textColor="@color/colorHint"
+                            app:bootstrapBrand="info"
+                            app:bootstrapSize="md" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/bottom_dialog_paysp_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_paysp_cardview"
+            android:orientation="vertical">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Estimasi Biaya"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                app:customFont="UbuntuMedium.ttf"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/item"
+                    android:textSize="16sp"
+                    app:customFont="MavenPro-Regular.ttf"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/bottom_dialog_paysp_txtitemprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_alignParentEnd="true"
+                    android:maxLines="1"
+                    android:text="@string/rp_0"
+                    android:textSize="16sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/diskon"
+                    android:textSize="16sp"
+                    app:customFont="MavenPro-Regular.ttf"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/bottom_dialog_paysp_txtitemdisc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_alignParentEnd="true"
+                    android:maxLines="1"
+                    android:text="@string/rp_0"
+                    android:textSize="16sp"
+                    app:customFont="MavenPro-Regular.ttf"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="368dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@color/colorContent"
+                tools:ignore="MissingPrefix" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/total"
+                    android:textSize="18sp"
+                    app:customFont="UbuntuMedium.ttf"/>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/bottom_dialog_paysp_txttotalprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_alignParentEnd="true"
+                    android:maxLines="1"
+                    android:text="@string/rp_0"
+                    android:textSize="18sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottom_dialog_paysp_txtInfoShipping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="6dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:visibility="visible"
+                android:textAlignment="center"
+                android:textColor="@color/colorRed"
+                android:text="@string/info_estimasi"
+                android:textSize="14sp"
+                app:customFont="MavenPro-Regular.ttf" />
+        </LinearLayout>
+
+        <!-- Area Order Item -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_paysp_summary">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_ordersp_rippleorderitem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:rv_rippleDuration="150"
+                    app:rv_type="rectangle">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorRed"
+                        android:orientation="horizontal">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="8dp"
+                            android:text="Silahkan upload dokumen"
+                            android:textAlignment="center"
+                            android:textColor="#fff"
+                            android:textSize="16sp"
+                            app:customFont="UbuntuMedium.ttf" />
+                    </LinearLayout>
+
+                </com.andexert.library.RippleView>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/form_ordersp_expandlayoutorderitem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:el_duration="1500"
+                    app:el_expanded="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/bottom_dialog_paysp_imgPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:contentDescription="@string/app_name"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <TextView
+                            android:id="@+id/bottom_dialog_paysp_imglocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <Button
+                            android:id="@+id/bottom_dialog_paysp_btnPicture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:text="Ambil Gambar"
+                            android:background="@color/colorEnd"
+                            android:textColor="@color/white"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textSize="11sp"/>
+
+                    </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Area Digital Signature -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView10">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_ordersp_rippledigitalsign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:rv_rippleDuration="150"
+                    app:rv_type="rectangle">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorHint"
+                        android:orientation="horizontal">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:padding="8dp"
+                            android:text="Persetujuan dokumen"
+                            android:textAlignment="center"
+                            android:textColor="#fff"
+                            android:textSize="16sp"
+                            app:customFont="UbuntuMedium.ttf" />
+                    </LinearLayout>
+
+                </com.andexert.library.RippleView>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/form_ordersp_expandlayoutdigitalsign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:el_duration="1500"
+                    app:el_expanded="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="15dp"
+                            android:text="@string/nama_customer"
+                            android:textColor="@color/colorContent"
+                            android:textSize="12sp"
+                            app:customFont="UbuntuMedium.ttf" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                            android:id="@+id/bottom_dialog_paysp_txtNamaCustomer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:hint="@string/isi_nama_customer"
+                            android:maxLength="14"
+                            android:inputType="textPersonName"
+                            android:padding="5dp"
                             android:textColor="@color/colorHint"
                             android:textColorHint="@color/colorContent"
                             app:bootstrapBrand="info"
@@ -155,289 +668,75 @@
                             app:roundedCorners="true" />
 
                         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight=".05"
-                            android:textAlignment="center"
-                            android:text="%"
-                            android:textColor="@color/colorContent"
-                            android:textSize="13sp"
+                            android:layout_centerInParent="true"
+                            android:text="* Isi paraf digital"
+                            android:layout_margin="15dp"
+                            android:textColor="@color/dot_dark_screen1"
+                            android:textSize="12sp"
                             app:customFont="UbuntuMedium.ttf" />
+
+                        <com.github.gcacace.signaturepad.views.SignaturePad
+                            android:id="@+id/bottom_dialog_paysp_imgdigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:contentDescription="@string/app_name"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/border_custom"
+                            app:penColor="@color/colorContent"
+                            app:penMinWidth="2dp"
+                            app:penMaxWidth="5dp"/>
+
+                        <TextView
+                            android:id="@+id/form_ordersp_txtdigitalsign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"/>
+
+                        <Button
+                            android:id="@+id/bottom_dialog_paysp_btndigitalsign"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:text="Hapus"
+                            android:background="@color/bg_screen1"
+                            android:textColor="@color/white"
+                            android:textAllCaps="false"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textSize="11sp"/>
+
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bottom_dialog_paysp_linearTitleCicilan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_weight=".4"
-                        android:padding="5dp"
-                        android:text="Durasi Cicilan"
-                        android:textColor="@color/colorContent"
-                        android:textSize="12sp"
-                        app:customFont="UbuntuMedium.ttf" />
-
-                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight=".6"
-                        android:padding="5dp"
-                        android:text="Mulai Bayar"
-                        android:textColor="@color/colorContent"
-                        android:textSize="12sp"
-                        app:customFont="UbuntuMedium.ttf" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bottom_dialog_paysp_linearContentCicilan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <com.beardedhen.androidbootstrap.BootstrapEditText
-                        android:id="@+id/bottom_dialog_paysp_txtCicilan"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight=".13"
-                        android:hint="2"
-                        android:maxLength="2"
-                        android:textAlignment="center"
-                        android:inputType="numberSigned"
-                        android:padding="5dp"
-                        android:visibility="gone"
-                        android:textColor="@color/colorHint"
-                        android:textColorHint="@color/colorContent"
-                        app:bootstrapBrand="info"
-                        app:bootstrapSize="md"
-                        app:roundedCorners="true" />
-
-                    <Spinner
-                        android:id="@+id/bottom_dialog_paysp_spinCicilan"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".13"
-                        android:layout_centerHorizontal="true"
-                        android:text="1"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:background="@color/bootstrap_brand_info" />
-
-                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight=".23"
-                        android:padding="5dp"
-                        android:text="Bulan"
-                        android:textColor="@color/colorContent"
-                        android:textSize="12sp"
-                        app:customFont="UbuntuMedium.ttf" />
-
-                    <Spinner
-                        android:id="@+id/bottom_dialog_paysp_spinMulaiCicilan"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".635"
-                        android:layout_centerHorizontal="true"
-                        android:text="-- Pilih Bulan --"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:background="@color/bootstrap_brand_info" />
-                </LinearLayout>
-
+                </net.cachapa.expandablelayout.ExpandableLayout>
             </LinearLayout>
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
-
-    <LinearLayout
-        android:id="@+id/bottom_dialog_paysp_summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/custom_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_paysp_cardview"
-        android:orientation="vertical">
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        <com.andexert.library.RippleView
+            android:id="@+id/bottom_dialog_paysp_btndetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Estimasi Biaya"
-            android:textColor="@color/colorBlack"
-            android:textSize="16sp"
-            app:customFont="UbuntuMedium.ttf"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView11"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp">
+            app:rv_color="@color/colorHint"
+            app:rv_rippleDuration="600"
+            app:rv_type="rectangle">
 
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/item"
-                android:textSize="16sp"
-                app:customFont="MavenPro-Regular.ttf"/>
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/border_custom"
+                android:text="@string/simpan"
+                android:textColor="@color/colorHint" />
+        </com.andexert.library.RippleView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/bottom_dialog_paysp_txtitemprice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:layout_alignParentEnd="true"
-                android:maxLines="1"
-                android:text="@string/rp_0"
-                android:textSize="16sp"
-                app:customFont="MavenPro-Regular.ttf"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/diskon"
-                android:textSize="16sp"
-                app:customFont="MavenPro-Regular.ttf"/>
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/bottom_dialog_paysp_txtitemdisc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:layout_alignParentEnd="true"
-                android:maxLines="1"
-                android:text="@string/rp_0"
-                android:textSize="16sp"
-                app:customFont="MavenPro-Regular.ttf"
-                tools:ignore="RelativeOverlap" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="368dp"
-            android:layout_height="1dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:background="@color/colorContent"
-            tools:ignore="MissingPrefix" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="8dp">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/total"
-                android:textSize="18sp"
-                app:customFont="UbuntuMedium.ttf"/>
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/bottom_dialog_paysp_txttotalprice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:layout_alignParentEnd="true"
-                android:maxLines="1"
-                android:text="@string/rp_0"
-                android:textSize="18sp"
-                app:customFont="UbuntuMedium.ttf"
-                tools:ignore="RelativeOverlap" />
-        </RelativeLayout>
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-            android:id="@+id/bottom_dialog_paysp_txtInfoShipping"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="6dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:visibility="visible"
-            android:textAlignment="center"
-            android:textColor="@color/colorRed"
-            android:text="@string/info_estimasi"
-            android:textSize="14sp"
-            app:customFont="MavenPro-Regular.ttf" />
-    </LinearLayout>
-
-    <com.andexert.library.RippleView
-        android:id="@+id/bottom_dialog_paysp_btndetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="16dp"
-        app:rv_rippleDuration="600"
-        app:rv_type="rectangle"
-        app:rv_color="@color/colorHint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_paysp_summary">
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/border_custom"
-            android:text="@string/simpan"
-            android:textColor="@color/colorHint" />
-    </com.andexert.library.RippleView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

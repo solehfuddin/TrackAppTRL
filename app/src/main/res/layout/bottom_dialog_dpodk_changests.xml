@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:focusable="true">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtopticname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/nama_optik"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/bottom_dialog_dpodkchangests_icpackage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_package"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txtopticname" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtinvnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/invoice_number"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:layout_constraintBottom_toTopOf="@+id/view13"
+            app:layout_constraintStart_toEndOf="@+id/bottom_dialog_dpodkchangests_icpackage"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txtopticname"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlenoteinv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/catatan"
+            android:textColor="@color/colorContent"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bottom_dialog_dpodkchangests_txtinvnumber" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtdpodknumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/dpodk_number"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/bottom_dialog_dpodkchangests_icpackage"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txtinvnumber" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtnoteinv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/empty"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlenoteinv" />
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/dotted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_icpackage" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlecustno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/nomor_akun"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtcustno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/nomor_akun"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlecustno" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitletotalinv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/total_tagihan"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttotalinv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/total_invoice"
+            android:textColor="@color/colorRed"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitletotalinv" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitletgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/tanggal"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txtcustno" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/tanggal"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitletgl" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlejam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/jam"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttotalinv" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txtjam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/jam"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlejam" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/dotted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttgl" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlestatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/status"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+        <Spinner
+            android:id="@+id/bottom_dialog_dpodkchangests_spinstatus"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlestatus" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlenama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/nama_penerima"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/bottom_dialog_dpodkchangests_edtNama"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_weight=".5"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textColor="@color/colorHint"
+            android:textColorHint="@color/colorContent"
+            android:maxLength="15"
+            app:bootstrapBrand="info"
+            app:bootstrapSize="md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlenama"
+            app:roundedCorners="true" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlekertas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/kertas_kembali"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_spinstatus" />
+
+        <Spinner
+            android:id="@+id/bottom_dialog_dpodkchangests_spinkertas"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlekertas" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlebayar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/total_bayar"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_edtNama" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/bottom_dialog_dpodkchangests_edtBayar"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_weight=".5"
+            android:inputType="numberDecimal"
+            android:digits="0123456789.,$"
+            android:padding="5dp"
+            android:textColor="@color/colorHint"
+            android:textColorHint="@color/colorContent"
+            app:bootstrapBrand="info"
+            app:bootstrapSize="md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlebayar"
+            app:roundedCorners="true" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/bottom_dialog_dpodkchangests_txttitlenote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/keterangan"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_spinkertas" />
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/bottom_dialog_dpodkchangests_edtNote"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="3dp"
+            android:inputType="textMultiLine"
+            android:textColor="@color/colorHint"
+            app:bootstrapBrand="info"
+            app:bootstrapSize="md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_txttitlenote" />
+
+        <com.andexert.library.RippleView
+            android:id="@+id/bottom_dialog_dpodkchangests_btnsave"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_edtNote"
+            app:rv_color="@color/colorHint"
+            app:rv_rippleDuration="600"
+            app:rv_type="rectangle">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/border_custom"
+                android:text="@string/simpan_data"
+                android:textColor="@color/colorHint" />
+        </com.andexert.library.RippleView>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/bottom_dialog_dpodkchangests_btncancel"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_dialog_dpodkchangests_edtNote"
+            app:rv_color="@color/colorRed"
+            app:rv_rippleDuration="600"
+            app:rv_type="rectangle">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/border_red"
+                android:text="@string/tutup"
+                android:textColor="@color/colorRed" />
+        </com.andexert.library.RippleView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
         return new TimeLineViewHolder(view, i);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TimeLineViewHolder viewHolder, int i) {
         viewHolder.txtTipeSp.setText(list.get(i).getTipesp());
@@ -47,6 +49,7 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
 
         String status = list.get(i).getStatus();
         String approve = list.get(1).getApprove();
+        String approvalName = list.get(i).getApprovalName() == null ? "-" : list.get(i).getApprovalName();
 
         if (approve.equals("null"))
         {
@@ -59,6 +62,18 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
         }
 
         switch (status) {
+            case "AM":
+                viewHolder.rlHeader.setBackgroundColor(Color.parseColor("#17a2b8"));
+                LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                lp1.setMargins(0, 18, 0, 0);
+
+                viewHolder.txtApprove.setText("Disetujui Sales Area (" + approvalName.toUpperCase() + ")");
+                viewHolder.txtApprove.setTextSize(14f);
+                viewHolder.txtApprove.setLayoutParams(lp1);
+                viewHolder.txtDuration.setVisibility(View.GONE);
+                viewHolder.imageView.setImageResource(R.drawable.img_am);
+                break;
             case "SAM":
                 viewHolder.rlHeader.setBackgroundColor(Color.parseColor("#17a2b8"));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

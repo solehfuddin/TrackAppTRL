@@ -2,9 +2,33 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_spheader {
     private String noSp, typeSp, sales, custName, address, city, orderVia, condition, installment, startInstallment,
-            shipAddress, photo, status, disc, signedPath, shipNumber;
+            shipAddress, photo, status, disc, customdisc, signedPath, shipNumber, notes, ownerOptic;
     private int dp;
     private double grandTotal;
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getOwnerOptic() {
+        return ownerOptic;
+    }
+
+    public void setOwnerOptic(String ownerOptic) {
+        this.ownerOptic = ownerOptic;
+    }
+
+    public String getCustomdisc() {
+        return customdisc;
+    }
+
+    public void setCustomdisc(String customdisc) {
+        this.customdisc = customdisc;
+    }
 
     public String getShipNumber() {
         return shipNumber;

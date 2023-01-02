@@ -7,8 +7,6 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.sofudev.trackapptrl.BuildConfig;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -43,7 +41,7 @@ public class VersionChecker extends AsyncTask<String, Void, String> {
         try {
             isAvailableInPlayStore = true;
             if (isNetworkAvailable(mContext)) {
-                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "&hl=en")
+                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=com.sofudev.trackapptrl" + "&hl=en")
                         .timeout(30000)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .referrer("http://www.google.com")

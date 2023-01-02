@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="215dp">
+
+        <ImageView
+            android:id="@+id/recycler_courierinv_icpackage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_package"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txtinvnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/invoice_number"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icpackage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/universalFontTextView71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/rp"
+            android:textAlignment="center"
+            android:textColor="@color/colorEnd"
+            android:textSize="12sp"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintEnd_toStartOf="@+id/recycler_courierinv_txttotalinv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txttotalinv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            android:text="@string/total_invoice"
+            android:textColor="@color/colorEnd"
+            android:textSize="14sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txtdpodknumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/dpodk_number"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icpackage"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_txtinvnumber" />
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/grayLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_icpackage" />
+
+        <ImageView
+            android:id="@+id/recycler_courierinv_icfrom"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="22dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_baseline_brightness_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_icpackage" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txttitlefrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/from"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icfrom"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txtfrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/pt_timur_raya_lestari"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icfrom"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_txttitlefrom" />
+
+        <CheckBox
+            android:id="@+id/recycler_courierinv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:button="@drawable/checkbox_selector"
+            app:layout_constraintBottom_toTopOf="@+id/view14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <ImageView
+            android:id="@+id/recycler_courierinv_icto"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="24dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_baseline_radio_unchecked_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recycler_courierinv_txtto" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txttitleto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/to"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icto"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_txtfrom" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="31dp"
+            android:background="@drawable/dotted_ver"
+            android:layerType="software"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_courierinv_icto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_icfrom"
+            tools:ignore="ContentDescription" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txtto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/lokasi_optik"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_icto"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_txttitleto" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/grayLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_courierinv_txtto" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txttitlestatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/status"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txtstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/process_by_courier"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintStart_toEndOf="@+id/recycler_courierinv_txttitlestatus"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_courierinv_txttitletgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="22dp"
+            android:text="@string/schedule_shipment"
+            android:textColor="@color/colorContent"
+            android:textSize="12sp"
+            app:customFont="UbuntuRegular.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

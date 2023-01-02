@@ -660,7 +660,7 @@
                     app:cardElevation="3dp"
                     app:cardCornerRadius="5dp"
                     app:cardUseCompatPadding="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -748,7 +748,7 @@
                     app:cardElevation="3dp"
                     app:cardCornerRadius="5dp"
                     app:cardUseCompatPadding="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"

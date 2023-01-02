@@ -1,8 +1,9 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_frame_header {
-    private int idParty, shippingId, shippingPrice, totalPrice;
-    private String orderId, shippingName, shippingService, opticCity, opticProvince, opticName, opticAddress, paymentCashCarry;
+    private int idParty, shippingId, shippingPrice;
+    private double totalPrice;
+    private String orderId, shippingName, shippingService, opticCity, opticProvince, opticName, opticAddress, paymentCashCarry, customDisc;
 
     public Data_frame_header() {
     }
@@ -13,6 +14,14 @@ public class Data_frame_header {
 
     public void setShippingService(String shippingService) {
         this.shippingService = shippingService;
+    }
+
+    public String getCustomDisc() {
+        return customDisc;
+    }
+
+    public void setCustomDisc(String customDisc) {
+        this.customDisc = customDisc;
     }
 
     public int getIdParty() {
@@ -39,11 +48,11 @@ public class Data_frame_header {
         this.shippingPrice = shippingPrice;
     }
 
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

@@ -216,7 +216,8 @@ public class BalanceFragment extends Fragment {
                     showSaldoTrl();
 
                     nominalDeposit = jsonObject.getString("sisa_saldo");
-                    String val = "IDR " + CurencyFormat(nominalDeposit);
+                    String val;
+                    val = "IDR " + CurencyFormat(nominalDeposit);
 
                     Log.d("Balance Fragment", "Nominal : " + nominalDeposit);
                     txtDeposit.setText(val);

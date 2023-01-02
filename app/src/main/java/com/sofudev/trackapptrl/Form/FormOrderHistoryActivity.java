@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.SystemClock;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,7 +29,10 @@ import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
+import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_orderhistory_optic;
@@ -37,7 +42,10 @@ import com.sofudev.trackapptrl.Custom.CustomLoading;
 import com.sofudev.trackapptrl.Custom.CustomRecyclerOrderHistoryClick;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Data.Data_orderhistory_optic;
+import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.R;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,8 +77,10 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     String URLSHOWPAYMENTDEPO   = config.Ip_address + config.order_history_showInfoPaymentDepo;
     String CHECKSTATUS          = config.payment_check_status;
     String UPDATESTATUS         = config.Ip_address + config.payment_method_updateStatus;
+    String URLCOMPLETEINFO      = config.Ip_address + config.orderlens_complete_info;
 
     //Area Integrasi Web
+    String URL_CONFIRMNONPAY   = config.Ip_address + config.orderlens_confirm_entrynonpay;
     String HISTORYBYDATE        = config.Ip_address + config.lenshistory_getOrderTodayWeb;
     String HISTORYBYPATIENT     = config.Ip_address + config.lenshistory_getOrderByPatient;
     String HISTORYBYRANGEDATE   = config.Ip_address + config.lenshistory_getOrderByRange;
@@ -83,6 +93,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     MaterialEditText txt_startdate, txt_enddate;
     CircleProgressBar loading;
     CustomLoading customLoading;
+    LovelyStandardDialog dialogComplete;
 
     RecyclerView recycler_data;
     RecyclerView.LayoutManager recyclerViewManager;
@@ -126,7 +137,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
 
         getUserInfo();
 //        showDataByDate();
-        historyLensByDate();
+//        historyLensByDate();
         searchHistoryByName();
         searchByRangeDate();
     }
@@ -134,7 +145,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     @Override
     protected void onResume() {
         super.onResume();
-        //showDataByDate();
+        historyLensByDate();
     }
 
     @Override
@@ -1346,7 +1357,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     }
 
     @Override
-    public void onItemClick(View view, int pos, String id, String status, String paymentType) {
+    public void onItemClick(View view, int pos, String id, String status, String info, String paymentType) {
         if (status.contentEquals("Pending") || status.equals("Pending") || status.contains("Pending") ||
             status.contentEquals("PENDING") || status.equals("PENDING") || status.contains("PENDING"))
         {
@@ -1360,12 +1371,300 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         {
             Toasty.error(getApplicationContext(), "This order canceled by system", Toast.LENGTH_LONG).show();
         }
+        else if (status.contentEquals("Waiting Order to Complete") || status.equals("Waiting Order to Complete") || status.contains("Waiting Order to Complete"))
+        {
+            Log.d("Incomplete", "Complete first");
+            String msg = id + " - " + info;
+            dialogKonfirmasiNonPay(id, msg);
+        }
+        else if (status.contentEquals("Waiting Payment Method") || status.equals("Waiting Payment Method") || status.contains("Waiting Payment Method"))
+        {
+            Log.d("Incomplete", "Wait payment method");
+            completeInfo(id);
+        }
         else
         {
             Intent intent = new Intent(FormOrderHistoryActivity.this, FormOrderDetailActivity.class);
             intent.putExtra("key", id);
             startActivity(intent);
         }
+    }
+
+    private void dialogKonfirmasiNonPay(final String id, String pesan)
+    {
+        dialogComplete = new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL);
+        dialogComplete.setTopColorRes(R.color.colorPrimary);
+        dialogComplete.setTopTitle("Konfirmasi data");
+        dialogComplete.setMessage("Apakah anda setuju dengan order " + pesan + " ?");
+        dialogComplete.setTopTitleColor(Color.WHITE);
+        dialogComplete.setPositiveButtonColor(Color.parseColor("#0275d8"));
+        dialogComplete.setPositiveButton("Konfirmasi", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Aksi", "Konfirmasi");
+                dialogComplete.dismiss();
+                confirmEntryNonPayment(id);
+            }
+        });
+        dialogComplete.setNegativeButtonColor(Color.parseColor("#f90606"));
+        dialogComplete.setNegativeButton("Keluar", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Aksi", "Keluar");
+                dialogComplete.dismiss();
+            }
+        });
+
+        dialogComplete.show();
+    }
+
+    private void showAccessDenied(String msg)
+    {
+        UniversalFontTextView txt_caption;
+        BootstrapButton btn_close;
+
+        final Dialog dialog = new Dialog(FormOrderHistoryActivity.this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_access_denied);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lp);
+
+        btn_close  = dialog.findViewById(R.id.dialog_accessdenied_btnsave);
+        txt_caption = dialog.findViewById(R.id.dialog_accessdenied_txtcaption);
+
+        txt_caption.setText(msg);
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void confirmEntryNonPayment(final String orderNumber)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_CONFIRMNONPAY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    if (object.names().get(0).equals("success"))
+                    {
+                        Log.d("Informasi", "success");
+                        customLoading.dismissLoadingDialog();
+
+                        historyLensByDate();
+                    }
+                    else
+                    {
+                        Log.d("Informasi", "error");
+                        customLoading.dismissLoadingDialog();
+
+                        showAccessDenied("Gagal menyimpan data, silahkan coba kembali");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void completeInfo(final String orderNumber) {
+        StringRequest request = new StringRequest(Request.Method.POST, URLCOMPLETEINFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        Log.d("Info : ", object.toString());
+
+                        if (object.names().get(0).equals("error"))
+                        {
+                            Log.d("Informasi", "error");
+
+                            Toast.makeText(getApplicationContext(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show();
+                            customLoading.dismissLoadingDialog();
+                        }
+                        else
+                        {
+                            Log.d("Informasi", "success");
+                            customLoading.dismissLoadingDialog();
+
+                            Intent intent = new Intent(FormOrderHistoryActivity.this, FormLensSummaryActivity.class);
+                            intent.putExtra("id_party", object.getString("id_party"));
+                            intent.putExtra("city_info", object.getString("city_info"));
+                            intent.putExtra("province", object.getString("province"));
+                            intent.putExtra("price_lens", Integer.parseInt(object.getString("price_lens")));
+                            intent.putExtra("description_lens", object.getString("description_lens"));
+                            intent.putExtra("discount_lens", Double.parseDouble(object.getString("discount_lens")));
+                            intent.putExtra("facet_lens", Integer.parseInt(object.getString("facet_lens")));
+                            intent.putExtra("tinting_lens", Integer.parseInt(object.getString("tinting_lens")));
+                            intent.putExtra("item_weight", Integer.parseInt(object.getString("item_weight")));
+                            intent.putExtra("flag_pasang", object.getString("flag_pasang"));
+                            intent.putExtra("username_info", object.getString("username_info"));
+                            intent.putExtra("optic_flag", object.getString("optic_flag"));
+                            intent.putExtra("flag_shipping", object.getString("flag_shipping"));
+                            intent.putExtra("order_number", object.getString("order_number"));
+                            intent.putExtra("patient_name", object.getString("patient_name"));
+                            intent.putExtra("phone_number", object.getString("phone_number"));
+                            intent.putExtra("note", object.getString("note"));
+                            intent.putExtra("prodDivType", object.getString("prodDivType"));
+                            intent.putExtra("lenstype", object.getString("lenstype"));
+                            intent.putExtra("lensdesc", object.getString("lensdesc"));
+                            intent.putExtra("categoryLens", object.getString("categoryLens"));
+                            intent.putExtra("isSp", object.getString("isSp"));
+                            intent.putExtra("sales", object.getString("sales"));
+                            intent.putExtra("level", object.getString("level"));
+                            intent.putExtra("opticname", object.getString("opticname"));
+
+                            /* Input SP Header */
+                            intent.putExtra("headerNoSp", object.getString("headerNoSp"));
+                            intent.putExtra("headerTipeSp", object.getString("headerTipeSp"));
+                            intent.putExtra("headerSales", object.getString("headerSales"));
+                            intent.putExtra("headerShipNumber", object.getString("headerShipNumber"));
+                            intent.putExtra("headerCustName", object.getString("headerCustName"));
+                            intent.putExtra("headerAddress", object.getString("headerAddress"));
+                            intent.putExtra("headerCity", object.getString("headerCity"));
+                            intent.putExtra("headerOrderVia", object.getString("headerOrderVia"));
+                            intent.putExtra("headerDp", Integer.parseInt(object.getString("headerDp")));
+                            intent.putExtra("headerDisc", object.getString("headerDisc"));
+                            intent.putExtra("headerCondition", object.getString("headerCondition"));
+                            intent.putExtra("headerInstallment", object.getString("headerInstallment"));
+                            intent.putExtra("headerStartInstallment", object.getString("headerStartInstallment"));
+                            intent.putExtra("headerShippingAddress", object.getString("headerShippingAddress"));
+                            intent.putExtra("headerStatus", object.getString("headerStatus"));
+                            intent.putExtra("headerImage", object.getString("headerImage"));
+                            intent.putExtra("headerSignedPath", object.getString("headerSignedPath"));
+
+                            intent.putExtra("sphR", object.getString("sphR"));
+                            intent.putExtra("sphL", object.getString("sphL"));
+                            intent.putExtra("cylR", object.getString("cylR"));
+                            intent.putExtra("cylL", object.getString("cylL"));
+                            intent.putExtra("axsR", object.getString("axsR"));
+                            intent.putExtra("axsL", object.getString("axsL"));
+                            intent.putExtra("addR", object.getString("addR"));
+                            intent.putExtra("addL", object.getString("addL"));
+                            intent.putExtra("coatCode", object.getString("coatCode"));
+                            intent.putExtra("coatDesc", object.getString("coatDesc"));
+                            intent.putExtra("tintCode", object.getString("tintCode"));
+                            intent.putExtra("tintDesc", object.getString("tintDesc"));
+                            intent.putExtra("corridor", object.getString("corridor"));
+                            intent.putExtra("mpdR", object.getString("mpdR"));
+                            intent.putExtra("mpdL", object.getString("mpdL"));
+                            intent.putExtra("pv", object.getString("pv"));
+                            intent.putExtra("wrap", object.getString("wrap"));
+                            intent.putExtra("panto", object.getString("panto"));
+                            intent.putExtra("vd", object.getString("vd"));
+                            intent.putExtra("facetInfo", object.getString("facetInfo"));
+                            intent.putExtra("frameModel", object.getString("frameModel"));
+                            intent.putExtra("dbl", object.getString("dbl"));
+                            intent.putExtra("hor", object.getString("hor"));
+                            intent.putExtra("ver", object.getString("ver"));
+                            intent.putExtra("frameCode", object.getString("frameCode"));
+
+                            intent.putExtra("margin_lens", object.getString("margin_lens"));
+                            intent.putExtra("extramargin_lens", object.getString("extramargin_lens"));
+
+                            //Area Lens R
+                            intent.putExtra("itemid_R", object.getString("itemid_R"));
+                            intent.putExtra("itemcode_R", object.getString("itemcode_R"));
+                            intent.putExtra("description_R", object.getString("description_R"));
+                            intent.putExtra("power_R", object.getString("power_R"));
+                            intent.putExtra("qty_R", object.getString("qty_R"));
+                            intent.putExtra("itemprice_R", Integer.parseInt(object.getString("itemprice_R")));
+                            intent.putExtra("itemtotal_R", Integer.parseInt(object.getString("itemtotal_R")));
+
+                            //Area Lens L
+                            intent.putExtra("itemid_L", object.getString("itemid_L"));
+                            intent.putExtra("itemcode_L", object.getString("itemcode_L"));
+                            intent.putExtra("description_L", object.getString("description_L"));
+                            intent.putExtra("power_L", object.getString("power_L"));
+                            intent.putExtra("qty_L", object.getString("qty_L"));
+                            intent.putExtra("itemprice_L", Integer.parseInt(object.getString("itemprice_L")));
+                            intent.putExtra("itemtotal_L", Integer.parseInt(object.getString("itemtotal_L")));
+
+                            //Area Diskon
+                            intent.putExtra("description_diskon", object.getString("description_diskon"));
+                            intent.putExtra("discount_r", Double.parseDouble(object.getString("discount_r")));
+                            intent.putExtra("discount_l", Double.parseDouble(object.getString("discount_l")));
+                            intent.putExtra("extra_margin_discount", object.getString("extra_margin_discount"));
+                            intent.putExtra("prod_attr_valR", object.getString("prod_attr_valR"));
+                            intent.putExtra("prod_attr_valL", object.getString("prod_attr_valL"));
+
+                            //Area Facet
+                            intent.putExtra("itemcode_facet", object.getString("itemcode_facet"));
+                            intent.putExtra("description_facet", object.getString("description_facet"));
+                            intent.putExtra("qty_facet", object.getString("qty_facet"));
+                            intent.putExtra("price_facet", Integer.parseInt(object.getString("price_facet")));
+                            intent.putExtra("total_facet", Integer.parseInt(object.getString("total_facet")));
+                            intent.putExtra("margin_facet", object.getString("margin_facet"));
+                            intent.putExtra("extra_margin_facet", object.getString("extra_margin_facet"));
+
+                            //Area Tinting
+                            intent.putExtra("itemcode_tinting", object.getString("itemcode_tinting"));
+                            intent.putExtra("description_tinting", object.getString("description_tinting"));
+                            intent.putExtra("qty_tinting", object.getString("qty_tinting"));
+                            intent.putExtra("price_tinting", Integer.parseInt(object.getString("price_tinting")));
+                            intent.putExtra("total_tinting", Integer.parseInt(object.getString("total_tinting")));
+                            intent.putExtra("margin_tinting", object.getString("margin_tinting"));
+                            intent.putExtra("extra_margin_tinting", object.getString("extra_margin_tinting"));
+
+                            intent.putExtra("total_price", Double.parseDouble(object.getString("total_price")));
+                            intent.putExtra("isHasInsert", 1);
+
+                            startActivity(intent);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null)
+                {
+                    Log.d("ERROR ENTRY STATUS", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderNumber", orderNumber);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void cancelPayment(String id) {

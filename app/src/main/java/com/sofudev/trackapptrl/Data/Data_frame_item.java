@@ -1,7 +1,8 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_frame_item {
-    private int lineNumber, frameId, frameQty, frameRealPrice, frameDisc, frameDiscPrice;
+    private int lineNumber, frameId, frameQty, frameRealPrice, frameDiscPrice;
+    private double frameDisc;
     private String orderId, frameCode, frameName;
 
     public Data_frame_item() {
@@ -39,11 +40,11 @@ public class Data_frame_item {
         this.frameRealPrice = frameRealPrice;
     }
 
-    public int getFrameDisc() {
+    public double getFrameDisc() {
         return frameDisc;
     }
 
-    public void setFrameDisc(int frameDisc) {
+    public void setFrameDisc(double frameDisc) {
         this.frameDisc = frameDisc;
     }
 

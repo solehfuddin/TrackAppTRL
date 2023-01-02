@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.Form;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -433,6 +434,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     private void OpenFilter()
     {
         btn_filter.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(FormTrackOrderActivity.this);

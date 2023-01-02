@@ -7,5 +7,5 @@ import android.view.View;
  */
 
 public interface CustomRecyclerOrderHistoryClick {
-    void onItemClick(View view, int pos, String id, String status, String paymentType);
+    void onItemClick(View view, int pos, String id, String status, String info, String paymentType);
 }

@@ -1287,8 +1287,15 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                     date_in= object.getString("date_in");
                     totalDurr = object.getString("total_durr");
 
+                    Log.d(FormTrackingSpActivity.class.getSimpleName(), "Last Status : " + status);
+
                     if (date_in.equals("null") || totalDurr.equals("Dalam proses"))
                     {
+                        if (status.contains("REJECT AM"))
+                        {
+                            txt_statusnull.setTextColor(Color.parseColor("#f90606"));
+                        }
+
                         txt_statusnull.setText(status);
 
                         txt_statusnull.setVisibility(View.VISIBLE);
@@ -1298,8 +1305,8 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                         txt_duration.setVisibility(View.GONE);
                         ripple_btnDetail.setEnabled(false);
                         btn_detail.setBackgroundColor(Color.parseColor("#58595e"));
-                        ripple_btndownload.setEnabled(false);
-                        btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
+//                        ripple_btndownload.setEnabled(false);
+//                        btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
                     }
                     else {
                         if (status.equals("AR")){
@@ -1312,16 +1319,16 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                                 {
                                     txt_status.setBackgroundColor(Color.parseColor("#45ac2d"));
                                     txt_status.setTextColor(Color.WHITE);
-                                    ripple_btndownload.setEnabled(true);
-                                    btnDownload.setBackgroundColor(Color.parseColor("#45ac2d"));
+//                                    ripple_btndownload.setEnabled(true);
+//                                    btnDownload.setBackgroundColor(Color.parseColor("#45ac2d"));
 //                                    txt_status.setHintTextColor(Color.parseColor("#fff"));
                                 }
                                 else
                                 {
                                     txt_status.setBackgroundColor(Color.parseColor("#f90606"));
                                     txt_status.setTextColor(Color.WHITE);
-                                    ripple_btndownload.setEnabled(false);
-                                    btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
+//                                    ripple_btndownload.setEnabled(false);
+//                                    btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
 //                                    txt_status.setHintTextColor(Color.parseColor("#fff"));
                                 }
                             }

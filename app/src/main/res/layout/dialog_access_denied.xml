@@ -34,6 +34,7 @@
             android:layout_marginBottom="15dp">
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/dialog_accessdenied_txtcaption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

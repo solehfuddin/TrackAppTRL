@@ -1336,35 +1336,23 @@ public class FormOrderSpActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatePhoto(dataHeader, URL_UPDATEPHOTO);
-                updateSigned();
-
-//                if (spinTipeSp.getText().toString().matches("-- Pilih SP --"))
+//                updatePhoto(dataHeader, URL_UPDATEPHOTO);
+//                updateSigned();
+//
+//                if (imgpath == null)
 //                {
-//                    Toasty.warning(getApplicationContext(), "Harap pilih tipe sp", Toast.LENGTH_SHORT).show();
-//                    spinTipeSp.setError("Pilih Sp");
-//                    isTipeSp = false;
+//                    isImage = false;
+//                    information("Pemberitahuan", "Mohon masukkan gambar/foto SP", R.drawable.failed_outline, DefaultBootstrapBrand.DANGER);
 //                }
 //                else
 //                {
-//                    spinTipeSp.setError(null);
-//                    isTipeSp = true;
+//                    isImage = true;
 //                }
-
-                if (imgpath == null)
-                {
-                    isImage = false;
-                    information("Pemberitahuan", "Mohon masukkan gambar/foto SP", R.drawable.failed_outline, DefaultBootstrapBrand.DANGER);
-                }
-                else
-                {
-                    isImage = true;
-                }
-
-                if (!isDigitalSigned)
-                {
-                    Toasty.warning(getApplicationContext(), "Harap isi tanda tangan digital", Toast.LENGTH_SHORT).show();
-                }
+//
+//                if (!isDigitalSigned)
+//                {
+//                    Toasty.warning(getApplicationContext(), "Harap isi tanda tangan digital", Toast.LENGTH_SHORT).show();
+//                }
 
                 if (spinTipeSp.getSelectedItem().toString().equals("Lensa Satuan"))
                 {
@@ -1419,7 +1407,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     txtCicilan.setText("1");
                 }
 
-                if (isMulaiBayar && isPilihOptik && isImage && isDigitalSigned)
+                if (isMulaiBayar && isPilihOptik)
                 {
                     dataHeader.setNoSp(txtNomorSp.getText().toString());
                     dataHeader.setTypeSp(spinTipeSp.getSelectedItem().toString());
@@ -1467,8 +1455,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
-                        intent.putExtra("header_image", imgpath);
-                        intent.putExtra("header_signedpath", signedpath);
+//                        intent.putExtra("header_image", imgpath);
+//                        intent.putExtra("header_signedpath", signedpath);
                         intent.putExtra("sales", username);
                         startActivity(intent);
                     }
@@ -1504,8 +1492,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
-                        intent.putExtra("header_image", imgpath);
-                        intent.putExtra("header_signedpath", signedpath);
+//                        intent.putExtra("header_image", imgpath);
+//                        intent.putExtra("header_signedpath", signedpath);
                         startActivity(intent);
                     }
                     else if (spinTipeSp.getSelectedItem().toString().equals("Frame"))
@@ -1535,8 +1523,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
-                        intent.putExtra("header_image", imgpath);
-                        intent.putExtra("header_signedpath", signedpath);
+//                        intent.putExtra("header_image", imgpath);
+//                        intent.putExtra("header_signedpath", signedpath);
 
                         startActivity(intent);
                     }

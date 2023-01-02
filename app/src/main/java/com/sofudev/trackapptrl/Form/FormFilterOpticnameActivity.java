@@ -347,6 +347,11 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
                     Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
                 }
+                else if (condition.equals("COURIERTRACK"))
+                {
+                    idparty = data_opticnames.get(position).getIdParty();
+                    Log.d(FormFilterOpticnameActivity.class.getSimpleName(), "Id party : " + idparty);
+                }
                 else if (condition.equals("LENSSALES"))
                 {
                     if (isHavingChild)
@@ -499,6 +504,12 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                     intent.putExtra("activetitle", sActive);
                     intent.putExtra("pasttitle", sPast);
                     intent.putExtra("totalprocess", String.valueOf(sTotal));
+                    startActivity(intent);
+                }
+                else if (condition.equals("COURIERTRACK"))
+                {
+                    Intent intent = new Intent(getApplicationContext(), FormCourierTrackingActivity.class);
+                    intent.putExtra("username", idparty);
                     startActivity(intent);
                 }
                 else if (condition.equals("LENSSALES"))
