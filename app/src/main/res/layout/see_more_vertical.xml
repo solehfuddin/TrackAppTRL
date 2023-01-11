@@ -56,4 +56,17 @@
         app:layout_constraintTop_toTopOf="@+id/imageView12"
         app:srcCompat="@drawable/round_corner_black"
         android:contentDescription="@string/app_name" />
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/textView_versionapps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_version"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        android:layout_marginTop="15dp"
+        app:customFont="RobotoRegular.ttf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView13" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,6 +61,8 @@ public class CourierHistoryActivity extends AppCompatActivity {
     Config config = new Config();
     String GETHISTORYBYDATERANGE = config.Ip_address + config.dpodk_historybydaterange;
     String FINDHISTORYBYNOTRX    = config.Ip_address + config.dpodk_historybysearchidtrx;
+    String GETPROCESSBYDATERANGE = config.Ip_address + config.dpodk_processbydaterange;
+    String FINDPROCESSBYKEYWORD  = config.Ip_address + config.dpodk_processbysearch;
 
     String partySiteId, username, todayDate, start_date, end_date, seachKeyword;
     SimpleDateFormat dateFormat;
@@ -73,6 +75,7 @@ public class CourierHistoryActivity extends AppCompatActivity {
     int limit = 5;
     int totalData = 0;
     long lastClick = 0;
+    boolean isAdmin;
 
     BootstrapButton btn_prev, btn_next;
     Button btn_filterdate;
@@ -80,7 +83,7 @@ public class CourierHistoryActivity extends AppCompatActivity {
     ImageView imgNotFound;
     MaterialEditText txt_search, txt_startdate, txt_enddate;
     RippleView rp_search, rp_filterdate;
-    UniversalFontTextView txt_counter;
+    UniversalFontTextView txt_counter, txtTitle;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recyclerLayoutManager;
     CircleProgressBar progressBar;
@@ -104,6 +107,7 @@ public class CourierHistoryActivity extends AppCompatActivity {
         rp_search       = (RippleView) findViewById(R.id.courier_history_rpsearch);
         txt_counter     = (UniversalFontTextView) findViewById(R.id.courier_history_txtCounter);
         txt_search      = (MaterialEditText) findViewById(R.id.courier_history_txtSearch);
+        txtTitle        = (UniversalFontTextView) findViewById(R.id.courier_history_txtTitle);
         imgNotFound     = (ImageView) findViewById(R.id.courier_history_imgnotfound);
         recyclerView    = (RecyclerView) findViewById(R.id.courier_history_recycleview);
         progressBar     = (CircleProgressBar) findViewById(R.id.courier_history_progressBar);
@@ -112,27 +116,8 @@ public class CourierHistoryActivity extends AppCompatActivity {
         recyclerLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(recyclerLayoutManager);
 
-        adapter_courier_dpodk = new Adapter_courier_dpodk(getApplicationContext(), listData, 2, new RecyclerViewOnClickListener() {
-            @Override
-            public void onItemClick(View view, int pos, String id) {
-                Log.d(CourierHistoryActivity.class.getSimpleName(), "History Dpodk : " + id);
-                Intent intent = new Intent(getApplicationContext(), CourierDpodkActivity.class);
-                intent.putExtra("idparty", partySiteId);
-                intent.putExtra("username", username);
-                intent.putExtra("iddpodk", id);
-                intent.putExtra("status", 1);
-                startActivity(intent);
-            }
-        });
-
-        recyclerView.setAdapter(adapter_courier_dpodk);
-
-        txt_search.setHint("Cari berdasarkan nomor dpodk");
-
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         todayDate = dateFormat.format(Calendar.getInstance().getTime());
-        start_date = getCalculatedDate(todayDate, "yyyy-MM-dd", -3);
-        end_date = todayDate;
 
         backToDashboard();
 //        getUsernameData();
@@ -157,6 +142,7 @@ public class CourierHistoryActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void getUsernameData()
     {
         Bundle bundle = getIntent().getExtras();
@@ -164,6 +150,23 @@ public class CourierHistoryActivity extends AppCompatActivity {
         {
             partySiteId = bundle.getString("idparty");
             username = bundle.getString("username");
+            isAdmin = bundle.getBoolean("isadmin");
+
+            if (isAdmin)
+            {
+                start_date = todayDate;
+                txt_search.setHint("Cari berdasarkan nama kurir");
+                txtTitle.setText("Monitoring Kurir");
+            }
+            else
+            {
+                start_date = getCalculatedDate(todayDate, "yyyy-MM-dd", -3);
+                txt_search.setHint("Cari berdasarkan nomor dpodk");
+                txtTitle.setText("Riwayat Pengiriman");
+            }
+
+            end_date = todayDate;
+
             Log.d("Id party : ", partySiteId);
             Log.d("Today date : ", todayDate);
 
@@ -171,14 +174,40 @@ public class CourierHistoryActivity extends AppCompatActivity {
             Log.d("End date : ", end_date);
 
             until += limit;
-            getHistoryCourier(partySiteId, start_date, end_date);
+            if (isAdmin)
+            {
+                getProcessCourier(start_date, end_date);
+            }
+            else
+            {
+                getHistoryCourier(partySiteId, start_date, end_date);
+            }
+
+            adapter_courier_dpodk = new Adapter_courier_dpodk(getApplicationContext(), listData, 2, isAdmin, new RecyclerViewOnClickListener() {
+                @Override
+                public void onItemClick(View view, int pos, String id) {
+                    Log.d(CourierHistoryActivity.class.getSimpleName(), "History Dpodk : " + id);
+                    Intent intent = new Intent(getApplicationContext(), CourierDpodkActivity.class);
+                    intent.putExtra("idparty", partySiteId);
+                    intent.putExtra("username", username);
+                    intent.putExtra("iddpodk", id);
+                    intent.putExtra("status", 1);
+                    intent.putExtra("isadmin", isAdmin);
+                    startActivity(intent);
+                }
+            });
+
+            recyclerView.setAdapter(adapter_courier_dpodk);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getUsernameData();
+        if (!isAdmin)
+        {
+            getUsernameData();
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -211,7 +240,14 @@ public class CourierHistoryActivity extends AppCompatActivity {
                     until = 0;
                     until += limit;
 
-                    getHistoryCourier(partySiteId, start_date, end_date);
+                    if (isAdmin)
+                    {
+                        getProcessCourier(start_date, end_date);
+                    }
+                    else
+                    {
+                        getHistoryCourier(partySiteId, start_date, end_date);
+                    }
                 }
                 else
                 {
@@ -220,7 +256,14 @@ public class CourierHistoryActivity extends AppCompatActivity {
                     until = 0;
                     until += limit;
 
-                    findHistoryCourier(partySiteId, seachKeyword);
+                    if (isAdmin)
+                    {
+                        findProcessCourier(seachKeyword, start_date, end_date);
+                    }
+                    else
+                    {
+                        findHistoryCourier(partySiteId, seachKeyword);
+                    }
                 }
             }
         });
@@ -241,7 +284,14 @@ public class CourierHistoryActivity extends AppCompatActivity {
                         until = 0;
                         until += limit;
 
-                        getHistoryCourier(partySiteId, start_date, end_date);
+                        if (isAdmin)
+                        {
+                            getProcessCourier(start_date, end_date);
+                        }
+                        else
+                        {
+                            getHistoryCourier(partySiteId, start_date, end_date);
+                        }
                     }
                     else
                     {
@@ -250,7 +300,14 @@ public class CourierHistoryActivity extends AppCompatActivity {
                         until = 0;
                         until += limit;
 
-                        findHistoryCourier(partySiteId, seachKeyword);
+                        if (isAdmin)
+                        {
+                            findProcessCourier(seachKeyword, start_date, end_date);
+                        }
+                        else
+                        {
+                            findHistoryCourier(partySiteId, seachKeyword);
+                        }
                     }
                 }
 
@@ -336,7 +393,14 @@ public class CourierHistoryActivity extends AppCompatActivity {
                             until += limit;
 //                            getCourierRange(partySiteId, start_date, end_date, String.valueOf(typeData));
 
-                            getHistoryCourier(partySiteId, start_date, end_date);
+                            if (isAdmin)
+                            {
+                                getProcessCourier(start_date, end_date);
+                            }
+                            else
+                            {
+                                getHistoryCourier(partySiteId, start_date, end_date);
+                            }
                         }
                     }
                 });
@@ -507,11 +571,25 @@ public class CourierHistoryActivity extends AppCompatActivity {
 
                 if (txt_search.getText().length() == 0)
                 {
-                    getHistoryCourier(partySiteId, start_date, end_date);
+                    if (isAdmin)
+                    {
+                        getProcessCourier(start_date, end_date);
+                    }
+                    else
+                    {
+                        getHistoryCourier(partySiteId, start_date, end_date);
+                    }
                 }
                 else
                 {
-                    findHistoryCourier(partySiteId, seachKeyword);
+                    if (isAdmin)
+                    {
+                        findProcessCourier(seachKeyword, start_date, end_date);
+                    }
+                    else
+                    {
+                        findHistoryCourier(partySiteId, seachKeyword);
+                    }
                 }
 
                 if (totalData < until)
@@ -533,11 +611,25 @@ public class CourierHistoryActivity extends AppCompatActivity {
 
                 if (txt_search.getText().length() == 0)
                 {
-                    getHistoryCourier(partySiteId, start_date, end_date);
+                    if (isAdmin)
+                    {
+                        getProcessCourier(start_date, end_date);
+                    }
+                    else
+                    {
+                        getHistoryCourier(partySiteId, start_date, end_date);
+                    }
                 }
                 else
                 {
-                    findHistoryCourier(partySiteId, seachKeyword);
+                    if (isAdmin)
+                    {
+                        findProcessCourier(seachKeyword, start_date, end_date);
+                    }
+                    else
+                    {
+                        findHistoryCourier(partySiteId, seachKeyword);
+                    }
                 }
 
                 if (start == 1)
@@ -658,6 +750,111 @@ public class CourierHistoryActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    private void getProcessCourier(final String stDate, final String edDate)
+    {
+        listData.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        customLoading.showLoadingDialog();
+
+        StringRequest request = new StringRequest(Request.Method.POST, GETPROCESSBYDATERANGE + "/" + limit + "/" + offset, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
+                btn_next.setEnabled(true);
+                customLoading.dismissLoadingDialog();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.names().get(0).equals("error"))
+                        {
+                            btn_prev.setEnabled(false);
+                            btn_next.setEnabled(false);
+                            imgNotFound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                        }
+                        else
+                        {
+                            Data_courier dt = new Data_courier();
+                            dt.setNama_optik(jsonObject.getString("nama_optik"));
+                            dt.setCust_no(jsonObject.getString("cust_no"));
+                            dt.setNo_inv(jsonObject.getString("no_inv"));
+                            dt.setNo_trx(jsonObject.getString("no_trx"));
+                            dt.setTotal_inv(jsonObject.getString("total_inv"));
+                            dt.setJumlah_dibayar(jsonObject.getString("jumlah_dibayar"));
+                            dt.setTgl(jsonObject.getString("tgl"));
+                            dt.setWarna_kertas(jsonObject.getString("warna_kertas"));
+                            dt.setTgl_kembali(jsonObject.getString("tgl_kembali"));
+                            dt.setStatus(jsonObject.getString("status"));
+                            dt.setBatal_kirim(jsonObject.getString("batal_kirim"));
+                            dt.setNote(jsonObject.getString("note"));
+                            dt.setNote_opd(jsonObject.getString("note_opd"));
+                            dt.setNoinv_ar(jsonObject.getString("noinv_ar"));
+                            dt.setUser(jsonObject.getString("user"));
+                            dt.setNama_penerima(jsonObject.getString("nama_penerima"));
+                            dt.setKeterangan(jsonObject.getString("keterangan"));
+                            dt.setNama_kurir(jsonObject.getString("nama_kurir"));
+                            dt.setRute(jsonObject.getString("rute"));
+                            dt.setJam_berangkat(jsonObject.getString("jam_berangkat"));
+                            dt.setTgl_kirim(jsonObject.getString("tgl_kirim"));
+
+                            totalData = jsonObject.getInt("total_row");
+
+                            String counter = "Show " + start + " - " + until + " from " + totalData + " data";
+                            txt_counter.setText(counter);
+
+                            if (start == 1)
+                            {
+                                btn_prev.setEnabled(false);
+                            }
+                            else
+                            {
+                                btn_prev.setEnabled(true);
+                            }
+
+                            if (totalData <= until)
+                            {
+                                btn_next.setEnabled(false);
+                            }
+
+                            listData.add(dt);
+                            imgNotFound.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+
+                        adapter_courier_dpodk.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                imgNotFound.setVisibility(View.VISIBLE);
+                customLoading.dismissLoadingDialog();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("dateSt", stDate);
+                map.put("dateEd", edDate);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void findHistoryCourier(final String idCourier, final String keyword)
     {
         listData.clear();
@@ -756,6 +953,112 @@ public class CourierHistoryActivity extends AppCompatActivity {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("keyword", keyword);
                 map.put("id_kurir", idCourier);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void findProcessCourier(final String keyword, final String dateSt, final String dateEd)
+    {
+        listData.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        customLoading.showLoadingDialog();
+
+        StringRequest request = new StringRequest(Request.Method.POST, FINDPROCESSBYKEYWORD + "/" + limit + "/" + offset, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
+                btn_next.setEnabled(true);
+                customLoading.dismissLoadingDialog();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.names().get(0).equals("error"))
+                        {
+                            btn_prev.setEnabled(false);
+                            btn_next.setEnabled(false);
+                            imgNotFound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                        }
+                        else
+                        {
+                            Data_courier dt = new Data_courier();
+                            dt.setNama_optik(jsonObject.getString("nama_optik"));
+                            dt.setCust_no(jsonObject.getString("cust_no"));
+                            dt.setNo_inv(jsonObject.getString("no_inv"));
+                            dt.setNo_trx(jsonObject.getString("no_trx"));
+                            dt.setTotal_inv(jsonObject.getString("total_inv"));
+                            dt.setJumlah_dibayar(jsonObject.getString("jumlah_dibayar"));
+                            dt.setTgl(jsonObject.getString("tgl"));
+                            dt.setWarna_kertas(jsonObject.getString("warna_kertas"));
+                            dt.setTgl_kembali(jsonObject.getString("tgl_kembali"));
+                            dt.setStatus(jsonObject.getString("status"));
+                            dt.setBatal_kirim(jsonObject.getString("batal_kirim"));
+                            dt.setNote(jsonObject.getString("note"));
+                            dt.setNote_opd(jsonObject.getString("note_opd"));
+                            dt.setNoinv_ar(jsonObject.getString("noinv_ar"));
+                            dt.setUser(jsonObject.getString("user"));
+                            dt.setNama_penerima(jsonObject.getString("nama_penerima"));
+                            dt.setKeterangan(jsonObject.getString("keterangan"));
+                            dt.setNama_kurir(jsonObject.getString("nama_kurir"));
+                            dt.setRute(jsonObject.getString("rute"));
+                            dt.setJam_berangkat(jsonObject.getString("jam_berangkat"));
+                            dt.setTgl_kirim(jsonObject.getString("tgl_kirim"));
+
+                            totalData = jsonObject.getInt("total_row");
+
+                            String counter = "Show " + start + " - " + until + " from " + totalData + " data";
+                            txt_counter.setText(counter);
+
+                            if (start == 1)
+                            {
+                                btn_prev.setEnabled(false);
+                            }
+                            else
+                            {
+                                btn_prev.setEnabled(true);
+                            }
+
+                            if (totalData <= until)
+                            {
+                                btn_next.setEnabled(false);
+                            }
+
+                            listData.add(dt);
+                            imgNotFound.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+
+                        adapter_courier_dpodk.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                imgNotFound.setVisibility(View.VISIBLE);
+                customLoading.dismissLoadingDialog();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("keyword", keyword);
+                map.put("dateSt", dateSt);
+                map.put("dateEd", dateEd);
                 return map;
             }
         };

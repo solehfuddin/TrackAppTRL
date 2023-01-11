@@ -5,6 +5,7 @@
         <item>Bor</item>
         <item>Nylon</item>
     </array>
+
     <array name="type_lensa_array">
         <item>Leinz</item>
         <item>Moe</item>
@@ -49,6 +50,7 @@
         <item>November</item>
         <item>Desember</item>
     </array>
+    <string name="app_version">App Version 2.1.0</string>
     <string name="code">Serial number: \n <font size='10'> 32000354</font></string>
     <string name="price1">Price: \n <font size='10'> 3,254,544</font></string>
     <string name="dst_city"><b>Mashhad</b>\n<font size='10'>MHD</font></string>
@@ -278,4 +280,7 @@
     <string name="harga_qty">Harga:</string>
     <string name="subtotal">Subtotal:</string>
     <string name="choose_action">Choose Action</string>
+    <string name="estimasi_biaya">Estimasi Biaya</string>
+    <string name="biaya_item">Item</string>
+    <string name="courier_progress">Courier Task</string>
 </resources>

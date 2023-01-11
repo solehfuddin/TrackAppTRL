@@ -579,6 +579,7 @@ public class CategoryFragment extends Fragment {
                     Intent intent = new Intent(myContext, CourierHistoryActivity.class);
                     intent.putExtra("idparty", PARTYSITEID);
                     intent.putExtra("username", USERNAME);
+                    intent.putExtra("isadmin", false);
                     startActivity(intent);
                 }
             }
@@ -587,6 +588,7 @@ public class CategoryFragment extends Fragment {
                 Intent intent = new Intent(myContext, CourierHistoryActivity.class);
                 intent.putExtra("idparty", PARTYSITEID);
                 intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", false);
                 startActivity(intent);
             }
         }
@@ -637,6 +639,40 @@ public class CategoryFragment extends Fragment {
                 intent.putExtra("username", USERNAME);
 
                 Log.d(CategoryFragment.class.getSimpleName(), "Username : " + USERNAME);
+                startActivity(intent);
+            }
+        }
+    }
+
+    private void handlerCourierprogress()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if (LEVEL != null)
+            {
+                if (Integer.parseInt(LEVEL) == 1)
+                {
+                    Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                    intent.putExtra("idparty", PARTYSITEID);
+                    intent.putExtra("username", USERNAME);
+                    intent.putExtra("isadmin", true);
+                    startActivity(intent);
+                }
+                else
+                {
+                    showAccessDeniedCustom("Mohon maaf fitur ini hanya dapat digunakan untuk user admin");
+                }
+            }
+            else
+            {
+                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", true);
                 startActivity(intent);
             }
         }
@@ -1029,6 +1065,7 @@ public class CategoryFragment extends Fragment {
         LinearLayout linPendingCourier = custom.findViewById(R.id.layout_custom_couriertask);
         LinearLayout linHistoryCourier = custom.findViewById(R.id.layout_custom_courierhistory);
         LinearLayout linTrackCourier = custom.findViewById(R.id.layout_custom_couriertracking);
+        LinearLayout linProgressCourier = custom.findViewById(R.id.layout_custom_courierprogress);
         LinearLayout linLensTrack = custom.findViewById(R.id.layout_custom_historylens);
         LinearLayout linFrameTrack = custom.findViewById(R.id.layout_custom_historyframe);
         LinearLayout linStockTrack = custom.findViewById(R.id.layout_custom_historystock);
@@ -1113,6 +1150,13 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 handlerCouriertrack();
+                bottomDialog.dismiss();
+            }
+        });
+        linProgressCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierprogress();
                 bottomDialog.dismiss();
             }
         });

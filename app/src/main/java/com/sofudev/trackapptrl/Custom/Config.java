@@ -8,8 +8,8 @@ public class Config {
 //    public String Ip_tiki    = "https://leinz.org/trl_tiki/";
 
     //Production Server
-    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
-//    public String Ip_address = "http://180.250.96.154/trl-dev/"; /* IP Public */
+//    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+    public String Ip_address = "http://180.250.96.154/trl-dev/"; /* IP Public */
     public String Ip_21express = "http://180.250.96.154/trl_ds_exp/";
     public String Ip_tiki    = "http://180.250.96.154/trl_tiki/";
 
@@ -351,6 +351,10 @@ public class Config {
     public String ordersp_update_approvalsp       = "index.php/Android_apisp/approvalByAreaManager";
     public String ordersp_update_rejectsp         = "index.php/Android_apisp/rejectByAreaManager";
     public String ordersp_item_detailsp           = "index.php/Android_apisp/getItemSpFrame";
+    public String ordersp_unprocess_frame         = "index.php/Android_apisp/getUnproccessSp/8/";
+    public String ordersp_process_frame           = "index.php/Android_apisp/getProccessSp/8/";
+    public String ordersp_unprocess_frame_search  = "index.php/Android_apisp/getUnproccessSpSearch/8/";
+    public String ordersp_process_frame_search    = "index.php/Android_apisp/getProccessSpSearch/8/";
 
     /* AREA FLASH SALE */
     public String flashsale_getActiveSale         = "index.php/Android_flashsale/getActiveSale";
@@ -433,8 +437,12 @@ public class Config {
     public String dpodk_searchbyinvnumber         = "index.php/Android_apidpodk/getCourierBySearchNoTrx";
     public String dpodk_historybydaterange        = "index.php/Android_apidpodk/getHistoryByDateRange";
     public String dpodk_historybysearchidtrx      = "index.php/Android_apidpodk/getHistoryBySearcNoinv";
+    public String dpodk_processbysearch           = "index.php/Android_apidpodk/getProcessBySearch";
     public String dpodk_historybyidtrx            = "index.php/Android_apidpodk/getHistoryByNotrx";
+    public String dpodk_processbyidtrx            = "index.php/Android_apidpodk/getProccessByNotrx";
     public String dpodk_historybysearchinvnumber  = "index.php/Android_apidpodk/getHistoryBySearcNoinv";
+    public String dpodk_processbysearchinvnumber  = "index.php/Android_apidpodk/getProcessBySearcNoinv";
+    public String dpodk_processbydaterange        = "index.php/Android_apidpodk/getProcessByDateRange";
     public String dpodk_statuscheckbyoptic        = "index.php/Android_apidpodk/getProcessCourierByOptic";
     public String dpodk_statuscounterbyoptic      = "index.php/Android_apidpodk/countProcessCourierByOptic";
     public String dpodk_getprocessbyoptic         = "index.php/Android_apidpodk/getProcessByOptic";

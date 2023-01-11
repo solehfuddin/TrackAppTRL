@@ -3,6 +3,7 @@ package com.sofudev.trackapptrl.LocalDb.Contract;
 public class AddFrameSpContract {
     public static final String TABLE_FRAMESP = "trl_framesp";
 
+    public static final String _ID          = "_id";
     public static final String PRODUCT_ID   = "product_id";
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_CODE = "product_code";

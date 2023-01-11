@@ -53,6 +53,11 @@ public class Adapter_approval_sp extends RecyclerView.Adapter<Adapter_approval_s
             holder.txtStatus.setText("Sudah disetujui sales area (" + approvalName.toUpperCase() + ")");
             holder.txtStatus.setTextColor(Color.parseColor("#14a895"));
         }
+        else if (sts.equals("REJECT AM"))
+        {
+            holder.txtStatus.setText("Tidak disetujui sales area");
+            holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
+        }
         else
         {
             holder.txtStatus.setText("Menunggu konfirmasi sales area");

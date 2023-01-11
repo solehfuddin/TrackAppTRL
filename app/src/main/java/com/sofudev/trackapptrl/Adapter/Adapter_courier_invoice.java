@@ -88,18 +88,27 @@ public class Adapter_courier_invoice extends RecyclerView.Adapter<Adapter_courie
             }
             else
             {
-                String tmpSts = list.get(position).getStatus() + " : " + list.get(position).getNote_opd().toUpperCase();
-
-                if (tmpSts.length() >= 23)
+                if (list.get(position).getStatus().equals("null"))
                 {
-                    sts = tmpSts.concat("...");
+                    sts = "Sedang Diproses Kurir";
+
+                    holder.txtStatus.setTextColor(Color.parseColor("#f90606"));
                 }
                 else
                 {
-                    sts = tmpSts;
-                }
+                    String tmpSts = list.get(position).getStatus() + " : " + list.get(position).getNote_opd().toUpperCase();
 
-                holder.txtStatus.setTextColor(Color.parseColor("#ff9100"));
+                    if (tmpSts.length() >= 23)
+                    {
+                        sts = tmpSts.concat("...");
+                    }
+                    else
+                    {
+                        sts = tmpSts;
+                    }
+
+                    holder.txtStatus.setTextColor(Color.parseColor("#ff9100"));
+                }
                 holder.txtStatus.setTypeface(null, Typeface.BOLD);
             }
 

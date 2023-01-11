@@ -68,9 +68,11 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
     Config config = new Config();
     private String GETCOURIERBYDPODK = config.Ip_address + config.dpodk_getinvbyidtrx;
     private String GETHISTORYCOURIER = config.Ip_address + config.dpodk_historybyidtrx;
+    private String GETPROCESSCOURIER = config.Ip_address + config.dpodk_processbyidtrx;
     private String UPDATECOURIERSTS  = config.Ip_address + config.dpodk_changestatus;
     private String SEARCHBYINVNUMBER = config.Ip_address + config.dpodk_searchbyinvnumber;
     private String SEARCHHISTORYBYINV= config.Ip_address + config.dpodk_historybysearchinvnumber;
+    private String SEARCHPROCESSBYKEY= config.Ip_address + config.dpodk_processbysearchinvnumber;
 
     ConstraintLayout constraintSelected;
     RippleView rippleActionBack, rippleActionUpdate;
@@ -85,7 +87,7 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
     Adapter_courier_invoice adapter_courier_invoice;
     List<Data_courier> listData = new ArrayList<>();
     String partySiteId, username, idDpodk;
-    boolean isName;
+    boolean isName, isAdmin;
     int statusDpodk = 0;
     View customView;
     CustomLoading customLoading;
@@ -109,7 +111,6 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
         rippleActionBack = (RippleView) findViewById(R.id.courier_dpodk_actionriplebtnback);
         rippleActionUpdate = (RippleView) findViewById(R.id.courier_dpodk_actionriplebtnupdate);
 
-        txtSearch.setHint("Cari berdasarkan nomor invoice");
 
         handleSearch();
         BackToDashboard();
@@ -125,6 +126,7 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
             partySiteId = bundle.getString("idparty");
             username    = bundle.getString("username");
             idDpodk     = bundle.getString("iddpodk");
+            isAdmin     = bundle.getBoolean("isadmin");
             statusDpodk = bundle.getInt("status", 0);
             txtDpodkNumber.setText("#" + idDpodk);
 
@@ -132,13 +134,23 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
             Log.d("Id dpodk : ", idDpodk);
             bindingView();
 
-            if (statusDpodk == 0)
+            if (isAdmin)
             {
-                getCourierByDpodk(idDpodk);
+                getProcessCourierByDpodk(idDpodk);
+                txtSearch.setHint("Cari Optik / nomor invoice");
             }
             else
             {
-                getHistoryCourierByDpodk(idDpodk);
+                if (statusDpodk == 0)
+                {
+                    getCourierByDpodk(idDpodk);
+                }
+                else
+                {
+                    getHistoryCourierByDpodk(idDpodk);
+                }
+
+                txtSearch.setHint("Cari berdasarkan nomor invoice");
             }
         }
     }
@@ -191,8 +203,8 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
                     final BottomDialog bottomDialog = new BottomDialog.Builder(CourierDpodkActivity.this)
                             .setTitle("Ubah Status Dpodk")
                             .setCustomView(customView)
-                            .setCancelable(false)
-                            .autoDismiss(false)
+//                            .setCancelable(false)
+//                            .autoDismiss(false)
                             .build();
 
                     final String[] status = {"TERKIRIM", "RETUR"};
@@ -408,24 +420,38 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
 
                 if (txtSearch.getText().toString().isEmpty())
                 {
-                    if (statusDpodk == 0)
+                    if (isAdmin)
                     {
-                        getCourierByDpodk(idDpodk);
+                        getProcessCourierByDpodk(idDpodk);
                     }
                     else
                     {
-                        getHistoryCourierByDpodk(idDpodk);
+                        if (statusDpodk == 0)
+                        {
+                            getCourierByDpodk(idDpodk);
+                        }
+                        else
+                        {
+                            getHistoryCourierByDpodk(idDpodk);
+                        }
                     }
                 }
                 else
                 {
-                    if (statusDpodk == 0)
+                    if (isAdmin)
                     {
-                        searchCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                        searchProcessCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
                     }
                     else
                     {
-                        searchHistoryCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                        if (statusDpodk == 0)
+                        {
+                            searchCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                        }
+                        else
+                        {
+                            searchHistoryCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                        }
                     }
                 }
             }
@@ -441,24 +467,38 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
 
                     if (txtSearch.getText().toString().isEmpty())
                     {
-                        if (statusDpodk == 0)
+                        if (isAdmin)
                         {
-                            getCourierByDpodk(idDpodk);
+                            getProcessCourierByDpodk(idDpodk);
                         }
                         else
                         {
-                            getHistoryCourierByDpodk(idDpodk);
+                            if (statusDpodk == 0)
+                            {
+                                getCourierByDpodk(idDpodk);
+                            }
+                            else
+                            {
+                                getHistoryCourierByDpodk(idDpodk);
+                            }
                         }
                     }
                     else
                     {
-                        if (statusDpodk == 0)
+                        if (isAdmin)
                         {
-                            searchCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                            searchProcessCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
                         }
                         else
                         {
-                            searchHistoryCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                            if (statusDpodk == 0)
+                            {
+                                searchCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                            }
+                            else
+                            {
+                                searchHistoryCourierByInvoice(idDpodk, txtSearch.getText().toString().trim());
+                            }
                         }
                     }
                 }
@@ -566,6 +606,87 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
         customLoading.showLoadingDialog();
 
         StringRequest request = new StringRequest(Request.Method.POST, GETHISTORYCOURIER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
+                customLoading.dismissLoadingDialog();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.names().get(0).equals("error"))
+                        {
+                            imgNotFound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Data_courier dt = new Data_courier();
+                            dt.setNama_optik(jsonObject.getString("nama_optik"));
+                            dt.setCust_no(jsonObject.getString("cust_no"));
+                            dt.setNo_inv(jsonObject.getString("no_inv"));
+                            dt.setNo_trx(jsonObject.getString("no_trx"));
+                            dt.setTotal_inv(jsonObject.getString("total_inv"));
+                            dt.setJumlah_dibayar(jsonObject.getString("jumlah_dibayar"));
+                            dt.setTgl(jsonObject.getString("tgl"));
+                            dt.setWarna_kertas(jsonObject.getString("warna_kertas"));
+                            dt.setTgl_kembali(jsonObject.getString("tgl_kembali"));
+                            dt.setStatus(jsonObject.getString("status"));
+                            dt.setBatal_kirim(jsonObject.getString("batal_kirim"));
+                            dt.setNote(jsonObject.getString("note"));
+                            dt.setNote_opd(jsonObject.getString("note_opd"));
+                            dt.setNoinv_ar(jsonObject.getString("noinv_ar"));
+                            dt.setUser(jsonObject.getString("user"));
+                            dt.setNama_penerima(jsonObject.getString("nama_penerima"));
+                            dt.setKeterangan(jsonObject.getString("keterangan"));
+                            dt.setNama_kurir(jsonObject.getString("nama_kurir"));
+                            dt.setRute(jsonObject.getString("rute"));
+                            dt.setJam_berangkat(jsonObject.getString("jam_berangkat"));
+                            dt.setTgl_kirim(jsonObject.getString("tgl_kirim"));
+
+                            listData.add(dt);
+                            imgNotFound.setVisibility(View.GONE);
+                        }
+
+                        adapter_courier_invoice.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                imgNotFound.setVisibility(View.VISIBLE);
+                customLoading.dismissLoadingDialog();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("no_trx", iddpodk);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getProcessCourierByDpodk(final String iddpodk)
+    {
+        listData.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        customLoading.showLoadingDialog();
+
+        StringRequest request = new StringRequest(Request.Method.POST, GETPROCESSCOURIER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progressBar.setVisibility(View.GONE);
@@ -806,6 +927,88 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    private void searchProcessCourierByInvoice(final String notrx, final String keyword)
+    {
+        listData.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        customLoading.showLoadingDialog();
+
+        StringRequest request = new StringRequest(Request.Method.POST, SEARCHPROCESSBYKEY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
+                customLoading.dismissLoadingDialog();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.names().get(0).equals("error"))
+                        {
+                            imgNotFound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Data_courier dt = new Data_courier();
+                            dt.setNama_optik(jsonObject.getString("nama_optik"));
+                            dt.setCust_no(jsonObject.getString("cust_no"));
+                            dt.setNo_inv(jsonObject.getString("no_inv"));
+                            dt.setNo_trx(jsonObject.getString("no_trx"));
+                            dt.setTotal_inv(jsonObject.getString("total_inv"));
+                            dt.setJumlah_dibayar(jsonObject.getString("jumlah_dibayar"));
+                            dt.setTgl(jsonObject.getString("tgl"));
+                            dt.setWarna_kertas(jsonObject.getString("warna_kertas"));
+                            dt.setTgl_kembali(jsonObject.getString("tgl_kembali"));
+                            dt.setStatus(jsonObject.getString("status"));
+                            dt.setBatal_kirim(jsonObject.getString("batal_kirim"));
+                            dt.setNote(jsonObject.getString("note"));
+                            dt.setNote_opd(jsonObject.getString("note_opd"));
+                            dt.setNoinv_ar(jsonObject.getString("noinv_ar"));
+                            dt.setUser(jsonObject.getString("user"));
+                            dt.setNama_penerima(jsonObject.getString("nama_penerima"));
+                            dt.setKeterangan(jsonObject.getString("keterangan"));
+                            dt.setNama_kurir(jsonObject.getString("nama_kurir"));
+                            dt.setRute(jsonObject.getString("rute"));
+                            dt.setJam_berangkat(jsonObject.getString("jam_berangkat"));
+                            dt.setTgl_kirim(jsonObject.getString("tgl_kirim"));
+
+                            listData.add(dt);
+                            imgNotFound.setVisibility(View.GONE);
+                        }
+
+                        adapter_courier_invoice.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                imgNotFound.setVisibility(View.VISIBLE);
+                customLoading.dismissLoadingDialog();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("keyword", keyword);
+                map.put("no_trx", notrx);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void changeStatus(final String noDpodk, final String noInv, final String status, final String penerima,
                               final String kertas, final String totalBayar, final String keterangan,
                               final BottomDialog dialog, final BootstrapEditText edtNama, final BootstrapEditText edtNote){
@@ -990,8 +1193,8 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
                 final BottomDialog bottomDialog = new BottomDialog.Builder(CourierDpodkActivity.this)
                         .setTitle("Ubah Status Dpodk")
                         .setCustomView(multiView)
-                        .setCancelable(false)
-                        .autoDismiss(false)
+//                        .setCancelable(false)
+//                        .autoDismiss(false)
                         .build();
 
                 txtOpticName = (UniversalFontTextView) multiView.findViewById(R.id.bottom_dialog_dpodkchangemulti_txtopticname);

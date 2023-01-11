@@ -5,6 +5,15 @@ public class Data_sp_header {
     startInstallment, shippingAddress, photo, path, status, approvalName, shipNumber, catatan;
 
     int grandTotal;
+    double subTotal;
+
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
 
     public int getGrandTotal() {
         return grandTotal;

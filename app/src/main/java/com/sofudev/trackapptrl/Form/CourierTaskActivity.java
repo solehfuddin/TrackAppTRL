@@ -203,7 +203,7 @@ public class CourierTaskActivity extends AppCompatActivity implements MultipleSe
 
     @SuppressLint("InflateParams")
     private void bindingView(){
-        adapter_courier_dpodk = new Adapter_courier_dpodk(getApplicationContext(), listData, 1, new RecyclerViewOnClickListener() {
+        adapter_courier_dpodk = new Adapter_courier_dpodk(getApplicationContext(), listData, 1,false, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
                 Log.d("NOMOR DPODKK", id);
@@ -212,6 +212,7 @@ public class CourierTaskActivity extends AppCompatActivity implements MultipleSe
                 intent.putExtra("username", username);
                 intent.putExtra("iddpodk", id);
                 intent.putExtra("status", 0);
+                intent.putExtra("isadmin", false);
                 startActivity(intent);
             }
         });

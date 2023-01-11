@@ -76,11 +76,13 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_add_framesp;
 import com.sofudev.trackapptrl.Adapter.Adapter_frame_brand;
 import com.sofudev.trackapptrl.Adapter.Adapter_framesp;
+import com.sofudev.trackapptrl.Adapter.Adapter_framesp_multi;
 import com.sofudev.trackapptrl.Adapter.Adapter_framesp_qty;
 import com.sofudev.trackapptrl.Adapter.Adapter_sorting_onhand;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
+import com.sofudev.trackapptrl.Custom.MultiSelectSpFrame;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_fragment_bestproduct;
 import com.sofudev.trackapptrl.Data.Data_frame_brand;
@@ -141,6 +143,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     Adapter_framesp adapter_framesp;
     Adapter_frame_brand adapter_frame_brand;
     Adapter_framesp_qty adapter_framesp_qty;
+    Adapter_framesp_multi adapter_framesp_multi;
     Adapter_sorting_onhand adapter_sorting_onhand;
 
     private BottomDialog payBottomDialog;
@@ -173,6 +176,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     List<ModelFrameSp> modelFrameSpList = new ArrayList<>();
     List<Data_sortingonhand> itemSorting = new ArrayList<>();
     List<Data_fragment_bestproduct> itemBestProduct = new ArrayList<>();
+    List<Data_fragment_bestproduct> returnItemBestProduct = new ArrayList<>();
     List<Data_frame_brand> itemCategory = new ArrayList<>();
     String totalData, selectCategory, productId, shipmentPrice, addpos, newpos, dataCatItem,
             dataSortItem, itemSortId, itemSortDesc;
@@ -1176,12 +1180,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
-        adapter_framesp_qty = new Adapter_framesp_qty(getApplicationContext(), itemBestProduct, new RecyclerViewOnClickListener() {
+        adapter_framesp_multi = new Adapter_framesp_multi(getApplicationContext(), itemBestProduct, new MultiSelectSpFrame() {
             @Override
-            public void onItemClick(View view, int pos, String id) {
-                int sisaQty = Integer.valueOf(itemBestProduct.get(pos).getProduct_qty());
+            public void passResult(ArrayList<Data_fragment_bestproduct> itemList) {
+                returnItemBestProduct = itemList;
 
-                if (sisaQty > 0)
+                if (returnItemBestProduct.size() > 0)
                 {
                     btnAdd.setEnabled(true);
                     btnAdd.setBootstrapBrand(DefaultBootstrapBrand.WARNING);
@@ -1191,14 +1195,34 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     btnAdd.setEnabled(false);
                     btnAdd.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
                 }
-
-                productId = itemBestProduct.get(pos).getProduct_id();
-
-//                Toasty.info(getApplicationContext(), "ID PRODUK = " + itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        recyclerFrame.setAdapter(adapter_framesp_qty);
+        recyclerFrame.setAdapter(adapter_framesp_multi);
+
+//        adapter_framesp_qty = new Adapter_framesp_qty(getApplicationContext(), itemBestProduct, new RecyclerViewOnClickListener() {
+//            @Override
+//            public void onItemClick(View view, int pos, String id) {
+//                int sisaQty = Integer.valueOf(itemBestProduct.get(pos).getProduct_qty());
+//
+//                if (sisaQty > 0)
+//                {
+//                    btnAdd.setEnabled(true);
+//                    btnAdd.setBootstrapBrand(DefaultBootstrapBrand.WARNING);
+//                }
+//                else
+//                {
+//                    btnAdd.setEnabled(false);
+//                    btnAdd.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
+//                }
+//
+//                productId = itemBestProduct.get(pos).getProduct_id();
+//
+////                Toasty.info(getApplicationContext(), "ID PRODUK = " + itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+//        recyclerFrame.setAdapter(adapter_framesp_qty);
 
 //        if (txtSearch.getText().toString().isEmpty()){
 //            getItemByBrand(addpos, itemSortDesc);
@@ -1350,8 +1374,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         newItem.addAll(itemBestProduct);
                                         itemBestProduct.clear();
                                         itemBestProduct.addAll(newItem);// add new data
-                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                        adapter_framesp_qty.notifyDataSetChanged();
+//                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                        adapter_framesp_qty.notifyDataSetChanged();
+
+                                        adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                        adapter_framesp_multi.notifyDataSetChanged();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -1480,8 +1507,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                     newItem.addAll(itemBestProduct);
                                     itemBestProduct.clear();
                                     itemBestProduct.addAll(newItem);// add new data
-                                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                    adapter_framesp_qty.notifyDataSetChanged();
+//                                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                    adapter_framesp_qty.notifyDataSetChanged();
+
+                                    adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                    adapter_framesp_multi.notifyDataSetChanged();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -1570,8 +1600,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                     newItem.addAll(itemBestProduct);
                                     itemBestProduct.clear();
                                     itemBestProduct.addAll(newItem);// add new data
-                                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                    adapter_framesp_qty.notifyDataSetChanged();
+//                                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                    adapter_framesp_qty.notifyDataSetChanged();
+
+                                    adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                    adapter_framesp_multi.notifyDataSetChanged();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -1744,8 +1777,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                             newItem.addAll(itemBestProduct);
                                             itemBestProduct.clear();
                                             itemBestProduct.addAll(newItem);// add new data
-                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                            adapter_framesp_qty.notifyDataSetChanged();
+//                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                            adapter_framesp_qty.notifyDataSetChanged();
+
+                                            adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                            adapter_framesp_multi.notifyDataSetChanged();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -1838,8 +1874,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                             newItem.addAll(itemBestProduct);
                                             itemBestProduct.clear();
                                             itemBestProduct.addAll(newItem);// add new data
-                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                            adapter_framesp_qty.notifyDataSetChanged();
+//                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                            adapter_framesp_qty.notifyDataSetChanged();
+
+                                            adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                            adapter_framesp_multi.notifyDataSetChanged();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -1939,8 +1978,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                             itemBestProduct.addAll(newItem);// add new data
 
                                             txtCounter.setText(newItem.size() + " Data Ditemukan");
-                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                            adapter_framesp_qty.notifyDataSetChanged();
+//                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                            adapter_framesp_qty.notifyDataSetChanged();
+
+                                            adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                            adapter_framesp_multi.notifyDataSetChanged();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -2035,8 +2077,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                             itemBestProduct.addAll(newItem);// add new data
 
                                             txtCounter.setText(newItem.size() + " Data Ditemukan");
-                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                            adapter_framesp_qty.notifyDataSetChanged();
+//                                            adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                            adapter_framesp_qty.notifyDataSetChanged();
+
+                                            adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                            adapter_framesp_multi.notifyDataSetChanged();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -2197,8 +2242,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         newItem.addAll(itemBestProduct);
                                         itemBestProduct.clear();
                                         itemBestProduct.addAll(newItem);// add new data
-                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                        adapter_framesp_qty.notifyDataSetChanged();
+//                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                        adapter_framesp_qty.notifyDataSetChanged();
+
+                                        adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                        adapter_framesp_multi.notifyDataSetChanged();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -2290,8 +2338,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         itemBestProduct.addAll(newItem);// add new data
 
                                         txtCounter.setText(newItem.size() + " Data Ditemukan");
-                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                                        adapter_framesp_qty.notifyDataSetChanged();
+//                                        adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                                        adapter_framesp_qty.notifyDataSetChanged();
+
+                                        adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                                        adapter_framesp_multi.notifyDataSetChanged();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -2328,7 +2379,20 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
 //                Log.d("ID PRODUK", productId);
-                showDetailProduk(productId);
+//                showDetailProduk(productId);
+
+                for (int i = 0; i < returnItemBestProduct.size(); i++)
+                {
+                    Log.d(FormSpFrameActivity.class.getSimpleName(), "Item name (" + i + ") : "
+                            + returnItemBestProduct.get(i).getProduct_name());
+                    try {
+                        Thread.sleep(150);
+
+                        showDetailProdukMulti(returnItemBestProduct.get(i).getProduct_id());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 dialog.dismiss();
             }
@@ -2722,6 +2786,88 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    private void showDetailProdukMulti(final String id) {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYITEMID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        Log.d("DETAIL PRODUK", object.getString("frame_id"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_name"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_sku"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_image"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_price"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_disc"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_disc_price"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_brand"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_qty"));
+                        Log.d("DETAIL PRODUK", object.getString("frame_weight"));
+
+                        addFrameSpHelper.open();
+
+                        int sts = addFrameSpHelper.checkAddFrameSp(object.getInt("frame_id"));
+
+                        if (sts < 1)
+                        {
+                            ModelFrameSp item = new ModelFrameSp();
+                            item.setProductId(object.getInt("frame_id"));
+                            item.setProductName(object.getString("frame_name"));
+                            item.setProductCode(object.getString("frame_sku"));
+                            item.setProductQty(1);
+                            item.setProductPrice(object.getInt("frame_price"));
+                            item.setProductDiscPrice(object.getInt("frame_disc_price"));
+                            item.setProductDisc(object.getInt("frame_disc"));
+                            item.setNewProductPrice(object.getInt("frame_price"));
+                            item.setNewProductDiscPrice(object.getInt("frame_disc_price"));
+                            item.setProductStock(object.getInt("frame_qty"));
+                            item.setProductWeight(object.getInt("frame_weight"));
+                            item.setProductImage(object.getString("frame_image"));
+
+                            long status = addFrameSpHelper.insertAddFrameSp(item);
+
+                            Toasty.success(getApplicationContext(), "Item berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+
+                            modelFrameSpList = addFrameSpHelper.getAllFrameSp();
+
+                            handlerItemCart();
+                            recyclerItemFrame.setAdapter(adapter_add_framesp);
+                        }
+                        else
+                        {
+                            tambahQty(id);
+                        }
+                    }
+
+                    for (int j = 0; j < modelFrameSpList.size(); j++)
+                    {
+                        Log.d(FormSpFrameActivity.class.getSimpleName(), "Db name (" + j + ") : "
+                                + modelFrameSpList.get(j).getProductName());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_lensa", id);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void insertSP(final String URL, final Data_spheader item) {
         StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -3080,8 +3226,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     itemBestProduct.addAll(newItem);// add new data
 
                     txtCounter.setText(newItem.size() + " Data Ditemukan");
-                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-                    adapter_framesp_qty.notifyDataSetChanged();
+//                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
+//                    adapter_framesp_qty.notifyDataSetChanged();
+
+                    adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
+                    adapter_framesp_multi.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

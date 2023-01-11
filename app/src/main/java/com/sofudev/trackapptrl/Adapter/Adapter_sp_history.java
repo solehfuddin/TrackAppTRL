@@ -48,7 +48,7 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
         viewHolder.txtDuration.setText(list.get(i).getDurationunit());
 
         String status = list.get(i).getStatus();
-        String approve = list.get(1).getApprove();
+        String approve = list.get(i).getApprove();
         String approvalName = list.get(i).getApprovalName() == null ? "-" : list.get(i).getApprovalName();
 
         if (approve.equals("null"))
@@ -57,6 +57,11 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
             viewHolder.txtApprove.setText(informasi);
         }
         else
+        {
+            viewHolder.txtReject.setVisibility(View.GONE);
+        }
+
+        if (list.get(i).getReject().equals("null"))
         {
             viewHolder.txtReject.setVisibility(View.GONE);
         }

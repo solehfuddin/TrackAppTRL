@@ -21,12 +21,14 @@ public class Adapter_courier_dpodk extends RecyclerView.Adapter<Adapter_courier_
     private List<Data_courier> list;
     private RecyclerViewOnClickListener itemClick;
     private int typeCourier;
+    private boolean isAdmin;
 
-    public Adapter_courier_dpodk(Context context, List<Data_courier> list, int typeCourier, RecyclerViewOnClickListener itemClick) {
+    public Adapter_courier_dpodk(Context context, List<Data_courier> list, int typeCourier, boolean isAdmin, RecyclerViewOnClickListener itemClick) {
         this.context = context;
         this.list = list;
         this.itemClick = itemClick;
         this.typeCourier = typeCourier;
+        this.isAdmin = isAdmin;
     }
 
     @NonNull
@@ -65,7 +67,14 @@ public class Adapter_courier_dpodk extends RecyclerView.Adapter<Adapter_courier_
             rute = list.get(position).getRute().trim();
         }
 
-        holder.txtrute.setText(rute);
+        if (isAdmin)
+        {
+            holder.txtrute.setText(list.get(position).getNama_kurir());
+        }
+        else
+        {
+            holder.txtrute.setText(rute);
+        }
     }
 
     @Override

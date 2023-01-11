@@ -3,6 +3,15 @@ package com.sofudev.trackapptrl.Data;
 public class Data_fragment_bestproduct {
     private String product_image, product_id, product_name, product_code, product_realprice, product_discprice,
             product_discpercent, product_brand, product_qty, product_weight;
+    private boolean checked = false;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public String getProduct_qty() {
         return product_qty;

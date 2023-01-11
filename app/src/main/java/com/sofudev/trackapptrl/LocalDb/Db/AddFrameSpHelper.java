@@ -27,6 +27,7 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUC
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_STOCK;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_WEIGHT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.TABLE_FRAMESP;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract._ID;
 
 public class AddFrameSpHelper {
     private static final String DATABASE_TABLE = TABLE_FRAMESP;
@@ -75,7 +76,8 @@ public class AddFrameSpHelper {
                 null,
                 null,
                 null,
-                PRODUCT_ID + " ASC",
+                _ID + " ASC",
+//                PRODUCT_ID + " ASC",
                 null);
         cursor.moveToFirst();
         ModelFrameSp addFrameSp;

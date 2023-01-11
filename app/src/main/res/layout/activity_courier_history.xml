@@ -59,6 +59,7 @@
             </com.andexert.library.RippleView>
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/courier_history_txtTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
