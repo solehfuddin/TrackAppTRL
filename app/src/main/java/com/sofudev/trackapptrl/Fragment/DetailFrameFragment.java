@@ -22,10 +22,12 @@ import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_another_product;
 import com.sofudev.trackapptrl.Adapter.Adapter_colordetail;
@@ -65,6 +67,7 @@ public class DetailFrameFragment extends Fragment {
     OnBadgeCounter badgeCounter;
     Config config = new Config();
 
+    private String FRAMEPRICEURL = config.Ip_address + config.frame_price_mode;
     String URLDETAILPRODUCT = config.Ip_address + config.frame_showdetail_product;
     String URLDETAILCOLOR   = config.Ip_address + config.frame_showdetail_color;
     String HOTSALEURL       = config.Ip_address + config.dashboard_hot_sale;
@@ -75,7 +78,7 @@ public class DetailFrameFragment extends Fragment {
 
     UniversalFontTextView txtLenscode, txtDiscPrice, txtRealPrice, txtDisc, txtBrand, txtAvailability, txtDescription;
     RecyclerView recyColor, recyAnotherProduct;
-    LinearLayout linear_flashsale;
+    LinearLayout linear_flashsale, linear_price;
     CountdownView countdown_flashsale;
 
 
@@ -83,6 +86,7 @@ public class DetailFrameFragment extends Fragment {
     private static int NUM_PAGES = 0;
     String frameName, frameSku, frameImage, framePrice, frameDisc, frameDiscPrice, frameAvailibilty,
             frameBrand, frameColor, frameQty, frameWeight, value, from;
+    boolean outputFrameMode;
 
     View view;
     LinearLayoutManager horizontal_manager;
@@ -262,6 +266,8 @@ public class DetailFrameFragment extends Fragment {
             value = getArguments().getString("product_id");
         }
 
+        getFrameMode();
+
         //Toasty.info(getContext(), value, Toast.LENGTH_SHORT).show();
 
         pagerImage  = view.findViewById(R.id.fragment_detailproduct_imgProduct);
@@ -277,6 +283,7 @@ public class DetailFrameFragment extends Fragment {
         recyColor   = view.findViewById(R.id.fragment_detailproduct_recyclerColor);
         recyAnotherProduct = view.findViewById(R.id.fragment_detailproduct_recyclerAnother);
         linear_flashsale = view.findViewById(R.id.fragment_detailproduct_linearSale);
+        linear_price = view.findViewById(R.id.fragment_detailproduct_linearPrice);
         countdown_flashsale = view.findViewById(R.id.fragment_detailproduct_countdown);
 
         showProductDetail(value);
@@ -363,36 +370,43 @@ public class DetailFrameFragment extends Fragment {
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addCartHelper.open();
-
-                ModelAddCart item = new ModelAddCart();
-                item.setProductId(frameId);
-                item.setProductName(frameName);
-                item.setProductCode(frameSku);
-                item.setProductQty(1);
-                item.setProductPrice(Integer.valueOf(removeRupiah(framePrice)));
-                item.setProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
-                item.setProductDisc(Integer.valueOf(removeDiskon(frameDisc)));
-                item.setNewProductPrice(Integer.valueOf(removeRupiah(framePrice)));
-                item.setNewProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
-                item.setProductStock(Integer.valueOf(frameQty));
-                item.setProductWeight(Integer.valueOf(frameWeight));
-                item.setProductImage(frameImage);
-
-                long status = addCartHelper.insertAddCart(item);
-
-                if (status > 0)
+                if (outputFrameMode)
                 {
-                    Toasty.success(view.getContext(), "Item has been added to cart", Toast.LENGTH_SHORT).show();
+                    addCartHelper.open();
+
+                    ModelAddCart item = new ModelAddCart();
+                    item.setProductId(frameId);
+                    item.setProductName(frameName);
+                    item.setProductCode(frameSku);
+                    item.setProductQty(1);
+                    item.setProductPrice(Integer.valueOf(removeRupiah(framePrice)));
+                    item.setProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
+                    item.setProductDisc(Integer.valueOf(removeDiskon(frameDisc)));
+                    item.setNewProductPrice(Integer.valueOf(removeRupiah(framePrice)));
+                    item.setNewProductDiscPrice(Integer.valueOf(removeRupiah(frameDiscPrice)));
+                    item.setProductStock(Integer.valueOf(frameQty));
+                    item.setProductWeight(Integer.valueOf(frameWeight));
+                    item.setProductImage(frameImage);
+
+                    long status = addCartHelper.insertAddCart(item);
+
+                    if (status > 0)
+                    {
+                        Toasty.success(view.getContext(), "Item has been added to cart", Toast.LENGTH_SHORT).show();
 
 //                    Intent intent = new Intent(getContext(), AddCartProductActivity.class);
 //                    startActivity(intent);
-                }
+                    }
 
-                int count = addCartHelper.countAddCart();
-                if (badgeCounter != null)
+                    int count = addCartHelper.countAddCart();
+                    if (badgeCounter != null)
+                    {
+                        badgeCounter.countCartlist(count);
+                    }
+                }
+                else
                 {
-                    badgeCounter.countCartlist(count);
+                    Toasty.warning(requireContext(), "Harap hubungi CS untuk informasi lebih lanjut", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -413,6 +427,40 @@ public class DetailFrameFragment extends Fragment {
     private void insertRecentSearch(Data_recent_view item)
     {
         recentViewHelper.insertRecentView(item);
+    }
+
+    private void getFrameMode() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, FRAMEPRICEURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    outputFrameMode = jsonObject.getBoolean("show_price_frame");
+
+                    Log.d("Frame Mode : ", String.valueOf(outputFrameMode));
+
+                    if (outputFrameMode)
+                    {
+                        linear_price.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        linear_price.setVisibility(View.GONE);
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(requireContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        requestQueue.add(stringRequest);
     }
 
     private void showProductDetail(final String id)

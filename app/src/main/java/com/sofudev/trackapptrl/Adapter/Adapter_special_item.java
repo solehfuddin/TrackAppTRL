@@ -120,6 +120,7 @@ public class Adapter_special_item extends RecyclerView.Adapter<RecyclerView.View
             }
             else
             {
+
                 txtStock.setVisibility(View.GONE);
                 txtPrice.setVisibility(View.VISIBLE);
             }

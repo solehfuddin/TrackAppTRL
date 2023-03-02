@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,7 @@ public class Adapter_add_framesp extends RecyclerView.Adapter<Adapter_add_frames
         holder.txt_productname.setText(data.getProductName());
         holder.txt_productqty.setText(String.valueOf(data.getProductQty()));
         holder.txt_productprice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductDiscPrice())));
+        holder.txt_productflag.setText(data.getProductFlag());
 
         int stock = data.getProductStock();
         if (stock < 0)
@@ -57,6 +59,17 @@ public class Adapter_add_framesp extends RecyclerView.Adapter<Adapter_add_frames
         else
         {
             holder.txt_stockkurang.setVisibility(View.GONE);
+        }
+
+        if (data.getProductFlag().equals("STORE"))
+        {
+            holder.txt_productflag.setBackgroundColor(Color.parseColor("#45ac2d"));
+            holder.txt_productflag.setTextColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+            holder.txt_productflag.setBackgroundColor(Color.parseColor("#ff9100"));
+            holder.txt_productflag.setTextColor(Color.parseColor("#ffffff"));
         }
 
         int disc = data.getProductDisc();
@@ -94,7 +107,7 @@ public class Adapter_add_framesp extends RecyclerView.Adapter<Adapter_add_frames
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView img_product, btn_plus, btn_minus;
-        UniversalFontTextView txt_productname, txt_productid, txt_productqty, txt_productprice, txt_productdisc,
+        UniversalFontTextView txt_productname, txt_productid, txt_productqty, txt_productprice, txt_productdisc, txt_productflag,
                 txt_producdiscprice, txt_stockkurang, btn_remove;
 
         public ViewHolder(@NonNull View itemView) {
@@ -110,6 +123,7 @@ public class Adapter_add_framesp extends RecyclerView.Adapter<Adapter_add_frames
             txt_producdiscprice = itemView.findViewById(R.id.item_cartframesp_txtPriceDisc);
             txt_productdisc = itemView.findViewById(R.id.item_cartframesp_txtDisc);
             txt_stockkurang = itemView.findViewById(R.id.item_cartframesp_lblStockKurang);
+            txt_productflag = itemView.findViewById(R.id.item_cartframesp_lblFlag);
             btn_remove = itemView.findViewById(R.id.item_cartframesp_btnRemove);
 
             btn_remove.setOnClickListener(this);

@@ -61,7 +61,7 @@ public class OtherProductFragment extends Fragment {
     Context myContext;
     List<Data_fragment_bestproduct> itemProduct = new ArrayList<>();
 
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, ACCESS_FROM;
 
     public OtherProductFragment() {
 
@@ -94,7 +94,8 @@ public class OtherProductFragment extends Fragment {
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -109,7 +110,8 @@ public class OtherProductFragment extends Fragment {
         cardBanner1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -125,7 +127,8 @@ public class OtherProductFragment extends Fragment {
         cardBanner2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -148,7 +151,8 @@ public class OtherProductFragment extends Fragment {
         adapter_other_product = new Adapter_other_product(myContext, itemProduct, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -183,6 +187,7 @@ public class OtherProductFragment extends Fragment {
         if (bundle != null)
         {
             ACTIVITY_TAG = bundle.getString("activity");
+            ACCESS_FROM  = bundle.getString("access");
         }
     }
 

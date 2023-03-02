@@ -56,7 +56,7 @@ public class MoreFrameFragment extends Fragment {
     Context myContext;
     List<Data_fragment_bestproduct> itemProduct = new ArrayList<>();
 
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, ACCESS_FROM;
 
     public MoreFrameFragment() {
         // Required empty public constructor
@@ -92,7 +92,8 @@ public class MoreFrameFragment extends Fragment {
         adapter_more_frame = new Adapter_more_frame(getContext(), itemProduct, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -137,6 +138,7 @@ public class MoreFrameFragment extends Fragment {
         if (bundle != null)
         {
             ACTIVITY_TAG = bundle.getString("activity");
+            ACCESS_FROM  = bundle.getString("access");
         }
     }
 

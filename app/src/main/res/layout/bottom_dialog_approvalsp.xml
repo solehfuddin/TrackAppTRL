@@ -452,6 +452,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitlealamatkirim" />
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txttitlecustomer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:text="@string/nama_customer"
+                android:textColor="@color/colorContent"
+                android:textSize="12sp"
+                app:customFont="UbuntuRegular.ttf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txtalamatkirim" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txtcustomer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/isi_nama_customer"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitlecustomer" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/bottomdialog_approvalsp_txttitlecatatan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -463,7 +490,7 @@
                 android:textSize="12sp"
                 app:customFont="UbuntuRegular.ttf"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txtalamatkirim" />
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txtcustomer" />
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/bottomdialog_approvalsp_txtcatatan"

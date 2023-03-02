@@ -172,6 +172,7 @@
                             android:background="@color/strok"/>
 
                         <LinearLayout
+                            android:id="@+id/fragment_detailproduct_linearPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
@@ -214,7 +215,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_marginTop="10dp"
-                        android:layout_height="305dp">
+                        android:layout_height="305dp"
+                        android:visibility="gone">
 
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/fragment_detailproduct_imgProduct"

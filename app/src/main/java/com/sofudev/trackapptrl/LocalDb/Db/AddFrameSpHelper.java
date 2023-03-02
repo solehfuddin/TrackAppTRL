@@ -17,6 +17,7 @@ import java.util.List;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_CODE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_DISCOUNT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_DISCPRICE;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_FLAG;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_ID;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_IMG;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_NAME;
@@ -76,7 +77,7 @@ public class AddFrameSpHelper {
                 null,
                 null,
                 null,
-                _ID + " ASC",
+                _ID + " DESC",
 //                PRODUCT_ID + " ASC",
                 null);
         cursor.moveToFirst();
@@ -96,6 +97,7 @@ public class AddFrameSpHelper {
                 addFrameSp.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
                 addFrameSp.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 addFrameSp.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
+                addFrameSp.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_FLAG)));
 
                 arrayList.add(addFrameSp);
                 cursor.moveToNext();
@@ -129,6 +131,7 @@ public class AddFrameSpHelper {
                 item.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow("product_stock")));
                 item.setProductWeight(cursor.getInt(cursor.getColumnIndex("product_weight")));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow("product_image")));
+                item.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow("product_flag")));
             }
 
             return item;
@@ -168,6 +171,7 @@ public class AddFrameSpHelper {
         args.put(PRODUCT_STOCK, addFrameSp.getProductStock());
         args.put(PRODUCT_WEIGHT, addFrameSp.getProductWeight());
         args.put(PRODUCT_IMG, addFrameSp.getProductImage());
+        args.put(PRODUCT_FLAG, addFrameSp.getProductFlag());
 
         return database.insert(DATABASE_TABLE, null, args);
     }

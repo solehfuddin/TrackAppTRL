@@ -16,6 +16,7 @@ import com.andexert.library.RippleView;
 import com.dueeeke.tablayout.SlidingTabLayout;
 import com.sofudev.trackapptrl.Data.Data_spframe_filter;
 import com.sofudev.trackapptrl.Fragment.SpApprovalFragment;
+import com.sofudev.trackapptrl.Fragment.SpOtherFragment;
 import com.sofudev.trackapptrl.R;
 import com.sofudev.trackapptrl.Util.ViewFindUtils;
 
@@ -71,14 +72,35 @@ public class SpApprovalActivity extends AppCompatActivity {
     private void setupPager(){
         pagerAdapter.removeAllFragment();
         pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"On process", areacode, "2022-12-01", "2023-01-02", 0));
-        pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"Tracking SP", areacode, "2022-12-01", "2023-01-02",1));
+//        pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"Tracking SP", areacode, "2022-12-01", "2023-01-02",1));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Hold", areacode, "2022-12-01", "2023-01-02",11));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Rejected", areacode, "2022-12-01", "2023-01-02",12));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AM", areacode, "2022-12-01", "2023-01-02",13));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AR", areacode, "2022-12-01", "2023-01-02",14));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Warehouse", areacode, "2022-12-01", "2023-01-02",15));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "CS", areacode, "2022-12-01", "2023-01-02",16));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Shipping", areacode, "2022-12-01", "2023-01-02",17));
 
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setViewPager(viewPager);
 
-        if (viewPager != null && viewPager.getAdapter() != null)
-        {
-            viewPager.getAdapter().notifyDataSetChanged();
+        if (viewPager != null) {
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    pagerAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
     }
 
@@ -93,7 +115,19 @@ public class SpApprovalActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return SpApprovalFragment.newInstance(item.get(position));
+            switch (position){
+                case 1 :
+                case 2 :
+                case 3 :
+                case 4 :
+                case 5 :
+                case 6 :
+                case 7 :
+                    return SpOtherFragment.newInstance(item.get(position));
+                default:
+                    return SpApprovalFragment.newInstance(item.get(position));
+            }
+//            return SpApprovalFragment.newInstance(item.get(position));
         }
 
         @Override

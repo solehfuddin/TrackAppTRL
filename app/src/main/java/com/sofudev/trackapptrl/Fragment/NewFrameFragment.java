@@ -116,7 +116,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
     int pos = 0;
     int posSw = 0;
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, ACCESS_FROM;
 
     List<String> listSortBy = new ArrayList<>();
     List<String> listBrand = new ArrayList<>();
@@ -163,7 +163,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 new RecyclerViewOnClickListener() {
                     @Override
                     public void onItemClick(View view, int pos, String id) {
-                        if (ACTIVITY_TAG.equals("main"))
+//                        if (ACTIVITY_TAG.equals("main"))
+                        if (ACCESS_FROM.equals("main"))
                         {
                             Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                         }
@@ -264,6 +265,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         if (bundle != null)
         {
             ACTIVITY_TAG = bundle.getString("activity");
+            ACCESS_FROM  = bundle.getString("access");
         }
     }
 

@@ -1,11 +1,43 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_sp_header {
-    String noSp, date, tipeSp, sales, customerName, address, city, orderVia, downPayment, discount, discountValue, conditions, installment,
-    startInstallment, shippingAddress, photo, path, status, approvalName, shipNumber, catatan;
+    String noSp, date, tipeSp, sales, customerName, namaUser, address, city, orderVia, downPayment, discount, discountValue, conditions, installment,
+    startInstallment, shippingAddress, photo, path, status, approvalName, shipNumber, catatan, lastStatus, lastApprove, lastReason;
 
     int grandTotal;
     double subTotal;
+
+    public String getNamaUser() {
+        return namaUser;
+    }
+
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
+    }
+
+    public String getLastApprove() {
+        return lastApprove;
+    }
+
+    public void setLastApprove(String lastApprove) {
+        this.lastApprove = lastApprove;
+    }
+
+    public String getLastReason() {
+        return lastReason;
+    }
+
+    public void setLastReason(String lastReason) {
+        this.lastReason = lastReason;
+    }
+
+    public String getLastStatus() {
+        return lastStatus;
+    }
+
+    public void setLastStatus(String lastStatus) {
+        this.lastStatus = lastStatus;
+    }
 
     public double getSubTotal() {
         return subTotal;

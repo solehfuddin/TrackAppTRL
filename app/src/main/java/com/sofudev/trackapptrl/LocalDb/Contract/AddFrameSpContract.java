@@ -16,4 +16,5 @@ public class AddFrameSpContract {
     public static final String PRODUCT_STOCK = "product_stock";
     public static final String PRODUCT_WEIGHT= "product_weight";
     public static final String PRODUCT_IMG  = "product_image";
+    public static final String PRODUCT_FLAG  = "product_flag";
 }

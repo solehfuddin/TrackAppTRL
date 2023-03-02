@@ -164,6 +164,7 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnBadgeCounter, OnFragmentInteractionListener {
     //PermissionSettings permission;
     Config config = new Config();
+    private String FRAMEPRICEURL = config.Ip_address + config.frame_price_mode;
     private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     private String userDetail_URL = config.Ip_address + config.dashboard_user_detail;
@@ -235,6 +236,8 @@ public class DashboardActivity extends AppCompatActivity
     WishlistHelper wishlistHelper;
     AddCartHelper addCartHelper;
     CustomLoading customLoading;
+
+    private String TAG = "";
 
 //    private Adapter_banner_custom mAdapter;
 //
@@ -385,6 +388,7 @@ public class DashboardActivity extends AppCompatActivity
 //        homeProduk();
         isHomeActive();
         showBanner();
+        getFrameMode();
 //        showBalance();
 
         if (data1.length() == 3)
@@ -402,12 +406,12 @@ public class DashboardActivity extends AppCompatActivity
             showCategory();
         }
 
-        showPromoFrame();
-        showSpesialProduk();
-        showAnotherProduk();
-        showMoreFrame();
-        showPromoBanner();
-        frameProduk();
+//        showPromoFrame();
+//        showSpesialProduk();
+//        showAnotherProduk();
+//        showMoreFrame();
+//        showPromoBanner();
+//        frameProduk();
 //        setupSlider();
 
         dt_time = new Date();
@@ -481,6 +485,51 @@ public class DashboardActivity extends AppCompatActivity
         txt_countCart.setText(" " + countCart + " ");
 
         getSaldoDepo(username);
+    }
+
+    private void getFrameMode() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, FRAMEPRICEURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean output = jsonObject.getBoolean("show_price_frame");
+
+                    Log.d("Frame Mode : ", String.valueOf(output));
+
+                    if (output)
+                    {
+                        TAG = "dashboard";
+                    }
+                    else
+                    {
+                        TAG = "main";
+                    }
+
+                    showPromoFrame();
+                    showSpesialProduk();
+                    showAnotherProduk();
+                    showMoreFrame();
+                    showPromoBanner();
+                    frameProduk();
+
+                    Log.d("TAG Mode : ", TAG);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+                customLoading.dismissLoadingDialog();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void countData(final String username)
@@ -3172,7 +3221,9 @@ public class DashboardActivity extends AppCompatActivity
     private void showPromoFrame() {
         PromoFrameFragment fragment = new PromoFrameFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("activity", "dashboard");
+//        bundle.putString("activity", "dashboard");
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_promo_frame, fragment);
@@ -3182,7 +3233,9 @@ public class DashboardActivity extends AppCompatActivity
     private void showSpesialProduk() {
         SpecialProductFragment fragment = new SpecialProductFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("activity", "dashboard");
+//        bundle.putString("activity", "dashboard");
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_special_product, fragment);
@@ -3192,7 +3245,9 @@ public class DashboardActivity extends AppCompatActivity
     private void showAnotherProduk() {
         OtherProductFragment fragment = new OtherProductFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("activity", "dashboard");
+//        bundle.putString("activity", "dashboard");
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_another_product, fragment);
@@ -3202,7 +3257,9 @@ public class DashboardActivity extends AppCompatActivity
     private void showMoreFrame() {
         MoreFrameFragment fragment = new MoreFrameFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("activity", "dashboard");
+//        bundle.putString("activity", "dashboard");
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_other_frame, fragment);
@@ -3219,7 +3276,9 @@ public class DashboardActivity extends AppCompatActivity
     private void frameProduk() {
         NewFrameFragment newFrameFragment = new NewFrameFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("activity", "dashboard");
+//        bundle.putString("activity", "dashboard");
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
         newFrameFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_fragment_container, newFrameFragment, "newframe");

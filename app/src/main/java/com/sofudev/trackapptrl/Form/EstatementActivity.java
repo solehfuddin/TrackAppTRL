@@ -70,6 +70,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
 
     private Config config = new Config();
     private String URLCATEGORYSTATEMENT = config.Ip_address + config.estatement_getcategory;
+    private String URLCATEGORYSTATEMENTRANGE = config.Ip_address + config.estatement_getcategoryrange;
     private String URLSUMMARYLAST = config.Ip_address + config.estatement_getsummarylast;
     private String URLDETAILSUMMARY = config.Ip_address + config.estatement_getdetailsummary;
 
@@ -97,6 +98,8 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
     String tmpOpticname = "";
     String divisi   = "";
     String filterby = "All Data";
+    String stDateRange = "";
+    String edDateRange = "";
     int pos = 0;
     int total = 0;
 
@@ -140,8 +143,12 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
         setDateNow();
         dialogCalendar();
 
+//        stateAdapter.addFragment(new EstatementItemFragment(),
+//                new Data_filter_estatement(filterby, username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
+//                        txtYearAwal.getText().toString(), divisi));
+
         stateAdapter.addFragment(new EstatementItemFragment(),
-                new Data_filter_estatement(filterby, username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
+                new Data_filter_estatement(filterby, username, stDateRange, edDateRange,
                         txtYearAwal.getText().toString(), divisi));
         viewPager.setAdapter(stateAdapter);
         tabLayout.setViewPager(viewPager);
@@ -191,8 +198,9 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCategory(username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
-                        txtYearAwal.getText().toString());
+//                getCategory(username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
+//                        txtYearAwal.getText().toString());
+                getCategoryRange(username, stDateRange, edDateRange);
             }
         });
 
@@ -202,8 +210,8 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
 //                Toasty.info(getApplicationContext(), String.valueOf(total), Toast.LENGTH_SHORT).show();
                 if (total > 0)
                 {
-                    String link = "http://180.250.96.154/trl-webs/index.php/PrintReceipt/Estatement/" + username + "/"
-                            + txtMonAwal.getText().toString() + "/" + txtMonAkhir.getText().toString() +"/" + txtYearAwal.getText().toString();
+                    String link = "http://180.250.96.154/trl-webs/index.php/PrintReceipt/EstatementNew/" + username + "/"
+                            + stDateRange + "/" + edDateRange +"/" + txtYearAwal.getText().toString();
                     Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                     startActivity(openBrowser);
                 }
@@ -280,7 +288,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
                     if (viewPager != null && viewPager.getAdapter() != null)
                     {
                         stateAdapter.addFragment(new EstatementItemFragment(),
-                                new Data_filter_estatement(filterby, username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
+                                new Data_filter_estatement(filterby, username, stDateRange, edDateRange,
                                         txtYearAwal.getText().toString(), divisi));
                         viewPager.getAdapter().notifyDataSetChanged();
                     }
@@ -298,17 +306,24 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
 
     private void setDateNow() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat, dateFormat1;
+        SimpleDateFormat dateFormat, dateFormat1, dateFormatRange, dateFormatRange1;
 
         String format = "dd-MM-yyyy";
         String format1 = "MM-yyyy";
+        String formatRange = "yyyy-MM-dd";
+        String formatRange1 = "yyyy-MM";
         String monAwal, monAkhir, yearAwal, yearAkhir;
 
         String date, date1;
         dateFormat = new SimpleDateFormat(format);
         dateFormat1 = new SimpleDateFormat(format1);
+        dateFormatRange = new SimpleDateFormat(formatRange);
+        dateFormatRange1 = new SimpleDateFormat(formatRange1);
         date = dateFormat.format(calendar.getTime());
         date1 = "01-" + dateFormat1.format(calendar.getTime());
+
+        edDateRange = dateFormatRange.format(calendar.getTime());
+        stDateRange = dateFormatRange1.format(calendar.getTime()) + "-01";
 
         String[] temp = date1.split("-");
         String[] temp1 = date.split("-");
@@ -333,6 +348,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
                 Integer.valueOf(temp1[1]) - 1, Integer.valueOf(temp1[2])));
 
         Log.d("Initialize date : ", date1 + " / " + date);
+        Log.d("Initialize daterange : ", stDateRange + " / " + edDateRange);
     }
 
     private void getMonYear(String dateAwal, String dateAkhir) {
@@ -352,7 +368,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
         if (viewPager != null && viewPager.getAdapter() != null)
         {
             stateAdapter.addFragment(new EstatementItemFragment(),
-                    new Data_filter_estatement(filterby, username, txtMonAwal.getText().toString(), txtMonAkhir.getText().toString(),
+                    new Data_filter_estatement(filterby, username, stDateRange, edDateRange,
                             txtYearAwal.getText().toString(), divisi));
             viewPager.getAdapter().notifyDataSetChanged();
         }
@@ -402,6 +418,9 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
                                         String date = new SimpleDateFormat(getString(R.string.titleDateStatement),
                                                 Locale.getDefault()).format(secondDate.getTime());
 
+                                        stDateRange = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(firstDate.getTime());
+                                        edDateRange = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(secondDate.getTime());
+
                                         String[] monAwal = date1.split("-");
                                         String[] monAkhir = date.split("-");
 
@@ -414,6 +433,7 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
 //                                txtAkhir.setText(date1);
 
                                         Log.d("Choose date : ", date1 + " / " + date);
+                                        Log.d("Choose daterange : ", stDateRange + " / " + edDateRange);
                                         getMonYear(date1, date);
                                     }
                                     else
@@ -484,6 +504,61 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
                 map.put("startmon", dtAwal);
                 map.put("endmon", dtAkhir);
                 map.put("year", tahun);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getCategoryRange(final String username, final String dtAwal, final String dtAkhir) {
+        StringRequest request = new StringRequest(Request.Method.POST, URLCATEGORYSTATEMENTRANGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    List<String> data = new ArrayList<>();
+
+                    data.add("All Data :");
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        if (object.names().get(0).equals("invalid"))
+                        {
+                            Log.d("Invalid", "Data not found");
+                        }
+                        else
+                        {
+                            JSONArray dataArray = object.getJSONArray("data");
+
+                            for (int j = 0; j < dataArray.length(); j++) {
+                                JSONObject obj = dataArray.getJSONObject(j);
+
+                                Log.d("Divisi", obj.getString("divisi"));
+                                data.add(obj.getString("divisi"));
+                            }
+                        }
+                    }
+
+                    dialogSorting(data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("username", username);
+                map.put("start_date", dtAwal);
+                map.put("end_date", dtAkhir);
                 return map;
             }
         };
@@ -631,7 +706,6 @@ public class EstatementActivity extends AppCompatActivity implements CounterData
         }
 
         private void addFragment(Fragment fragment, Data_filter_estatement item) {
-
             mFragmentList.add(fragment);
             mFilterList.add(item);
         }

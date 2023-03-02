@@ -130,15 +130,22 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     String URL_INSERTLINETITEM   = config.Ip_address + config.frame_insert_lineitem;
     String URL_INSERTSPHEADER    = config.Ip_address + config.ordersp_insert_spHeader;
     String URL_INSERTDURATION    = config.Ip_address + config.ordersp_insert_duration;
+    String URL_INSERTDURATIONBIN = config.Ip_address + config.ordersp_insert_durationbin;
     String URL_INSERTSAMTEMP     = config.Ip_address + config.ordersp_insert_samTemp;
     String URL_GETBRANDFRAME     = config.Ip_address + config.spframe_get_framebrand;
     String URL_GETFRAMEBYBRAND   = config.Ip_address + config.spframe_get_byframe;
+    String URL_GETFRAMEBYBRANDFLAG = config.Ip_address + config.spframe_get_byframe_flag;
     String URL_GETFRAMESEARCH    = config.Ip_address + config.spframe_get_searchframe;
     String URL_GETFRAMESEARCHBRAND = config.Ip_address + config.spframe_get_searchframebrand;
+    String URL_GETFRAMESEARCHBRANDFLAG = config.Ip_address + config.spframe_get_searchframebrandflag;
     String URL_GETFRAMEBARCODE   = config.Ip_address + config.spframe_get_searchbarcode;
+    String URL_GETFRAMEBARCODEFLAG   = config.Ip_address + config.spframe_get_searchbarcodeflag;
     String URL_GETFRAMEBYITEMID  = config.Ip_address + config.spframe_get_byitemid;
+    String URL_GETFRAMEBYITEMIDFLAG  = config.Ip_address + config.spframe_get_byitemidflag;
     String URL_UPDATESIGNED   = config.Ip_address + config.ordersp_update_digitalsigned;
     String URL_UPDATEPHOTO    = config.Ip_address + config.ordersp_update_photo;
+
+    boolean isFotoUploaded = false;
 
     Adapter_framesp adapter_framesp;
     Adapter_frame_brand adapter_frame_brand;
@@ -152,7 +159,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     LinearLayout progressLayout;
     ProgressWheel loader;
     ImageView imgFrameNotFound;
-    TextView txtCounter, txtTmp;
+    TextView txtCounter, txtTmp, txtFlag;
+    Switch swFlag;
     RippleView btnPilihFrame;
     RecyclerView recyclerFrame, recyclerItemFrame;
     EditText txtBarcode;
@@ -185,7 +193,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     int pos = 0, isLoad = 0, isInvalid = 0;
     int priceDisc, shippingId, flagPayment, headerDp;
     double totalDisc, totalPrice, totalAllPrice;
-    String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, subcustId, subcustLocId, idSp;
+    String opticId, opticName, opticProvince, opticUsername, opticCity, opticAddress, subcustId, subcustLocId, idSp, flag, idPartySales;
     String headerNoSp;
     String headerTipeSp;
     String headerSales;
@@ -231,6 +239,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         txtShipping = findViewById(R.id.form_spframe_txtitemship);
         txtTotalPrice = findViewById(R.id.form_spframe_txttotalprice);
         txtBarcode = findViewById(R.id.form_spframe_txtBarcode);
+        txtFlag    = findViewById(R.id.form_spframe_txtflag);
+        swFlag     = findViewById(R.id.form_spframe_swflag);
         txtTmp     = findViewById(R.id.form_spframe_txttmp);
         txtOpticName = findViewById(R.id.form_spframe_txtopticname);
         cardSummary = findViewById(R.id.form_spframe_cardsummary);
@@ -331,6 +341,24 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
 //        newpos = "Qty Terendah";
 //        storingPref();
         recyclerItemFrame.setAdapter(adapter_add_framesp);
+
+        handleFlag();
+        swFlag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                {
+                    txtFlag.setText("BIN");
+                    flag = "BIN";
+                }
+                else
+                {
+                    txtFlag.setText("STORE");
+                    flag = "STORE";
+                }
+            }
+        });
     }
 
     private void slideShow(View view){
@@ -385,7 +413,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             headerStatus   = bundle.getString("header_status");
             headerImage    = bundle.getString("header_image");
             headerSignedPath = bundle.getString("header_signedpath");
+            idPartySales   = bundle.getString("header_idparty");
 
+            flag = "STORE";
+            Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales : " + idPartySales);
             txtOpticName.setText(opticName);
 //            getSp();
             getOraId(opticId);
@@ -722,22 +753,32 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     if (object.names().get(0).equals("error") || object.names().get(0).equals("invalid"))
                     {
                         Toasty.error(getApplicationContext(), "Data failed save", Toast.LENGTH_SHORT).show();
+                        isFotoUploaded = false;
                     }
                     else if (object.names().get(0).equals("info")) {
                         Toasty.warning(getApplicationContext(), "Gambar sudah pernah diupload", Toast.LENGTH_SHORT).show();
+                        isFotoUploaded = false;
                     }
                     else
                     {
                         Log.d("Return image : ", object.getString("path"));
+                        isFotoUploaded = true;
+
+//                        insertHeader(dataFrameHeader, subcustId, subcustLocId, "");
+//                        insertNonPaymentStatus(idSp);
+//
+//                        insertSP(URL_INSERTSAMTEMP, dataSpHeader);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    isFotoUploaded = false;
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                isFotoUploaded = false;
             }
         });
 
@@ -1056,9 +1097,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         dataFrameHeader.setOpticAddress(opticAddress);
         dataFrameHeader.setPaymentCashCarry("Non Payment Method");
         dataFrameHeader.setCustomDisc(discCustom);
-
         insertHeader(dataFrameHeader, subcustId, subcustLocId, "");
-        insertNonPaymentStatus(idSp);
 
         for (int i = 0; i < modelFrameSpList.size(); i++)
         {
@@ -1109,8 +1148,21 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             updatePhoto(dataSpHeader, URL_UPDATEPHOTO);
         }
 
+        insertNonPaymentStatus(idSp);
         insertSP(URL_INSERTSAMTEMP, dataSpHeader);
-        insertSpHeader(dataSpHeader);
+
+        /*else
+        {
+            try {
+                Thread.sleep(500);
+                insertNonPaymentStatus(idSp);
+
+                insertSP(URL_INSERTSAMTEMP, dataSpHeader);
+//            insertSpHeader(dataSpHeader);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     private boolean isAngka(String input)
@@ -1146,7 +1198,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         addpos = pref.getString("DIALOGSP_ADDPOS", "LEINZ");
         itemSortDesc = pref.getString("DIALOGSP_ITEMSORTDESC","DESC");
         newpos = pref.getString("DIALOGSP_NEWPOS","Qty Tertinggi");
-        getItemByBrand(addpos, itemSortDesc);
+
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Pos : " + addpos);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Sort : " + itemSortDesc);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Flag : " + flag);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales : " + idPartySales);
 
         rpFilter      = dialog.findViewById(R.id.dialog_chooseframe_rpfilter);
         rpSort        = dialog.findViewById(R.id.dialog_chooseframe_rpSort);
@@ -1162,10 +1218,11 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         RecyclerView.LayoutManager verticalGrid = new LinearLayoutManager(FormSpFrameActivity.this);
         recyclerFrame.setLayoutManager(verticalGrid);
 
-//        loader.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.VISIBLE);
+
+        getItemByBrand(addpos, itemSortDesc, flag, idPartySales);
+
         isBarcode = false;
-//        isClear   = false;
 
         btnAdd.setEnabled(false);
         btnAdd.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
@@ -1175,8 +1232,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 scanNow();
                 isBarcode = true;
-//                isClear = true;
-//                dialog.dismiss();
             }
         });
 
@@ -1200,34 +1255,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
 
         recyclerFrame.setAdapter(adapter_framesp_multi);
 
-//        adapter_framesp_qty = new Adapter_framesp_qty(getApplicationContext(), itemBestProduct, new RecyclerViewOnClickListener() {
-//            @Override
-//            public void onItemClick(View view, int pos, String id) {
-//                int sisaQty = Integer.valueOf(itemBestProduct.get(pos).getProduct_qty());
-//
-//                if (sisaQty > 0)
-//                {
-//                    btnAdd.setEnabled(true);
-//                    btnAdd.setBootstrapBrand(DefaultBootstrapBrand.WARNING);
-//                }
-//                else
-//                {
-//                    btnAdd.setEnabled(false);
-//                    btnAdd.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
-//                }
-//
-//                productId = itemBestProduct.get(pos).getProduct_id();
-//
-////                Toasty.info(getApplicationContext(), "ID PRODUK = " + itemBestProduct.get(pos).getProduct_id(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-//        recyclerFrame.setAdapter(adapter_framesp_qty);
-
-//        if (txtSearch.getText().toString().isEmpty()){
-//            getItemByBrand(addpos, itemSortDesc);
-//        }
-
         imgClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1245,7 +1272,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         progressLayout.setVisibility(View.VISIBLE);
 
                         itemBestProduct.clear();
-                        getItemByBrand(addpos, itemSortDesc);
+                        getItemByBrand(addpos, itemSortDesc, flag, idPartySales);
                     }
                     else
                     {
@@ -1261,7 +1288,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         progressLayout.setVisibility(View.VISIBLE);
 
                         itemBestProduct.clear();
-                        getItemByBrand(addpos, itemSortDesc);
+                        getItemByBrand(addpos, itemSortDesc, flag, idPartySales);
                     }
                 }
                 else
@@ -1269,15 +1296,13 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
 //                    isClear = true;
                     txtSearch.setText("");
                     isBarcode = false;
-//                    progressLayout.setVisibility(View.VISIBLE);
+                    progressLayout.setVisibility(View.VISIBLE);
 //
                     itemBestProduct.clear();
-                    getItemByBrand(addpos, itemSortDesc);
+                    getItemByBrand(addpos, itemSortDesc, flag, idPartySales);
                 }
             }
         });
-
-//        txtSearch.setText(txtTmp.getText().toString());
 
         txtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1305,16 +1330,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             txtSearch.setEnabled(false);
 
                             progressLayout.setVisibility(View.VISIBLE);
-//                    searchFrame(txtSearch.getText().toString(), itemSortDesc);
-
-//                    itemBestProduct.clear();
-//        imgClear.setImageResource(R.drawable.ic_close);
-                            itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
-//                    adapter_framesp_qty.notifyDataSetChanged();
-                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBARCODE, new Response.Listener<String>() {
+                            itemBestProduct.clear();
+                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBARCODEFLAG, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-//                            loader.setVisibility(View.GONE);
                                     progressLayout.setVisibility(View.GONE);
 
                                     try {
@@ -1393,7 +1412,9 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     HashMap<String, String> hashMap = new HashMap<>();
                                     hashMap.put("key", scanContent);
-//                hashMap.put("sort", itemSortDesc);
+                                    hashMap.put("flag", flag);
+                                    hashMap.put("idsales", idPartySales);
+//                hashMap.put("sort", itemSortDesc);,
                                     return hashMap;
                                 }
                             };
@@ -1402,25 +1423,17 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         }
                         else
                         {
-//                        itemBestProduct.clear();
-//                        adapter_framesp_qty.notifyDataSetChanged();
                             itemBestProduct.clear();
-//                            getItemByBrand(addpos, itemSortDesc);
                         }
                     }
                     else
                     {
-//                        Toast.makeText(getApplicationContext(), "Hasil input", Toast.LENGTH_LONG).show();
-//                    adapter_framesp_qty.notifyDataSetChanged();
                         itemBestProduct.clear();
-//                        getItemByBrand(addpos, itemSortDesc);
                     }
                 }
                 else
                 {
                     itemBestProduct.clear();
-//                    isClear = false;
-//                    getItemByBrand(addpos, itemSortDesc);
                 }
             }
         });
@@ -1436,18 +1449,14 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     progressLayout.setVisibility(View.VISIBLE);
-//                    searchFrame(txtSearch.getText().toString(), itemSortDesc);
-
-//                    itemBestProduct.clear();
                     txtSearch.setEnabled(false);
                     imgClear.setImageResource(R.drawable.ic_close);
-                    itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
+                    itemBestProduct.clear();
 
                     if (cekInput && isBarcode){
-                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBARCODE, new Response.Listener<String>() {
+                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBARCODEFLAG, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-//                            loader.setVisibility(View.GONE);
                                 progressLayout.setVisibility(View.GONE);
 
                                 try {
@@ -1526,6 +1535,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             protected Map<String, String> getParams() throws AuthFailureError {
                                 HashMap<String, String> hashMap = new HashMap<>();
                                 hashMap.put("key", txtSearch.getText().toString());
+                                hashMap.put("flag", flag);
+                                hashMap.put("idsales", idPartySales);
 //                hashMap.put("sort", itemSortDesc);
                                 return hashMap;
                             }
@@ -1535,12 +1546,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     }
                     else
                     {
+                        progressLayout.setVisibility(View.VISIBLE);
 //                        adapter_framesp_qty.notifyDataSetChanged();
 //                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
-                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
+                        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRANDFLAG, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-//                            loader.setVisibility(View.GONE);
                                 progressLayout.setVisibility(View.GONE);
 
                                 try {
@@ -1621,6 +1632,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 hashMap.put("key", txtSearch.getText().toString());
                                 hashMap.put("sort", itemSortDesc);
                                 hashMap.put("brand", addpos);
+                                hashMap.put("flag", flag);
+                                hashMap.put("idsales", idPartySales);
                                 return hashMap;
                             }
                         };
@@ -1690,33 +1703,21 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Toasty.info(getApplicationContext(), itemOrgId, Toast.LENGTH_SHORT).show();
-//                        if (itemOrgId.equals("0"))
-//                        {
-//                            getOnHandByQty(itemOrgId);
-//                        }
-//                        else
-//                        {
 
                         recyclerFrame.setVisibility(View.GONE);
                         progressLayout.setVisibility(View.VISIBLE);
 
                         if (txtSearch.getText().length() > 0)
                         {
-//                            recyclerFrame.setVisibility(View.GONE);
-//                            progressLayout.setVisibility(View.VISIBLE);
-
                             if (itemSortId.equals("0"))
                             {
-//                                progressLayout.setVisibility(View.VISIBLE);
                                 itemSortDesc = "ASC";
                                 storingPref();
                                 itemBestProduct.clear();
 //                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRANDFLAG, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-//                                        loader.setVisibility(View.GONE);
                                         progressLayout.setVisibility(View.GONE);
                                         recyclerFrame.setVisibility(View.VISIBLE);
 
@@ -1798,6 +1799,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         hashMap.put("key", txtSearch.getText().toString());
                                         hashMap.put("sort", itemSortDesc);
                                         hashMap.put("brand", addpos);
+                                        hashMap.put("flag", flag);
+                                        hashMap.put("idsales", idPartySales);
                                         return hashMap;
                                     }
                                 };
@@ -1805,15 +1808,13 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 AppController.getInstance().addToRequestQueue(request);
                             }
                             else {
-//                                progressLayout.setVisibility(View.VISIBLE);
                                 itemSortDesc = "DESC";
                                 storingPref();
                                 itemBestProduct.clear();
 //                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRANDFLAG, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-//                                        loader.setVisibility(View.GONE);
                                         progressLayout.setVisibility(View.GONE);
                                         recyclerFrame.setVisibility(View.VISIBLE);
 
@@ -1895,6 +1896,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         hashMap.put("key", txtSearch.getText().toString());
                                         hashMap.put("sort", itemSortDesc);
                                         hashMap.put("brand", addpos);
+                                        hashMap.put("flag", flag);
+                                        hashMap.put("idsales", idPartySales);
                                         return hashMap;
                                     }
                                 };
@@ -1903,22 +1906,20 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             }
                         }
                         else {
-//                            recyclerFrame.setVisibility(View.GONE);
-//                            progressLayout.setVisibility(View.VISIBLE);
                             if (itemSortId.equals("0")) {
-//                                progressLayout.setVisibility(View.VISIBLE);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Pos1 : " + addpos);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Sort1 : " + itemSortDesc);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Flag1 : " + flag);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales1 : " + idPartySales);
+
                                 itemSortDesc = "ASC";
                                 storingPref();
-//                                getItemByBrand(addpos, itemSortDesc);
 
                                 itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
-//        adapter_framesp_qty.notifyDataSetChanged();
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRANDFLAG, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-//                loader.setVisibility(View.GONE);
                                         progressLayout.setVisibility(View.GONE);
-//                recyclerFrame.setVisibility(View.VISIBLE);
 
                                         try {
                                             JSONArray jsonArray = new JSONArray(response);
@@ -1998,6 +1999,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         HashMap<String, String> hashMap = new HashMap<>();
                                         hashMap.put("category", addpos);
                                         hashMap.put("sort", itemSortDesc);
+                                        hashMap.put("flag", flag);
+                                        hashMap.put("idsales", idPartySales);
                                         return hashMap;
                                     }
                                 };
@@ -2005,19 +2008,19 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 AppController.getInstance().addToRequestQueue(request);
                             }
                             else {
-//                                progressLayout.setVisibility(View.VISIBLE);
                                 itemSortDesc = "DESC";
                                 storingPref();
-//                                getItemByBrand(addpos, itemSortDesc);
+
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Pos2 : " + addpos);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Sort2 : " + itemSortDesc);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Flag2 : " + flag);
+                                Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales2 : " + idPartySales);
 
                                 itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
-//        adapter_framesp_qty.notifyDataSetChanged();
-                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRANDFLAG, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-//                loader.setVisibility(View.GONE);
                                         progressLayout.setVisibility(View.GONE);
-//                recyclerFrame.setVisibility(View.VISIBLE);
 
                                         try {
                                             JSONArray jsonArray = new JSONArray(response);
@@ -2097,6 +2100,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                         HashMap<String, String> hashMap = new HashMap<>();
                                         hashMap.put("category", addpos);
                                         hashMap.put("sort", itemSortDesc);
+                                        hashMap.put("flag", flag);
+                                        hashMap.put("idsales", idPartySales);
                                         return hashMap;
                                     }
                                 };
@@ -2104,8 +2109,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                 AppController.getInstance().addToRequestQueue(request);
                             }
                         }
-//                        }
-//                        getSuggestion(itemOrgId);
                         dialog.dismiss();
                     }
                 });
@@ -2160,25 +2163,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         storingPref();
                         recyclerFrame.setVisibility(View.GONE);
                         progressLayout.setVisibility(View.VISIBLE);
-//                        getItemByBrand(addpos, itemSortDesc);
-
-//                        Toasty.info(getApplicationContext(), itemOrgId, Toast.LENGTH_SHORT).show();
-//                if (dataCatItem.equals("0"))
-//                {
-////                    getOnHandByQty(itemOrgId);
-//                }
-//                else
-//                {
-////                            getOnHandByOrgId(itemOrgId);
-////                    getOnHandBySort(itemOrgId, itemSortDesc);
-//                }
-//                        getSuggestion(itemOrgId);
 
                         if (txtSearch.getText().length() > 0)
                         {
                             itemBestProduct.clear();
 //                                StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCH, new Response.Listener<String>() {
-                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRAND, new Response.Listener<String>() {
+                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMESEARCHBRANDFLAG, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
 //                                        loader.setVisibility(View.GONE);
@@ -2263,6 +2253,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                     hashMap.put("key", txtSearch.getText().toString());
                                     hashMap.put("sort", itemSortDesc);
                                     hashMap.put("brand", addpos);
+                                    hashMap.put("flag", flag);
+                                    hashMap.put("idsales", idPartySales);
                                     return hashMap;
                                 }
                             };
@@ -2271,14 +2263,18 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         }
                         else
                         {
+                            Log.d(FormSpFrameActivity.class.getSimpleName(), "Pos3 : " + addpos);
+                            Log.d(FormSpFrameActivity.class.getSimpleName(), "Sort3 : " + itemSortDesc);
+                            Log.d(FormSpFrameActivity.class.getSimpleName(), "Flag3 : " + flag);
+                            Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales3 : " + idPartySales);
+
+
                             itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
-//        adapter_framesp_qty.notifyDataSetChanged();
-                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
+                            StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRANDFLAG, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-//                loader.setVisibility(View.GONE);
                                     progressLayout.setVisibility(View.GONE);
-//                recyclerFrame.setVisibility(View.VISIBLE);
+                                    Log.d(FormSpFrameActivity.class.getSimpleName(), response);
 
                                     try {
                                         JSONArray jsonArray = new JSONArray(response);
@@ -2358,6 +2354,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                                     HashMap<String, String> hashMap = new HashMap<>();
                                     hashMap.put("category", addpos);
                                     hashMap.put("sort", itemSortDesc);
+                                    hashMap.put("flag", flag);
+                                    hashMap.put("idsales", idPartySales);
                                     return hashMap;
                                 }
                             };
@@ -2411,6 +2409,26 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         adapter_framesp_qty.notifyItemRangeInserted(0, newItem.size());
     }
 
+    @SuppressLint("SetTextI18n")
+    private void handleFlag(){
+        if (modelFrameSpList.size() > 0)
+        {
+           String itemFlag =  modelFrameSpList.get(0).getProductFlag();
+           if (itemFlag.equals("STORE"))
+           {
+               flag = "STORE";
+               txtFlag.setText("STORE");
+               swFlag.setChecked(false);
+           }
+           else
+           {
+               flag = "BIN";
+               txtFlag.setText("BIN");
+               swFlag.setChecked(true);
+           }
+        }
+    }
+
     private void handlerItemCart() {
         adapter_add_framesp = new Adapter_add_framesp(getApplicationContext(), modelFrameSpList, new RecyclerViewOnClickListener() {
             @Override
@@ -2430,12 +2448,16 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             linearEmpty.setVisibility(View.GONE);
                             scrollView.setVisibility(View.VISIBLE);
                             cardView.setVisibility(View.VISIBLE);
+
+                            swFlag.setEnabled(false);
                         }
                         else
                         {
                             linearEmpty.setVisibility(View.VISIBLE);
                             scrollView.setVisibility(View.GONE);
                             cardView.setVisibility(View.GONE);
+
+                            swFlag.setEnabled(true);
                         }
 
                         adapter_add_framesp.notifyDataSetChanged();
@@ -2619,6 +2641,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             cardView.setVisibility(View.VISIBLE);
             recyclerItemFrame.setVisibility(View.VISIBLE);
 
+            swFlag.setEnabled(false);
+
             adapter_add_framesp.notifyDataSetChanged();
         }
         else
@@ -2627,76 +2651,10 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             scrollView.setVisibility(View.GONE);
             cardView.setVisibility(View.GONE);
             recyclerItemFrame.setVisibility(View.GONE);
+
+            swFlag.setEnabled(true);
         }
     }
-
-//    private void showCategoryFrame()
-//    {
-//        final UniversalFontTextView txtTitle;
-//        final ListView listView;
-//        final BootstrapButton btnChoose;
-//        final Dialog dialog = new Dialog(FormSpFrameActivity.this);
-//
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.dialog_power_lensstock);
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//
-//        adapter_frame_brand = new Adapter_frame_brand(FormSpFrameActivity.this, itemCategory, addpos);
-//
-//        txtTitle = dialog.findViewById(R.id.dialog_powerstock_txtTitle);
-//        listView = dialog.findViewById(R.id.dialog_powerstock_listview);
-//        btnChoose= dialog.findViewById(R.id.dialog_powerstock_btnsave);
-//
-//        txtTitle.setText("Pilih Category Item");
-//        listView.setAdapter(adapter_frame_brand);
-//        btnChoose.setEnabled(false);
-//        btnChoose.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
-//
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                dataCatItem = itemCategory.get(position).getItem();
-//
-//                addpos = dataCatItem;
-//                if (dataCatItem.isEmpty())
-//                {
-//                    btnChoose.setEnabled(false);
-//                    btnChoose.setBootstrapBrand(DefaultBootstrapBrand.REGULAR);
-//                }
-//                else
-//                {
-//                    btnChoose.setEnabled(true);
-//                    btnChoose.setBootstrapBrand(DefaultBootstrapBrand.SUCCESS);
-//                }
-//            }
-//        });
-//
-//        btnChoose.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                storingPref();
-//                progressLayout.setVisibility(View.VISIBLE);
-//                getItemByBrand(addpos, itemSortDesc);
-//
-////                        Toasty.info(getApplicationContext(), itemOrgId, Toast.LENGTH_SHORT).show();
-////                if (dataCatItem.equals("0"))
-////                {
-//////                    getOnHandByQty(itemOrgId);
-////                }
-////                else
-////                {
-//////                            getOnHandByOrgId(itemOrgId);
-//////                    getOnHandBySort(itemOrgId, itemSortDesc);
-////                }
-////                        getSuggestion(itemOrgId);
-//
-//
-//                dialog.hide();
-//            }
-//        });
-//
-//        dialog.show();
-//    }
 
     private String CurencyFormat(String Rp){
         if (Rp.contentEquals("0") | Rp.equals("0"))
@@ -2711,7 +2669,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showDetailProduk(final String id) {
-        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYITEMID, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYITEMIDFLAG, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -2750,6 +2708,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             item.setProductStock(object.getInt("frame_qty"));
                             item.setProductWeight(object.getInt("frame_weight"));
                             item.setProductImage(object.getString("frame_image"));
+                            item.setProductFlag(flag);
 
                             long status = addFrameSpHelper.insertAddFrameSp(item);
 
@@ -2779,6 +2738,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_lensa", id);
+                hashMap.put("flag", flag);
+                hashMap.put("idsales", idPartySales);
                 return hashMap;
             }
         };
@@ -2787,7 +2748,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showDetailProdukMulti(final String id) {
-        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYITEMID, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYITEMIDFLAG, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -2826,6 +2787,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             item.setProductStock(object.getInt("frame_qty"));
                             item.setProductWeight(object.getInt("frame_weight"));
                             item.setProductImage(object.getString("frame_image"));
+                            item.setProductFlag(flag);
 
                             long status = addFrameSpHelper.insertAddFrameSp(item);
 
@@ -2861,6 +2823,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_lensa", id);
+                hashMap.put("flag", flag);
+                hashMap.put("idsales", idPartySales);
                 return hashMap;
             }
         };
@@ -2878,6 +2842,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     if (object.names().get(0).equals("success"))
                     {
                         Log.d("INSERT SP", "Data has been save");
+
+                        insertSpHeader(dataSpHeader);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3054,7 +3020,14 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     if (jsonObject.names().get(0).equals("success"))
                     {
 //                        Toasty.info(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                        insertDuration(item);
+                        if (flag.equals("STORE"))
+                        {
+                            insertDuration(item);
+                        }
+                        else
+                        {
+                            insertDurationBin(item);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -3122,6 +3095,43 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    private void insertDurationBin(final Data_frame_item item) {
+        StringRequest request = new StringRequest(Request.Method.POST, URL_INSERTDURATIONBIN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        addFrameSpHelper.open();
+                        addFrameSpHelper.truncCart();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("no_sp", item.getOrderId());
+                hashMap.put("item_id", String.valueOf(item.getFrameId()));
+                hashMap.put("qty", String.valueOf(item.getFrameQty()));
+                hashMap.put("idsales", idPartySales);
+                hashMap.put("namasales", headerSales);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void getBrand() {
         itemCategory.clear();
 
@@ -3157,16 +3167,20 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private void getItemByBrand(final String category, final String sorting) {
-//        itemBestProduct.clear();
-        itemBestProduct.clear(); //here items is an ArrayList populating the RecyclerView
-//        adapter_framesp_qty.notifyDataSetChanged();
-        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRAND, new Response.Listener<String>() {
+    private void getItemByBrand(final String category, final String sorting, final String flag, final String salesid) {
+        itemBestProduct.clear();
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Pos0 : " + category);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Sort0 : " + sorting);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Flag0 : " + flag);
+        Log.d(FormSpFrameActivity.class.getSimpleName(), "Id sales0 : " + salesid);
+
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETFRAMEBYBRANDFLAG, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                loader.setVisibility(View.GONE);
-//                progressLayout.setVisibility(View.GONE);
-//                recyclerFrame.setVisibility(View.VISIBLE);
+                if (progressLayout.getVisibility() == View.VISIBLE)
+                {
+                    progressLayout.setVisibility(View.GONE);
+                }
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -3180,8 +3194,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             check = false;
 
 //                            recyclerFrame.setVisibility(View.GONE);
-//                            txtCounter.setVisibility(View.GONE);
-//                            imgFrameNotFound.setVisibility(View.VISIBLE);
+                            txtCounter.setVisibility(View.GONE);
+                            imgFrameNotFound.setVisibility(View.VISIBLE);
                         }
                         else
                         {
@@ -3217,8 +3231,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                             itemBestProduct.add(data);
                         }
                     }
-//                    adapter_framesp_qty.notifyDataSetChanged();
-//                    handleRecyclerQty(itemBestProduct);
 
                     List<Data_fragment_bestproduct> newItem = new ArrayList<>();
                     newItem.addAll(itemBestProduct);
@@ -3226,8 +3238,6 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                     itemBestProduct.addAll(newItem);// add new data
 
                     txtCounter.setText(newItem.size() + " Data Ditemukan");
-//                    adapter_framesp_qty.notifyItemRangeInserted(0, itemBestProduct.size());// notify adapter of new data
-//                    adapter_framesp_qty.notifyDataSetChanged();
 
                     adapter_framesp_multi.notifyItemRangeInserted(0, itemBestProduct.size());
                     adapter_framesp_multi.notifyDataSetChanged();
@@ -3246,6 +3256,8 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("category", category);
                 hashMap.put("sort", sorting);
+                hashMap.put("flag", flag);
+                hashMap.put("idsales", salesid);
                 return hashMap;
             }
         };
@@ -3272,6 +3284,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                         sendBroadcast(intent);
 
                         finish();
+
 //                        updatePhoto(dataHeader, URL_UPDATEPHOTO);
                     }
                     else if (object.names().get(0).equals("error"))
@@ -3316,6 +3329,7 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 hashMap.put("custom_discount", item.getCustomdisc());
                 hashMap.put("notes", item.getNotes());
                 hashMap.put("nama_owner", item.getOwnerOptic());
+                hashMap.put("flag", flag);
                 return hashMap;
             }
         };
@@ -3442,13 +3456,12 @@ public class FormSpFrameActivity extends AppCompatActivity implements View.OnCli
                 txtTmp.setText(scanContent);
                 txtSearch.setText(txtTmp.getText());
             } else {
-                getItemByBrand(addpos, itemSortDesc);
+                getItemByBrand(addpos, itemSortDesc, txtFlag.getText().toString(), idPartySales);
             }
         } else {
             Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
-
-            getItemByBrand(addpos, itemSortDesc);
+//            getItemByBrand(addpos, itemSortDesc, txtFlag.getText().toString(), idPartySales);
         }
 
         super.onActivityResult(requestCode, resultCode, data);

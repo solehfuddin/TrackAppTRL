@@ -79,6 +79,19 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
                 viewHolder.txtDuration.setVisibility(View.GONE);
                 viewHolder.imageView.setImageResource(R.drawable.img_am);
                 break;
+            case "REJECT AM":
+                viewHolder.rlHeader.setBackgroundColor(Color.parseColor("#17a2b8"));
+                LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                lp2.setMargins(0, 18, 0, 0);
+
+                viewHolder.txtApprove.setText("Ditolak Sales Area (" + approvalName.toUpperCase() + ")");
+                viewHolder.txtApprove.setTextSize(14f);
+                viewHolder.txtApprove.setTextColor(Color.parseColor("#f90606"));
+                viewHolder.txtApprove.setLayoutParams(lp2);
+                viewHolder.txtDuration.setVisibility(View.GONE);
+                viewHolder.imageView.setImageResource(R.drawable.img_am);
+                break;
             case "SAM":
                 viewHolder.rlHeader.setBackgroundColor(Color.parseColor("#17a2b8"));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

@@ -54,6 +54,7 @@ public class EstatementItemFragment extends Fragment {
 
     private Config config = new Config();
     private String URLDATA = config.Ip_address + config.estatement_getdata;
+    private String URLDATARANGE = config.Ip_address + config.estatement_getdatarange;
 
     private ShimmerRecyclerView shimmer;
     private RecyclerView recyclerView;
@@ -169,7 +170,8 @@ public class EstatementItemFragment extends Fragment {
             Log.d("Loading data ", "All data");
         }
 
-        getData(username, blnawal, blnakhir, tahun, divisi);
+//        getData(username, blnawal, blnakhir, tahun, divisi);
+        getDataRange(username, blnawal, blnakhir, divisi);
     }
 
     private List<Data_child_estatement> itemList() {
@@ -343,6 +345,139 @@ public class EstatementItemFragment extends Fragment {
                 map.put("startmon", dtAwal);
                 map.put("endmon", dtAkhir);
                 map.put("year", tahun);
+                map.put("divisi", div);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void getDataRange(final String username, final String dtAwal, final String dtAkhir, final String div) {
+        shimmer.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        item.clear();
+        StringRequest request = new StringRequest(Request.Method.POST, URLDATARANGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    Log.d("Output", response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            //Data tidak ditemukan
+                            imgnotfound.setVisibility(View.VISIBLE);
+                            shimmer.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
+
+                            if (divisi.length() > 0)
+                            {
+                                txttotal.setText(CurencyFormat("0"));
+                                txtsubtotal.setText(CurencyFormat("0"));
+
+                                progresssubtotal.setVisibility(View.GONE);
+                                txtsubtotal.setVisibility(View.VISIBLE);
+                                progresstotal.setVisibility(View.GONE);
+                                txttotal.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                txttotalall.setText(CurencyFormat("0"));
+
+                                progresstotalall.setVisibility(View.GONE);
+                                txttotalall.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        else
+                        {
+                            JSONArray jsonArray1 = jsonObject.getJSONArray("data");
+                            JSONArray total      = jsonObject.getJSONArray("count");
+                            JSONArray subtotal   = jsonObject.getJSONArray("subtotal");
+
+                            for (int j = 0; j < jsonArray1.length(); j++)
+                            {
+                                JSONObject object = jsonArray1.getJSONObject(j);
+
+                                Data_child_estatement child = new Data_child_estatement(
+                                        object.getString("trx_no"),
+                                        object.getString("tgl"),
+                                        object.getString("outstanding")
+                                );
+
+                                item.add(child);
+                            }
+
+                            counterData.counterData(item.size());
+
+                            for (int t = 0; t < total.length(); t++)
+                            {
+                                JSONObject object = total.getJSONObject(t);
+
+                                String totalamount = object.getString("totalamount");
+                                String totaloutstand = object.getString("totaloutstanding");
+
+                                if (divisi.length() > 0)
+                                {
+                                    txttotal.setText(CurencyFormat(String.valueOf(totaloutstand)));
+
+                                    progresstotal.setVisibility(View.GONE);
+                                    txttotal.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    txttotalall.setText(CurencyFormat(String.valueOf(totaloutstand)));
+//                                    txtsubtotal.setText(CurencyFormat(String.valueOf(totalamount)));
+
+                                    progresstotalall.setVisibility(View.GONE);
+                                    txttotalall.setVisibility(View.VISIBLE);
+//                                    txtsubtotal.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            for (int s = 0; s < subtotal.length(); s++)
+                            {
+                                JSONObject object = subtotal.getJSONObject(s);
+
+                                String subtotalamount = object.getString("totalamount");
+                                String subtotaloutstand = object.getString("totaloutstanding");
+
+                                if (divisi.length() > 0)
+                                {
+                                    txtsubtotal.setText(CurencyFormat(String.valueOf(subtotaloutstand)));
+//                                    txttotal.setText(CurencyFormat(String.valueOf(subtotalamount)));
+                                    progresssubtotal.setVisibility(View.GONE);
+                                    txtsubtotal.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+
+                    shimmer.hideShimmerAdapter();
+                    shimmer.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    adapter_child_estatement.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("username", username);
+                map.put("start_date", dtAwal);
+                map.put("end_date", dtAkhir);
                 map.put("divisi", div);
                 return map;
             }

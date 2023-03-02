@@ -8,8 +8,8 @@ public class Config {
 //    public String Ip_tiki    = "https://leinz.org/trl_tiki/";
 
     //Production Server
-//    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
-    public String Ip_address = "http://180.250.96.154/trl-dev/"; /* IP Public */
+    public String Ip_address = "http://180.250.96.154/trl-webs/"; /* IP Public */
+//    public String Ip_address = "http://180.250.96.154/trl-dev/"; /* IP Public */
     public String Ip_21express = "http://180.250.96.154/trl_ds_exp/";
     public String Ip_tiki    = "http://180.250.96.154/trl_tiki/";
 
@@ -28,6 +28,8 @@ public class Config {
 
     /* Area App Setting */
     public String version_apps = "index.php/android_appsetting/getVersion";
+    public String maintenance_mode = "index.php/android_appsetting/getMaintenanceMode";
+    public String frame_price_mode = "index.php/android_appsetting/getPriceFrameMode";
 
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
@@ -346,15 +348,23 @@ public class Config {
     public String ordersp_get_detailSp            = "index.php/Android_apisp/trackingSp";
     public String ordersp_get_inv                 = "index.php/Android_apisp/getInv";
     public String ordersp_insert_duration         = "index.php/Android_apisp/insertDuration";
+    public String ordersp_insert_durationbin      = "index.php/Android_apisp/insertDurationBin";
     public String ordersp_get_approvalsp          = "index.php/Android_apisp/getApprovalSp/8/";
     public String ordersp_search_approvalsp       = "index.php/Android_apisp/getSpApprovalSearch/1/";
     public String ordersp_update_approvalsp       = "index.php/Android_apisp/approvalByAreaManager";
+    public String ordersp_update_approvalsphold   = "index.php/Android_apisp/approvalHoldByAreaManager";
     public String ordersp_update_rejectsp         = "index.php/Android_apisp/rejectByAreaManager";
+    public String ordersp_update_rejectsphold     = "index.php/Android_apisp/rejectHoldByAreaManager";
     public String ordersp_item_detailsp           = "index.php/Android_apisp/getItemSpFrame";
     public String ordersp_unprocess_frame         = "index.php/Android_apisp/getUnproccessSp/8/";
     public String ordersp_process_frame           = "index.php/Android_apisp/getProccessSp/8/";
     public String ordersp_unprocess_frame_search  = "index.php/Android_apisp/getUnproccessSpSearch/8/";
     public String ordersp_process_frame_search    = "index.php/Android_apisp/getProccessSpSearch/8/";
+    public String ordersp_holdunprocess_frame     = "index.php/Android_apisp/getHoldUnproccessSp/8/";
+    public String ordersp_holdunprocess_frame_search  = "index.php/Android_apisp/getHoldUnproccessSpSearch/8/";
+    public String ordersp_hold_frame              = "index.php/Android_apisp/getHoldSpFrame/8/";
+    public String ordersp_reject_frame            = "index.php/Android_apisp/getRejectSpFrame/8/";
+    public String ordersp_laststatus_frame        = "index.php/Android_apisp/getLastStatusSpFrame/8/";
 
     /* AREA FLASH SALE */
     public String flashsale_getActiveSale         = "index.php/Android_flashsale/getActiveSale";
@@ -379,10 +389,14 @@ public class Config {
     /* AREA SP FRAME */
     public String spframe_get_framebrand          = "index.php/Android_apispframe/getBrand";
     public String spframe_get_byframe             = "index.php/Android_apispframe/getFrameByBrand";
+    public String spframe_get_byframe_flag        = "index.php/Android_apispframe/getFrameByBrandFlag";
     public String spframe_get_searchframe         = "index.php/Android_apispframe/getFrameBySearch";
     public String spframe_get_searchframebrand    = "index.php/Android_apispframe/getFrameBrandBySearch";
+    public String spframe_get_searchframebrandflag= "index.php/Android_apispframe/getFrameBrandBySearchBin";
     public String spframe_get_searchbarcode       = "index.php/Android_apispframe/getFrameByBarcode";
+    public String spframe_get_searchbarcodeflag   = "index.php/Android_apispframe/getFrameByBarcodeBin";
     public String spframe_get_byitemid            = "index.php/Android_apispframe/getFrameByItemId";
+    public String spframe_get_byitemidflag        = "index.php/Android_apispframe/getFrameByItemIdBin";
 
     /* AREA DEPOSIT */
     public String depo_getsaldo                   = "index.php/Android_deposit/getSaldo";
@@ -394,7 +408,9 @@ public class Config {
 
     /* AREA ESTATEMENT */
     public String estatement_getdata              = "index.php/Android_estatement/showStatement";
+    public String estatement_getdatarange         = "index.php/Android_estatement/showStatementRange";
     public String estatement_getcategory          = "index.php/Android_estatement/showCategory";
+    public String estatement_getcategoryrange     = "index.php/Android_estatement/showCategoryRange";
     public String estatement_getsummarylast       = "index.php/Android_estatement/getTotalSummaryLast";
     public String estatement_getdetailsummary     = "index.php/Android_estatement/getDetailSummaryLast";
 

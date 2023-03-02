@@ -21,7 +21,7 @@ buildscript {
         // in the individual module build.gradle files
         //classpath 'com.google.gms:google-services:3.0.0'
 
-//        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'com.google.gms:google-services:4.0.1'
     }
 }
 
@@ -37,6 +37,18 @@ allprojects {
 //        }
         google()
         maven { url "https://jcenter.bintray.com" }
+
+//        configurations.all {
+//            resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//                def requested = details.requested
+//                if (requested.group == 'com.google.android.gms') {
+//                    details.useVersion '17.0.0'
+//                }
+//                if (requested.group == 'com.google.firebase') {
+//                    details.useVersion '17.0.0'
+//                }
+//            }
+//        }
     }
 }
 

@@ -31,10 +31,10 @@ public class DateFormat {
     }
 
     public String Indotime(String data) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date newdate = sdf.parse(data);
-            sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+            sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
             data = sdf.format(newdate);
         } catch (ParseException e) {

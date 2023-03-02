@@ -1303,8 +1303,8 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                         txt_datestatus.setVisibility(View.GONE);
                         lbl_duration.setVisibility(View.GONE);
                         txt_duration.setVisibility(View.GONE);
-                        ripple_btnDetail.setEnabled(false);
-                        btn_detail.setBackgroundColor(Color.parseColor("#58595e"));
+//                        ripple_btnDetail.setEnabled(false);
+//                        btn_detail.setBackgroundColor(Color.parseColor("#58595e"));
 //                        ripple_btndownload.setEnabled(false);
 //                        btnDownload.setBackgroundColor(Color.parseColor("#58595e"));
                     }

@@ -61,7 +61,7 @@ public class PromoFrameFragment extends Fragment {
     Context myContext;
     List<Data_fragment_bestproduct> itemProduct = new ArrayList<>();
 
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, ACCESS_FROM;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -88,7 +88,8 @@ public class PromoFrameFragment extends Fragment {
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -103,7 +104,8 @@ public class PromoFrameFragment extends Fragment {
         cardBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -123,7 +125,8 @@ public class PromoFrameFragment extends Fragment {
         adapter_promo_frame = new Adapter_promo_frame(myContext, itemProduct, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -158,6 +161,7 @@ public class PromoFrameFragment extends Fragment {
         if (bundle != null)
         {
             ACTIVITY_TAG = bundle.getString("activity");
+            ACCESS_FROM  = bundle.getString("access");
         }
     }
 

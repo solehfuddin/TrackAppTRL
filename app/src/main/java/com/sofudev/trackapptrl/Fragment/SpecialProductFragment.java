@@ -66,7 +66,7 @@ public class SpecialProductFragment extends Fragment {
     Context myContext;
     List<Data_fragment_bestproduct> itemProduct = new ArrayList<>();
 
-    String ACTIVITY_TAG;
+    String ACTIVITY_TAG, ACCESS_FROM;
 
     public SpecialProductFragment() {
         // Required empty public constructor
@@ -121,7 +121,8 @@ public class SpecialProductFragment extends Fragment {
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -141,7 +142,8 @@ public class SpecialProductFragment extends Fragment {
         adapter_special_item = new Adapter_special_item(getContext(), itemProduct, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
-                if (ACTIVITY_TAG.equals("main"))
+//                if (ACTIVITY_TAG.equals("main"))
+                if (ACCESS_FROM.equals("main"))
                 {
                     Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
@@ -187,6 +189,7 @@ public class SpecialProductFragment extends Fragment {
         if (bundle != null)
         {
             ACTIVITY_TAG = bundle.getString("activity");
+            ACCESS_FROM  = bundle.getString("access");
         }
     }
 

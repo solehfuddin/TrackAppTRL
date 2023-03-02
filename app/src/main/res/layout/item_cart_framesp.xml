@@ -171,6 +171,7 @@
                     android:maxLines="1"
                     android:textSize="11dp"
                     android:text="Rp. 310.519.900"
+                    android:visibility="gone"
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="15"
                     app:scale_left="284"
@@ -178,6 +179,28 @@
                     app:scale_height="30"
                     app:scale_textsize="14"/>
 
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_cartframesp_lblFlag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="STORE"
+                    android:textSize="12sp"
+                    android:textColor="#14a895"
+                    android:textStyle="bold"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="0"
+                    app:scale_left="340"
+                    app:scale_width="65"
+                    app:scale_height="25"
+                    app:scale_textsize="14"
+                    tools:ignore="RtlCompat" />
             </com.ssomai.android.scalablelayout.ScalableLayout>
 
         </LinearLayout>

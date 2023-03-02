@@ -165,230 +165,478 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
             @Override
             public void onItemClick(View view, final int pos, String id) {
                 Log.d("NOMOR INVOICE", id);
-                if(statusDpodk == 0)
+                if (isAdmin)
                 {
-                    UniversalFontTextView txtOpticName, txtInvoiceNumber, txtDpodkNumber, txtCustNo, txtTotalInv, txtDate, txtTime, txtNote;
-                    final Spinner spinStatus, spinWarna;
-                    final BootstrapEditText edtName, edtNotes, edtBayar;
-                    RippleView btnSave, btnExit;
-
-                    txtOpticName = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtopticname);
-                    txtInvoiceNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtinvnumber);
-                    txtDpodkNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtdpodknumber);
-                    txtCustNo      = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtcustno);
-                    txtTotalInv    = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttotalinv);
-                    txtDate        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttgl);
-                    txtTime        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtjam);
-                    txtNote        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtnoteinv);
-                    spinStatus     = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinstatus);
-                    spinWarna      = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinkertas);
-                    edtBayar       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtBayar);
-                    edtName        = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNama);
-                    edtNotes       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNote);
-                    btnSave        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btnsave);
-                    btnExit        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btncancel);
-
-                    Log.d(CourierDpodkActivity.class.getSimpleName(), "Total inv : " + listData.get(pos).getTotal_inv());
-
-                    final TextWatcher customWatcher = new MoneyTextWatcher(edtBayar);
-
-                    if (!listData.get(pos).getTotal_inv().contains("."))
+                    if (!listData.get(pos).getStatus().equals("null"))
                     {
-                        edtBayar.addTextChangedListener(customWatcher);
-                    }
+//                        Toast.makeText(getApplicationContext(), "Dialog untuk ubah nama", Toast.LENGTH_SHORT).show();
 
-                    edtName.setText("");
-                    edtNotes.setText("");
+                        UniversalFontTextView txtOpticName, txtInvoiceNumber, txtDpodkNumber, txtCustNo, txtTotalInv, txtDate, txtTime, txtNote;
+                        final Spinner spinStatus, spinWarna;
+                        final BootstrapEditText edtName, edtNotes, edtBayar;
+                        RippleView btnSave, btnExit;
 
-                    final BottomDialog bottomDialog = new BottomDialog.Builder(CourierDpodkActivity.this)
-                            .setTitle("Ubah Status Dpodk")
-                            .setCustomView(customView)
+                        txtOpticName = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtopticname);
+                        txtInvoiceNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtinvnumber);
+                        txtDpodkNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtdpodknumber);
+                        txtCustNo      = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtcustno);
+                        txtTotalInv    = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttotalinv);
+                        txtDate        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttgl);
+                        txtTime        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtjam);
+                        txtNote        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtnoteinv);
+                        spinStatus     = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinstatus);
+                        spinWarna      = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinkertas);
+                        edtBayar       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtBayar);
+                        edtName        = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNama);
+                        edtNotes       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNote);
+                        btnSave        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btnsave);
+                        btnExit        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btncancel);
+
+                        Log.d(CourierDpodkActivity.class.getSimpleName(), "Total inv : " + listData.get(pos).getTotal_inv());
+
+                        final TextWatcher customWatcher = new MoneyTextWatcher(edtBayar);
+
+                        if (!listData.get(pos).getTotal_inv().contains("."))
+                        {
+                            edtBayar.addTextChangedListener(customWatcher);
+                        }
+
+                        edtName.setText(listData.get(pos).getNama_penerima());
+                        edtNotes.setText(listData.get(pos).getNote_opd());
+
+                        final BottomDialog bottomDialog = new BottomDialog.Builder(CourierDpodkActivity.this)
+                                .setTitle("Ubah Status Dpodk")
+                                .setCustomView(customView)
 //                            .setCancelable(false)
 //                            .autoDismiss(false)
-                            .build();
+                                .build();
 
-                    final String[] status = {"TERKIRIM", "RETUR"};
-                    final String[] warna = {"PUTIH", "MERAH", "TTB", "LAIN-LAIN"};
-                    String note;
-                    spinStatus.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, status));
-                    spinWarna.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, warna));
+                        final String[] status = {"TERKIRIM", "RETUR"};
+                        final String[] warna = {"PUTIH", "MERAH", "TTB", "LAIN-LAIN"};
+                        String note;
+                        ArrayAdapter<String> adapterStatus = new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, status);
+                        ArrayAdapter<String> adapterWarna  = new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, warna);
+                        //  spinStatus.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, status));
+                        spinStatus.setAdapter(adapterStatus);
+                        spinWarna.setAdapter(adapterWarna);
+//                        spinWarna.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, warna));
 
-                    spinStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            String item = adapterView.getItemAtPosition(i).toString();
-                            Log.d("Selected Status", item);
+                        if (listData.get(pos).getStatus() != null)
+                        {
+                            int statusPos = adapterStatus.getPosition(listData.get(pos).getStatus());
+                            spinStatus.setSelection(statusPos);
+                        }
 
-                            if (item.equals("RETUR"))
-                            {
-                                edtName.setEnabled(false);
-                                edtName.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                        if (listData.get(pos).getWarna_kertas() != null)
+                        {
+                            int warnaPos = adapterWarna.getPosition(listData.get(pos).getWarna_kertas());
+                            spinWarna.setSelection(warnaPos);
+                        }
 
-                                spinWarna.setVisibility(View.INVISIBLE);
+                        spinStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                String item = adapterView.getItemAtPosition(i).toString();
+                                Log.d("Selected Status", item);
 
-                                edtNotes.setEnabled(true);
-                                edtNotes.requestFocus();
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
+                                if (item.equals("RETUR"))
+                                {
+                                    edtName.setEnabled(false);
+                                    edtName.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
 
-                                edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                    spinWarna.setVisibility(View.INVISIBLE);
+
+                                    edtNotes.setEnabled(true);
+                                    edtNotes.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
+
+                                    edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                }
+                                else
+                                {
+                                    edtName.setEnabled(true);
+                                    edtName.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                    edtName.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(edtName, InputMethodManager.SHOW_IMPLICIT);
+
+                                    spinWarna.setVisibility(View.VISIBLE);
+
+                                    if (spinWarna.getSelectedItem() == "PUTIH")
+                                    {
+                                        edtNotes.setEnabled(false);
+                                        edtNotes.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                                    }
+                                }
                             }
-                            else
-                            {
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
                                 edtName.setEnabled(true);
-                                edtName.setBootstrapBrand(DefaultBootstrapBrand.INFO);
-                                edtName.requestFocus();
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.showSoftInput(edtName, InputMethodManager.SHOW_IMPLICIT);
+                            }
+                        });
 
-                                spinWarna.setVisibility(View.VISIBLE);
+                        spinWarna.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                String item = adapterView.getItemAtPosition(i).toString();
+                                Log.d("Selected Warna", item);
 
-                                if (spinWarna.getSelectedItem() == "PUTIH")
+                                if (!item.equals("PUTIH"))
+                                {
+                                    if (!item.equals("MERAH"))
+                                    {
+                                        edtNotes.requestFocus();
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
+                                    }
+
+                                    edtNotes.setEnabled(true);
+                                    edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                }
+                                else
                                 {
                                     edtNotes.setEnabled(false);
                                     edtNotes.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
                                 }
-                            }
-                        }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-                            edtName.setEnabled(true);
-                        }
-                    });
-
-                    spinWarna.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            String item = adapterView.getItemAtPosition(i).toString();
-                            Log.d("Selected Warna", item);
-
-                            if (!item.equals("PUTIH"))
-                            {
-                                if (!item.equals("MERAH"))
+                                if (item.equals("MERAH"))
                                 {
-                                    edtNotes.requestFocus();
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
-                                }
-
-                                edtNotes.setEnabled(true);
-                                edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
-                            }
-                            else
-                            {
-                                edtNotes.setEnabled(false);
-                                edtNotes.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
-                            }
-
-                            if (item.equals("MERAH"))
-                            {
-                                edtBayar.setEnabled(true);
-                                edtBayar.setTextColor(Color.parseColor("#0275d8"));
-                                edtBayar.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                    edtBayar.setEnabled(true);
+                                    edtBayar.setTextColor(Color.parseColor("#0275d8"));
+                                    edtBayar.setBootstrapBrand(DefaultBootstrapBrand.INFO);
 //                                edtBayar.requestFocus();
 //                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //                                imm.showSoftInput(edtBayar, InputMethodManager.SHOW_IMPLICIT);
 
-                                edtBayar.setText(listData.get(pos).getTotal_inv());
-                                edtBayar.setSelection(edtBayar.getText().length());
-                            }
-                            else
-                            {
-                                edtBayar.setEnabled(false);
-                                edtBayar.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
-                                edtBayar.setTextColor(Color.parseColor("#b4b3b3"));
-                                edtBayar.setText("0");
-                            }
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-
-                        }
-                    });
-
-                    if (listData.get(pos).getNote().isEmpty())
-                    {
-                        note = "-";
-                    }
-                    else
-                    {
-                        note = listData.get(pos).getNote().toUpperCase();
-                    }
-
-                    txtOpticName.setText(listData.get(pos).getNama_optik());
-                    txtInvoiceNumber.setText(listData.get(pos).getNo_inv());
-                    txtNote.setText(note);
-                    txtDpodkNumber.setText(listData.get(pos).getNo_trx());
-                    txtCustNo.setText(listData.get(pos).getCust_no());
-                    txtTotalInv.setText("Rp. " + CurencyFormat(listData.get(pos).getTotal_inv().replace(",", ".")));
-                    txtDate.setText(listData.get(pos).getTgl_kirim());
-                    txtTime.setText(listData.get(pos).getJam_berangkat());
-
-                    btnSave.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            String totalBayar = edtBayar.getText().toString().replace("Rp", "").replace(".", "").trim();
-                            Log.d(CourierTaskActivity.class.getSimpleName(), "Total Bayar : " + totalBayar);
-                            String warna;
-
-                            if (spinStatus.getSelectedItem().equals("RETUR"))
-                            {
-                                warna = "LAIN-LAIN";
-                                totalBayar = "";
-                                isName = true;
-                            }
-                            else
-                            {
-                                warna = spinWarna.getSelectedItem().toString();
-
-                                if (edtName.getText().length() > 0)
+                                    edtBayar.setText(listData.get(pos).getTotal_inv());
+                                    edtBayar.setSelection(edtBayar.getText().length());
+                                }
+                                else
                                 {
+                                    edtBayar.setEnabled(false);
+                                    edtBayar.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                                    edtBayar.setTextColor(Color.parseColor("#b4b3b3"));
+                                    edtBayar.setText("0");
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
+
+                        if (listData.get(pos).getNote().isEmpty())
+                        {
+                            note = "-";
+                        }
+                        else
+                        {
+                            note = listData.get(pos).getNote().toUpperCase();
+                        }
+
+                        txtOpticName.setText(listData.get(pos).getNama_optik());
+                        txtInvoiceNumber.setText(listData.get(pos).getNo_inv());
+                        txtNote.setText(note);
+                        txtDpodkNumber.setText(listData.get(pos).getNo_trx());
+                        txtCustNo.setText(listData.get(pos).getCust_no());
+                        txtTotalInv.setText("Rp. " + CurencyFormat(listData.get(pos).getTotal_inv().replace(",", ".")));
+                        txtDate.setText(listData.get(pos).getTgl_kirim());
+                        txtTime.setText(listData.get(pos).getJam_berangkat());
+
+                        btnSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String totalBayar = edtBayar.getText().toString().replace("Rp", "").replace(".", "").trim();
+                                Log.d(CourierTaskActivity.class.getSimpleName(), "Total Bayar : " + totalBayar);
+                                String warna;
+
+                                if (spinStatus.getSelectedItem().equals("RETUR"))
+                                {
+                                    warna = "LAIN-LAIN";
+                                    totalBayar = "";
                                     isName = true;
                                 }
                                 else
                                 {
-                                    isName = false;
+                                    warna = spinWarna.getSelectedItem().toString();
+
+                                    if (edtName.getText().length() > 0)
+                                    {
+                                        isName = true;
+                                    }
+                                    else
+                                    {
+                                        isName = false;
+                                    }
                                 }
-                            }
 
-                            if (!spinWarna.getSelectedItem().equals("MERAH"))
-                            {
-                                totalBayar = "";
-                            }
-
-                            if (isName)
-                            {
-                                if (listData.get(pos).getTotal_inv().contains("."))
+                                if (!spinWarna.getSelectedItem().equals("MERAH"))
                                 {
-                                    totalBayar = edtBayar.getText().toString().replace(".", ",");
+                                    totalBayar = "";
                                 }
 
-                                changeStatus(listData.get(pos).getNo_trx(), listData.get(pos).getNo_inv(), spinStatus.getSelectedItem().toString(),
-                                        edtName.getText().toString().toUpperCase().trim(), warna, totalBayar,
-                                        edtNotes.getText().toString().toUpperCase().trim(), bottomDialog,
-                                        edtName, edtNotes);
+                                if (isName)
+                                {
+                                    if (listData.get(pos).getTotal_inv().contains("."))
+                                    {
+                                        totalBayar = edtBayar.getText().toString().replace(".", ",");
+                                    }
 
+                                    changeStatus(listData.get(pos).getNo_trx(), listData.get(pos).getNo_inv(), spinStatus.getSelectedItem().toString(),
+                                            edtName.getText().toString().toUpperCase().trim(), warna, totalBayar,
+                                            edtNotes.getText().toString().toUpperCase().trim(), bottomDialog,
+                                            edtName, edtNotes);
+
+                                    edtBayar.removeTextChangedListener(customWatcher);
+                                }
+                                else
+                                {
+                                    Toasty.warning(getApplicationContext(), "Nama penerima belum diisi", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        btnExit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
                                 edtBayar.removeTextChangedListener(customWatcher);
+                                bottomDialog.dismiss();
                             }
-                            else
-                            {
-                                Toasty.warning(getApplicationContext(), "Nama penerima belum diisi", Toast.LENGTH_SHORT).show();
+                        });
+
+                        bottomDialog.show();
+                    }
+                }
+                else {
+                    if(statusDpodk == 0)
+                    {
+                        UniversalFontTextView txtOpticName, txtInvoiceNumber, txtDpodkNumber, txtCustNo, txtTotalInv, txtDate, txtTime, txtNote;
+                        final Spinner spinStatus, spinWarna;
+                        final BootstrapEditText edtName, edtNotes, edtBayar;
+                        RippleView btnSave, btnExit;
+
+                        txtOpticName = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtopticname);
+                        txtInvoiceNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtinvnumber);
+                        txtDpodkNumber = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtdpodknumber);
+                        txtCustNo      = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtcustno);
+                        txtTotalInv    = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttotalinv);
+                        txtDate        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txttgl);
+                        txtTime        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtjam);
+                        txtNote        = (UniversalFontTextView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_txtnoteinv);
+                        spinStatus     = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinstatus);
+                        spinWarna      = (Spinner) customView.findViewById(R.id.bottom_dialog_dpodkchangests_spinkertas);
+                        edtBayar       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtBayar);
+                        edtName        = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNama);
+                        edtNotes       = (BootstrapEditText) customView.findViewById(R.id.bottom_dialog_dpodkchangests_edtNote);
+                        btnSave        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btnsave);
+                        btnExit        = (RippleView) customView.findViewById(R.id.bottom_dialog_dpodkchangests_btncancel);
+
+                        Log.d(CourierDpodkActivity.class.getSimpleName(), "Total inv : " + listData.get(pos).getTotal_inv());
+
+                        final TextWatcher customWatcher = new MoneyTextWatcher(edtBayar);
+
+                        if (!listData.get(pos).getTotal_inv().contains("."))
+                        {
+                            edtBayar.addTextChangedListener(customWatcher);
+                        }
+
+                        edtName.setText("");
+                        edtNotes.setText("");
+
+                        final BottomDialog bottomDialog = new BottomDialog.Builder(CourierDpodkActivity.this)
+                                .setTitle("Ubah Status Dpodk")
+                                .setCustomView(customView)
+//                            .setCancelable(false)
+//                            .autoDismiss(false)
+                                .build();
+
+                        final String[] status = {"TERKIRIM", "RETUR"};
+                        final String[] warna = {"PUTIH", "MERAH", "TTB", "LAIN-LAIN"};
+                        String note;
+                        spinStatus.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, status));
+                        spinWarna.setAdapter(new ArrayAdapter<>(CourierDpodkActivity.this, R.layout.spin_framemodel_item, warna));
+
+                        spinStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @SuppressLint("ResourceAsColor")
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                String item = adapterView.getItemAtPosition(i).toString();
+                                Log.d("Selected Status", item);
+
+                                if (item.equals("RETUR"))
+                                {
+                                    edtName.setEnabled(false);
+                                    edtName.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+
+                                    spinWarna.setVisibility(View.INVISIBLE);
+
+                                    edtNotes.setEnabled(true);
+                                    edtNotes.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
+
+                                    edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                }
+                                else
+                                {
+                                    edtName.setEnabled(true);
+                                    edtName.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                    edtName.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(edtName, InputMethodManager.SHOW_IMPLICIT);
+
+                                    spinWarna.setVisibility(View.VISIBLE);
+
+                                    if (spinWarna.getSelectedItem() == "PUTIH")
+                                    {
+                                        edtNotes.setEnabled(false);
+                                        edtNotes.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                                    }
+                                }
                             }
-                        }
-                    });
 
-                    btnExit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            edtBayar.removeTextChangedListener(customWatcher);
-                            bottomDialog.dismiss();
-                        }
-                    });
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                edtName.setEnabled(true);
+                            }
+                        });
 
-                    bottomDialog.show();
+                        spinWarna.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                String item = adapterView.getItemAtPosition(i).toString();
+                                Log.d("Selected Warna", item);
+
+                                if (!item.equals("PUTIH"))
+                                {
+                                    if (!item.equals("MERAH"))
+                                    {
+                                        edtNotes.requestFocus();
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.showSoftInput(edtNotes, InputMethodManager.SHOW_IMPLICIT);
+                                    }
+
+                                    edtNotes.setEnabled(true);
+                                    edtNotes.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+                                }
+                                else
+                                {
+                                    edtNotes.setEnabled(false);
+                                    edtNotes.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                                }
+
+                                if (item.equals("MERAH"))
+                                {
+                                    edtBayar.setEnabled(true);
+                                    edtBayar.setTextColor(Color.parseColor("#0275d8"));
+                                    edtBayar.setBootstrapBrand(DefaultBootstrapBrand.INFO);
+//                                edtBayar.requestFocus();
+//                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                                imm.showSoftInput(edtBayar, InputMethodManager.SHOW_IMPLICIT);
+
+                                    edtBayar.setText(listData.get(pos).getTotal_inv());
+                                    edtBayar.setSelection(edtBayar.getText().length());
+                                }
+                                else
+                                {
+                                    edtBayar.setEnabled(false);
+                                    edtBayar.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                                    edtBayar.setTextColor(Color.parseColor("#b4b3b3"));
+                                    edtBayar.setText("0");
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        });
+
+                        if (listData.get(pos).getNote().isEmpty())
+                        {
+                            note = "-";
+                        }
+                        else
+                        {
+                            note = listData.get(pos).getNote().toUpperCase();
+                        }
+
+                        txtOpticName.setText(listData.get(pos).getNama_optik());
+                        txtInvoiceNumber.setText(listData.get(pos).getNo_inv());
+                        txtNote.setText(note);
+                        txtDpodkNumber.setText(listData.get(pos).getNo_trx());
+                        txtCustNo.setText(listData.get(pos).getCust_no());
+                        txtTotalInv.setText("Rp. " + CurencyFormat(listData.get(pos).getTotal_inv().replace(",", ".")));
+                        txtDate.setText(listData.get(pos).getTgl_kirim());
+                        txtTime.setText(listData.get(pos).getJam_berangkat());
+
+                        btnSave.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String totalBayar = edtBayar.getText().toString().replace("Rp", "").replace(".", "").trim();
+                                Log.d(CourierTaskActivity.class.getSimpleName(), "Total Bayar : " + totalBayar);
+                                String warna;
+
+                                if (spinStatus.getSelectedItem().equals("RETUR"))
+                                {
+                                    warna = "LAIN-LAIN";
+                                    totalBayar = "";
+                                    isName = true;
+                                }
+                                else
+                                {
+                                    warna = spinWarna.getSelectedItem().toString();
+
+                                    if (edtName.getText().length() > 0)
+                                    {
+                                        isName = true;
+                                    }
+                                    else
+                                    {
+                                        isName = false;
+                                    }
+                                }
+
+                                if (!spinWarna.getSelectedItem().equals("MERAH"))
+                                {
+                                    totalBayar = "";
+                                }
+
+                                if (isName)
+                                {
+                                    if (listData.get(pos).getTotal_inv().contains("."))
+                                    {
+                                        totalBayar = edtBayar.getText().toString().replace(".", ",");
+                                    }
+
+                                    changeStatus(listData.get(pos).getNo_trx(), listData.get(pos).getNo_inv(), spinStatus.getSelectedItem().toString(),
+                                            edtName.getText().toString().toUpperCase().trim(), warna, totalBayar,
+                                            edtNotes.getText().toString().toUpperCase().trim(), bottomDialog,
+                                            edtName, edtNotes);
+
+                                    edtBayar.removeTextChangedListener(customWatcher);
+                                }
+                                else
+                                {
+                                    Toasty.warning(getApplicationContext(), "Nama penerima belum diisi", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        btnExit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                edtBayar.removeTextChangedListener(customWatcher);
+                                bottomDialog.dismiss();
+                            }
+                        });
+
+                        bottomDialog.show();
+                    }
                 }
             }
         }, this);
@@ -1022,7 +1270,14 @@ public class CourierDpodkActivity extends AppCompatActivity implements MultipleS
                     {
                         Toasty.success(getApplicationContext(), "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
 
-                        getCourierByDpodk(idDpodk);
+                        if (isAdmin)
+                        {
+                            getProcessCourierByDpodk(idDpodk);
+                        }
+                        else
+                        {
+                            getCourierByDpodk(idDpodk);
+                        }
 
                         edtNama.setText("");
                         edtNote.setText("");

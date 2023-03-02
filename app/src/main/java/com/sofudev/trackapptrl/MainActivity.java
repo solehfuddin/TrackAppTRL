@@ -46,6 +46,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -63,6 +64,8 @@ import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontCheckBox;
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity
     String BANNER_URL = config.Ip_address + config.dashboard_banner_slide;
 
     private String VersioningURL = config.Ip_address + config.version_apps;
+    private String maintenanceURL = config.Ip_address + config.maintenance_mode;
     private String LoginURL = config.Ip_address + config.login_apps;
     private String UpdateIsOnlineURL = config.Ip_address + config.login_update_isOnline;
     private String ViewPdfURL = config.Ip_address + config.view_pdf_showAllDataByFilter;
@@ -351,6 +355,23 @@ public class MainActivity extends AppCompatActivity
         txt_countwishlist.setText(" " + counter + " ");
         txt_countcart.setText(" " + countcart + " ");
         //frameProduk();
+
+//        generateToken();
+//        subscribeTopic();
+    }
+
+    private void generateToken(){
+        String token =  FirebaseInstanceId.getInstance().getToken();
+//        Toast.makeText(getApplicationContext(), "Token Firebase : " + token, Toast.LENGTH_SHORT).show();
+        Log.d(MainActivity.class.getSimpleName(), "Token Firebase : " + token);
+    }
+
+    private void subscribeTopic(){
+        FirebaseMessaging.getInstance().subscribeToTopic("alluser");
+    }
+
+    private void unsubscribeTopic(){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("alluser");
     }
 
     public void information(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
@@ -959,6 +980,40 @@ public class MainActivity extends AppCompatActivity
                     {
                         showUpdateDialog();
                     }
+                    else
+                    {
+                        getMaintenance();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    customLoading.dismissLoadingDialog();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+                customLoading.dismissLoadingDialog();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void getMaintenance() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, maintenanceURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean output = jsonObject.getBoolean("maintenance_mode");
+
+                    if (output)
+                    {
+                        showMaintenanceDialog();
+                    }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -1189,6 +1244,26 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void showMaintenanceDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_maintenance);
+
+        Button btnClose = dialog.findViewById(R.id.dialog_maintenance_btnclose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                dialog.dismiss();
+            }
+        });
+
+        if (!isFinishing())
+        {
+            dialog.show();
+        }
+    }
+
 //    private void homeProduk() {
 //        HomeFragment homeFragment = new HomeFragment();
 //        Bundle bundle = new Bundle();
@@ -1234,6 +1309,7 @@ public class MainActivity extends AppCompatActivity
         PromoFrameFragment fragment = new PromoFrameFragment();
         Bundle bundle = new Bundle();
         bundle.putString("activity", "main");
+        bundle.putString("access", "main");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_promo_frame, fragment);
@@ -1244,6 +1320,7 @@ public class MainActivity extends AppCompatActivity
         SpecialProductFragment fragment = new SpecialProductFragment();
         Bundle bundle = new Bundle();
         bundle.putString("activity", "main");
+        bundle.putString("access", "main");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_special_product, fragment);
@@ -1254,6 +1331,7 @@ public class MainActivity extends AppCompatActivity
         OtherProductFragment fragment = new OtherProductFragment();
         Bundle bundle = new Bundle();
         bundle.putString("activity", "main");
+        bundle.putString("access", "main");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_another_product, fragment);
@@ -1264,6 +1342,7 @@ public class MainActivity extends AppCompatActivity
         MoreFrameFragment fragment = new MoreFrameFragment();
         Bundle bundle = new Bundle();
         bundle.putString("activity", "main");
+        bundle.putString("access", "main");
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_other_frame, fragment);
@@ -1281,6 +1360,7 @@ public class MainActivity extends AppCompatActivity
         NewFrameFragment newFrameFragment = new NewFrameFragment();
         Bundle bundle = new Bundle();
         bundle.putString("activity", "main");
+        bundle.putString("access", "main");
         newFrameFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_fragment_container, newFrameFragment, "newframe");

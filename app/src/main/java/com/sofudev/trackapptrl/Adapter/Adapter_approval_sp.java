@@ -46,22 +46,81 @@ public class Adapter_approval_sp extends RecyclerView.Adapter<Adapter_approval_s
         holder.txtAlamat.setText(list.get(position).getAddress());
 
         String sts = list.get(position).getStatus();
+        String laststatus = list.get(position).getLastStatus();
+        String lastapprove = list.get(position).getLastApprove();
         String approvalName = list.get(position).getApprovalName() == null ? "-" : list.get(position).getApprovalName();
 
-        if (sts.equals("AM"))
+//        if (sts.equals("AM"))
+//        {
+//            holder.txtStatus.setText("Sudah disetujui sales area (" + approvalName.toUpperCase() + ")");
+//            holder.txtStatus.setTextColor(Color.parseColor("#14a895"));
+//        }
+//        else if (sts.equals("REJECT AM"))
+//        {
+//            holder.txtStatus.setText("Tidak disetujui sales area");
+//            holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
+//        }
+//        else
+//        {
+//            holder.txtStatus.setText("Menunggu konfirmasi sales area");
+//            holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
+//        }
+
+        if (laststatus.equals(""))
         {
-            holder.txtStatus.setText("Sudah disetujui sales area (" + approvalName.toUpperCase() + ")");
-            holder.txtStatus.setTextColor(Color.parseColor("#14a895"));
+            holder.txtStatus.setText("Menunggu konfirmasi sales area");
+            holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
         }
-        else if (sts.equals("REJECT AM"))
+        else if (laststatus.equals("REJECT AM"))
         {
             holder.txtStatus.setText("Tidak disetujui sales area");
             holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
         }
         else
         {
-            holder.txtStatus.setText("Menunggu konfirmasi sales area");
-            holder.txtStatus.setTextColor(Color.parseColor("#f64c73"));
+            holder.txtStatus.setText("Sudah disetujui sales area (" + approvalName.toUpperCase() + ")");
+            holder.txtStatus.setTextColor(Color.parseColor("#14a895"));
+        }
+
+        switch (lastapprove) {
+            case "null":
+                if (sts.equals("AM")) {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#45ac2d"));
+                    holder.txtLastStatus.setText("APRROVE " + list.get(position).getLastStatus().toUpperCase());
+                }
+                else if (sts.equals("REJECT AM")) {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#de002b"));
+                    holder.txtLastStatus.setText("REJECT AM");
+                }
+                else {
+                    holder.txtLastStatus.setVisibility(View.GONE);
+                }
+                break;
+            case "APPROVE":
+                if (laststatus.equals("AR"))
+                {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#45ac2d"));
+                    holder.txtLastStatus.setText("APRROVE " + list.get(position).getLastStatus().toUpperCase());
+                }
+                else
+                {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#45ac2d"));
+                    holder.txtLastStatus.setText(list.get(position).getLastStatus().toUpperCase());
+                }
+                break;
+            case "HOLD":
+                holder.txtLastStatus.setBackgroundColor(Color.parseColor("#ff9100"));
+                holder.txtLastStatus.setText("HOLD " + list.get(position).getLastStatus().toUpperCase());
+                break;
+            default:
+                if (list.get(position).getLastStatus().equals("REJECT AM")) {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#de002b"));
+                    holder.txtLastStatus.setText("REJECT AM");
+                } else {
+                    holder.txtLastStatus.setBackgroundColor(Color.parseColor("#de002b"));
+                    holder.txtLastStatus.setText("REJECT " + list.get(position).getLastStatus().toUpperCase());
+                }
+                break;
         }
     }
 
@@ -71,7 +130,7 @@ public class Adapter_approval_sp extends RecyclerView.Adapter<Adapter_approval_s
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        UniversalFontTextView txtNomorSp, txtTipeSp, txtNamaSales, txtTanggal, txtCustname, txtAlamat, txtStatus;
+        UniversalFontTextView txtNomorSp, txtTipeSp, txtNamaSales, txtTanggal, txtCustname, txtAlamat, txtStatus, txtLastStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +142,7 @@ public class Adapter_approval_sp extends RecyclerView.Adapter<Adapter_approval_s
             txtCustname= (UniversalFontTextView) itemView.findViewById(R.id.recycler_spapproval_txtnamaoptik);
             txtAlamat  = (UniversalFontTextView) itemView.findViewById(R.id.recycler_spapproval_txtalamatoptik);
             txtStatus  = (UniversalFontTextView) itemView.findViewById(R.id.recycler_spapproval_txtstatus);
+            txtLastStatus = (UniversalFontTextView) itemView.findViewById(R.id.recycler_spapproval_txtlaststatus);
 
             itemView.setOnClickListener(this);
         }

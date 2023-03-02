@@ -162,5 +162,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view14" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/recycler_spapproval_txtlaststatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:background="@color/colorToolbar"
+            android:text="@string/status"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:customFont="UbuntuMedium.ttf"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
