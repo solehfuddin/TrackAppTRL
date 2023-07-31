@@ -84,7 +84,15 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
         holder.txtJumlah.setText(String.valueOf(data.getJumlah()));
         holder.txtDiskon.setText(disc);
         holder.txtTinting.setText(tintPrice);
-        holder.txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(data.getTotalAll())));
+
+        if (data.getCategory() == 3)
+        {
+            holder.txtTotal.setText("Unavailable");
+        }
+        else
+        {
+            holder.txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(data.getTotalAll())));
+        }
     }
 
     @Override

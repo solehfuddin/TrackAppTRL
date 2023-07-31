@@ -131,18 +131,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                     android:id="@+id/form_spframe_txtflag"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:textSize="14sp"
                     android:focusable="true"
-                    android:hint="@string/flag"
+                    android:text="@string/flag"
                     android:gravity="center|end"
                     android:textAlignment="textEnd"
+                    android:textColor="@color/colorContent"
                     android:layout_toStartOf="@+id/form_spframe_swflag"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp"
+                    app:customFont="UbuntuMedium.ttf"/>
 
                 <Switch
                     android:id="@+id/form_spframe_swflag"
@@ -152,7 +154,8 @@
                     android:layout_marginEnd="8dp"
                     android:layout_gravity="end"
                     android:layout_alignParentEnd="true"
-                    android:gravity="end"/>
+                    android:gravity="end"
+                    android:checked="true"/>
             </RelativeLayout>
 
             <LinearLayout

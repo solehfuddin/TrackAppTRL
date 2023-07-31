@@ -100,8 +100,9 @@ public class SpApprovalFragment extends Fragment {
     RecyclerView.LayoutManager recyclerLayoutManager;
     View custom;
 
+    UniversalFontTextView txtTotalQty;
     AdvancedTextView  txt_status, txt_statusnull, txt_datestatus, txt_duration, txt_invoice;
-    UniversalFontTextView lbl_duration;
+    UniversalFontTextView lbl_duration, lbl_flagbsd, lbl_flag;
     LinearLayout linear_invoice;
     Button btn_detail, btnDownload;
 
@@ -110,7 +111,8 @@ public class SpApprovalFragment extends Fragment {
     List<Data_sp_header> list = new ArrayList<>();
     List<Data_item_sp> itemSp = new ArrayList<>();
     String sales, salesarea, startDate, endDate, status, date_in, totalDurr;
-    int condition, counter = 0, totalData, total_item, flagCon;
+    int condition, counter = 0, totalData, total_item, flagCon, totalQty = 0;
+    boolean isStore = true;
     Context myContext;
 
     public SpApprovalFragment() {
@@ -481,11 +483,14 @@ public class SpApprovalFragment extends Fragment {
         UniversalFontTextView txtTitlecicil = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txttitlecicilan);
         UniversalFontTextView txtSubtotal = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayaitem);
         UniversalFontTextView txtDiskon   = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayadiskon);
+        txtTotalQty = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtqtytotal);
         UniversalFontTextView txtTotal    = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayatotal);
         TextView txtCicil = (TextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcicilan);
         UniversalFontTextView txtAlamatKirim = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtalamatkirim);
         UniversalFontTextView txtNamaKustomer = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcustomer);
         UniversalFontTextView txtCatatan = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcatatan);
+        lbl_flagbsd = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbsd);
+        lbl_flag = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtlabelflag);
         RecyclerView rvItem = (RecyclerView) custom.findViewById(R.id.bottomdialog_approvalsp_rvItem);
         RippleView btnApprove = (RippleView) custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnApprove);
         RippleView btnReject  = (RippleView) custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnReject);
@@ -589,6 +594,7 @@ public class SpApprovalFragment extends Fragment {
         txtSubtotal.setText("Rp. " + CurencyFormat(String.valueOf(list.get(pos).getSubTotal())).replace(",", "."));
         txtDiskon.setText("Rp. - " + CurencyFormat(String.valueOf(discVal)).replace(",", "."));
         txtDiskon.setTextColor(Color.parseColor("#f90606"));
+//        txtTotalQty.setText(totalQty + " Pcs");
         txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(list.get(pos).getGrandTotal())).replace(",", "."));
         txtAlamatKirim.setText(alamatKirim);
         txtCicil.setText(Html.fromHtml(cicilan));
@@ -1484,6 +1490,7 @@ public class SpApprovalFragment extends Fragment {
 
     private void getItemSp(final String idsp) {
         itemSp.clear();
+        totalQty = 0;
         StringRequest request = new StringRequest(Request.Method.POST, URLITEMSP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1512,9 +1519,30 @@ public class SpApprovalFragment extends Fragment {
                             data.setUmoCode(object.getString("umo_code"));
 
                             itemSp.add(data);
+
+                            totalQty += data.getQty();
+                            Log.d("Total Qty : ", String.valueOf(totalQty));
+
+                            if (object.getString("flag").contains("BIN"))
+                            {
+                                isStore = false;
+                                lbl_flagbsd.setVisibility(View.VISIBLE);
+
+                                lbl_flag.setBackgroundColor(Color.parseColor("#ff9100"));
+                                lbl_flag.setText(object.getString("flag"));
+                            }
+                            else
+                            {
+                                isStore = true;
+                                lbl_flagbsd.setVisibility(View.GONE);
+
+                                lbl_flag.setBackgroundColor(Color.parseColor("#45ac2d"));
+                                lbl_flag.setText(object.getString("flag"));
+                            }
                         }
                     }
 
+                    txtTotalQty.setText(totalQty + " Pcs");
                     adapter_detail_sp.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -565,6 +565,20 @@
                                     app:scale_textsize="20"
                                     app:scale_width="120" />
 
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:id="@+id/activity_lenssummary_txt_priceshipmenthide"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:text="Unavailable"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"
+                                    android:visibility="gone"
+                                    app:customFont="UbuntuMedium.ttf"
+                                    app:scale_height="25"
+                                    app:scale_left="280"
+                                    app:scale_textsize="20"
+                                    app:scale_width="120" />
                             </com.ssomai.android.scalablelayout.ScalableLayout>
 
                         </LinearLayout>
@@ -676,6 +690,21 @@
                             android:gravity="right|center_vertical"
                             android:textColor="@android:color/white"
                             android:textSize="15sp"
+                            app:customFont="UbuntuMedium.ttf"
+                            app:scale_left="228"
+                            app:scale_textsize="23"
+                            app:scale_width="170"
+                            app:scale_height="50"/>
+
+                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                            android:id="@+id/activity_lenssummary_txt_pricetotalhide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Unavailable"
+                            android:gravity="right|center_vertical"
+                            android:textColor="@android:color/white"
+                            android:textSize="15sp"
+                            android:visibility="gone"
                             app:customFont="UbuntuMedium.ttf"
                             app:scale_left="228"
                             app:scale_textsize="23"

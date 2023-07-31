@@ -82,6 +82,7 @@ import com.sofudev.trackapptrl.Custom.WSCallerVersionListener;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
+import com.sofudev.trackapptrl.Fragment.NewsFragment;
 import com.sofudev.trackapptrl.Fragment.OtherProductFragment;
 import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
@@ -306,6 +307,11 @@ public class MainActivity extends AppCompatActivity
         showBanner();
         showBalance();
         showCategory();
+
+        //DISABLE BEFORE UPLOAD
+//        showNews();
+        //DISABLE BEFORE UPLOAD
+
         showPromoFrame();
         showSpesialProduk();
         showAnotherProduk();
@@ -482,11 +488,13 @@ public class MainActivity extends AppCompatActivity
                 HashMap<String, String> user = session.getLoginSession();
                 String username = user.get(LoginSession.UsernameKey);
                 String idparty  = user.get(LoginSession.IdPartyKey);
+                String level = user.get(LoginSession.LevelKey);
 
                 if (username != null && idparty != null) {
                     Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                     intent.putExtra("username", username);
                     intent.putExtra("idparty", idparty);
+                    intent.putExtra("level", level);
 
                     Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
                     finish();
@@ -506,7 +514,7 @@ public class MainActivity extends AppCompatActivity
                 Boolean b = !menu.findItem(R.id.nav_price1).isVisible();
                 menu.findItem(R.id.nav_price1).setVisible(b);
                 menu.findItem(R.id.nav_price2).setVisible(b);
-                menu.findItem(R.id.nav_price3).setVisible(b);
+//                menu.findItem(R.id.nav_price3).setVisible(b);
             }
             catch (Exception e)
             {
@@ -949,10 +957,12 @@ public class MainActivity extends AppCompatActivity
                     String [] dataRead = readTxt.split(",");
                     String idparty  = dataRead[1];
                     String username = dataRead[2];
+                    String level = dataRead[5];
 
                     Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                     intent.putExtra("username", username);
                     intent.putExtra("idparty", idparty);
+                    intent.putExtra("level", level);
 
                     Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
                     finish();
@@ -1044,6 +1054,7 @@ public class MainActivity extends AppCompatActivity
 
                 String data1 = "customer";
                 String data2 = "idparty";
+                String data3 = "level";
                 try {
                     String failed   = MCrypt.bytesToHex(mCrypt.encrypt(info2));
                     String error    = MCrypt.bytesToHex(mCrypt.encrypt(info3));
@@ -1052,6 +1063,7 @@ public class MainActivity extends AppCompatActivity
 
                     String customer = MCrypt.bytesToHex(mCrypt.encrypt(data1));
                     String idparty  = MCrypt.bytesToHex(mCrypt.encrypt(data2));
+                    String levelUser= MCrypt.bytesToHex(mCrypt.encrypt(data3));
                     try {
 //                        hideDialogLoading();
                         customLoading.dismissLoadingDialog();
@@ -1074,20 +1086,22 @@ public class MainActivity extends AppCompatActivity
                         else {
                             String user = new String(mCrypt.decrypt(jsonObject.getString(customer)));
                             String id   = new String(mCrypt.decrypt(jsonObject.getString(idparty)));
+                            String level= new String(mCrypt.decrypt(jsonObject.getString(levelUser)));
 //                            showLoading();
 
                             Toasty.info(getApplicationContext(), "welcome " + user, Toast.LENGTH_SHORT, true).show();
                             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                             intent.putExtra("username", user);
                             intent.putExtra("idparty", id);
+                            intent.putExtra("level", level);
 
                             //Create temp login
                             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                session.AddLoginSession(user, id);
+                                session.AddLoginSession(user, id, level);
                             }
                             else {
                                 //readTemp();
-                                String msg = "1," + id + "," + user + "," + datetime + "," + deviceInfo;
+                                String msg = "1," + id + "," + user + "," + datetime + "," + deviceInfo + "," + level;
                                 createTemp(msg);
                             }
 
@@ -1302,6 +1316,17 @@ public class MainActivity extends AppCompatActivity
         categoryFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbarmain_category, categoryFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showNews() {
+        NewsFragment fragment = new NewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "main");
+        bundle.putString("access", "main");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbarmain_news, fragment);
         fragmentTransaction.commit();
     }
 

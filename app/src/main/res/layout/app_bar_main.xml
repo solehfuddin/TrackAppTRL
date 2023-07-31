@@ -126,6 +126,8 @@
                 android:id="@+id/appbarmain_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable ="true"
+                android:focusableInTouchMode ="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -150,6 +152,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbarmain_balance"/>
 
+            <FrameLayout
+                android:id="@+id/appbarmain_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbarmain_category"/>
+
             <include
                 android:id="@+id/appbarmain_iklan1"
                 android:layout_width="match_parent"
@@ -159,7 +171,7 @@
                 android:layout_marginBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbarmain_category"/>
+                app:layout_constraintTop_toBottomOf="@+id/appbarmain_news"/>
 
             <FrameLayout
                 android:id="@+id/appbarmain_promo_frame"

@@ -4,10 +4,18 @@ package com.sofudev.trackapptrl.LocalDb.Model;
 public class ModelFrameSp {
     private int productId, productQty, productPrice, productDiscPrice, productDisc, newProductPrice,
             newProductDiscPrice, productStock, productTempStock, productWeight;
-    private String productName, productCode, productImage, productFlag;
+    private String productName, productCode, productImage, productFlag, productCollect;
 
     public ModelFrameSp() {
 
+    }
+
+    public String getProductCollect() {
+        return productCollect;
+    }
+
+    public void setProductCollect(String productCollect) {
+        this.productCollect = productCollect;
     }
 
     public String getProductFlag() {

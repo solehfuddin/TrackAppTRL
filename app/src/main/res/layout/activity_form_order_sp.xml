@@ -211,6 +211,74 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/form_ordersp_linearSales"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="5dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="1.0">
+
+                                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_weight=".4"
+                                            android:padding="5dp"
+                                            android:text="Sales Name"
+                                            android:textColor="@color/colorContent"
+                                            android:textSize="12sp"
+                                            app:customFont="UbuntuMedium.ttf" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="5dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="3.0">
+
+                                        <com.beardedhen.androidbootstrap.BootstrapEditText
+                                            android:id="@+id/form_ordersp_txtSalesEntry"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="2.92"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="5dp"
+                                            android:textAlignment="center"
+                                            android:inputType="textPersonName"
+                                            android:padding="5dp"
+                                            android:textColor="@color/colorHint"
+                                            android:textColorHint="@color/colorContent"
+                                            app:bootstrapBrand="info"
+                                            app:bootstrapSize="md"
+                                            app:roundedCorners="true" />
+
+                                        <com.andexert.library.RippleView
+                                            android:id="@+id/form_ordersp_btnChooseSales"
+                                            android:layout_width="27dp"
+                                            android:layout_height="27dp"
+                                            android:layout_marginTop="2dp"
+                                            app:rv_type="simpleRipple"
+                                            app:rv_rippleDuration="100">
+
+                                            <ImageView
+                                                android:id="@+id/form_order_imgChooserSales"
+                                                android:layout_width="26dp"
+                                                android:layout_height="26dp"
+                                                android:src="@drawable/ic_arrow_drop_down"
+                                                android:background="@color/bootstrap_brand_info"/>
+                                        </com.andexert.library.RippleView>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">

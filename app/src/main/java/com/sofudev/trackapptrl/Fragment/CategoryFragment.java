@@ -9,6 +9,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,11 +32,17 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
+import com.sofudev.trackapptrl.Adapter.Adapter_compare_product;
+import com.sofudev.trackapptrl.Adapter.Adapter_search_product;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.DateFormat;
+import com.sofudev.trackapptrl.Custom.MultiSelectLensProduct;
+import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
+import com.sofudev.trackapptrl.Data.Data_compare_category;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
 import com.sofudev.trackapptrl.Form.CourierHistoryActivity;
@@ -51,10 +61,12 @@ import com.sofudev.trackapptrl.Form.FormOrderLensActivity;
 import com.sofudev.trackapptrl.Form.FormOrderSpActivity;
 import com.sofudev.trackapptrl.Form.FormTrackOrderActivity;
 import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
+import com.sofudev.trackapptrl.Form.ProductCompareActivity;
 import com.sofudev.trackapptrl.Form.SpApprovalActivity;
 import com.sofudev.trackapptrl.OnHandActivity;
 import com.sofudev.trackapptrl.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +80,6 @@ import java.util.Map;
 import es.dmoral.toasty.Toasty;
 
 public class CategoryFragment extends Fragment {
-
     private Config config = new Config();
     private String URLGETUSERBYID  = config.Ip_address + config.get_user_byid;
     private String URLGETUSERBYCUSTNAME = config.Ip_address + config.get_user_bycustname;
@@ -81,6 +92,7 @@ public class CategoryFragment extends Fragment {
     View custom;
     LinearLayout linearLensorder, linearStockorder, linearSporder, linearOnhand, linearOrdertrack, linearDeliverytrack,
             linearSptrack, linearMore;
+    RippleView rpLensorder, rpStockorder, rpSpOrder, rpOnHand, rpOrderTrack, rpDeliveryTrack, rpSpTrack, rpMore;
     Context myContext;
 
     BottomDialog bottomDialogInput;
@@ -121,17 +133,31 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         TypefaceProvider.registerDefaultIconSets();
         linearLensorder = view.findViewById(R.id.layout_custom_lensorder);
+        rpLensorder     = view.findViewById(R.id.layout_custom_rplensorder);
         linearStockorder= view.findViewById(R.id.layout_custom_stockorder);
+        rpStockorder    = view.findViewById(R.id.layout_custom_rpstockorder);
         linearSporder   = view.findViewById(R.id.layout_custom_sporder);
+        rpSpOrder       = view.findViewById(R.id.layout_custom_rpsporder);
         linearOnhand    = view.findViewById(R.id.layout_custom_onhand);
+        rpOnHand        = view.findViewById(R.id.layout_custom_rponhand);
         linearOrdertrack= view.findViewById(R.id.layout_custom_ordertrack);
+        rpOrderTrack    = view.findViewById(R.id.layout_custom_rpordertrack);
         linearDeliverytrack = view.findViewById(R.id.layout_custom_deliverytracking);
+        rpDeliveryTrack     = view.findViewById(R.id.layout_custom_rpdeliverytracking);
         linearSptrack   = view.findViewById(R.id.layout_custom_sptracking);
+        rpSpTrack       = view.findViewById(R.id.layout_custom_rpsptracking);
         linearMore      = view.findViewById(R.id.layout_custom_more);
+        rpMore          = view.findViewById(R.id.layout_custom_rpmore);
 
         getData();
 
         linearLensorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerLensOrder();
+            }
+        });
+        rpLensorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerLensOrder();
@@ -144,8 +170,20 @@ public class CategoryFragment extends Fragment {
                 handlerStockOrder();
             }
         });
+        rpStockorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerStockOrder();
+            }
+        });
 
         linearSporder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSpOrder();
+            }
+        });
+        rpSpOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerSpOrder();
@@ -158,8 +196,20 @@ public class CategoryFragment extends Fragment {
                 handlerOnhand();
             }
         });
+        rpOnHand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerOnhand();
+            }
+        });
 
         linearOrdertrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerOrdertrack();
+            }
+        });
+        rpOrderTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerOrdertrack();
@@ -172,6 +222,12 @@ public class CategoryFragment extends Fragment {
                 handlerDeliverytrack();
             }
         });
+        rpDeliveryTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerDeliverytrack();
+            }
+        });
 
         linearSptrack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,8 +235,20 @@ public class CategoryFragment extends Fragment {
                 handlerSptrack();
             }
         });
+        rpSpTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSptrack();
+            }
+        });
 
         linearMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMoreDialog();
+            }
+        });
+        rpMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showMoreDialog();
@@ -990,6 +1058,20 @@ public class CategoryFragment extends Fragment {
         }
     }
 
+    @SuppressLint("InflateParams")
+    private void handlerProductCompared()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Intent intent = new Intent(myContext, ProductCompareActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private void handlerInvoicePaid()
     {
         if (ACTIVITY_TAG.equals("main"))
@@ -1057,26 +1139,49 @@ public class CategoryFragment extends Fragment {
         custom = LayoutInflater.from(myContext).inflate(R.layout.bottom_dialog_moremenu, null);
 
         LinearLayout linLensOrder = custom.findViewById(R.id.layout_custom_lensorder);
+        RippleView ripLensOrder   = custom.findViewById(R.id.layout_custom_rplensorder);
         LinearLayout linStockOrder = custom.findViewById(R.id.layout_custom_stockorder);
+        RippleView ripStockOrder  = custom.findViewById(R.id.layout_custom_rpstockorder);
         LinearLayout linSpOrder = custom.findViewById(R.id.layout_custom_sporder);
-        LinearLayout linTrackOrder = custom.findViewById(R.id.layout_custom_ordertrack);
-        LinearLayout linTrackDelivery = custom.findViewById(R.id.layout_custom_deliverytracking);
-        LinearLayout linTrackSp = custom.findViewById(R.id.layout_custom_sptracking);
-        LinearLayout linPendingCourier = custom.findViewById(R.id.layout_custom_couriertask);
-        LinearLayout linHistoryCourier = custom.findViewById(R.id.layout_custom_courierhistory);
-        LinearLayout linTrackCourier = custom.findViewById(R.id.layout_custom_couriertracking);
-        LinearLayout linProgressCourier = custom.findViewById(R.id.layout_custom_courierprogress);
-        LinearLayout linLensTrack = custom.findViewById(R.id.layout_custom_historylens);
-        LinearLayout linFrameTrack = custom.findViewById(R.id.layout_custom_historyframe);
-        LinearLayout linStockTrack = custom.findViewById(R.id.layout_custom_historystock);
-        LinearLayout linCheckBalance = custom.findViewById(R.id.layout_custom_featurebalance);
-        LinearLayout linMasterOnHand = custom.findViewById(R.id.layout_custom_masteronhand);
-        LinearLayout linStatement = custom.findViewById(R.id.layout_custom_estatement);
-        LinearLayout linWarranty = custom.findViewById(R.id.layout_custom_ewarranty);
-        LinearLayout linInvoice = custom.findViewById(R.id.layout_custom_featureinvoice);
-        LinearLayout linInvoicePaid = custom.findViewById(R.id.layout_custom_featureinvoicepaid);
-        LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
+        RippleView ripSpOrder   = custom.findViewById(R.id.layout_custom_rpsporder);
         LinearLayout linSpApproval = custom.findViewById(R.id.layout_custom_spapproval);
+        RippleView ripSpApproval   = custom.findViewById(R.id.layout_custom_rpspapproval);
+        LinearLayout linTrackOrder = custom.findViewById(R.id.layout_custom_ordertrack);
+        RippleView ripTrackOrder   = custom.findViewById(R.id.layout_custom_rpordertrack);
+        LinearLayout linTrackDelivery = custom.findViewById(R.id.layout_custom_deliverytracking);
+        RippleView ripTrackDevliery = custom.findViewById(R.id.layout_custom_rpdeliverytracking);
+        LinearLayout linTrackSp = custom.findViewById(R.id.layout_custom_sptracking);
+        RippleView ripTrackSp   = custom.findViewById(R.id.layout_custom_rpsptracking);
+        LinearLayout linPendingCourier = custom.findViewById(R.id.layout_custom_couriertask);
+        RippleView ripPendingCourier   = custom.findViewById(R.id.layout_custom_rpcouriertask);
+        LinearLayout linHistoryCourier = custom.findViewById(R.id.layout_custom_courierhistory);
+        RippleView ripHistoryCourier   = custom.findViewById(R.id.layout_custom_rpcourierhistory);
+        LinearLayout linTrackCourier = custom.findViewById(R.id.layout_custom_couriertracking);
+        RippleView ripTrackCourier   = custom.findViewById(R.id.layout_custom_rpcouriertracking);
+        LinearLayout linProgressCourier = custom.findViewById(R.id.layout_custom_courierprogress);
+        RippleView ripProgressCourier = custom.findViewById(R.id.layout_custom_rpcourierprogress);
+        LinearLayout linLensTrack = custom.findViewById(R.id.layout_custom_historylens);
+        RippleView ripLensTrack   = custom.findViewById(R.id.layout_custom_rphistorylens);
+        LinearLayout linFrameTrack = custom.findViewById(R.id.layout_custom_historyframe);
+        RippleView ripFrameTrack   = custom.findViewById(R.id.layout_custom_rphistoryframe);
+        LinearLayout linStockTrack = custom.findViewById(R.id.layout_custom_historystock);
+        RippleView ripStockTrack   = custom.findViewById(R.id.layout_custom_rphistorystock);
+        LinearLayout linCheckBalance = custom.findViewById(R.id.layout_custom_featurebalance);
+        RippleView ripCheckBalance = custom.findViewById(R.id.layout_custom_rpfeaturebalance);
+        LinearLayout linMasterOnHand = custom.findViewById(R.id.layout_custom_masteronhand);
+        RippleView ripMasterOnHand   = custom.findViewById(R.id.layout_custom_rpmasteronhand);
+        LinearLayout linStatement = custom.findViewById(R.id.layout_custom_estatement);
+        RippleView ripStatement   = custom.findViewById(R.id.layout_custom_rpestatement);
+        LinearLayout linWarranty = custom.findViewById(R.id.layout_custom_ewarranty);
+        RippleView ripWarranty  = custom.findViewById(R.id.layout_custom_rpewarranty);
+        LinearLayout linInvoice = custom.findViewById(R.id.layout_custom_featureinvoice);
+        RippleView ripInvoice   = custom.findViewById(R.id.layout_custom_rpfeatureinvoice);
+        LinearLayout linInvoicePaid = custom.findViewById(R.id.layout_custom_featureinvoicepaid);
+        RippleView ripInvoicePaid   = custom.findViewById(R.id.layout_custom_rpfeatureinvoicepaid);
+        LinearLayout linProductCompare = custom.findViewById(R.id.layout_custom_featureproductcompare);
+        RippleView ripProductCompare = custom.findViewById(R.id.layout_custom_rpfeatureproductcompare);
+        LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
+        RippleView ripCustomercare   = custom.findViewById(R.id.layout_custom_rpcustomercare);
 
         final BottomDialog bottomDialog = new BottomDialog.Builder(myContext)
                 .setTitle("More Menu")
@@ -1084,6 +1189,13 @@ public class CategoryFragment extends Fragment {
                 .build();
 
         linLensOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerLensOrder();
+                bottomDialog.dismiss();
+            }
+        });
+        ripLensOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerLensOrder();
@@ -1098,8 +1210,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripStockOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerStockOrder();
+                bottomDialog.dismiss();
+            }
+        });
 
         linSpOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSpOrder();
+                bottomDialog.dismiss();
+            }
+        });
+        ripSpOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerSpOrder();
@@ -1114,8 +1240,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripSpApproval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSpApproval();
+                bottomDialog.dismiss();
+            }
+        });
 
         linTrackOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerOrdertrack();
+                bottomDialog.dismiss();
+            }
+        });
+        ripTrackOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerOrdertrack();
@@ -1130,8 +1270,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripTrackDevliery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerDeliverytrack();
+                bottomDialog.dismiss();
+            }
+        });
 
         linPendingCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierPending();
+                bottomDialog.dismiss();
+            }
+        });
+        ripPendingCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerCourierPending();
@@ -1146,6 +1300,14 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripHistoryCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierHistory();
+                bottomDialog.dismiss();
+            }
+        });
+
         linTrackCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1153,7 +1315,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripTrackCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCouriertrack();
+                bottomDialog.dismiss();
+            }
+        });
+
         linProgressCourier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCourierprogress();
+                bottomDialog.dismiss();
+            }
+        });
+        ripProgressCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerCourierprogress();
@@ -1168,8 +1345,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripTrackSp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerSptrack();
+                bottomDialog.dismiss();
+            }
+        });
 
         linLensTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerLensTrack();
+                bottomDialog.dismiss();
+            }
+        });
+        ripLensTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerLensTrack();
@@ -1184,8 +1375,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripFrameTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerFrameTrack();
+                bottomDialog.dismiss();
+            }
+        });
 
         linStockTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerStockTrack();
+                bottomDialog.dismiss();
+            }
+        });
+        ripStockTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerStockTrack();
@@ -1200,8 +1405,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripCheckBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCheckBalance();
+                bottomDialog.dismiss();
+            }
+        });
 
         linMasterOnHand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerOnhand();
+                bottomDialog.dismiss();
+            }
+        });
+        ripMasterOnHand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerOnhand();
@@ -1216,8 +1435,22 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripStatement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerEstatement();
+                bottomDialog.dismiss();
+            }
+        });
 
         linWarranty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerEWarranty();
+                bottomDialog.dismiss();
+            }
+        });
+        ripWarranty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerEWarranty();
@@ -1232,6 +1465,13 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripInvoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerEInvoice();
+                bottomDialog.dismiss();
+            }
+        });
 
         linInvoicePaid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1240,8 +1480,39 @@ public class CategoryFragment extends Fragment {
                 bottomDialog.dismiss();
             }
         });
+        ripInvoicePaid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerInvoicePaid();
+                bottomDialog.dismiss();
+            }
+        });
+
+        //DISABLE BEFORE UPLOAD
+        linProductCompare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                handlerProductCompared();
+                bottomDialog.dismiss();
+            }
+        });
+        ripProductCompare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                handlerProductCompared();
+                bottomDialog.dismiss();
+            }
+        });
+        //DISABLE BEFORE UPLOAD
 
         linCustomercare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerCustomerCare();
+                bottomDialog.dismiss();
+            }
+        });
+        ripCustomercare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handlerCustomerCare();

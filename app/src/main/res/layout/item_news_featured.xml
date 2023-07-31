@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andexert.library.RippleView
+    android:id="@+id/item_newsfeatured_ripple"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="265dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginHorizontal="8dp"
+    app:rv_color="@color/grey"
+    app:rv_type="rectangle"
+    app:rv_rippleDuration="150"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            android:backgroundTint="@color/bggray">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/item_newsfeatured_cardnews"
+                    android:layout_width="0dp"
+                    android:layout_height="170dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/item_newsfeatured_imgnews"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/bumperbanner" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/item_newsfeatured_cardcategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/item_newsfeatured_txtcategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category"
+                        android:textColor="@color/white"
+                        android:paddingVertical="3dp"
+                        android:paddingHorizontal="10dp"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        app:customFont="UbuntuMedium.ttf" />
+                </androidx.cardview.widget.CardView>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_newsfeatured_txtdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="13dp"
+                    android:text="@string/date"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_newsfeatured_cardnews" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_newsfeatured_txttitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="13dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@string/title_activity_dashboard"
+                    android:textColor="@color/colorContent"
+                    android:textSize="16sp"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_newsfeatured_txtdate" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_newsfeatured_txtid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/category"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_newsfeatured_txtdate" />
+
+                <ImageView
+                    android:id="@+id/item_newsfeatured_imguser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="15dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_user"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_newsfeatured_txttitle" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/item_newsfeatured_txtuser"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/title_user_details"
+                    android:textColor="@color/grey"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:customFont="RobotoMedium.ttf"
+                    app:layout_constraintBottom_toBottomOf="@+id/item_newsfeatured_imguser"
+                    app:layout_constraintStart_toEndOf="@+id/item_newsfeatured_imguser"
+                    app:layout_constraintTop_toTopOf="@+id/item_newsfeatured_imguser" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+</com.andexert.library.RippleView>

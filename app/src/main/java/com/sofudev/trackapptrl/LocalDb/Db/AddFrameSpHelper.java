@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_CODE;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_COLLECT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_DISCOUNT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_DISCPRICE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_FLAG;
@@ -98,6 +99,7 @@ public class AddFrameSpHelper {
                 addFrameSp.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 addFrameSp.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
                 addFrameSp.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_FLAG)));
+                addFrameSp.setProductCollect(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_COLLECT)));
 
                 arrayList.add(addFrameSp);
                 cursor.moveToNext();
@@ -132,6 +134,7 @@ public class AddFrameSpHelper {
                 item.setProductWeight(cursor.getInt(cursor.getColumnIndex("product_weight")));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow("product_image")));
                 item.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow("product_flag")));
+                item.setProductCollect(cursor.getString(cursor.getColumnIndexOrThrow("product_collect")));
             }
 
             return item;
@@ -172,6 +175,7 @@ public class AddFrameSpHelper {
         args.put(PRODUCT_WEIGHT, addFrameSp.getProductWeight());
         args.put(PRODUCT_IMG, addFrameSp.getProductImage());
         args.put(PRODUCT_FLAG, addFrameSp.getProductFlag());
+        args.put(PRODUCT_COLLECT, addFrameSp.getProductCollect());
 
         return database.insert(DATABASE_TABLE, null, args);
     }
@@ -189,6 +193,16 @@ public class AddFrameSpHelper {
     public int countTotalPrice()
     {
         Cursor cursor = database.rawQuery("select sum(product_newprice) as total_price from " + DATABASE_TABLE, null);
+        cursor.moveToFirst();
+        int output = cursor.getInt(0);
+        cursor.close();
+
+        return output;
+    }
+
+    public int countTotalQty()
+    {
+        Cursor cursor = database.rawQuery("select sum(product_qty) as total_qty from " + DATABASE_TABLE, null);
         cursor.moveToFirst();
         int output = cursor.getInt(0);
         cursor.close();

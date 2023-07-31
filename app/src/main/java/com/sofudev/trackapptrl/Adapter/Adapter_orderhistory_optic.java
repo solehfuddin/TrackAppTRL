@@ -52,7 +52,15 @@ public class Adapter_orderhistory_optic extends RecyclerView.Adapter<Adapter_ord
         Picasso.with(context).load(item.get(position).getIconOrder()).into(holder.img_icon);
         holder.txt_ordernumber.setText(item.get(position).getNomorOrder() + "/" + item.get(position).getNamaPasien());
         holder.txt_date.setText(item.get(position).getTanggalOrder());
-        holder.txt_pricetotal.setText(item.get(position).getTotalBiaya());
+        if (item.get(position).getUserLevel() == 3)
+        {
+            holder.txt_pricetotal.setText("Unavailable");
+        }
+        else
+        {
+            holder.txt_pricetotal.setText(item.get(position).getTotalBiaya());
+        }
+
         String status = item.get(position).getStatusOrder();
         holder.txt_status.setText(status);
 

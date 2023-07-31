@@ -2,7 +2,7 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_fragment_bestproduct {
     private String product_image, product_id, product_name, product_code, product_realprice, product_discprice,
-            product_discpercent, product_brand, product_qty, product_weight;
+            product_discpercent, product_brand, product_qty, product_weight, product_collect, product_entry, product_qtysubtotal;
     private boolean checked = false;
 
     public boolean isChecked() {
@@ -91,5 +91,29 @@ public class Data_fragment_bestproduct {
 
     public void setProduct_discpercent(String product_discpercent) {
         this.product_discpercent = product_discpercent;
+    }
+
+    public String getProduct_collect() {
+        return product_collect;
+    }
+
+    public void setProduct_collect(String product_collect) {
+        this.product_collect = product_collect;
+    }
+
+    public String getProduct_entry() {
+        return product_entry;
+    }
+
+    public void setProduct_entry(String product_entry) {
+        this.product_entry = product_entry;
+    }
+
+    public String getProduct_qtysubtotal() {
+        return product_qtysubtotal;
+    }
+
+    public void setProduct_qtysubtotal(String product_qtysubtotal) {
+        this.product_qtysubtotal = product_qtysubtotal;
     }
 }

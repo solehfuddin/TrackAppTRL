@@ -2,6 +2,7 @@ package com.sofudev.trackapptrl.Data;
 
 public class Data_orderhistory_optic {
     private String tanggalOrder, nomorOrder, totalBiaya, statusOrder, iconOrder, namaPasien, paymentType;
+    private int userLevel;
 
     public Data_orderhistory_optic() {
     }
@@ -14,6 +15,14 @@ public class Data_orderhistory_optic {
         this.iconOrder = iconOrder;
         this.namaPasien = namaPasien;
         this.paymentType = paymentType;
+    }
+
+    public int getUserLevel() {
+        return userLevel;
+    }
+
+    public void setUserLevel(int userLevel) {
+        this.userLevel = userLevel;
     }
 
     public String getPaymentType() {

@@ -43,6 +43,7 @@ public class Adapter_add_cart extends RecyclerView.Adapter<Adapter_add_cart.View
         final ModelAddCart data = item.get(position);
 
         Picasso.with(context).load(data.getProductImage()).resize(100, 100).into(holder.img_product);
+
         holder.txt_productid.setText(String.valueOf(data.getProductId()));
         holder.txt_productname.setText(data.getProductName());
         holder.txt_productqty.setText(String.valueOf(data.getProductQty()));

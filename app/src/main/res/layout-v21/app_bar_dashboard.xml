@@ -111,7 +111,7 @@
         android:id="@+id/dashboard_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bggray"
+        android:background="@color/white"
         android:layout_marginTop="56dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,6 +123,8 @@
                 android:id="@+id/appbardashboard_header"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
+                android:focusable ="true"
+                android:focusableInTouchMode ="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -147,6 +149,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbardashboard_balance"/>
 
+            <FrameLayout
+                android:id="@+id/appbardashboard_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_category"/>
+
             <include
                 android:id="@+id/appbardashboard_iklan1"
                 android:layout_width="match_parent"
@@ -156,7 +168,7 @@
                 android:layout_marginBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_category"/>
+                app:layout_constraintTop_toBottomOf="@+id/appbardashboard_news"/>
 
             <FrameLayout
                 android:id="@+id/appbardashboard_promo_frame"

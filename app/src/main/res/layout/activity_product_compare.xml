@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Form.ProductCompareActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout14"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_compare_bottom"
+            android:contentDescription="@string/app_name" />
+
+        <com.andexert.library.RippleView
+            android:id="@+id/product_compare_ripplebtnback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:rv_rippleDuration="100"
+            app:rv_type="rectangle">
+
+            <ImageButton
+                android:id="@+id/product_compare_btnback"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/app_name" />
+        </com.andexert.library.RippleView>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/product_compare_txttitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="28dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/compare_lens_product"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:customFont="UbuntuMedium.ttf"
+            tools:ignore="RtlCompat" />
+
+        <com.andexert.library.RippleView
+            android:id="@+id/product_compare_ripplebtnfilter"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="8dp"
+            app:rv_rippleDuration="100"
+            android:layout_gravity="end"
+            app:rv_type="rectangle">
+
+            <ImageButton
+                android:id="@+id/product_compare_btnfilter"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_filter"
+                android:contentDescription="@string/app_name" />
+        </com.andexert.library.RippleView>
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout14">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/product_compare_linearImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/product_compare_txtproductleft"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/lensa_creator"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorHint"
+                    android:textSize="18sp"
+                    app:customFont="RobotoRegular.ttf"
+                    tools:ignore="RtlCompat" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:background="@drawable/background_lens"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/app_name" />
+
+                    <ImageView
+                        android:id="@+id/product_compare_imageleft"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:contentDescription="@string/app_name"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/creator" />
+                </RelativeLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/product_compare_rippledetailLeft"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_type="rectangle"
+                            app:rv_rippleDuration="150">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@color/colorEnd">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="8dp"
+                                    android:text="@string/product_description"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/product_compare_expandLeft"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                tools:ignore="WebViewLayout">
+
+                                <WebView
+                                    android:id="@+id/product_compare_webviewleft"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/product_compare_bumperleft"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="300dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    android:background="@drawable/background_lens">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/product_compare_imageleft"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="300dp"-->
+<!--                        android:contentDescription="@string/app_name"-->
+<!--                        android:scaleType="fitXY"-->
+<!--                        android:src="@drawable/creator" />-->
+<!--                </LinearLayout>-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/product_compare_txtvs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/colorPrimary"
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="2dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/vs"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:layout_centerInParent="true"
+                        app:customFont="UbuntuMedium.ttf"
+                        tools:ignore="RtlCompat" />
+                </RelativeLayout>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/product_compare_txtproductright"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/lensa_masterpiece_deluxe"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorFirst"
+                    android:textSize="18sp"
+                    app:customFont="RobotoRegular.ttf"
+                    tools:ignore="RtlCompat" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:background="@drawable/background_lens"
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/app_name" />
+
+                    <ImageView
+                        android:id="@+id/product_compare_imageright"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitXY"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/masterpiece_deluxe" />
+
+                </RelativeLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="visible"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/product_compare_rippledetailRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:rv_type="rectangle"
+                            app:rv_rippleDuration="150">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@color/colorFirst">
+
+                                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="8dp"
+                                    android:text="@string/product_description"
+                                    android:textAlignment="center"
+                                    android:textColor="#fff"
+                                    android:textSize="16sp"
+                                    app:customFont="UbuntuMedium.ttf" />
+                            </LinearLayout>
+
+                        </com.andexert.library.RippleView>
+
+                        <net.cachapa.expandablelayout.ExpandableLayout
+                            android:id="@+id/product_compare_expandRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:el_duration="1500">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                tools:ignore="WebViewLayout">
+
+                                <WebView
+                                    android:id="@+id/product_compare_webviewright"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                        </net.cachapa.expandablelayout.ExpandableLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/product_compare_bumperright"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="300dp"-->
+<!--                    android:background="@drawable/background_lens">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/product_compare_imageright"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="300dp"-->
+<!--                        android:contentDescription="@string/app_name"-->
+<!--                        android:scaleType="fitXY"-->
+<!--                        android:src="@drawable/masterpiece_deluxe" />-->
+<!--                </LinearLayout>-->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/product_compare_linearlensname"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="5dp"
+                android:weightSum="2.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_compare_linearImage"
+                android:orientation="horizontal">
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                        android:id="@+id/product_compare_txtproductleft"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:ellipsize="end"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:text="@string/lensa_creator"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/colorHint"-->
+<!--                        android:textSize="14sp"-->
+<!--                        app:customFont="RobotoRegular.ttf"-->
+<!--                        tools:ignore="RtlCompat" />-->
+
+<!--                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                        android:id="@+id/product_compare_txtsubproductleft"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:ellipsize="end"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:text="@string/leinz_premium"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/colorContent"-->
+<!--                        android:textSize="12sp"-->
+<!--                        app:customFont="RobotoMedium.ttf"-->
+<!--                        tools:ignore="RtlCompat" />-->
+<!--                </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight=".2" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                        android:id="@+id/product_compare_txtproductright"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:ellipsize="end"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:text="@string/lensa_masterpiece_deluxe"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/colorHint"-->
+<!--                        android:textSize="14sp"-->
+<!--                        app:customFont="RobotoRegular.ttf"-->
+<!--                        tools:ignore="RtlCompat" />-->
+
+<!--                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                        android:id="@+id/product_compare_txtsubproductright"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:ellipsize="end"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:text="@string/leinz_prestige_japan"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/colorContent"-->
+<!--                        android:textSize="12sp"-->
+<!--                        app:customFont="RobotoMedium.ttf"-->
+<!--                        tools:ignore="RtlCompat" />-->
+<!--                </LinearLayout>-->
+            </LinearLayout>
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:orientation="vertical"-->
+<!--                app:cardCornerRadius="10dp"-->
+<!--                app:cardUseCompatPadding="false"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/product_compare_linearlensname">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:ellipsize="end"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:paddingHorizontal="@dimen/keyline_1_minus_8dp"-->
+<!--                        android:paddingVertical="10dp"-->
+<!--                        android:text="@string/product_description"-->
+<!--                        android:textColor="@color/colorContent"-->
+<!--                        android:textSize="14sp"-->
+<!--                        app:customFont="RobotoMedium.ttf"-->
+<!--                        tools:ignore="RtlCompat" />-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:weightSum="2.2"-->
+<!--                        tools:ignore="WebViewLayout">-->
+
+<!--                        <WebView-->
+<!--                            android:id="@+id/product_compare_webviewleft"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1" />-->
+
+<!--                        <View-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight=".2" />-->
+
+<!--                        <WebView-->
+<!--                            android:id="@+id/product_compare_webviewright"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1" />-->
+<!--                    </LinearLayout>-->
+
+<!--                </LinearLayout>-->
+
+<!--            </androidx.cardview.widget.CardView>-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:cardElevation="3dp"-->
+<!--                app:cardCornerRadius="5dp"-->
+<!--                app:cardUseCompatPadding="true"-->
+<!--                android:visibility="visible"-->
+<!--                android:layout_marginStart="@dimen/keyline_1_minus_8dp"-->
+<!--                android:layout_marginEnd="@dimen/keyline_1_minus_8dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/product_compare_linearImage">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                <com.andexert.library.RippleView-->
+<!--                    android:id="@+id/product_compare_rippledetail"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:rv_type="rectangle"-->
+<!--                    app:rv_rippleDuration="150">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:background="@color/colorEnd">-->
+
+<!--                        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:padding="8dp"-->
+<!--                            android:text="@string/product_description"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="#fff"-->
+<!--                            android:textSize="16sp"-->
+<!--                            app:customFont="UbuntuMedium.ttf" />-->
+<!--                    </LinearLayout>-->
+
+<!--                </com.andexert.library.RippleView>-->
+
+<!--                <net.cachapa.expandablelayout.ExpandableLayout-->
+<!--                    android:id="@+id/product_compare_expanddetail"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:el_duration="1500">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        tools:ignore="WebViewLayout">-->
+
+<!--                        <WebView-->
+<!--                            android:id="@+id/product_compare_webviewleft"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content" />-->
+
+<!--                        <WebView-->
+<!--                            android:id="@+id/product_compare_webviewright"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content" />-->
+<!--                    </LinearLayout>-->
+
+<!--                </net.cachapa.expandablelayout.ExpandableLayout>-->
+
+<!--                </LinearLayout>-->
+
+<!--            </androidx.cardview.widget.CardView>-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

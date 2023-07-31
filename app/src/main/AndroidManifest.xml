@@ -18,7 +18,11 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="q">
-        <activity android:name=".Form.SpApprovalActivity"></activity>
+        <activity android:name=".ZoomImageActivity"></activity>
+        <activity android:name=".Form.ProductCompareActivity" />
+        <activity android:name=".Form.FilterNewsActivity" />
+        <activity android:name=".Form.DetailNewsActivity" />
+        <activity android:name=".Form.SpApprovalActivity" />
         <activity android:name=".Form.FormCourierTrackingActivity" />
         <activity android:name=".Form.CourierHistoryActivity" />
         <activity android:name=".Form.CourierDpodkActivity" />
@@ -189,21 +193,13 @@
         <activity
             android:name=".Form.FormOrderDetailPartaiActivity"
             android:exported="false" />
-         <service android:name=".service.MyFirebaseMessagingService"
-             tools:ignore="Instantiatable"
-             android:exported="false">
-             <intent-filter>
-             <action android:name="com.google.firebase.MESSAGING_EVENT" />
-             </intent-filter>
-         </service>
-        <!-- <service android:name=".service.GenerateIdFire"> -->
+        <activity
+            android:name=".Form.SearchProductActivity"
+            android:exported="false" /> <!-- <service android:name=".service.GenerateIdFire"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
         <!-- </intent-filter> -->
         <!-- </service> -->
-        <activity
-            android:name=".Form.SearchProductActivity"
-            android:exported="false" />
         <activity
             android:name=".DetailProductActivity"
             android:exported="false" />
@@ -259,6 +255,15 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:exported="false"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <uses-library
             android:name="org.apache.http.legacy"

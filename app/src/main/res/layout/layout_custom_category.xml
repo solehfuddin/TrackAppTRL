@@ -47,19 +47,28 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_iclensorder"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rplensorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/lensorder" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_iclensorder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/lensorder_round"
+                            android:scaleType="fitXY"/>
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtlensorder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/lens_order"
                         android:textAlignment="center"
                         android:textColor="@color/colorContent"
@@ -78,19 +87,27 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icstockorder"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpstockorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/stockorder" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icstockorder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/stockorder_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtstockorder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:textSize="12sp"
                         android:text="@string/stock_order"
                         android:textAlignment="center"
@@ -109,19 +126,27 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icsporder"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpsporder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/sporder" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icsporder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/sporder_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtsporder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/sp_order"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -140,19 +165,27 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_iconhand"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rponhand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/masteronhand" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_iconhand"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/onhand_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtonhand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/master_onhand"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -182,19 +215,27 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icordertrack"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpordertrack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/ordertracking" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icordertrack"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/ordertrack_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtordertrack"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/order_track"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -211,19 +252,27 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icdeliverytracking"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpdeliverytracking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/deliverytracking" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icdeliverytracking"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/deliverytrack_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtdeliverytracking"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/ship_track"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -240,19 +289,27 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icsptracking"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpsptracking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/sptracking" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icsptracking"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/sptrack_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtsptracking"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/sp_track"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -269,19 +326,27 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/layout_custom_icmore"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpmore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:contentDescription="@string/app_name"
-                        app:srcCompat="@drawable/more" />
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icmore"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/more_round" />
+                    </com.andexert.library.RippleView>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/layout_custom_txtmore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:text="@string/more"
                         android:textSize="12sp"
                         android:textAlignment="center"

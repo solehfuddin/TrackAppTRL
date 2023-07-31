@@ -9,11 +9,11 @@
     <array name="type_lensa_array">
         <item>Leinz</item>
         <item>Moe</item>
-        <item>Nikon</item>
+        <!--  <item>Nikon</item> -->
         <item>Oriental</item>
     </array>
     <array name="type_frame_array">
-        <item>Nikon</item>
+        <!--        <item>Nikon</item>-->
         <item>Oriental</item>
         <item>Leinz</item>
         <item>Tweens</item>
@@ -26,9 +26,13 @@
         <item>Lensa Satuan</item>
         <item>Lensa Partai</item>
         <item>Frame</item>
+        <!-- APK KHUSUS PAMERAN -->
+        <!--        <item>Pameran</item>-->
     </array>
     <array name="payment_sp_array">
-        <item>Cash</item>
+        <item>COD</item>
+        <item>Lunas Tunai</item>
+        <item>Lunas Transfer</item>
         <item>Cicilan</item>
     </array>
     <array name="durasi_cicilan">
@@ -50,7 +54,7 @@
         <item>November</item>
         <item>Desember</item>
     </array>
-    <string name="app_version">App Version 2.1.7</string>
+    <string name="app_version">App Version 2.2.2</string>
     <string name="code">Serial number: \n <font size='10'> 32000354</font></string>
     <string name="price1">Price: \n <font size='10'> 3,254,544</font></string>
     <string name="dst_city"><b>Mashhad</b>\n<font size='10'>MHD</font></string>
@@ -283,7 +287,25 @@
     <string name="estimasi_biaya">Estimasi Biaya</string>
     <string name="biaya_item">Item</string>
     <string name="courier_progress">Courier Task</string>
-    <string name="flag">STORE</string>
+    <string name="flag">BIN</string>
     <string name="maintenance">Mohon maaf, sedang ada pemeliharaan sistem</string>
     <string name="exit">Keluar Aplikasi</string>
+    <string name="update_news">UPDATE NEWS</string>
+    <string name="data_count">Data count</string>
+    <string name="product_compare">Compare</string>
+    <string name="compare_lens_product">Compare Lens Product</string>
+    <string name="vs">VS</string>
+    <string name="lensa_creator">Creator</string>
+    <string name="leinz_premium">LEINZ PREMIUM</string>
+    <string name="lensa_masterpiece_deluxe">Masterpiece Deluxe</string>
+    <string name="leinz_prestige_japan">LEINZ PRESTIGE - JAPAN</string>
+    <string name="product_description">Product Description</string>
+    <string name="product_news">Product News</string>
+    <string name="pilih_lensa">Pilih Lensa</string>
+    <string name="bandingkan_lensa">Bandingkan Lensa</string>
+    <string name="total_qty">Total Qty</string>
+    <string name="_0_pcs">0 Pcs</string>
+    <string name="caption_bsd">Barang Sudah Diterima</string>
+    <string name="store">STORE</string>
+    <string name="detail_frame">Detail Frame</string>
 </resources>

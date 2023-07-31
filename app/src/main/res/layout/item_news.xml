@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andexert.library.RippleView
+    android:id="@+id/item_news_ripple"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:rv_color="@color/grey"
+    app:rv_type="rectangle"
+    app:rv_rippleDuration="150">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/item_news_cardnews"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/item_news_imgnews"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/bumperbanner" />
+        </androidx.cardview.widget.CardView>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_news_txtid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/category"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintStart_toEndOf="@+id/item_news_cardnews"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_news_txtcategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/category"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintStart_toEndOf="@+id/item_news_cardnews"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_news_txttitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/title_activity_dashboard"
+            android:textColor="@color/colorContent"
+            android:textSize="16sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintStart_toEndOf="@+id/item_news_cardnews"
+            app:layout_constraintTop_toBottomOf="@+id/item_news_txtcategory" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/item_news_txtdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/date"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            app:customFont="RobotoMedium.ttf"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_news_txttitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</com.andexert.library.RippleView>

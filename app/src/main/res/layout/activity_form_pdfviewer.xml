@@ -1,49 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context="com.sofudev.trackapptrl.Form.FormPDFViewerActivity">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.andexert.library.RippleView
             android:id="@+id/form_pdfviewer_ripplebtnback"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            app:rv_type="rectangle"
-            app:rv_rippleDuration="100">
+            app:rv_rippleDuration="100"
+            app:rv_type="rectangle">
 
             <ImageButton
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:src="@drawable/ic_arrow_back"
+                android:layout_centerVertical="true"
                 android:background="@color/colorPrimary"
-                android:layout_centerVertical="true"/>
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_arrow_back" />
         </com.andexert.library.RippleView>
 
         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
             android:id="@+id/form_pdfviewer_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="3dp"
             android:text="User Guide"
             android:textAlignment="center"
-            android:paddingTop="3dp"
             android:textColor="#fff"
             android:textSize="20sp"
-            android:layout_centerInParent="true"
             app:customFont="DroidBold.ttf" />
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/form_pdfviewer_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <com.github.barteksc.pdfviewer.PDFView
+        android:id="@+id/form_pdfviewer_pdf"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
     <WebView
         android:id="@+id/form_pdfviewer_webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

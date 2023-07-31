@@ -312,7 +312,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
             level    = bundle.getString("level");
 
             assert level != null;
-            if (level.equals("0"))
+            if (level.equals("0") || level.equals("3"))
             {
                 username = bundle.getString("user_info");
                 idparty  = bundle.getString("idparty");
@@ -774,6 +774,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                             dataOrder.setTotalBiaya("Rp. " + CurencyFormat(totalBiaya));
                             dataOrder.setStatusOrder(status);
                             dataOrder.setIconOrder(icon);
+                            dataOrder.setUserLevel(Integer.parseInt(level));
 
 //                            dataOrder.setPaymentType(paymentType);
 
@@ -917,6 +918,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                             dataOrder.setTotalBiaya("Rp. " + CurencyFormat(totalBiaya));
                             dataOrder.setStatusOrder(status);
                             dataOrder.setIconOrder(icon);
+                            dataOrder.setUserLevel(Integer.parseInt(level));
 //                            dataOrder.setPaymentType(paymentType);
 
                             itemOrderHistory.add(dataOrder);
@@ -1064,6 +1066,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                             dataOrder.setTotalBiaya("Rp. " + CurencyFormat(totalBiaya));
                             dataOrder.setStatusOrder(status);
                             dataOrder.setIconOrder(icon);
+                            dataOrder.setUserLevel(Integer.parseInt(level));
 //                            dataOrder.setPaymentType(paymentType);
 
                             itemOrderHistory.add(dataOrder);
@@ -1386,6 +1389,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         {
             Intent intent = new Intent(FormOrderHistoryActivity.this, FormOrderDetailActivity.class);
             intent.putExtra("key", id);
+            intent.putExtra("level", level);
             startActivity(intent);
         }
     }

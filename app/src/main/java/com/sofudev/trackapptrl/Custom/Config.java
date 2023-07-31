@@ -23,8 +23,11 @@ public class Config {
     public String ClientId   = "ebf4b72c9ec86e51e5827ab352cc1aa9";
     public String ClientSecret = "1b8fc7a3a55de16ee21904d2d84cfb66";
 
-    public String UsernameTiki = "TIMURRAYA";
-    public String PasswordTiki = "RAYALES785";
+    /*public String UsernameTiki = "TIMURRAYA";
+    public String PasswordTiki = "RAYALES785";*/
+
+    public String UsernameTiki = "17464515123871067514";
+    public String PasswordTiki = "2a35487c74b28b7548ed8f5a0b359f37aa6e1dcd";
 
     /* Area App Setting */
     public String version_apps = "index.php/android_appsetting/getVersion";
@@ -43,6 +46,7 @@ public class Config {
 
     /* Area Dashboard*/
     public String dashboard_user_detail = "index.php/android_dashboard/userDetail";
+    public String dashboard_user_detailByUsername = "index.php/android_dashboard/userDetailByUsername";
     public String dashboard_show_image  = "index.php/android_dashboard/showImageHome";
     public String sample_image          = "assets/images/produk/sample_image.png";
     public String dashboard_banner_slide= "index.php/android_dashboard/show_banner";
@@ -93,6 +97,10 @@ public class Config {
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
     public String filter_optic_showbyname   = "index.php/Android_filteroptic/showOpticByFilter/8/";
     public String filter_optic_getbyshipnumber = "index.php/Android_filteroptic/showOpticByShipname";
+
+    /* Area Filter Sales Name */
+    public String filter_sales_showall      = "index.php/Android_Filtersales/showAllsales/8/";
+    public String filter_sales_showbyname   = "index.php/Android_Filtersales/showSalesByFilter/8/";
 
     /* Area Info Order History */
     public String info_order_history    = "index.php/Android_checkorder/getOrderHistoryByStatus";
@@ -330,6 +338,7 @@ public class Config {
     /* AREA INTEGRASI DENGAN APLIKASI SP */
     public String ordersp_get_spId                = "index.php/Android_apisp/getSpId";
     public String ordersp_get_spIdFrame           = "index.php/Android_apisp/getSpIdFrame";
+    public String ordersp_get_spIdPameran         = "index.php/Android_apisp/getPameran";
     public String ordersp_get_opticInfo           = "index.php/Android_apisp/getOpticInfo";
     public String ordersp_insert_spHeader         = "index.php/Android_apisp/insertSp";
     public String ordersp_insert_samTemp          = "index.php/Android_apisp/insertSamTemp";
@@ -465,4 +474,13 @@ public class Config {
     public String dpodk_getdeliveredbyoptic       = "index.php/Android_apidpodk/getDeliveredByOptic";
     public String dpodk_processcounterbyoptic     = "index.php/Android_apidpodk/countProcessByOptic";
     public String dpodk_deliveredcounterbyoptic   = "index.php/Android_apidpodk/countDeliveredByOptic";
+
+    /* AREA NEWS */
+    public String news_getdatawithlimit           = "index.php/Android_Post/getNewsExtenal/3/";
+    public String news_getbycategorylimit         = "index.php/Android_Post/getNewsExtenalByCategory/5/";
+    public String news_getcategory                = "index.php/Android_Post/getCategories";
+
+    /* AREA PRODUCT COMPARE */
+    public String compare_getbyId                 = "index.php/Android_Compare/getCompareById";
+    public String compare_getcategory             = "index.php/Android_Compare/getTitles";
 }

@@ -29,8 +29,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract.TABLE_WI
 public class DbTrlHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "dbtrl";
-    // Last DB Version = 5 (30-01-2023)
-    private static final int DATABASE_VERSION = 6;
+    // Last DB Version = 6 (19-04-2023)
+    private static final int DATABASE_VERSION = 7;
 
     private static final String CREATE_TBL_WISHLIST = String.format("CREATE TABLE %s"
                     + " (%s INTEGER PRIMARY KEY," +
@@ -134,7 +134,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
                     " %s TEXT," +
-                    " %s VARCHAR (50))",
+                    " %s VARCHAR (50)," +
+                    " %s VARCHAR (100))",
             TABLE_FRAMESP,
             AddFrameSpContract._ID,
             AddFrameSpContract.PRODUCT_ID,
@@ -149,7 +150,8 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             AddFrameSpContract.PRODUCT_STOCK,
             AddFrameSpContract.PRODUCT_WEIGHT,
             AddFrameSpContract.PRODUCT_IMG,
-            AddFrameSpContract.PRODUCT_FLAG
+            AddFrameSpContract.PRODUCT_FLAG,
+            AddFrameSpContract.PRODUCT_COLLECT
     );
 
     private static final String CREATE_TBL_LENSSATUAN = String.format("CREATE TABLE %s"

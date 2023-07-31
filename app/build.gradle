@@ -22,10 +22,10 @@ android {
         minSdkVersion 17
 //        targetSdkVersion 30
         targetSdkVersion 31
-//        versionCode 68
-//        versionName "2.1.6"
-        versionCode 69
-        versionName "2.1.7"
+//        versionCode 74
+//        versionName "2.2.1"
+        versionCode 75
+        versionName "2.2.2"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
@@ -252,6 +252,7 @@ dependencies {
     compile 'com.github.javiersantos:BottomDialogs:1.2.1'
     compile 'com.github.captain-miao:optroundcardview:1.0.0'
     implementation 'com.vipulasri:ticketview:1.1.2'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     testCompile 'junit:junit:4.12'
 }
 

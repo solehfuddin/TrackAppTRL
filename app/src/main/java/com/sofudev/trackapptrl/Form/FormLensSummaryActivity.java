@@ -111,7 +111,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
     CustomLoading customLoading;
     Button btnCheckout, btnTest;
     UniversalFontTextView txtLensDescr, txtPriceLens, txtPriceDisc, txtPriceDiscSale ,txtPriceFacet, txtPriceTinting, txtPriceShipping,
-                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping, txtOpticName;
+                            txtPriceTotal, txtItemWeight, txtLensModel, txtSide, txtShippingMethod, txtInfoShipping, txtOpticName,
+                            txtPriceTotalHide, txtPriceShippingHide;
     ScalableLayout scalableCourier;
     RecyclerView recyclerCourier;
     ImageView imgLensModel;
@@ -185,8 +186,10 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         txtPriceFacet   =  findViewById(R.id.activity_lenssummary_txt_pricefacet);
         txtPriceTinting =  findViewById(R.id.activity_lenssummary_txt_pricetinting);
         txtPriceShipping=  findViewById(R.id.activity_lenssummary_txt_priceshipment);
+        txtPriceShippingHide = findViewById(R.id.activity_lenssummary_txt_priceshipmenthide);
         txtInfoShipping =  findViewById(R.id.activity_lenssummary_txtInfoShipping);
         txtPriceTotal   =  findViewById(R.id.activity_lenssummary_txt_pricetotal);
+        txtPriceTotalHide = findViewById(R.id.activity_lenssummary_txt_pricetotalhide);
         txtItemWeight   =  findViewById(R.id.activity_lenssummary_txt_itemweight);
         txtLensModel    =  findViewById(R.id.activity_lenssummary_txt_lensmodel);
         txtSide         =  findViewById(R.id.activity_lenssummary_txt_side);
@@ -211,12 +214,12 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         getActiveSale();
         getAllKurir(cityOptic, province);
 
-        txtLensDescr.setText(deskripsiLensa);
-        txtPriceLens.setText(hargaLensa);
-        txtPriceDisc.setText(" - " + diskonLensa);
-        txtPriceFacet.setText(facetLensa);
-        txtPriceTinting.setText(tintingLensa);
-        txtItemWeight.setText(itemWeight + " gram");
+//        txtLensDescr.setText(deskripsiLensa);
+//        txtPriceLens.setText(hargaLensa);
+//        txtPriceDisc.setText(" - " + diskonLensa);
+//        txtPriceFacet.setText(facetLensa);
+//        txtPriceTinting.setText(tintingLensa);
+//        txtItemWeight.setText(itemWeight + " gram");
 
         listPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -290,8 +293,27 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                 Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
                 addTemp = CurencyFormat(addNew.toString());
-                txtPriceShipping.setText(String.valueOf(price));
-                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                if (opticLevel.equals("3"))
+                {
+                    txtPriceTotalHide.setVisibility(View.VISIBLE);
+                    txtPriceTotal.setVisibility(View.GONE);
+                    txtPriceShippingHide.setVisibility(View.VISIBLE);
+                    txtPriceShipping.setVisibility(View.GONE);
+
+                    txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                    txtPriceShipping.setText(String.valueOf(price));
+                }
+                else
+                {
+                    txtPriceTotalHide.setVisibility(View.GONE);
+                    txtPriceTotal.setVisibility(View.VISIBLE);
+                    txtPriceShippingHide.setVisibility(View.GONE);
+                    txtPriceShipping.setVisibility(View.VISIBLE);
+
+                    txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                    txtPriceShipping.setText(String.valueOf(price));
+                }
             }
         });
 
@@ -1776,8 +1798,26 @@ public class FormLensSummaryActivity extends AppCompatActivity {
 
                     Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
                     addTemp = CurencyFormat(addNew.toString());
-                    txtPriceShipping.setText(String.valueOf(price));
-                    txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                    if (opticLevel.equals("3"))
+                    {
+                        txtPriceTotalHide.setVisibility(View.VISIBLE);
+                        txtPriceTotal.setVisibility(View.GONE);
+                        txtPriceShippingHide.setVisibility(View.VISIBLE);
+                        txtPriceShipping.setVisibility(View.GONE);
+
+                        txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                        txtPriceShipping.setText(String.valueOf(price));
+                    }
+                    else {
+                        txtPriceTotalHide.setVisibility(View.GONE);
+                        txtPriceTotal.setVisibility(View.VISIBLE);
+                        txtPriceShippingHide.setVisibility(View.GONE);
+                        txtPriceShipping.setVisibility(View.VISIBLE);
+
+                        txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                        txtPriceShipping.setText(String.valueOf(price));
+                    }
 
                     adapterCourierService.notifyDataSetChanged();
                     recyclerCourier.setAdapter(adapterCourierService);
@@ -1957,16 +1997,6 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 dataSpHeader.setPhoto(headerImage);
                 dataSpHeader.setStatus(headerStatus);
                 dataSpHeader.setSignedPath(headerSignedPath);
-            }
-
-            if (opticLevel.equals("1"))
-            {
-                txtOpticName.setText(opticName.replace(',', ' '));
-                constraintLayoutOpticName.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                constraintLayoutOpticName.setVisibility(View.GONE);
             }
 
             Double g   = bundle.getDouble("total_price");
@@ -2241,6 +2271,39 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             else
             {
                 discOperandL = "0";
+            }
+
+            if (opticLevel.equals("1"))
+            {
+                txtOpticName.setText(opticName.replace(',', ' '));
+                constraintLayoutOpticName.setVisibility(View.VISIBLE);
+
+                txtLensDescr.setText(deskripsiLensa);
+                txtPriceLens.setText(hargaLensa);
+                txtPriceDisc.setText(" - " + diskonLensa);
+                txtPriceFacet.setText(facetLensa);
+                txtPriceTinting.setText(tintingLensa);
+                txtItemWeight.setText(itemWeight + " gram");
+            }
+            else if (opticLevel.equals("3"))
+            {
+                txtLensDescr.setText(deskripsiLensa);
+                txtPriceLens.setText("Unavailable");
+                txtPriceDisc.setText("Unavailable");
+                txtPriceFacet.setText("Unavailable");
+                txtPriceTinting.setText("Unavailable");
+                txtItemWeight.setText("Unavailable");
+            }
+            else
+            {
+                constraintLayoutOpticName.setVisibility(View.GONE);
+
+                txtLensDescr.setText(deskripsiLensa);
+                txtPriceLens.setText(hargaLensa);
+                txtPriceDisc.setText(" - " + diskonLensa);
+                txtPriceFacet.setText(facetLensa);
+                txtPriceTinting.setText(tintingLensa);
+                txtItemWeight.setText(itemWeight + " gram");
             }
         }
     }
@@ -3354,8 +3417,26 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                             String price = CurencyFormat(shipPrice.toString());
                             Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
                             addTemp = CurencyFormat(addNew.toString());
-                            txtPriceShipping.setText(String.valueOf(price));
-                            txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                            if (opticLevel.equals("3"))
+                            {
+                                txtPriceTotalHide.setVisibility(View.VISIBLE);
+                                txtPriceTotal.setVisibility(View.GONE);
+                                txtPriceShippingHide.setVisibility(View.VISIBLE);
+                                txtPriceShipping.setVisibility(View.GONE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
+                            else {
+                                txtPriceTotalHide.setVisibility(View.GONE);
+                                txtPriceTotal.setVisibility(View.VISIBLE);
+                                txtPriceShippingHide.setVisibility(View.GONE);
+                                txtPriceShipping.setVisibility(View.VISIBLE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
 
                             cardPayment.setVisibility(View.GONE);
 
@@ -3469,8 +3550,26 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                             String price = CurencyFormat(shipPrice.toString());
                             Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
                             addTemp = CurencyFormat(addNew.toString());
-                            txtPriceShipping.setText(String.valueOf(price));
-                            txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                            if (opticLevel.equals("3"))
+                            {
+                                txtPriceTotalHide.setVisibility(View.VISIBLE);
+                                txtPriceTotal.setVisibility(View.GONE);
+                                txtPriceShippingHide.setVisibility(View.VISIBLE);
+                                txtPriceShipping.setVisibility(View.GONE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
+                            else {
+                                txtPriceTotalHide.setVisibility(View.GONE);
+                                txtPriceTotal.setVisibility(View.VISIBLE);
+                                txtPriceShippingHide.setVisibility(View.GONE);
+                                txtPriceShipping.setVisibility(View.VISIBLE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
                         }
                         else
                         {
@@ -3551,8 +3650,26 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                             String price = CurencyFormat(shipPrice.toString());
                             Double addNew = Double.parseDouble(tempTotal) + Double.parseDouble(shipPrice) - valTotalDiscSale;
                             addTemp = CurencyFormat(addNew.toString());
-                            txtPriceShipping.setText(String.valueOf(price));
-                            txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+
+                            if (opticLevel.equals("3"))
+                            {
+                                txtPriceTotalHide.setVisibility(View.VISIBLE);
+                                txtPriceTotal.setVisibility(View.GONE);
+                                txtPriceShippingHide.setVisibility(View.VISIBLE);
+                                txtPriceShipping.setVisibility(View.GONE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
+                            else {
+                                txtPriceTotalHide.setVisibility(View.GONE);
+                                txtPriceTotal.setVisibility(View.VISIBLE);
+                                txtPriceShippingHide.setVisibility(View.GONE);
+                                txtPriceShipping.setVisibility(View.VISIBLE);
+
+                                txtPriceTotal.setText("Rp " + String.valueOf(addTemp));
+                                txtPriceShipping.setText(String.valueOf(price));
+                            }
                         }
                         else
                         {

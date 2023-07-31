@@ -99,6 +99,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
     Config config = new Config();
     String URL_GETIDSP = config.Ip_address + config.ordersp_get_spId;
     String URL_GETIDSPFRAME   = config.Ip_address + config.ordersp_get_spIdFrame;
+    String URL_GETIDPAMERAN   = config.Ip_address + config.ordersp_get_spIdPameran;
     String URL_UPDATEPHOTO    = config.Ip_address + config.ordersp_update_photo;
     String URL_UPDATESIGNED   = config.Ip_address + config.ordersp_update_digitalsigned;
 
@@ -108,9 +109,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
     ACProgressFlower loading;
     Spinner spinCicilan, spinPilihPembayaran, spinTipeSp, spinMulaiCicilan;
     BootstrapEditText txtNomorSp, txtNamaOptik, txtKotaOptik, txtAlamatOptik, txtDiskon, txtJumlahDp,
-            txtCicilan, txtAlamatPengiriman, txtShipNumber;
-    RippleView btnChooseOptik, btnSave, btnBack;
-    LinearLayout linearTitleCicilan, linearContentCicilan, linearPembayaran;
+            txtCicilan, txtAlamatPengiriman, txtShipNumber, txtSalesEntry;
+    RippleView btnChooseOptik, btnChooseSales, btnSave, btnBack;
+    LinearLayout linearTitleCicilan, linearContentCicilan, linearPembayaran, linearSalesEntry;
     ImageView imgPhoto;
     TextView txtImgLoc;
     SignaturePad digitalSignature;
@@ -138,6 +139,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
         spinTipeSp = findViewById(R.id.form_ordersp_spinTipeSp);
         spinPilihPembayaran = findViewById(R.id.form_ordersp_txtPembayaran);
         spinMulaiCicilan = findViewById(R.id.form_ordersp_spinMulaiCicilan);
+        txtSalesEntry = findViewById(R.id.form_ordersp_txtSalesEntry);
         txtShipNumber = findViewById(R.id.form_ordersp_txtShipNumber);
         txtNomorSp = findViewById(R.id.form_ordersp_txtNomorSp);
         txtNamaOptik = findViewById(R.id.form_ordersp_txtNamaOptik);
@@ -149,6 +151,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
         txtAlamatPengiriman = findViewById(R.id.form_ordersp_txtAlamatPengiriman);
         digitalSignature = findViewById(R.id.form_ordersp_imgdigitalsign);
         btnChooseOptik = findViewById(R.id.form_ordersp_btnChooser);
+        btnChooseSales = findViewById(R.id.form_ordersp_btnChooseSales);
         btnSave = findViewById(R.id.form_ordersp_ripplebtnsave);
         btnBack = findViewById(R.id.form_ordersp_ripplebtnback);
         btnTakePicture = findViewById(R.id.form_ordersp_btnPicture);
@@ -156,6 +159,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
         imgPhoto = findViewById(R.id.form_ordersp_imgPhoto);
         txtImgLoc = findViewById(R.id.form_ordersp_imglocation);
         linearPembayaran = findViewById(R.id.form_ordersp_linearPembayaran);
+        linearSalesEntry = findViewById(R.id.form_ordersp_linearSales);
         linearTitleCicilan = findViewById(R.id.form_ordersp_linearTitleCicilan);
         linearContentCicilan = findViewById(R.id.form_ordersp_linearContentCicilan);
 
@@ -241,6 +245,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
         txtNomorSp.setEnabled(false);
         txtNamaOptik.setEnabled(false);
+        txtSalesEntry.setEnabled(false);
         txtKotaOptik.setEnabled(false);
         txtAlamatOptik.setEnabled(false);
         txtShipNumber.setEnabled(false);
@@ -262,6 +267,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
         ambilIntent();
         selectOptic();
+        selectSales();
         saveHeader();
         chooseTypeSp();
         choosePaymentSp();
@@ -505,6 +511,11 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //                    Log.d("SELECTED SP", "Frame");
                     getIdSpFrame(otherDate);
                 }
+                else if (spinTipeSp.getSelectedItem().toString().equals("Pameran"))
+                {
+//                    Log.d("SELECTED SP", "Frame");
+                    getIdPameran(otherDate);
+                }
                 else
                 {
 //                    Log.d("SELECTED SP", "Lensa");
@@ -516,12 +527,21 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     linearPembayaran.setVisibility(View.VISIBLE);
                     linearTitleCicilan.setVisibility(View.VISIBLE);
                     linearContentCicilan.setVisibility(View.VISIBLE);
+                    linearSalesEntry.setVisibility(View.GONE);
+                }
+                else if (spinTipeSp.getSelectedItem().toString().equals("Pameran"))
+                {
+                    linearPembayaran.setVisibility(View.GONE);
+                    linearTitleCicilan.setVisibility(View.GONE);
+                    linearContentCicilan.setVisibility(View.GONE);
+                    linearSalesEntry.setVisibility(View.VISIBLE);
                 }
                 else
                 {
                     linearPembayaran.setVisibility(View.GONE);
                     linearTitleCicilan.setVisibility(View.GONE);
                     linearContentCicilan.setVisibility(View.GONE);
+                    linearSalesEntry.setVisibility(View.GONE);
                 }
             }
 
@@ -755,6 +775,41 @@ public class FormOrderSpActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    private void getIdPameran(final String date) {
+//        showLoading();
+        StringRequest request = new StringRequest(Request.Method.POST, URL_GETIDPAMERAN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                loading.dismiss();
+                try {
+                    JSONObject object = new JSONObject(response);
+
+                    String idSp = object.getString("lastnumber");
+
+                    txtNomorSp.setText(idSp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Log.d("ERROR GET IDSP", error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("date", date);
+                return hashmap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void getUserInfo(final String idParty) {
         Config config = new Config();
         String URL = config.Ip_address + config.profile_user_detail;
@@ -806,6 +861,529 @@ public class FormOrderSpActivity extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void selectSales() {
+        btnChooseSales.setOnClickListener(new View.OnClickListener() {
+            Config config = new Config();
+            String URLSHOWALLSALES      = config.Ip_address + config.filter_sales_showall;
+            String URLSHOWSALESBYNAME   = config.Ip_address + config.filter_sales_showbyname;
+            String URLOPTICINFO         = config.Ip_address + config.ordersp_get_opticInfo;
+
+            List<Data_opticname> data_opticnames = new ArrayList<>();
+            Adapter_filter_optic adapter_filter_optic;
+            Data_opticname data;
+
+            MCrypt mCrypt;
+
+            UniversalFontTextView txtCounter;
+            ListView listview;
+            RippleView btnSearch, btnPrev, btnNext, btnSelect;
+            Button selectBtn;
+            BootstrapButton prevBtn, nextBtn;
+            MaterialEditText txtSearch;
+            RelativeLayout rl_optic;
+            ImageView imgView_opticname;
+            View progress;
+
+            String idparty;
+            Integer req_start = 0, totalrow, lastitem, item;
+            long lastclick = 0;
+
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(FormOrderSpActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.form_choose_optic);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                txtSearch = dialog.findViewById(R.id.form_chooseoptic_txtsearch);
+                btnSearch = dialog.findViewById(R.id.form_chooseoptic_btnsearch);
+                btnPrev = dialog.findViewById(R.id.form_chooseoptic_ripplebtnprev);
+                btnNext = dialog.findViewById(R.id.form_chooseoptic_ripplebtnnext);
+                txtCounter = dialog.findViewById(R.id.form_chooseoptic_txtCounter);
+                listview = dialog.findViewById(R.id.form_chooseoptic_listview);
+                btnSelect = dialog.findViewById(R.id.form_chooseoptic_ripplebtnselect);
+                prevBtn = dialog.findViewById(R.id.form_chooseoptic_btnprev);
+                nextBtn = dialog.findViewById(R.id.form_chooseoptic_btnnext);
+                selectBtn = dialog.findViewById(R.id.form_chooseoptic_btnselect);
+                rl_optic = dialog.findViewById(R.id.form_chooseoptic_rl);
+                progress    = ((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                        .inflate(R.layout.footer_progress, null, false);
+
+                adapter_filter_optic = new Adapter_filter_optic(getApplicationContext(), data_opticnames);
+                listview.setAdapter(adapter_filter_optic);
+
+                mCrypt      = new MCrypt();
+
+                disableSelect();
+                disableNext();
+                disablePrev();
+                localselectSales();
+                searchOptic();
+                showNextOptic();
+                showPrevOptic();
+
+                req_start = 0;
+                data_opticnames.clear();
+                showAllOptic(req_start);
+
+                btnSelect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getOpticInfo(idparty);
+                        req_start = 0;
+                        dialog.dismiss();
+                    }
+                });
+
+                if (!isFinishing()){
+                    dialog.show();
+                }
+            }
+
+            private void disableSelect() {
+                btnSelect.setEnabled(false);
+                selectBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+            }
+
+            private void enableSelect() {
+                btnSelect.setEnabled(true);
+                selectBtn.setBackgroundColor(getResources().getColor(R.color.colorToolbar));
+            }
+
+            private void disablePrev() {
+                btnPrev.setEnabled(false);
+                prevBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+            }
+
+            private void enablePrev() {
+                btnPrev.setEnabled(true);
+                prevBtn.setBackgroundColor(getResources().getColor(R.color.colorToolbar));
+            }
+
+            private void disableNext() {
+                btnNext.setEnabled(false);
+                nextBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+            }
+
+            private void enableNext() {
+                btnNext.setEnabled(true);
+                nextBtn.setBackgroundColor(getResources().getColor(R.color.colorToolbar));
+            }
+
+            private void localselectSales() {
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        idparty = data_opticnames.get(position).getUsername();
+                        //Toast.makeText(getApplicationContext(), idparty, Toast.LENGTH_SHORT).show();
+
+                        if (idparty.isEmpty())
+                        {
+                            disableSelect();
+                        }
+                        else
+                        {
+                            enableSelect();
+                        }
+                    }
+                });
+            }
+
+            private void showNextOptic() {
+                btnNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (SystemClock.elapsedRealtime() - lastclick < 1500)
+                        {
+                            return;
+                        }
+
+                        lastclick = SystemClock.elapsedRealtime();
+
+                        try {
+                            Thread.sleep(300);
+
+                            if (txtSearch.getText().length() == 0)
+                            {
+                                lastitem = 0;
+                                req_start = req_start + 8;
+
+                                item     = totalrow % 8;
+                                lastitem = req_start + item;
+
+                                enablePrev();
+                                disableSelect();
+                                listview.addHeaderView(progress);
+                                showAllOptic(req_start);
+                            }
+                            else
+                            {
+                                lastitem = 0;
+                                req_start = req_start + 8;
+
+                                item     = totalrow % 8;
+                                lastitem = req_start + item;
+
+                                enablePrev();
+                                disableSelect();
+                                listview.addHeaderView(progress);
+                                showOpticByName(txtSearch.getText().toString(),req_start);
+                            }
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            private void showPrevOptic() {
+                btnPrev.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (SystemClock.elapsedRealtime() - lastclick < 1500)
+                        {
+                            return;
+                        }
+
+                        lastclick = SystemClock.elapsedRealtime();
+
+                        try {
+                            Thread.sleep(300);
+
+                            if (txtSearch.getText().length() == 0)
+                            {
+                                req_start = req_start - 8;
+
+                                if (req_start == 0)
+                                {
+                                    disablePrev();
+                                }
+
+                                disableSelect();
+                                listview.addHeaderView(progress);
+                                showAllOptic(req_start);
+                            }
+                            else
+                            {
+                                req_start = req_start - 8;
+
+                                if (req_start == 0)
+                                {
+                                    disablePrev();
+                                }
+
+                                disableSelect();
+                                listview.addHeaderView(progress);
+                                showOpticByName(txtSearch.getText().toString(), req_start);
+                            }
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            private void showErrorImage() {
+                imgView_opticname = new ImageView(getApplicationContext());
+                imgView_opticname.setImageResource(R.drawable.notfound);
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                imgView_opticname.setLayoutParams(lp);
+                rl_optic.addView(imgView_opticname);
+            }
+
+            private void searchOptic() {
+                txtSearch.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                        req_start = 0;
+                        disableSelect();
+
+                        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                        {
+                            String check = txtSearch.getText().toString();
+                            if (check.isEmpty())
+                            {
+                                Toasty.warning(getApplicationContext(), "Please fill optic name", Toast.LENGTH_SHORT, true).show();
+                            }
+                            else
+                            {
+                                showOpticByName(check, req_start);
+                                disablePrev();
+                            }
+                        }
+
+                        return false;
+                    }
+                });
+
+                btnSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                        String check = txtSearch.getText().toString();
+                        req_start = 0;
+                        disableSelect();
+
+                        if (check.isEmpty())
+                        {
+                            Toasty.warning(getApplicationContext(), "Please fill optic name", Toast.LENGTH_SHORT, true).show();
+                        }
+                        else
+                        {
+                            showOpticByName(check, req_start);
+                            disablePrev();
+                        }
+                    }
+                });
+            }
+
+            private void showAllOptic(int record) {
+                adapter_filter_optic.notifyDataSetChanged();
+                data_opticnames.clear();
+
+                StringRequest stringRequest = new StringRequest(URLSHOWALLSALES + String.valueOf(record), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listview.removeHeaderView(progress);
+                        String info1 = "username";
+                        String info2 = "custname";
+                        String info3 = "status";
+                        String info4 = "total_row";
+                        int start, until;
+
+                        try {
+                            String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                            String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                            String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                            String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+
+                            try {
+                                JSONArray jsonArray = new JSONArray(response);
+
+                                for (int i=0; i < jsonArray.length(); i++)
+                                {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                                    String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                                    String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                                    String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+
+                                    totalrow = Integer.parseInt(total);
+
+                                    start    = req_start + 1;
+                                    until    = jsonArray.length() + req_start;
+
+                                    String counter = "Show " + start + " - " + until + " from "+ totalrow + " records";
+                                    txtCounter.setText(counter);
+
+                                    data = new Data_opticname();
+                                    data.setUsername(username);
+                                    data.setCustname(custname);
+                                    data.setStatus(status);
+
+                                    data_opticnames.add(data);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (totalrow > 8)
+                            {
+                                enableNext();
+                            }
+                            else
+                            {
+                                disableNext();
+                                disablePrev();
+                            }
+
+                            adapter_filter_optic.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.error(getApplicationContext(), "Failed to encrypt message", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                stringRequest.setShouldCache(false);
+                AppController.getInstance().addToRequestQueue(stringRequest);
+            }
+
+            private void showOpticByName(final String key, int record) {
+                adapter_filter_optic.notifyDataSetChanged();
+                data_opticnames.clear();
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWSALESBYNAME + String.valueOf(record), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listview.removeHeaderView(progress);
+                        rl_optic.removeView(imgView_opticname);
+                        String info1 = "username";
+                        String info2 = "custname";
+                        String info3 = "status";
+                        String info4 = "total_row";
+                        String info5 = "invalid";
+                        int start, until;
+
+                        try {
+                            String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                            String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                            String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                            String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+                            String encrypt_info5 = MCrypt.bytesToHex(mCrypt.encrypt(info5));
+
+                            try {
+                                JSONArray jsonArray = new JSONArray(response);
+                                for (int i = 0; i < jsonArray.length(); i++)
+                                {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    if (jsonObject.names().get(0).equals(encrypt_info5))
+                                    {
+                                        showErrorImage();
+                                        String info = "No record found";
+                                        txtCounter.setText(info);
+                                        disableNext();
+                                        disablePrev();
+                                        Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                                    }
+                                    else
+                                    {
+                                        String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                                        String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                                        String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                                        String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+
+                                        data            = new Data_opticname();
+                                        data.setUsername(username);
+                                        data.setCustname(custname);
+                                        data.setStatus(status);
+
+                                        totalrow        = Integer.parseInt(total);
+
+                                        start           = req_start + 1;
+                                        until           = jsonArray.length() + req_start;
+
+                                        String counter  = "Show " + start + " - " + until + " from " + totalrow + " records";
+
+                                        txtCounter.setText(counter);
+
+                                        if (totalrow > 8)
+                                        {
+                                            enableNext();
+                                        }
+                                        else
+                                        {
+                                            disableNext();
+                                            disablePrev();
+                                        }
+
+                                        if (totalrow.equals(until))
+                                        {
+                                            disableNext();
+                                        }
+
+                                        data_opticnames.add(data);
+                                    }
+                                }
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            adapter_filter_optic.notifyDataSetChanged();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.warning(getApplicationContext(), "Failed to encrypt data", Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toasty.error(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("custname", key);
+
+                        return hashMap;
+                    }
+                };
+
+                stringRequest.setShouldCache(false);
+                AppController.getInstance().addToRequestQueue(stringRequest);
+            }
+
+            private void getOpticInfo(final String id) {
+                StringRequest request = new StringRequest(Request.Method.POST, URLOPTICINFO, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            status = obj.getString("status");
+
+//                            if (status.equals("A"))
+//                            {
+                                txtSalesEntry.setError(null);
+
+//                                idOptic = idparty;
+//                                txtNamaOptik.setText(obj.getString("custName"));
+//                                txtKotaOptik.setText(obj.getString("city"));
+//                                txtAlamatOptik.setText(obj.getString("address"));
+//                                txtShipNumber.setText(obj.getString("username"));
+//                                province = obj.getString("province");
+//                                opticUsername = obj.getString("username");
+
+                                txtSalesEntry.setText(obj.getString("username"));
+//                            }
+//                            else
+//                            {
+//                                Toasty.error(getApplicationContext(), "Akun Inactive tidak dapat membuat SP", Toast.LENGTH_SHORT).show();
+//                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.getMessage().isEmpty())
+                        {
+                            Log.d("ERROR OPTIC INFO", error.getMessage());
+                        }
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("id_party", id);
+                        return map;
+                    }
+                };
+
+                AppController.getInstance().addToRequestQueue(request);
+            }
+        });
     }
 
     private void selectOptic() {
@@ -1378,6 +1956,19 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         cicilanVal = "";
                     }
                 }
+                else if (spinTipeSp.getSelectedItem().toString().equals("Pameran")) {
+                    if (txtSalesEntry.length() > 3)
+                    {
+                        isMulaiBayar = true;
+//                    cicilanVal = spinMulaiCicilan.getSelectedItem().toString();
+                        cicilanVal = "";
+                        txtSalesEntry.setError(null);
+                    }
+                    else
+                    {
+                        txtSalesEntry.setError("Isi nama sales");
+                    }
+                }
                 else
                 {
                     isMulaiBayar = true;
@@ -1496,7 +2087,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //                        intent.putExtra("header_signedpath", signedpath);
                         startActivity(intent);
                     }
-                    else if (spinTipeSp.getSelectedItem().toString().equals("Frame"))
+                    else if (spinTipeSp.getSelectedItem().toString().equals("Frame") || spinTipeSp.getSelectedItem().toString().equals("Pameran"))
                     {
 //                            Toasty.info(getApplicationContext(), "Form Frame", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), FormSpFrameActivity.class);
@@ -1508,8 +2099,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("province_address", txtAlamatOptik.getText().toString());
                         intent.putExtra("idSp", dataHeader.getNoSp());
                         intent.putExtra("header_nosp", txtNomorSp.getText().toString());
-                        intent.putExtra("header_tipesp", spinTipeSp.getSelectedItem().toString());
-                        intent.putExtra("header_sales", username);
+//                        intent.putExtra("header_tipesp", spinTipeSp.getSelectedItem().toString());
+                        intent.putExtra("header_tipesp", "Frame");
+                        intent.putExtra("header_sales", txtSalesEntry.length() > 3 ? txtSalesEntry.getText().toString() : username);
                         intent.putExtra("header_shipnumber", txtShipNumber.getText().toString());
                         intent.putExtra("header_custname", txtNamaOptik.getText().toString());
                         intent.putExtra("header_address", txtAlamatOptik.getText().toString());

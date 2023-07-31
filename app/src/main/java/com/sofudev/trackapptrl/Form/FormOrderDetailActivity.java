@@ -51,7 +51,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
     List<Data_item_orderdetail> itemList = new ArrayList<>();
     Adapter_item_orderdetail adapter_item_orderdetail;
 
-    String key;
+    String key, level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +107,14 @@ public class FormOrderDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         key = bundle.getString("key");
+        level = bundle.getString("level");
         getInformationDetailHeader(key);
         getInformationDetailItem(key);
+
+        if (level.equals("3"))
+        {
+            btnDownload.setVisibility(View.GONE);
+        }
     }
 
     private void getInformationDetailHeader(final String key_order)
@@ -153,14 +159,27 @@ public class FormOrderDetailActivity extends AppCompatActivity {
                             break;
                     }
 
-//                    txtPasien.setText(jsonObject.getString("nama_pasien"));
-                    txtTanggal.setText(jsonObject.getString("tanggal_order"));
-                    txtOptik.setText(jsonObject.getString("nama_optik"));
-                    txtEkspedisi.setText(jsonObject.getString("ekspedisi"));
-                    txtService.setText(jsonObject.getString("servis"));
-                    txtHarga.setText("Rp. " + CurencyFormat(jsonObject.getString("total_harga")));
-                    txtStatus.setText(jsonObject.getString("status_bayar"));
-                    txtNomorOrder.setText(nomor + jsonObject.getString("order_number"));
+                    if (level.equals("3"))
+                    {
+                        txtTanggal.setText(jsonObject.getString("tanggal_order"));
+                        txtOptik.setText(jsonObject.getString("nama_optik"));
+                        txtEkspedisi.setText(jsonObject.getString("ekspedisi"));
+                        txtService.setText(jsonObject.getString("servis"));
+                        txtHarga.setText("Unavailable");
+                        txtStatus.setText(jsonObject.getString("status_bayar"));
+                        txtNomorOrder.setText(nomor + jsonObject.getString("order_number"));
+                    }
+                    else
+                    {
+//                        txtPasien.setText(jsonObject.getString("nama_pasien"));
+                        txtTanggal.setText(jsonObject.getString("tanggal_order"));
+                        txtOptik.setText(jsonObject.getString("nama_optik"));
+                        txtEkspedisi.setText(jsonObject.getString("ekspedisi"));
+                        txtService.setText(jsonObject.getString("servis"));
+                        txtHarga.setText("Rp. " + CurencyFormat(jsonObject.getString("total_harga")));
+                        txtStatus.setText(jsonObject.getString("status_bayar"));
+                        txtNomorOrder.setText(nomor + jsonObject.getString("order_number"));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -205,6 +224,7 @@ public class FormOrderDetailActivity extends AppCompatActivity {
                         data.setDiskon(object.getDouble("diskon"));
                         data.setTinting(object.getInt("tinting"));
                         data.setTotalAll(object.getInt("total_all"));
+                        data.setCategory(Integer.parseInt(level));
 
                         itemList.add(data);
                     }

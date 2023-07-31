@@ -248,68 +248,54 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginTop="7dp"
                         android:layout_marginBottom="7dp"
                         android:background="@color/neutral"
-                        >
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:layout_weight="1"
                             android:gravity="center"
-                            >
+                            android:orientation="horizontal">
 
                             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                                 android:id="@+id/fragment_detailproduct_txtBrandName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="10dp"
+                                android:text="Nikon"
                                 android:textColor="@color/colorContent"
                                 android:textSize="15sp"
-                                android:text="Nikon"
-                                app:customFont="UbuntuMedium.ttf"/>
+                                app:customFont="UbuntuMedium.ttf" />
                         </LinearLayout>
 
 
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/colordevider" />
-
                         <LinearLayout
-                            android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:layout_weight="1"
                             android:gravity="center"
-                            >
+                            android:orientation="horizontal">
 
                             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                                 android:id="@+id/fragment_detailproduct_txtAvailability"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="10dp"
+                                android:text="In Stock"
                                 android:textColor="@color/colorRed"
                                 android:textSize="15sp"
-                                android:text="In Stock"
-                                app:customFont="UbuntuMedium.ttf"/>
+                                app:customFont="UbuntuMedium.ttf" />
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/colordevider" />
-
                         <LinearLayout
-                            android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:layout_weight="1"
                             android:gravity="right"
-                            >
+                            android:orientation="horizontal">
 
                             <!--<net.igenius.customcheckbox.CustomCheckBox-->
                             <!--android:id="@+id/recycle_colorfilter_checkbox"-->
@@ -327,9 +313,19 @@
                                 android:id="@+id/fragment_detailproduct_recyclerColor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="end"/>
+                                android:layout_gravity="end" />
 
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colordevider" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colordevider" />
                     </LinearLayout>
 
                 </LinearLayout>

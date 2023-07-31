@@ -113,6 +113,7 @@ import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.Form.FormUACActivity;
 import com.sofudev.trackapptrl.Form.SearchProductActivity;
 import com.sofudev.trackapptrl.Form.WishlistProductActivity;
+import com.sofudev.trackapptrl.Fragment.AssitsFragment;
 import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
 import com.sofudev.trackapptrl.Fragment.CategoryFragment;
@@ -121,6 +122,7 @@ import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
+import com.sofudev.trackapptrl.Fragment.NewsFragment;
 import com.sofudev.trackapptrl.Fragment.OtherProductFragment;
 import com.sofudev.trackapptrl.Fragment.PromoBannerFragment;
 import com.sofudev.trackapptrl.Fragment.PromoFrameFragment;
@@ -168,6 +170,7 @@ public class DashboardActivity extends AppCompatActivity
     private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
 
     private String userDetail_URL = config.Ip_address + config.dashboard_user_detail;
+    private String userDetailByUsername = config.Ip_address + config.dashboard_user_detailByUsername;
     private String logout_URL     = config.Ip_address + config.dashboard_update_offline;
     private String check_userinfo = config.Ip_address + config.dashboard_check_userinfo;
     private String update_phone   = config.Ip_address + config.dashboard_update_phone;
@@ -197,7 +200,7 @@ public class DashboardActivity extends AppCompatActivity
     private MaterialSearchView searchViews;
     private LovelyStandardDialog dialog;
     private MCrypt mCrypt;
-    private String data, data1, level_user, image_user, email_address, mobile_number, verify_code, phone_number,
+    private String data, data1, data2, level_user, image_user, email_address, mobile_number, verify_code, phone_number,
             phone_pincode, province_user, province_address, username, city, member_flag, urlPdf, sts;
     private NavigationView navigationView;
     ActionBarDrawerToggle toggle;
@@ -382,7 +385,16 @@ public class DashboardActivity extends AppCompatActivity
         checkUserInfo(data1);
         navdash_username.setText(data);
         navdash_id.setText(data1);
-        getUserDetailDB(data1);
+
+        if (data.contains("STAFF"))
+        {
+            getUserDetailByUsername(data);
+        }
+        else
+        {
+            getUserDetailDB(data1);
+        }
+
         getParentInfo(navdash_id.getText().toString());
 
 //        homeProduk();
@@ -391,20 +403,30 @@ public class DashboardActivity extends AppCompatActivity
         getFrameMode();
 //        showBalance();
 
-        if (data1.length() == 3)
-        {
-            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
-            lp.topMargin = -20;
-            lp.bottomMargin = 10;
-
-            frameCategory.setLayoutParams(lp);
-
-            showCourier();
-        }
-        else
-        {
-            showCategory();
-        }
+//        if (data1.length() == 3)
+//        {
+//            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
+//            lp.topMargin = -40;
+//            lp.bottomMargin = 10;
+//
+//            frameCategory.setLayoutParams(lp);
+//
+//            showCourier();
+//        }
+//        else if (data2.equals("3"))
+//        {
+//            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
+//            lp.topMargin = -30;
+//            lp.bottomMargin = 10;
+//
+//            frameCategory.setLayoutParams(lp);
+//
+//            showAssits();
+//        }
+//        else
+//        {
+//            showCategory();
+//        }
 
 //        showPromoFrame();
 //        showSpesialProduk();
@@ -505,6 +527,10 @@ public class DashboardActivity extends AppCompatActivity
                     {
                         TAG = "main";
                     }
+
+                    //DISABLE BEFORE UPLOAD
+//                    showNews();
+                    //DISABLE BEFORE UPLOAD
 
                     showPromoFrame();
                     showSpesialProduk();
@@ -1064,7 +1090,7 @@ public class DashboardActivity extends AppCompatActivity
                 Boolean b = !menu.findItem(R.id.nav_price1).isVisible();
                 menu.findItem(R.id.nav_price1).setVisible(b);
                 menu.findItem(R.id.nav_price2).setVisible(b);
-                menu.findItem(R.id.nav_price3).setVisible(b);
+//                menu.findItem(R.id.nav_price3).setVisible(b);
             }
             catch (Exception e)
             {
@@ -1444,10 +1470,36 @@ public class DashboardActivity extends AppCompatActivity
         if (bundle != null){
             data    = bundle.getString("username");
             data1   = bundle.getString("idparty");
+            data2   = bundle.getString("level");
 
             showBalance();
 
             Log.d(DashboardActivity.class.getSimpleName(), "Username : " + data);
+
+            if (data1.length() == 3)
+            {
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
+                lp.topMargin = -40;
+                lp.bottomMargin = 10;
+
+                frameCategory.setLayoutParams(lp);
+
+                showCourier();
+            }
+            else if (data2.equals("3"))
+            {
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
+                lp.topMargin = -30;
+                lp.bottomMargin = 10;
+
+                frameCategory.setLayoutParams(lp);
+
+                showAssits();
+            }
+            else
+            {
+                showCategory();
+            }
         }
     }
 
@@ -1593,7 +1645,7 @@ public class DashboardActivity extends AppCompatActivity
                             hideMenu();
                             countData(navdash_username.getText().toString());
                         }
-                        else if (Integer.parseInt(level_user) == 2){
+                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3){
                             hideMenuKurir();
                         }
 
@@ -1617,6 +1669,77 @@ public class DashboardActivity extends AppCompatActivity
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("id_party", key);
+                return hashMap;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    public void getUserDetailByUsername(final String key) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, userDetailByUsername, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mCrypt = new MCrypt();
+                String dt = "level";
+                String dt1 = "image";
+                String dt2 = "province";
+                String dt3 = "username";
+                String dt4 = "city";
+                String dt5 = "memberFlag";
+                String dt6 = "address1";
+
+                try {
+                    String status = MCrypt.bytesToHex(mCrypt.encrypt(dt));
+                    String image  = MCrypt.bytesToHex(mCrypt.encrypt(dt1));
+                    String province = MCrypt.bytesToHex(mCrypt.encrypt(dt2));
+                    String userInfo = MCrypt.bytesToHex(mCrypt.encrypt(dt3));
+                    String cityInfo = MCrypt.bytesToHex(mCrypt.encrypt(dt4));
+                    String memberFlag = MCrypt.bytesToHex(mCrypt.encrypt(dt5));
+                    String address  = MCrypt.bytesToHex(mCrypt.encrypt(dt6));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        level_user = new String(mCrypt.decrypt(jsonObject.getString(status)));
+                        image_user = new String(mCrypt.decrypt(jsonObject.getString(image)));
+                        province_user = new String(mCrypt.decrypt(jsonObject.getString(province)));
+                        province_address = new String(mCrypt.decrypt(jsonObject.getString(address)));
+                        username   = new String(mCrypt.decrypt(jsonObject.getString(userInfo)));
+                        city = new String(mCrypt.decrypt(jsonObject.getString(cityInfo)));
+                        member_flag = new String(mCrypt.decrypt(jsonObject.getString(memberFlag)));
+
+                        getSaldoDepo(username);
+
+                        if (Integer.parseInt(level_user) == 0) {
+                            hideMenu();
+                            countData(navdash_username.getText().toString());
+                        }
+                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3){
+                            hideMenuKurir();
+                        }
+
+                        image_user = image_user.replaceAll(" ", "%20");
+                        Log.d("IMG PROFILE", image_user);
+                        Picasso.with(DashboardActivity.this).load(image_user).into(img_profile);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("custname", key);
                 return hashMap;
             }
         };
@@ -3215,6 +3338,29 @@ public class DashboardActivity extends AppCompatActivity
         courierFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_category, courierFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showAssits() {
+        AssitsFragment assitsFragment = new AssitsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        bundle.putString("partySiteId", data1);
+        bundle.putString("username", data);
+        assitsFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_category, assitsFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showNews() {
+        NewsFragment fragment = new NewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", TAG);
+        bundle.putString("access", "dashboard");
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_news, fragment);
         fragmentTransaction.commit();
     }
 

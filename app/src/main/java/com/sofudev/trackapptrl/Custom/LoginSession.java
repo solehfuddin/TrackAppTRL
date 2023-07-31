@@ -11,6 +11,8 @@ public class LoginSession {
     public static final String MyPREFERENCES = "MyLogin" ;
     public static final String UsernameKey = "UsernameKey";
     public static final String IdPartyKey = "IdPartyKey";
+    public static final String LevelKey = "LevelKey";
+
     Context _context;
     SharedPreferences.Editor editor;
 
@@ -19,11 +21,12 @@ public class LoginSession {
         sharedpreferences = _context.getSharedPreferences(MyPREFERENCES, 0);
     }
 
-    public void AddLoginSession(String user, String id)
+    public void AddLoginSession(String user, String id, String level)
     {
         editor = sharedpreferences.edit();
         editor.putString(UsernameKey, user);
         editor.putString(IdPartyKey, id);
+        editor.putString(LevelKey, level);
         editor.apply();
     }
 
@@ -34,6 +37,8 @@ public class LoginSession {
 
         // user id
         user.put(IdPartyKey, sharedpreferences.getString(IdPartyKey, null));
+
+        user.put(LevelKey, sharedpreferences.getString(LevelKey, "0"));
 
         // return user
         return user;

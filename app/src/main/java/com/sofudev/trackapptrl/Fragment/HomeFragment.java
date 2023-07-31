@@ -844,6 +844,8 @@ public class HomeFragment extends Fragment {
 //        String uri = "http://www.timurrayalab.com/dev/uploads/img/127.jpg";
             Picasso.with(getContext()).load(url).into(imgBgDialogSale);
 
+
+
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

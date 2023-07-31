@@ -505,6 +505,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitlecatatan" />
 
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txtbsd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/caption_bsd"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp"
+                app:customFont="UbuntuBold.ttf"
+                android:visibility="gone"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/bottomdialog_approvalsp_txtcatatan"
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitlecatatan" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -537,6 +552,23 @@
                 android:textSize="16sp"
                 app:customFont="UbuntuRegular.ttf"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txtlabelflag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/store"
+                android:background="@color/colorToolbar"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:customFont="UbuntuRegular.ttf"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view10" />
 
             <View
@@ -668,6 +700,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txtbiayadiskon" />
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txttitleqtytotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:text="@string/total_qty"
+                android:textColor="@color/colorContent"
+                android:textSize="14sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/bottomdialog_approvalsp_txtqtytotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:text="@string/_0_pcs"
+                android:textColor="@color/colorContent"
+                android:textSize="14sp"
+                app:customFont="UbuntuMedium.ttf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/bottomdialog_approvalsp_txttitlebiayatotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -679,7 +739,7 @@
                 android:textSize="14sp"
                 app:customFont="UbuntuMedium.ttf"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6" />
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitleqtytotal" />
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/bottomdialog_approvalsp_txtbiayatotal"
@@ -693,7 +753,7 @@
                 android:textSize="14sp"
                 app:customFont="UbuntuMedium.ttf"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6" />
+                app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_txttitleqtytotal" />
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/bottomdialog_approvalsp_txttitlebiayainfo"

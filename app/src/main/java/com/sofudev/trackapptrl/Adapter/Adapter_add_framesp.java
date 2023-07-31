@@ -14,6 +14,7 @@ import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelFrameSp;
 import com.sofudev.trackapptrl.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -47,6 +48,7 @@ public class Adapter_add_framesp extends RecyclerView.Adapter<Adapter_add_frames
 //        Picasso.with(context).load(data.getProductImage()).resize(100, 100).into(holder.img_product);
         holder.txt_productid.setText(String.valueOf(data.getProductId()));
         holder.txt_productname.setText(data.getProductName());
+//        holder.txt_productname.setText(data.getProductCollect());
         holder.txt_productqty.setText(String.valueOf(data.getProductQty()));
         holder.txt_productprice.setText("Rp. " + CurencyFormat(String.valueOf(data.getNewProductDiscPrice())));
         holder.txt_productflag.setText(data.getProductFlag());
