@@ -56,6 +56,7 @@
             tools:ignore="RtlHardcoded" />
 
         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:id="@+id/frame_product_txtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

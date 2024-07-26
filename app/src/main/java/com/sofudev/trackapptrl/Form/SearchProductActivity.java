@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -189,7 +190,8 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
                     }
                     else
                     {
-                        bottomSnackBar.showWarningMessage("Product Not found");
+//                        bottomSnackBar.showWarningMessage("Product Not found");
+                        Toasty.warning(getApplicationContext(), "Product Not Found", Toast.LENGTH_SHORT).show();
                     }
 
                     return true;
@@ -243,7 +245,8 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
                     dataSearchList.clear();
                     adapter_search_product.notifyDataSetChanged();
 
-                    bottomSnackBar.showErrorMessage("All recent search has been deleted");
+//                    bottomSnackBar.showErrorMessage("All recent search has been deleted");
+                    Toasty.warning(getApplicationContext(), "All recent search has been deleted", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -256,7 +259,8 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
                     dataRecentViews.clear();
                     adapter_recent_view.notifyDataSetChanged();
 
-                    bottomSnackBar.showErrorMessage("All recent view has been deleted");
+//                    bottomSnackBar.showErrorMessage("All recent view has been deleted");
+                    Toasty.warning(getApplicationContext(), "All recent search has been deleted", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -271,7 +275,15 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    id2 = jsonObject.getInt("item_id");
+                    if (jsonObject.names().get(0).equals("invalid"))
+                    {
+//                        bottomSnackBar.showWarningMessage("Product Not found");
+                        Toasty.warning(getApplicationContext(), "Product Not found", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        id2 = jsonObject.getInt("item_id");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -473,14 +485,21 @@ public class SearchProductActivity extends AppCompatActivity implements View.OnC
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                        int id = jsonObject.getInt("item_id");
-                        String desc = jsonObject.getString("description");
+                        if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            Log.d(SearchProductActivity.class.getSimpleName(), "Data not found");
+                        }
+                        else
+                        {
+                            int id = jsonObject.getInt("item_id");
+                            String desc = jsonObject.getString("description");
 
-                        Data_searchnow item = new Data_searchnow();
-                        item.setId(id);
-                        item.setKeyword(desc);
+                            Data_searchnow item = new Data_searchnow();
+                            item.setId(id);
+                            item.setKeyword(desc);
 
-                        dataSearchnows.add(item);
+                            dataSearchnows.add(item);
+                        }
                     }
 
                     recyOutputSearch.setAdapter(adapter_searchnow);

@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     app:cardElevation="0dp"
     app:cardUseCompatPadding="true"
+    app:layout_goneMarginBottom="4dp"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
         android:background="@color/white">
 
         <RelativeLayout
@@ -60,7 +60,7 @@
             android:paddingStart="7dp"
             android:paddingTop="3dp"
             android:paddingEnd="7dp"
-            android:paddingBottom="3dp"
+            android:paddingBottom="2dp"
             android:text="@string/nikon"
             android:textAlignment="center"
             android:textColor="@color/white"

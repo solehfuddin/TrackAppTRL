@@ -54,7 +54,8 @@
         <item>November</item>
         <item>Desember</item>
     </array>
-    <string name="app_version">App Version 2.2.2</string>
+    <string name="app_version">App Version 2.3.6</string>
+    <string name="default_notification_channel_id">channel_oreo</string>
     <string name="code">Serial number: \n <font size='10'> 32000354</font></string>
     <string name="price1">Price: \n <font size='10'> 3,254,544</font></string>
     <string name="dst_city"><b>Mashhad</b>\n<font size='10'>MHD</font></string>
@@ -158,7 +159,7 @@
     <string name="sp_track">SP Track</string>
     <string name="deposit">TRL Deposit</string>
     <string name="bprks">Bprks Loan</string>
-    <string name="special_product">SPECIAL PRODUCT</string>
+    <string name="special_product">NEW COLLECTIONS</string>
     <string name="more_custom"><![CDATA[MORE >]]></string>
     <string name="_10">-10%</string>
     <string name="nikon">Nikon</string>
@@ -180,8 +181,8 @@
     <string name="pilih_subcategory">Pilih Subcategory</string>
     <string name="detail_summary">Detail Summary</string>
     <string name="another_product">OTHER PRODUCT</string>
-    <string name="popular_product">POPULAR PRODUCT</string>
-    <string name="other_frame">OTHER FRAME</string>
+    <string name="popular_product">BEST SELLER</string>
+    <string name="other_frame">RECOMMENDED</string>
     <string name="flash_sale">Flash Sale</string>
     <string name="order_service">Order</string>
     <string name="tracking_service">Tracking</string>
@@ -308,4 +309,8 @@
     <string name="caption_bsd">Barang Sudah Diterima</string>
     <string name="store">STORE</string>
     <string name="detail_frame">Detail Frame</string>
+    <string name="pusat_notifikasi">Pusat Notifikasi</string>
+    <string name="terbaru">Terbaru</string>
+    <string name="sebelumnya">Sebelumnya</string>
+    <string name="assign_bin">Assign Bin</string>
 </resources>

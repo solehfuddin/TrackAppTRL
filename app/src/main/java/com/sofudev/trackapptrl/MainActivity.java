@@ -44,6 +44,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -79,6 +80,7 @@ import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.VersionChecker;
 import com.sofudev.trackapptrl.Custom.WSCallerVersionListener;
+import com.sofudev.trackapptrl.Data.Data_token_fcm;
 import com.sofudev.trackapptrl.Form.EwarrantyActivity;
 import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
@@ -130,6 +132,8 @@ public class MainActivity extends AppCompatActivity
     private String VersioningURL = config.Ip_address + config.version_apps;
     private String maintenanceURL = config.Ip_address + config.maintenance_mode;
     private String LoginURL = config.Ip_address + config.login_apps;
+    private String UpdateTokenURL = config.Ip_address + config.login_update_fcmtoken;
+    private String UpdateTokenByCustURL = config.Ip_address + config.login_update_fcmtokenbyCust;
     private String UpdateIsOnlineURL = config.Ip_address + config.login_update_isOnline;
     private String ViewPdfURL = config.Ip_address + config.view_pdf_showAllDataByFilter;
 
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
     private BootstrapEditText txt_user, txt_pass;
     private UniversalFontCheckBox cb_pass;
-    ImageView imgWishlist, imgCart;
+    ImageView imgWishlist, imgCart, imgSearch;
     FabSpeedDial fab_about;
     LayoutInflater inflater;
     View dialogView;
@@ -168,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     CustomLoading customLoading;
 
     int versionCode;
+//    String fcmTokenDevice = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +180,10 @@ public class MainActivity extends AppCompatActivity
         UniversalFontComponents.init(this);
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_main);
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 //        showDialogLoading();
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
@@ -187,6 +196,7 @@ public class MainActivity extends AppCompatActivity
 
         imgWishlist = findViewById(R.id.main_btn_wishlist);
         imgCart = findViewById(R.id.main_btn_addcart);
+        imgSearch = findViewById(R.id.main_btn_search);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         searchView = (MaterialSearchView) findViewById(R.id.main_search);
         txt_countwishlist = findViewById(R.id.main_badge_wishlist);
@@ -197,7 +207,6 @@ public class MainActivity extends AppCompatActivity
         imgTop = findViewById(R.id.appbarmain_buttonTop);
         scrollView = findViewById(R.id.main_scrollview);
         session = new LoginSession(getApplicationContext());
-
         getVersion();
 
         PackageManager pm = this.getPackageManager();
@@ -247,6 +256,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) searchView.getLayoutParams();
+        lp.setMargins(0,0,50, 0);
         searchView.setEllipsize(true);
         searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -264,6 +275,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+        searchView.setLayoutParams(lp);
 
         Menu m = navigationView.getMenu();
         for (int i=0;i<m.size();i++) {
@@ -305,11 +317,11 @@ public class MainActivity extends AppCompatActivity
 //        homeProduk();
         isHomeActive();
         showBanner();
-        showBalance();
+//        showBalance();
         showCategory();
 
         //DISABLE BEFORE UPLOAD
-//        showNews();
+        showNews();
         //DISABLE BEFORE UPLOAD
 
         showPromoFrame();
@@ -327,6 +339,13 @@ public class MainActivity extends AppCompatActivity
 //                //intent.putExtra("activity", "main");
 //                startActivityForResult(intent, 1);
 
+                Toasty.warning(getApplicationContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Toasty.warning(getApplicationContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
             }
         });
@@ -358,12 +377,68 @@ public class MainActivity extends AppCompatActivity
 //        editor.commit();
 //
 //        int value = preferences.getInt(VALUE_COUNTWISHLIST, 0);
-        txt_countwishlist.setText(" " + counter + " ");
-        txt_countcart.setText(" " + countcart + " ");
+        if (counter > 0)
+        {
+            txt_countwishlist.setText(" " + counter + " ");
+            txt_countwishlist.setVisibility(View.VISIBLE);
+        }
+
+        if (countcart > 0)
+        {
+            txt_countcart.setText(" " + countcart + " ");
+            txt_countcart.setVisibility(View.VISIBLE);
+        }
+
         //frameProduk();
 
 //        generateToken();
 //        subscribeTopic();
+
+        checkLastToken();
+    }
+
+    private void checkLastToken(){
+        HashMap<String, String> token = session.getTokenSession();
+
+        if (token.get(LoginSession.TokenKey) != null)
+        {
+            Log.d(MainActivity.class.getSimpleName(), "Token Firebase : " + token.get(LoginSession.TokenKey));
+
+//            fcmTokenDevice = token.get(LoginSession.TokenKey);
+        }
+        else
+        {
+            Log.d(MainActivity.class.getSimpleName(), "Token Firebase : Belum tergenerate");
+        }
+
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
+//            //showDialogLoginCustom();
+//            HashMap<String, String> user = session.getLoginSession();
+//            String username = user.get(LoginSession.UsernameKey);
+//            String idparty  = user.get(LoginSession.IdPartyKey);
+////                String level = user.get(LoginSession.LevelKey);
+//
+//            if (username != null && idparty != null) {
+////                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+////                    intent.putExtra("username", username);
+////                    intent.putExtra("idparty", idparty);
+////                    intent.putExtra("level", level);
+////
+////                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+////                    finish();
+////                    startActivity(intent);
+//
+//                Log.d(MainActivity.class.getSimpleName(), "Username pie keatas : " + username);
+//                updateTokenFcm(username);
+//            }
+//            else {
+////                showDialogLogin();
+//            }
+//        }
+//        else {
+//            readTemp();
+//        }
     }
 
     private void generateToken(){
@@ -426,12 +501,20 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1)
         {
             int counter = data.getIntExtra("counter", 0);
-            txt_countwishlist.setText(" " + counter + " ");
+            if (counter > 0)
+            {
+                txt_countwishlist.setText(" " + counter + " ");
+                txt_countwishlist.setVisibility(View.VISIBLE);
+            }
         }
         else if (requestCode == 2)
         {
             int counter = data.getIntExtra("counter", 0);
-            txt_countcart.setText(" " + counter + " ");
+            if (counter > 0)
+            {
+                txt_countcart.setText(" " + counter + " ");
+                txt_countcart.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -448,7 +531,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        /*getMenuInflater().inflate(R.menu.main, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
         //searchView.setMenuItem(item);
@@ -460,7 +543,7 @@ public class MainActivity extends AppCompatActivity
 
                 return false;
             }
-        });
+        });*/
 
         return true;
     }
@@ -488,17 +571,20 @@ public class MainActivity extends AppCompatActivity
                 HashMap<String, String> user = session.getLoginSession();
                 String username = user.get(LoginSession.UsernameKey);
                 String idparty  = user.get(LoginSession.IdPartyKey);
-                String level = user.get(LoginSession.LevelKey);
+//                String level = user.get(LoginSession.LevelKey);
 
                 if (username != null && idparty != null) {
-                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("idparty", idparty);
-                    intent.putExtra("level", level);
+//                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+//                    intent.putExtra("username", username);
+//                    intent.putExtra("idparty", idparty);
+//                    intent.putExtra("level", level);
+//
+//                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+//                    finish();
+//                    startActivity(intent);
 
-                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
-                    finish();
-                    startActivity(intent);
+                    Log.d(MainActivity.class.getSimpleName(), "Username pie keatas : " + username);
+                    updateTokenFcm(username);
                 }
                 else {
                     showDialogLogin();
@@ -507,6 +593,8 @@ public class MainActivity extends AppCompatActivity
             else {
                 readTemp();
             }
+
+//            showDialogLogin();
         } else if (id == R.id.nav_pricelist)
         {
             try {
@@ -514,6 +602,7 @@ public class MainActivity extends AppCompatActivity
                 Boolean b = !menu.findItem(R.id.nav_price1).isVisible();
                 menu.findItem(R.id.nav_price1).setVisible(b);
                 menu.findItem(R.id.nav_price2).setVisible(b);
+                menu.findItem(R.id.nav_price4).setVisible(b);
 //                menu.findItem(R.id.nav_price3).setVisible(b);
             }
             catch (Exception e)
@@ -524,13 +613,16 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         else if (id == R.id.nav_price1){
-            ViewPdfByFilter("link_leinz", "Price List Leinz");
+            ViewPdfByFilter("link_leinz", "Price List Leinz", "local");
         }
         else if (id == R.id.nav_price2){
-            ViewPdfByFilter("link_oriental", "Price List Oriental");
+            ViewPdfByFilter("link_oriental", "Price List Oriental", "local");
         }
         else if (id == R.id.nav_price3){
-            ViewPdfByFilter("link_nikon", "Price List Nikon");
+            ViewPdfByFilter("link_nikon", "Price List Nikon", "local");
+        }
+        else if (id == R.id.nav_price4){
+            ViewPdfByFilter("link_frame", "Price List Frame", "url");
         }
         else if (id == R.id.nav_lenses) {
             /*try {
@@ -702,7 +794,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.nav_guide1)
         {
-            ViewPdfByFilter("link_guide", "User Guide");
+            ViewPdfByFilter("link_guide", "User Guide", "local");
         }
 
         drawer.closeDrawers();
@@ -950,6 +1042,7 @@ public class MainActivity extends AppCompatActivity
 //                    else {
 //                        showDialogLogin();
 //                    }
+
                     showDialogLogin();
                 }
                 else
@@ -959,14 +1052,17 @@ public class MainActivity extends AppCompatActivity
                     String username = dataRead[2];
                     String level = dataRead[5];
 
-                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("idparty", idparty);
-                    intent.putExtra("level", level);
+//                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+//                    intent.putExtra("username", username);
+//                    intent.putExtra("idparty", idparty);
+//                    intent.putExtra("level", level);
+//
+//                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+//                    finish();
+//                    startActivity(intent);
 
-                    Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
-                    finish();
-                    startActivity(intent);
+                    Log.d(MainActivity.class.getSimpleName(), "Username under oreo : " + username);
+                    updateTokenFcmByCust(username);
                 }
             }
         }
@@ -1140,6 +1236,8 @@ public class MainActivity extends AppCompatActivity
                 HashMap <String, String> hashMap = new HashMap<>();
                 hashMap.put("username", username);
                 hashMap.put("password", password);
+                HashMap<String, String> token = session.getTokenSession();
+                hashMap.put("token", token.get(LoginSession.TokenKey));
 
                 return hashMap;
             }
@@ -1201,6 +1299,166 @@ public class MainActivity extends AppCompatActivity
                 hashMap.put("is_online", "0");
                 hashMap.put("device_info", deviceInfo);
                 hashMap.put("date_time", datetime);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void updateTokenFcm(final String username)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UpdateTokenURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mCrypt = new MCrypt();
+                String info1 = "success";
+                String info3 = "failure";
+
+                try {
+                    String success = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                    String failure = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        if (jsonObject.names().get(0).equals(success))
+                        {
+                            //Toasty.success(getApplicationContext(), "Update info login success", Toast.LENGTH_SHORT, true).show();
+                            Log.d(MainActivity.class.getSimpleName(), "Success update token");
+
+//                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                //Toast.makeText(getApplicationContext(), "Custom Dialog", Toast.LENGTH_SHORT).show();
+                                //showDialogLoginCustom();
+                                HashMap<String, String> user = session.getLoginSession();
+                                String username = user.get(LoginSession.UsernameKey);
+                                String idparty = user.get(LoginSession.IdPartyKey);
+                                String level = user.get(LoginSession.LevelKey);
+
+                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                intent.putExtra("username", username);
+                                intent.putExtra("idparty", idparty);
+                                intent.putExtra("level", level);
+
+                                Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+                                finish();
+                                startActivity(intent);
+//                            }
+//                            else
+//                            {
+//                                String [] dataRead = readTxt.split(",");
+//                                String idparty  = dataRead[1];
+//                                String username = dataRead[2];
+//                                String level = dataRead[5];
+//
+//                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+//                                intent.putExtra("username", username);
+//                                intent.putExtra("idparty", idparty);
+//                                intent.putExtra("level", level);
+//
+//                                Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+//                                finish();
+//                                startActivity(intent);
+//                            }
+                        }
+                        else if (jsonObject.names().get(0).equals(failure))
+                        {
+                            //Toasty.warning(getApplicationContext(), "Account not found", Toast.LENGTH_SHORT, true).show();
+
+                            Log.d(MainActivity.class.getSimpleName(), "Failed update token");
+                        }
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("username", username);
+                HashMap<String, String> token = session.getTokenSession();
+                hashMap.put("token", token.get(LoginSession.TokenKey));
+//                hashMap.put("token", token);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void updateTokenFcmByCust(final String custname)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UpdateTokenByCustURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mCrypt = new MCrypt();
+                String info1 = "success";
+                String info3 = "failure";
+
+                try {
+                    String success = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                    String failure = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        if (jsonObject.names().get(0).equals(success))
+                        {
+                            //Toasty.success(getApplicationContext(), "Update info login success", Toast.LENGTH_SHORT, true).show();
+                            Log.d(MainActivity.class.getSimpleName(), "Success update token");
+
+                            String [] dataRead = readTxt.split(",");
+                            String idparty  = dataRead[1];
+                            String username = dataRead[2];
+                            String level = dataRead[5];
+
+                            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                            intent.putExtra("username", username);
+                            intent.putExtra("idparty", idparty);
+                            intent.putExtra("level", level);
+
+                            Toasty.info(getApplicationContext(), "welcome back " + username, Toast.LENGTH_SHORT, true).show();
+                            finish();
+                            startActivity(intent);
+                        }
+                        else if (jsonObject.names().get(0).equals(failure))
+                        {
+                            //Toasty.warning(getApplicationContext(), "Account not found", Toast.LENGTH_SHORT, true).show();
+
+                            Log.d(MainActivity.class.getSimpleName(), "Failed update token");
+                        }
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT, true).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("custname", custname);
+                HashMap<String, String> token = session.getTokenSession();
+                hashMap.put("token", token.get(LoginSession.TokenKey));
+//                hashMap.put("token", token);
                 return hashMap;
             }
         };
@@ -1435,7 +1693,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void ViewPdfByFilter(final String title, final String header)
+    private void ViewPdfByFilter(final String title, final String header, final String source)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ViewPdfURL, new Response.Listener<String>() {
             @Override
@@ -1448,6 +1706,7 @@ public class MainActivity extends AppCompatActivity
                     Intent intent = new Intent(MainActivity.this, FormPDFViewerActivity.class);
                     intent.putExtra("data", urlPdf);
                     intent.putExtra("title", header);
+                    intent.putExtra("source", source);
                     startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1478,10 +1737,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void countWishlist(int counter) {
         txt_countwishlist.setText(" " + counter + " ");
+        if (counter > 0)
+        {
+            txt_countwishlist.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void countCartlist(int counter) {
         txt_countcart.setText(" " + counter + " ");
+        if (counter > 0)
+        {
+            txt_countcart.setVisibility(View.VISIBLE);
+        }
     }
 }

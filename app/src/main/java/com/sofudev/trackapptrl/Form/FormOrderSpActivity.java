@@ -14,9 +14,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +61,7 @@ import com.nj.imagepicker.ImagePicker;
 import com.nj.imagepicker.listener.ImageMultiResultListener;
 import com.nj.imagepicker.result.ImageResult;
 import com.nj.imagepicker.utils.DialogConfiguration;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_filter_optic;
@@ -75,8 +80,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,6 +93,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
@@ -131,6 +139,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_order_sp);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
@@ -170,30 +179,42 @@ public class FormOrderSpActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                switch (action) {
-                    case "finishLs":
-                        finish();
-                        break;
-                    case "finishLp":
-                        finish();
-                        break;
-                    case "finishFr":
-                        finish();
-                        break;
+                if (action != null) {
+                    switch (action) {
+                        case "finishLs":
+                            intent.setAction(FormLensSummaryActivity.class.getName());
+                            break;
+                        case "finishLp":
+                            intent.setAction(FormLensaPartaiActivity.class.getName());;
+                            break;
+                        case "finishFr":
+                            intent.setAction(FormSpFrameActivity.class.getName());
+                            break;
+                    }
                 }
+                else
+                {
+                    intent.setAction(FormSpFrameActivity.class.getName());
+                }
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                finish();
             }
         };
-        registerReceiver(broadcastReceiver, new IntentFilter("finishLs"));
-        registerReceiver(broadcastReceiver, new IntentFilter("finishLp"));
-        registerReceiver(broadcastReceiver, new IntentFilter("finishFr"));
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU)
+        {
+            registerReceiver(broadcastReceiver, new IntentFilter("finishLs"), RECEIVER_EXPORTED);
+            registerReceiver(broadcastReceiver, new IntentFilter("finishLp"), RECEIVER_EXPORTED);
+            registerReceiver(broadcastReceiver, new IntentFilter("finishFr"), RECEIVER_EXPORTED);
+        }
+        else
+        {
+            registerReceiver(broadcastReceiver, new IntentFilter("finishLs"));
+            registerReceiver(broadcastReceiver, new IntentFilter("finishLp"));
+            registerReceiver(broadcastReceiver, new IntentFilter("finishFr"));
+        }
     }
-
-//    @Override
-//    protected void onStop() {
-//        unregisterReceiver(broadcastReceiver);
-//        super.onStop();
-//    }
-
 
     @Override
     protected void onDestroy() {
@@ -237,9 +258,42 @@ public class FormOrderSpActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storage_permissions_33 = {
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.CAMERA,
+    };
+
+    public static String[] storage_permissions = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
+    public static String[] permissions() {
+        String[] p;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            p = storage_permissions_33;
+        }
+        else {
+            p = storage_permissions;
+        }
+        return p;
+    }
+
+
+
     private void autoLoad()
     {
         dataHeader = new Data_spheader();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        {
+            ActivityCompat.requestPermissions(FormOrderSpActivity.this,
+                    permissions(),
+                    1);
+        }
 
         showLoading();
 
@@ -306,55 +360,33 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //              loading.dismiss();
 //                startActivityForResult(intent, 7);
-                ImagePicker.build(new DialogConfiguration()
-                        .setTitle("Choose")
-                        .setOptionOrientation(LinearLayoutCompat.HORIZONTAL)
+
+
+                    ImagePicker.build(new DialogConfiguration()
+                                    .setTitle("Choose")
+                                    .setOptionOrientation(LinearLayoutCompat.HORIZONTAL)
 //                        .setResultImageDimension(1089, 719)
-                                .setResultImageDimension(719,  1089)
-                        , new ImageMultiResultListener() {
-                    @Override
-                    public void onImageResult(ArrayList<ImageResult> imageResult) {
-                        Log.e(LOG_TAG, "onImageResult:Number of image picked " + imageResult.size());
-                        Log.d("Image path : ", imageResult.get(0).getPath());
+                                    .setResultImageDimension(719,  1089)
+                            , new ImageMultiResultListener() {
+                                @Override
+                                public void onImageResult(ArrayList<ImageResult> imageResult) {
+                                    Log.e(LOG_TAG, "onImageResult:Number of image picked " + imageResult.size());
+                                    Log.d("Image path : ", imageResult.get(0).getPath());
 
+                                    Toasty.info(getApplicationContext(), imageResult.get(0).getPath(), Toast.LENGTH_LONG).show();
 
-//                        Toasty.info(getApplicationContext(), imageResult.get(0).getPath(), Toast.LENGTH_SHORT).show();
+                                    imgPhoto.setImageBitmap(imageResult.get(0).getBitmap());
 
-//                        File photo = new File(imageResult.get(0).getPath());
-////                        String filename = photo.getName();
+                                    img_uri = getImageUrl(getApplicationContext(), imageResult.get(0).getBitmap());
+
+                                    filename = getPath(img_uri);
 //
-//                        String genfilename = txtNomorSp.getText().toString() + "_" + Calendar.getInstance().getTime();
-//                        File newphoto = new File(genfilename);
+                                    String[] delimit = filename.split("/");
 //
-//                        photo.renameTo(newphoto);
+                                    imgpath  = delimit[delimit.length - 1];
 
-                        Toasty.info(getApplicationContext(), imageResult.get(0).getPath(), Toast.LENGTH_LONG).show();
-
-                        imgPhoto.setImageBitmap(imageResult.get(0).getBitmap());
-
-                        img_uri = getImageUrl(getApplicationContext(), imageResult.get(0).getBitmap());
-//                        filename = getPath(img_uri);
-
-//                        img_uri = imageResult.get(0).getUri();
-//                        createImageFile(imageResult.get(0).getBitmap());
-//                        img_uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/TRLAPP/Img/" + fname));
-
-                        filename = getPath(img_uri);
-//
-                        String[] delimit = filename.split("/");
-//
-                        imgpath  = delimit[delimit.length - 1];
-
-//                        filename = getPath(img_uri);
-
-//                        String[] delimit = filename.split("/");
-//
-//                        imgpath  = delimit[delimit.length - 1];
-//
-//                        txtImgLoc.setText(imageResult.get(0).getPath());
-
-                        txtImgLoc.setVisibility(View.GONE);
-                        txtImgLoc.setText(img_uri.getPath());
+                                    txtImgLoc.setVisibility(View.GONE);
+                                    txtImgLoc.setText(img_uri.getPath());
 
                         /*if (imageResult.size() > 0) {
                             imgPhoto.setImageBitmap(imageResult.get(0).getBitmap());
@@ -382,8 +414,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
 //                            updatePhoto(dataHeader, URL_UPDATEPHOTO);
                         }*/
-                    }
-                }).show(getSupportFragmentManager());
+                                }
+                            }).show(getSupportFragmentManager());
             }
         });
 
@@ -446,6 +478,45 @@ public class FormOrderSpActivity extends AppCompatActivity {
 //        }
 //    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri selectedImage;
+
+        if (resultCode == RESULT_OK)
+        {
+            if (requestCode == 1)
+            {
+                if (data != null)
+                {
+                    selectedImage = data.getData();
+                    InputStream in;
+                    try {
+                        assert selectedImage != null;
+                        in = getContentResolver().openInputStream(selectedImage);
+                        final Bitmap selected_img = BitmapFactory.decodeStream(in);
+                        imgPhoto.setImageBitmap(selected_img);
+
+                        img_uri = getImageUrl(getApplicationContext(), selected_img);
+
+                        filename = getPath(img_uri);
+
+                        String[] delimit = filename.split("/");
+
+                        imgpath  = delimit[delimit.length - 1];
+
+                        txtImgLoc.setVisibility(View.GONE);
+                        txtImgLoc.setText(img_uri.getPath());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "An error occured!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+    }
+
     public void EnableRuntimePermission(){
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(FormOrderSpActivity.this,
@@ -464,7 +535,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
-
+        super.onRequestPermissionsResult(RC, per, PResult);
         switch (RC) {
 
             case RequestPermissionCode:
@@ -474,7 +545,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
                     Log.i(FormOrderSpActivity.class.getSimpleName(), "CAMERA permission allows us to Access CAMERA app");
                 } else {
 
-                    Toast.makeText(FormOrderSpActivity.this,"Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FormOrderSpActivity.this, "Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -944,7 +1015,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disableSelect() {
                 btnSelect.setEnabled(false);
-                selectBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                selectBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enableSelect() {
@@ -954,7 +1025,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disablePrev() {
                 btnPrev.setEnabled(false);
-                prevBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                prevBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enablePrev() {
@@ -964,7 +1035,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disableNext() {
                 btnNext.setEnabled(false);
-                nextBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                nextBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enableNext() {
@@ -1148,7 +1219,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
             }
 
             private void showAllOptic(int record) {
-                adapter_filter_optic.notifyDataSetChanged();
                 data_opticnames.clear();
 
                 StringRequest stringRequest = new StringRequest(URLSHOWALLSALES + String.valueOf(record), new Response.Listener<String>() {
@@ -1227,7 +1297,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
             }
 
             private void showOpticByName(final String key, int record) {
-                adapter_filter_optic.notifyDataSetChanged();
                 data_opticnames.clear();
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWSALESBYNAME + String.valueOf(record), new Response.Listener<String>() {
@@ -1467,7 +1536,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disableSelect() {
                 btnSelect.setEnabled(false);
-                selectBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                selectBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enableSelect() {
@@ -1477,7 +1546,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disablePrev() {
                 btnPrev.setEnabled(false);
-                prevBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                prevBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enablePrev() {
@@ -1487,7 +1556,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void disableNext() {
                 btnNext.setEnabled(false);
-                nextBtn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                nextBtn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
             }
 
             private void enableNext() {
@@ -1671,7 +1740,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
             }
 
             private void showAllOptic(int record) {
-                adapter_filter_optic.notifyDataSetChanged();
                 data_opticnames.clear();
 
                 StringRequest stringRequest = new StringRequest(URLSHOWALLOPTIC + String.valueOf(record), new Response.Listener<String>() {
@@ -1750,7 +1818,6 @@ public class FormOrderSpActivity extends AppCompatActivity {
             }
 
             private void showOpticByName(final String key, int record) {
-                adapter_filter_optic.notifyDataSetChanged();
                 data_opticnames.clear();
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWOPTICBYNAME + String.valueOf(record), new Response.Listener<String>() {
@@ -2042,12 +2109,15 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_disc", dataHeader.getDisc());
                         intent.putExtra("header_condition", spinPilihPembayaran.getSelectedItem().toString());
 //                        intent.putExtra("header_installment", txtCicilan.getText().toString());
+                        intent.putExtra("header_installment", "");
                         intent.putExtra("header_installment", spinCicilan.getSelectedItem().toString());
                         intent.putExtra("header_startinstallment", cicilanVal);
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
 //                        intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_image", "");
 //                        intent.putExtra("header_signedpath", signedpath);
+                        intent.putExtra("header_signedpath", "");
                         intent.putExtra("sales", username);
                         startActivity(intent);
                     }
@@ -2084,7 +2154,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_shippingaddress", txtAlamatPengiriman.getText().toString());
                         intent.putExtra("header_status", "");
 //                        intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_image", "");
 //                        intent.putExtra("header_signedpath", signedpath);
+                        intent.putExtra("header_signedpath", "");
                         startActivity(intent);
                     }
                     else if (spinTipeSp.getSelectedItem().toString().equals("Frame") || spinTipeSp.getSelectedItem().toString().equals("Pameran"))
@@ -2117,7 +2189,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         intent.putExtra("header_status", "");
                         intent.putExtra("header_idparty", idpartySales);
 //                        intent.putExtra("header_image", imgpath);
+                        intent.putExtra("header_image", "");
 //                        intent.putExtra("header_signedpath", signedpath);
+                        intent.putExtra("header_signedpath", "");
 
                         startActivity(intent);
                     }

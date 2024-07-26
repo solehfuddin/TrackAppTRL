@@ -90,7 +90,7 @@ public class OtherProductFragment extends Fragment {
         recyclerView = view.findViewById(R.id.fragment_otherproduct_recyclerview);
         cardBanner1 = view.findViewById(R.id.fragment_otherproduct_banner1);
         cardBanner2 = view.findViewById(R.id.fragment_otherproduct_banner2);
-        txtMore = view.findViewById(R.id.fragment_otherproduct_txtMore);
+        /*txtMore = view.findViewById(R.id.fragment_otherproduct_txtMore);
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,10 +102,13 @@ public class OtherProductFragment extends Fragment {
                 else
                 {
                     Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                    intent.putExtra("activity", ACTIVITY_TAG);
+                    intent.putExtra("tag_name", "ALL FRAME");
+                    intent.putExtra("tag_id", "");
                     startActivity(intent);
                 }
             }
-        });
+        });*/
 
         cardBanner1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +166,9 @@ public class OtherProductFragment extends Fragment {
                     {
 //                        Toasty.info(myContext, "Buka menu frame", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                        intent.putExtra("activity", ACTIVITY_TAG);
+                        intent.putExtra("tag_name", "ALL FRAME");
+                        intent.putExtra("tag_id", "");
                         startActivity(intent);
                     }
                     else

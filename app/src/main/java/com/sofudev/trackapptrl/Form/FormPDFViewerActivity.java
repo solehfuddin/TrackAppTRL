@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -105,10 +107,12 @@ public class FormPDFViewerActivity extends AppCompatActivity{
     @SuppressLint("SetJavaScriptEnabled")
     private void getData()
     {
+        String source;
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String link = bundle.getString("data");
             String title= bundle.getString("title");
+            source      = bundle.getString("source");
 
             txt_title.setText(title);
 
@@ -131,44 +135,107 @@ public class FormPDFViewerActivity extends AppCompatActivity{
 
 //            new RetrievePDFfromUrl().execute(link);
 
-            pdfView.fromAsset(link).onLoad(new OnLoadCompleteListener() {
-                @Override
-                public void loadComplete(int nbPages) {
-                    customLoading.dismissLoadingDialog();
-                }
-            }).onError(new OnErrorListener() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onError(Throwable t) {
-                    customLoading.dismissLoadingDialog();
-
-                    final Dialog dialog = new Dialog(FormPDFViewerActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
-
-                    dialog.setContentView(R.layout.dialog_warning);
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    lwindow.copyFrom(dialog.getWindow().getAttributes());
-                    lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
-
-                    ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
-                    UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
-                    imgClose.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    });
-
-                    dialog.getWindow().setAttributes(lwindow);
-                    txtTitle.setText("Gagal memuat file pdf (404)");
-                    if (!isFinishing()){
-                        dialog.show();
+            assert source != null;
+            if (source.equals("url"))
+            {
+                getPdf(link);
+            }
+            else
+            {
+                pdfView.fromAsset(link).onLoad(new OnLoadCompleteListener() {
+                    @Override
+                    public void loadComplete(int nbPages) {
+                        customLoading.dismissLoadingDialog();
                     }
-                }
-            }).load();
+                }).onError(new OnErrorListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onError(Throwable t) {
+                        customLoading.dismissLoadingDialog();
+
+                        final Dialog dialog = new Dialog(FormPDFViewerActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                        dialog.setContentView(R.layout.dialog_warning);
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        lwindow.copyFrom(dialog.getWindow().getAttributes());
+                        lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                        ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                        UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                        imgClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                        dialog.getWindow().setAttributes(lwindow);
+                        txtTitle.setText("Gagal memuat file pdf (404)");
+                        if (!isFinishing()){
+                            dialog.show();
+                        }
+                    }
+                }).load();
+            }
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void getPdf(final String completeUrl) {
+        new AsyncTask<Void, Void, Void>() {
+            @SuppressLint("WrongThread")
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    InputStream input = new URL(completeUrl).openStream();
+                    pdfView.fromStream(input).onLoad(new OnLoadCompleteListener() {
+                        @Override
+                        public void loadComplete(int nbPages) {
+                            customLoading.dismissLoadingDialog();
+                        }
+                    }).onError(new OnErrorListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.d(FormPDFViewerActivity.class.getSimpleName(), "Error pdf : " + t.getMessage());
+                            customLoading.dismissLoadingDialog();
+
+                            final Dialog dialog = new Dialog(FormPDFViewerActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            WindowManager.LayoutParams lwindow = new WindowManager.LayoutParams();
+
+                            dialog.setContentView(R.layout.dialog_warning);
+                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            lwindow.copyFrom(dialog.getWindow().getAttributes());
+                            lwindow.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lwindow.height= WindowManager.LayoutParams.WRAP_CONTENT;
+
+                            ImageView imgClose = dialog.findViewById(R.id.dialog_warning_imgClose);
+                            UniversalFontTextView txtTitle = dialog.findViewById(R.id.dialog_warning_txtInfo);
+                            imgClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            dialog.getWindow().setAttributes(lwindow);
+                            txtTitle.setText("Gagal memuat file pdf (404)");
+                            if (!isFinishing()){
+                                dialog.show();
+                            }
+                        }
+                    }).load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 }

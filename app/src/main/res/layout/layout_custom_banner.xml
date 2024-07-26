@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="185dp">-->
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="185dp">
+    android:layout_height="@dimen/_155sdp">
+
+<!--    <com.cooltechworks.views.shimmer.ShimmerRecyclerView-->
+<!--        android:id="@+id/layout_custom_shimmer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="185dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:shimmer_demo_angle="20"-->
+<!--        app:shimmer_demo_child_count="10"-->
+<!--        app:shimmer_demo_layout="@layout/layout_demo_banner"-->
+<!--        app:shimmer_demo_layout_manager_type="linear_horizontal" />-->
 
     <com.cooltechworks.views.shimmer.ShimmerRecyclerView
         android:id="@+id/layout_custom_shimmer"
         android:layout_width="match_parent"
-        android:layout_height="185dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="@dimen/_115sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,17 +49,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--    <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator-->
+<!--        android:id="@+id/layout_custom_mydots"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/_2sdp"-->
+<!--        app:dotsColor="@color/colorIjo"-->
+<!--        app:dotsCornerRadius="8dp"-->
+<!--        app:dotsSize="12dp"-->
+<!--        app:dotsSpacing="4dp"-->
+<!--        app:dotsStrokeColor="@color/dot_dark_screen2"-->
+<!--        app:dotsStrokeWidth="2dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/layout_custom_mybanner" />-->
+
     <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
         android:id="@+id/layout_custom_mydots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="@dimen/_2sdp"
         app:dotsColor="@color/colorIjo"
-        app:dotsCornerRadius="8dp"
-        app:dotsSize="12dp"
-        app:dotsSpacing="4dp"
+        app:dotsCornerRadius="@dimen/_7sdp"
+        app:dotsSize="@dimen/_11sdp"
+        app:dotsSpacing="@dimen/_3sdp"
         app:dotsStrokeColor="@color/dot_dark_screen2"
-        app:dotsStrokeWidth="2dp"
+        app:dotsStrokeWidth="@dimen/_2sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_custom_mybanner" />

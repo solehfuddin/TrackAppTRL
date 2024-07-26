@@ -124,7 +124,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:focusableInTouchMode="true"
             android:background="@color/white">
 
             <RelativeLayout
@@ -179,7 +178,7 @@
                         android:orientation="horizontal"
                         android:weightSum="1.0">
 
-                        <Edittext
+                        <EditText
                             android:id="@+id/form_spframe_txtBarcode"
                             android:layout_width="0dp"
                             android:layout_weight="0.98"
@@ -230,7 +229,7 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/form_spframe_scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -522,7 +521,7 @@
 
         </RelativeLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/form_spframe_linearLayout"

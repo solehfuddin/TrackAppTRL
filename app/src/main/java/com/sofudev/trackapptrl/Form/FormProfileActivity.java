@@ -470,7 +470,7 @@ public class FormProfileActivity extends AppCompatActivity{
                 layoutInflater = getLayoutInflater();
                 view = layoutInflater.inflate(R.layout.form_profile_contact, null);
                 lovelyCustomDialog.setView(view);
-                lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                 lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                 lovelyCustomDialog.setTopTitle("Update contact profile");
 

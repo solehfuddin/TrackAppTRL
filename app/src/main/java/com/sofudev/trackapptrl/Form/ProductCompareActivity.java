@@ -144,7 +144,7 @@ public class ProductCompareActivity extends AppCompatActivity {
         btnCompare  = compare.findViewById(R.id.dialog_compareproduct_btnselect);
 
         rippleCompare.setEnabled(false);
-        btnCompare.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+        btnCompare.setBackgroundColor(getResources().getColor(R.color.colorDisable));
 
         categoryList.clear();
 
@@ -171,7 +171,7 @@ public class ProductCompareActivity extends AppCompatActivity {
                 else
                 {
                     rippleCompare.setEnabled(false);
-                    btnCompare.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+                    btnCompare.setBackgroundColor(getResources().getColor(R.color.colorDisable));
                 }
             }
         });

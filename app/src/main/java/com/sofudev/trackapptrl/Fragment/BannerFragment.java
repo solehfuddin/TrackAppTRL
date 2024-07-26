@@ -72,11 +72,16 @@ public class BannerFragment extends Fragment {
 
     private void setupSlider() {
         bannerSlider.setDurationScroll(700);
+//        ViewGroup.LayoutParams params = bannerSlider.getLayoutParams();
+//        params.height = 800;
+//        bannerSlider.setLayoutParams(params);
+//        bannerSlider.requestLayout();
 
         if (getFragmentManager() != null) {
             mAdapter = new Adapter_banner_custom(getFragmentManager(), fragments);
         }
         bannerSlider.setAdapter(mAdapter);
+
         myDots.setViewPager(bannerSlider);
 
         showBannerFromDb();

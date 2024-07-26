@@ -72,7 +72,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
     MCrypt mCrypt;
 
-    String idparty, condition, sActive, sPast, opticName, salesName;
+    String idparty, condition, sActive, sPast, opticName, salesName, levelUser;
     Boolean isHavingChild, isPaid;
     int sTotal;
     Integer req_start = 0, totalrow, lastitem, item;
@@ -139,6 +139,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
             isHavingChild = bundle.getBoolean("havingChild");
             customerId = bundle.getInt("customerId", 0);
             isPaid = bundle.getBoolean("ispaid", false);
+            levelUser = bundle.getString("leveluser");
 
             Log.d("Sales Name chooseopt : ", salesName);
         }
@@ -157,7 +158,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     private void disableSelect()
     {
         btn_select.setEnabled(false);
-        select_btn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+        select_btn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
     }
 
     private void enableSelect()
@@ -169,7 +170,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     private void disablePrev()
     {
         btn_prev.setEnabled(false);
-        prev_btn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+        prev_btn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
     }
 
     private void enablePrev()
@@ -181,7 +182,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
     private void disableNext()
     {
         btn_next.setEnabled(false);
-        next_btn.setBackgroundColor(getResources().getColor(R.color.bootstrap_gray_light));
+        next_btn.setBackgroundColor(getResources().getColor(R.color.colorDisable));
     }
 
     private void enableNext()
@@ -488,6 +489,7 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                 {
                     Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
                     intent.putExtra("idparty", idparty);
+                    intent.putExtra("leveluser", levelUser);
                     startActivity(intent);
                 }
                 else if (condition.equals("ESTMENT"))
@@ -634,12 +636,31 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("province", jsonObject.getString("province"));
                             intent.putExtra("usernameInfo", jsonObject.getString("username"));
                             intent.putExtra("city", jsonObject.getString("city"));
-                            intent.putExtra("level", "1");
                             intent.putExtra("flag", jsonObject.getString("flag"));
-                            intent.putExtra("idSp", "0");
+                            intent.putExtra("level", "1");
                             intent.putExtra("isSp", "0");
+                            intent.putExtra("idSp", "0");
                             intent.putExtra("noHp", "0");
                             intent.putExtra("sales", salesName);
+
+                            //Area Sp
+                            intent.putExtra("header_nosp", "");
+                            intent.putExtra("header_tipesp", "");
+                            intent.putExtra("header_sales", "");
+                            intent.putExtra("header_shipnumber", "");
+                            intent.putExtra("header_custname", "");
+                            intent.putExtra("header_address", "");
+                            intent.putExtra("header_city", "");
+                            intent.putExtra("header_ordervia", "");
+                            intent.putExtra("header_dp", 0);
+                            intent.putExtra("header_disc", "");
+                            intent.putExtra("header_condition", "");
+                            intent.putExtra("header_installment", "");
+                            intent.putExtra("header_startinstallment", "");
+                            intent.putExtra("header_shippingaddress", "");
+                            intent.putExtra("header_status", "");
+                            intent.putExtra("header_image", "");
+                            intent.putExtra("header_signedpath", "");
                             startActivity(intent);
                         }
                         else if (category == 1)
@@ -655,6 +676,9 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("flag", jsonObject.getString("flag"));
                             intent.putExtra("sales", salesName);
                             startActivityForResult(intent, 2);
+
+//                            Intent intent = new Intent(getApplicationContext(), ShippingInfoActivity.class);
+//                            startActivity(intent);
                         }
                         else if (category == 2)
                         {
@@ -670,6 +694,24 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
                             intent.putExtra("flag", jsonObject.getString("flag"));
                             intent.putExtra("level", "1");
                             intent.putExtra("sales", salesName);
+
+                            intent.putExtra("header_nosp", "");
+                            intent.putExtra("header_tipesp", "");
+                            intent.putExtra("header_sales", "");
+                            intent.putExtra("header_shipnumber", "");
+                            intent.putExtra("header_custname", "");
+                            intent.putExtra("header_address", "");
+                            intent.putExtra("header_city", "");
+                            intent.putExtra("header_ordervia", "");
+                            intent.putExtra("header_dp", 0);
+                            intent.putExtra("header_disc", "");
+                            intent.putExtra("header_condition", "");
+                            intent.putExtra("header_installment", "");
+                            intent.putExtra("header_startinstallment", "");
+                            intent.putExtra("header_shippingaddress", "");
+                            intent.putExtra("header_status", "");
+                            intent.putExtra("header_image", "");
+                            intent.putExtra("header_signedpath", "");
                             startActivity(intent);
                         }
 
@@ -703,7 +745,6 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
     private void showAllOptic(int record)
     {
-        adapter_filter_optic.notifyDataSetChanged();
         data_opticnames.clear();
 
         StringRequest stringRequest = new StringRequest(URLSHOWALLOPTIC + String.valueOf(record), new Response.Listener<String>() {
@@ -787,7 +828,6 @@ public class FormFilterOpticnameActivity extends AppCompatActivity {
 
     private void showOpticByName(final String key, int record)
     {
-        adapter_filter_optic.notifyDataSetChanged();
         data_opticnames.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWOPTICBYNAME + String.valueOf(record), new Response.Listener<String>() {

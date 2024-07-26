@@ -17,6 +17,7 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_order_history;
+import com.sofudev.trackapptrl.Adapter.Adapter_order_history_stock;
 import com.sofudev.trackapptrl.Adapter.Adapter_sp_history;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
@@ -46,6 +47,7 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
     String URL_GETDETAILSP = config.Ip_address + config.ordersp_get_detailSp;
     String URL_INFOORDERPOS = config.Ip_address + config.info_order_historypos;
     String URL_INFOORDERJOB = config.Ip_address + config.info_order_historyjob;
+    String URL_INFOORDERST  = config.Ip_address + config.info_order_historyStock;
 
     ACProgressFlower loading;
     RecyclerView recyclerView;
@@ -53,12 +55,13 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
     UniversalFontTextView txt_ordernumber;
     RecyclerView.LayoutManager recyclerLayout;
     Adapter_order_history adapter_order_history;
+    Adapter_order_history_stock adapter_order_history_stock;
     Adapter_sp_history adapter_sp_history;
     List<Data_order_history> list = new ArrayList<>();
     List<Data_sp_history> lisSp = new ArrayList<>();
 
     MCrypt mCrypt;
-    String order_number;
+    String order_number, flag, level;
     int isSp;
 
     @Override
@@ -78,28 +81,6 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
 
         getOrdernumber();
         backToTrackOrder();
-
-        if (isSp == 0)
-        {
-            showLoading();
-            adapter_order_history = new Adapter_order_history(getApplicationContext(), list);
-            recyclerView.setAdapter(adapter_order_history);
-            txt_ordernumber.setText("Job #" + order_number);
-
-//            runOrder();
-//            runOrderWithCallback();
-
-            showHistoryOrderJob(order_number);
-        }
-        else
-        {
-            showLoading();
-            //Ini Sp
-            adapter_sp_history = new Adapter_sp_history(getApplicationContext(), lisSp);
-            recyclerView.setAdapter(adapter_sp_history);
-            txt_ordernumber.setText("Sp #" + order_number);
-            getDetailSp(order_number);
-        }
     }
 
     private void showLoading()
@@ -125,6 +106,29 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
         });
     }
 
+    private String convertStatus(String input)
+    {
+        String output = "";
+        if (input.contains("CS"))
+        {
+            output = "CS";
+        }
+        else if (input.contains("WH"))
+        {
+            output = "WARE";
+        }
+        else if (input.contains("OPD"))
+        {
+            output = "SHIP";
+        }
+        else
+        {
+            output = "ADMIN";
+        }
+
+        return output;
+    }
+
     private void getOrdernumber()
     {
         Bundle bundle = getIntent().getExtras();
@@ -132,7 +136,51 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
         {
             order_number = bundle.getString("order_number");
             isSp         = bundle.getInt("is_sp");
+
+            if (isSp == 0)
+            {
+               flag = bundle.getString("flag");
+               level = bundle.getString("level");
+            }
             //Toasty.warning(getApplicationContext(), "No Job nya : " + order_number, Toast.LENGTH_LONG).show();
+
+            if (isSp == 0)
+            {
+                assert flag != null;
+                if (flag.equals("LENSA STOK"))
+                {
+//                    showLoading();
+                    adapter_order_history_stock = new Adapter_order_history_stock(list, getApplicationContext(), level);
+                    recyclerView.setAdapter(adapter_order_history_stock);
+                    txt_ordernumber.setText("Invoice #" + order_number);
+
+//                    runOrder();
+//                    runOrderWithCallback();
+
+                    showHistoryOrderSt(order_number);
+                }
+                else
+                {
+//                    showLoading();
+                    adapter_order_history = new Adapter_order_history(getApplicationContext(), list);
+                    recyclerView.setAdapter(adapter_order_history);
+                    txt_ordernumber.setText("Job #" + order_number);
+
+//                    runOrder();
+//                    runOrderWithCallback();
+
+                    showHistoryOrderJob(order_number);
+                }
+            }
+            else
+            {
+//                showLoading();
+                //Ini Sp
+                adapter_sp_history = new Adapter_sp_history(getApplicationContext(), lisSp);
+                recyclerView.setAdapter(adapter_sp_history);
+                txt_ordernumber.setText("Sp #" + order_number);
+                getDetailSp(order_number);
+            }
         }
     }
 
@@ -462,7 +510,8 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
     }
 
     private void showHistoryOrderJob(final String key) {
-        adapter_order_history.notifyDataSetChanged();
+        list.clear();
+        showLoading();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INFOORDERJOB, new Response.Listener<String>() {
             @Override
@@ -534,8 +583,84 @@ public class InfoOrderHistoryActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void showHistoryOrderSt(final String key) {
+        list.clear();
+        showLoading();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_INFOORDERST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                loading.dismiss();
+
+                String info1 = "order_custname";
+                String info2 = "order_statusdt";
+                String info3 = "order_statustm";
+                String info4 = "order_lensname";
+                String info5 = "order_located";
+                String info6 = "order_statustxt";
+
+                try {
+                    String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                    String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                    String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                    String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+                    String encrypt_info5 = MCrypt.bytesToHex(mCrypt.encrypt(info5));
+                    String encrypt_info6 = MCrypt.bytesToHex(mCrypt.encrypt(info6));
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            String order_custname   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                            String order_statusdate = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                            String order_statustime = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                            String order_lensname   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+                            String order_status     = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info5)));
+                            String order_statustext = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info6)));
+
+                            Data_order_history data = new Data_order_history();
+                            data.setCustname(order_custname);
+                            data.setDatetime(order_statusdate + " " + order_statustime);
+                            data.setLensname(order_lensname);
+                            data.setStatus(convertStatus(order_status));
+                            data.setStatusdesc(order_statustext);
+
+                            list.add(data);
+                        }
+
+                        adapter_order_history_stock.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_tracking", key);
+                return hashMap;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
     private void getDetailSp(final String noSp) {
         lisSp.clear();
+        showLoading();
+
         StringRequest request = new StringRequest(Request.Method.POST, URL_GETDETAILSP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

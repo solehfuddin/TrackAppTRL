@@ -136,7 +136,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             itemFacetCode, facetDescription, facetqty, facetPrice, facetTotal, facetMargin, facetExtraMargin,
             itemTintingCode, tintingDescription, tintingqty, tintingPrice, tintingTotal, tintingMargin, tintingExtraMargin;
     String sphR, sphL, cylR, cylL, axsR, axsL, addR, addL, coatCode, coatDesc, tintCode, tintDesc, corridor, mpdR, mpdL,
-            pv, wrap, panto, vd, facetInfo, frameModel, dbl, hor, ver, frameCode, province, shipCourier, shipPrice, shipService, shipId,
+            pv, wrap, panto, vd, facetTrl, facetInfo, frameModel, dbl, hor, ver, frameCode, province, shipCourier, shipPrice, shipService, shipId,
             sideR, sideL, itemIdR, itemIdL, discOperandR, discNameR, discOperandL, discNameL, prod_attr_valR, prod_attr_valL,
             divName, categoryLens;
 
@@ -522,6 +522,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         dataHeader.setWrap(wrap);
         dataHeader.setPanto(panto);
         dataHeader.setVd(vd);
+        dataHeader.setFacetTrl(facetTrl);
         dataHeader.setFacetInfo(facetInfo);
         dataHeader.setFrameModel(frameModel);
         dataHeader.setDbl(dbl);
@@ -831,6 +832,8 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         Log.d("HEADER Panto : ", dataHeader.getPanto());
         dataHeader.setVd(vd);
         Log.d("HEADER Vertex : ", dataHeader.getVd());
+        dataHeader.setFacetTrl(facetTrl);
+        Log.d("HEADER FacetTrl : ", dataHeader.getFacetTrl());
         dataHeader.setFacetInfo(facetInfo);
         Log.d("HEADER FacetInfo : ", dataHeader.getFacetInfo());
         dataHeader.setFrameModel(frameModel);
@@ -1925,13 +1928,13 @@ public class FormLensSummaryActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
         {
-            Integer a = bundle.getInt("price_lens");
+            int a = bundle.getInt("price_lens", 0);
             String b  = bundle.getString("description_lens");
-            Double c   = bundle.getDouble("discount_lens");
-            Integer d = bundle.getInt("facet_lens");
-            Integer e = bundle.getInt("tinting_lens");
+            double c   = bundle.getDouble("discount_lens", 0.0);
+            int d = bundle.getInt("facet_lens", 0);
+            int e = bundle.getInt("tinting_lens", 0);
             cityOptic = bundle.getString("city_info");
-            Integer f = bundle.getInt("item_weight");
+            int f = bundle.getInt("item_weight", 0);
             String h  = bundle.getString("flag_pasang");
             opticFlag = bundle.getString("optic_flag");
             opticName = bundle.getString("opticname");
@@ -1999,7 +2002,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 dataSpHeader.setSignedPath(headerSignedPath);
             }
 
-            Double g   = bundle.getDouble("total_price");
+            double g   = bundle.getDouble("total_price", 0.0);
             opticUsername = bundle.getString("username_info");
             flagShipping  = bundle.getString("flag_shipping");
             orderNumber   = bundle.getString("order_number");
@@ -2032,6 +2035,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             wrap          = bundle.getString("wrap");
             panto         = bundle.getString("panto");
             vd            = bundle.getString("vd");
+            facetTrl      = bundle.getString("facetTrl");
             facetInfo     = bundle.getString("facetInfo");
             frameModel    = bundle.getString("frameModel");
             dbl           = bundle.getString("dbl");
@@ -2040,22 +2044,21 @@ public class FormLensSummaryActivity extends AppCompatActivity {
             frameCode     = bundle.getString("frameCode");
             categoryLens  = bundle.getString("categoryLens");
 
-
-            hargaLensa = CurencyFormat(a.toString());
+            hargaLensa = CurencyFormat(String.valueOf(a));
             deskripsiLensa = b;
             if (c > 0)
             {
-                diskonLensa = CurencyFormat(c.toString());
+                diskonLensa = CurencyFormat(String.valueOf(c));
             }
             else
             {
-                diskonLensa = c.toString();
+                diskonLensa = String.valueOf(c);
             }
-            facetLensa  = CurencyFormat(d.toString());
-            tintingLensa = CurencyFormat(e.toString());
-            tempTotal  = g.toString();
-            totalPrice = CurencyFormat(g.toString());
-            itemWeight = f.toString();
+            facetLensa  = CurencyFormat(String.valueOf(d));
+            tintingLensa = CurencyFormat(String.valueOf(e));
+            tempTotal  = String.valueOf(g);
+            totalPrice = CurencyFormat(String.valueOf(g));
+            itemWeight = String.valueOf(f);
 
             //AREA R
             itemIdR     = bundle.getString("itemid_R");
@@ -2954,6 +2957,7 @@ public class FormLensSummaryActivity extends AppCompatActivity {
                 hashMap.put("wrap", header.getWrap());
                 hashMap.put("panto", header.getPanto());
                 hashMap.put("vd", header.getVd());
+                hashMap.put("facetTrl", header.getFacetTrl());
                 hashMap.put("facetInfo", header.getFacetInfo());
                 hashMap.put("frameModel", header.getFrameModel());
                 hashMap.put("dbl", header.getDbl());

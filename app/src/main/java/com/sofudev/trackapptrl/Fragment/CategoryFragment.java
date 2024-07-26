@@ -44,6 +44,7 @@ import com.sofudev.trackapptrl.Custom.MultiSelectLensProduct;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_compare_category;
 import com.sofudev.trackapptrl.FanpageActivity;
+import com.sofudev.trackapptrl.Form.AssignApprovalActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
 import com.sofudev.trackapptrl.Form.CourierHistoryActivity;
 import com.sofudev.trackapptrl.Form.CourierTaskActivity;
@@ -76,6 +77,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
 
@@ -313,6 +315,8 @@ public class CategoryFragment extends Fragment {
                             intent.putExtra("sales", USERNAME);
                             intent.putExtra("havingChild", isHavingChild);
                             intent.putExtra("customerId", customerId);
+                            intent.putExtra("ispaid", false);
+                            intent.putExtra("leveluser", LEVEL);
                             startActivity(intent);
 
                             Log.d(CategoryFragment.class.getSimpleName(),"Sales Name : " + USERNAME);
@@ -325,11 +329,31 @@ public class CategoryFragment extends Fragment {
                             intent.putExtra("province", PROVINCE);
                             intent.putExtra("usernameInfo", USERNAME);
                             intent.putExtra("city", CITY);
-                            intent.putExtra("level", LEVEL);
                             intent.putExtra("flag", MEMBERFLAG);
-                            intent.putExtra("idSp", "0");
+                            intent.putExtra("level", LEVEL);
                             intent.putExtra("isSp", "0");
+                            intent.putExtra("idSp", "0");
                             intent.putExtra("noHp", "0");
+                            intent.putExtra("sales", USERNAME);
+
+                            //Area Sp
+                            intent.putExtra("header_nosp", "");
+                            intent.putExtra("header_tipesp", "");
+                            intent.putExtra("header_sales", "");
+                            intent.putExtra("header_shipnumber", "");
+                            intent.putExtra("header_custname", "");
+                            intent.putExtra("header_address", "");
+                            intent.putExtra("header_city", "");
+                            intent.putExtra("header_ordervia", "");
+                            intent.putExtra("header_dp", 0);
+                            intent.putExtra("header_disc", "");
+                            intent.putExtra("header_condition", "");
+                            intent.putExtra("header_installment", "");
+                            intent.putExtra("header_startinstallment", "");
+                            intent.putExtra("header_shippingaddress", "");
+                            intent.putExtra("header_status", "");
+                            intent.putExtra("header_image", "");
+                            intent.putExtra("header_signedpath", "");
                             startActivity(intent);
                         }
                     }
@@ -340,6 +364,8 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
 
                         Log.d(CategoryFragment.class.getSimpleName(),"Sales Name : " + USERNAME);
@@ -353,11 +379,31 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("province", PROVINCE);
                     intent.putExtra("usernameInfo", USERNAME);
                     intent.putExtra("city", CITY);
-                    intent.putExtra("level", LEVEL);
                     intent.putExtra("flag", MEMBERFLAG);
-                    intent.putExtra("idSp", "0");
+                    intent.putExtra("level", LEVEL);
                     intent.putExtra("isSp", "0");
+                    intent.putExtra("idSp", "0");
                     intent.putExtra("noHp", "0");
+                    intent.putExtra("sales", USERNAME);
+
+                    //Area Sp
+                    intent.putExtra("header_nosp", "");
+                    intent.putExtra("header_tipesp", "");
+                    intent.putExtra("header_sales", "");
+                    intent.putExtra("header_shipnumber", "");
+                    intent.putExtra("header_custname", "");
+                    intent.putExtra("header_address", "");
+                    intent.putExtra("header_city", "");
+                    intent.putExtra("header_ordervia", "");
+                    intent.putExtra("header_dp", 0);
+                    intent.putExtra("header_disc", "");
+                    intent.putExtra("header_condition", "");
+                    intent.putExtra("header_installment", "");
+                    intent.putExtra("header_startinstallment", "");
+                    intent.putExtra("header_shippingaddress", "");
+                    intent.putExtra("header_status", "");
+                    intent.putExtra("header_image", "");
+                    intent.putExtra("header_signedpath", "");
                     startActivity(intent);
                 }
             }
@@ -385,6 +431,8 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
                 else
@@ -401,6 +449,25 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("idSp", "0");
                     intent.putExtra("isSp", 0);
                     intent.putExtra("flag", MEMBERFLAG);
+
+
+                    intent.putExtra("header_nosp", "");
+                    intent.putExtra("header_tipesp", "");
+                    intent.putExtra("header_sales", "");
+                    intent.putExtra("header_shipnumber", "");
+                    intent.putExtra("header_custname", "");
+                    intent.putExtra("header_address", "");
+                    intent.putExtra("header_city", "");
+                    intent.putExtra("header_ordervia", "");
+                    intent.putExtra("header_dp", 0);
+                    intent.putExtra("header_disc", "");
+                    intent.putExtra("header_condition", "");
+                    intent.putExtra("header_installment", "");
+                    intent.putExtra("header_startinstallment", "");
+                    intent.putExtra("header_shippingaddress", "");
+                    intent.putExtra("header_status", "");
+                    intent.putExtra("header_image", "");
+                    intent.putExtra("header_signedpath", "");
                     startActivity(intent);
                 }
             }
@@ -411,6 +478,8 @@ public class CategoryFragment extends Fragment {
                 intent.putExtra("sales", USERNAME);
                 intent.putExtra("havingChild", isHavingChild);
                 intent.putExtra("customerId", customerId);
+                intent.putExtra("ispaid", false);
+                intent.putExtra("leveluser", LEVEL);
                 startActivity(intent);
             }
         }
@@ -471,6 +540,9 @@ public class CategoryFragment extends Fragment {
             if (Integer.parseInt(LEVEL) == 1)
             {
                 Intent intent = new Intent(myContext, OnHandActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+//                intent.putExtra("username", USERNAME);
+//                intent.putExtra("level", LEVEL);
                 startActivity(intent);
             }
             else
@@ -499,12 +571,15 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(myContext, FormTrackOrderActivity.class);
                         intent.putExtra("idparty", PARTYSITEID);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                 }
@@ -516,6 +591,8 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -523,6 +600,7 @@ public class CategoryFragment extends Fragment {
             {
                 Intent intent = new Intent(myContext, FormTrackOrderActivity.class);
                 intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("leveluser", LEVEL);
                 startActivity(intent);
             }
         }
@@ -547,6 +625,8 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
@@ -567,6 +647,8 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -608,6 +690,7 @@ public class CategoryFragment extends Fragment {
                     Intent intent = new Intent(myContext, CourierTaskActivity.class);
                     intent.putExtra("idparty", PARTYSITEID);
                     intent.putExtra("username", USERNAME);
+                    intent.putExtra("level", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -616,6 +699,7 @@ public class CategoryFragment extends Fragment {
                 Intent intent = new Intent(myContext, CourierTaskActivity.class);
                 intent.putExtra("idparty", PARTYSITEID);
                 intent.putExtra("username", USERNAME);
+                intent.putExtra("level", LEVEL);
                 startActivity(intent);
             }
         }
@@ -647,6 +731,7 @@ public class CategoryFragment extends Fragment {
                     Intent intent = new Intent(myContext, CourierHistoryActivity.class);
                     intent.putExtra("idparty", PARTYSITEID);
                     intent.putExtra("username", USERNAME);
+//                    intent.putExtra("isadmin", isAdmin);
                     intent.putExtra("isadmin", false);
                     startActivity(intent);
                 }
@@ -681,6 +766,8 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
@@ -698,6 +785,8 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -759,6 +848,7 @@ public class CategoryFragment extends Fragment {
                     Intent intent = new Intent(myContext, FormTrackingSpActivity.class);
                     intent.putExtra("username", USERNAME);
                     intent.putExtra("level", 1);
+                    intent.putExtra("spnumber", "");
 
                     startActivity(intent);
                 }
@@ -767,6 +857,7 @@ public class CategoryFragment extends Fragment {
                     Intent intent = new Intent(myContext, FormTrackingSpActivity.class);
                     intent.putExtra("username", CUSTNAME);
                     intent.putExtra("level", 0);
+                    intent.putExtra("spnumber", "");
 
                     startActivity(intent);
                 }
@@ -787,33 +878,43 @@ public class CategoryFragment extends Fragment {
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryActivity.class);
-                        intent.putExtra("sales", USERNAME);
                         intent.putExtra("level", "1");
+                        intent.putExtra("ordernumber", "");
+                        intent.putExtra("sales", USERNAME);
+                        intent.putExtra("idparty", "");
+                        intent.putExtra("user_info", "");
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryActivity.class);
+                        intent.putExtra("level", LEVEL);
+                        intent.putExtra("ordernumber", "");
+                        intent.putExtra("sales", "");
                         intent.putExtra("idparty", PARTYSITEID);
                         intent.putExtra("user_info", USERNAME);
-                        intent.putExtra("level", LEVEL);
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(myContext, FormOrderHistoryActivity.class);
-                    intent.putExtra("sales", USERNAME);
                     intent.putExtra("level", LEVEL);
+                    intent.putExtra("ordernumber", "");
+                    intent.putExtra("sales", USERNAME);
+                    intent.putExtra("idparty", "");
+                    intent.putExtra("user_info", "");
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(myContext, FormOrderHistoryActivity.class);
+                intent.putExtra("level", LEVEL);
+                intent.putExtra("ordernumber", "");
+                intent.putExtra("sales", "");
                 intent.putExtra("idparty", PARTYSITEID);
                 intent.putExtra("user_info", USERNAME);
-                intent.putExtra("level", LEVEL);
                 startActivity(intent);
             }
         }
@@ -834,33 +935,39 @@ public class CategoryFragment extends Fragment {
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryFrameActivity.class);
-                        intent.putExtra("sales", USERNAME);
                         intent.putExtra("level", "1");
+                        intent.putExtra("sales", USERNAME);
+                        intent.putExtra("user_info", "");
+                        intent.putExtra("username", "");
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryFrameActivity.class);
+                        intent.putExtra("level", LEVEL);
+                        intent.putExtra("sales", "");
                         intent.putExtra("user_info", PARTYSITEID);
                         intent.putExtra("username", USERNAME);
-                        intent.putExtra("level", LEVEL);
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(myContext, FormOrderHistoryFrameActivity.class);
-                    intent.putExtra("sales", USERNAME);
                     intent.putExtra("level", LEVEL);
+                    intent.putExtra("sales", USERNAME);
+                    intent.putExtra("user_info", "");
+                    intent.putExtra("username", "");
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(myContext, FormOrderHistoryFrameActivity.class);
+                intent.putExtra("level", LEVEL);
+                intent.putExtra("sales", "");
                 intent.putExtra("user_info", PARTYSITEID);
                 intent.putExtra("username", USERNAME);
-                intent.putExtra("level", LEVEL);
                 startActivity(intent);
             }
         }
@@ -881,33 +988,39 @@ public class CategoryFragment extends Fragment {
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryPartaiActivity.class);
-                        intent.putExtra("sales", USERNAME);
                         intent.putExtra("level", "1");
+                        intent.putExtra("user_info", "");
+                        intent.putExtra("username", "");
+                        intent.putExtra("sales", USERNAME);
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(myContext, FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("level", LEVEL);
                         intent.putExtra("user_info", PARTYSITEID);
                         intent.putExtra("username", USERNAME);
-                        intent.putExtra("level", LEVEL);
+                        intent.putExtra("sales", "");
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(myContext, FormOrderHistoryPartaiActivity.class);
-                    intent.putExtra("sales", USERNAME);
                     intent.putExtra("level", LEVEL);
+                    intent.putExtra("user_info", "");
+                    intent.putExtra("username", "");
+                    intent.putExtra("sales", USERNAME);
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(myContext, FormOrderHistoryPartaiActivity.class);
+                intent.putExtra("level", LEVEL);
                 intent.putExtra("user_info", PARTYSITEID);
                 intent.putExtra("username", USERNAME);
-                intent.putExtra("level", LEVEL);
+                intent.putExtra("sales", "");
                 startActivity(intent);
             }
         }
@@ -947,6 +1060,8 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("sales", USERNAME);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
@@ -971,6 +1086,8 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("sales", USERNAME);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -1024,6 +1141,7 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
                         intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
@@ -1044,6 +1162,7 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
                     intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -1072,6 +1191,24 @@ public class CategoryFragment extends Fragment {
         }
     }
 
+    @SuppressLint("InflateParams")
+    private void handlerAssignBin()
+    {
+        if (ACTIVITY_TAG.equals("main"))
+        {
+            Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Intent intent = new Intent(myContext, AssignApprovalActivity.class);
+            intent.putExtra("username", USERNAME);
+            intent.putExtra("custname", CUSTNAME);
+            intent.putExtra("idparty", PARTYSITEID);
+            intent.putExtra("noinv", "");
+            startActivity(intent);
+        }
+    }
+
     private void handlerInvoicePaid()
     {
         if (ACTIVITY_TAG.equals("main"))
@@ -1092,6 +1229,7 @@ public class CategoryFragment extends Fragment {
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
                         intent.putExtra("ispaid", true);
+                        intent.putExtra("leveluser", LEVEL);
                         startActivity(intent);
                     }
                     else
@@ -1112,6 +1250,7 @@ public class CategoryFragment extends Fragment {
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
                     intent.putExtra("ispaid", true);
+                    intent.putExtra("leveluser", LEVEL);
                     startActivity(intent);
                 }
             }
@@ -1180,6 +1319,8 @@ public class CategoryFragment extends Fragment {
         RippleView ripInvoicePaid   = custom.findViewById(R.id.layout_custom_rpfeatureinvoicepaid);
         LinearLayout linProductCompare = custom.findViewById(R.id.layout_custom_featureproductcompare);
         RippleView ripProductCompare = custom.findViewById(R.id.layout_custom_rpfeatureproductcompare);
+        LinearLayout linAssignBin    = custom.findViewById(R.id.layout_custom_featureassignbin);
+        RippleView ripAssignBin      = custom.findViewById(R.id.layout_custom_rpfeatureassignbin);
         LinearLayout linCustomercare = custom.findViewById(R.id.layout_custom_customercare);
         RippleView ripCustomercare   = custom.findViewById(R.id.layout_custom_rpcustomercare);
 
@@ -1504,6 +1645,22 @@ public class CategoryFragment extends Fragment {
             }
         });
         //DISABLE BEFORE UPLOAD
+
+        linAssignBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerAssignBin();
+                bottomDialog.dismiss();
+            }
+        });
+
+        ripAssignBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerAssignBin();
+                bottomDialog.dismiss();
+            }
+        });
 
         linCustomercare.setOnClickListener(new View.OnClickListener() {
             @Override

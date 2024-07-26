@@ -138,13 +138,45 @@
                 android:textColor="@android:color/black"
                 android:layout_centerHorizontal="true"/>
 
+            <LinearLayout
+                android:id="@+id/dialog_chooseframe_linearcounter"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:background="@color/colorFirst"
+                android:layout_below="@id/dialog_chooseframe_txtcounter">
+
+                <TextView
+                    android:id="@+id/dialog_chooseframe_txtcounterbrand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="counter"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:id="@+id/dialog_chooseframe_txtcountertotal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="counter"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="textEnd"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    wheel:ignore="RtlCompat" />
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dialog_chooseframe_recyclerItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@id/dialog_chooseframe_txtcounter"
+                android:layout_below="@id/dialog_chooseframe_linearcounter"
                 android:background="@android:color/white"/>
 
             <ImageView

@@ -64,17 +64,33 @@
                 android:textColor="@color/neutral"
                 android:textSize="19sp"
                 app:customFont="MavenPro-Regular.ttf" />
-
         </androidx.appcompat.widget.Toolbar>
 
         <ozaydin.serkan.com.image_zoom_view.ImageViewZoom
             android:id="@+id/zoom_image"
             android:layout_width="0dp"
-            android:layout_height="350dp"
+            android:layout_height="390dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addcart_product_toolbar" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/zoom_btnDownloadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_cloud_download"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            app:backgroundTint="@color/bootstrap_brand_success"
+            app:borderWidth="0dp"
+            app:elevation="0dp"
+            app:fabCustomSize="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/zoom_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:maxImageSize="22dp"
+            app:useCompatPadding="false" />
 
         <LinearLayout
             android:id="@+id/linearLayout15"
@@ -112,6 +128,13 @@
                     android:textColor="@color/colorContent"
                     android:textSize="14sp"
                     app:customFont="MavenPro-Regular.ttf" />
+
+                <WebView
+                    android:id="@+id/zoom_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:ignore="WebViewLayout" />
             </LinearLayout>
         </LinearLayout>
 

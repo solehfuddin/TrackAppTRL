@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.andexert.library.RippleView
+        android:id="@+id/recycler_notificationImg_ripple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rv_rippleDuration="400"
+        app:rv_type="rectangle"
+        app:rv_color="@color/grey">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recycler_notificationImg_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBlueExtraLight"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/recycler_notificationImg_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logotrl"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_notificationImg_txttipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tipe_sp"
+                android:textColor="@color/colorContent"
+                android:textSize="11sp"
+                app:customFont="UbuntuRegular.ttf"
+                android:layout_marginTop="11dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/recycler_notificationImg_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SmallSp" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_notificationImg_txtwaktu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tanggal"
+                android:textColor="@color/colorContent"
+                android:textSize="11sp"
+                app:customFont="UbuntuRegular.ttf"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SmallSp" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_notificationImg_txttitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/pt_timur_raya_lestari"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:customFont="UbuntuMedium.ttf"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/recycler_notificationImg_txtwaktu"
+                app:layout_constraintStart_toEndOf="@+id/recycler_notificationImg_icon"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_notificationImg_txttipe" />
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/recycler_notificationImg_txtmessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:text="@string/pt_timur_raya_lestari"
+                android:textColor="@color/colorContent"
+                android:textSize="12sp"
+                android:lineSpacingExtra="3dp"
+                app:customFont="DroidRegular.ttf"
+                android:layout_marginTop="3dp"
+                app:layout_constraintEnd_toEndOf="@+id/recycler_notificationImg_txttitle"
+                app:layout_constraintStart_toStartOf="@+id/recycler_notificationImg_txttitle"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_notificationImg_txttitle"
+                android:justificationMode="inter_word"
+                tools:targetApi="p" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/recycler_notificationImg_cardimage"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/recycler_notificationImg_txtmessage"
+                app:layout_constraintStart_toEndOf="@+id/recycler_notificationImg_icon"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_notificationImg_txtmessage">
+
+                <ImageView
+                    android:id="@+id/recycler_notificationImg_imgbanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/logo_trl3" />
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recycler_notificationImg_txtmessage"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_notificationImg_cardimage"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.andexert.library.RippleView>
+</LinearLayout>

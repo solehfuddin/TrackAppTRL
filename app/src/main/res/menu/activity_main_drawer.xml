@@ -41,6 +41,11 @@
                     android:title="Nikon"
                     android:visible="false"
                     />
+                <item
+                    android:id="@+id/nav_price4"
+                    android:title="Frame"
+                    android:visible="false"
+                    />
             <item
                 android:id="@+id/nav_lenses"
                 android:icon="@drawable/ic_lensa"

@@ -1,6 +1,7 @@
 package com.sofudev.trackapptrl.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class Adapter_more_frame extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.item = item;
         this.itemClick = itemClick;
         this.TAG = TAG;
+
+        Log.d(Adapter_more_frame.class.getSimpleName(), "TAG Adapter : " + TAG);
     }
 
     @NonNull
@@ -111,6 +114,16 @@ public class Adapter_more_frame extends RecyclerView.Adapter<RecyclerView.ViewHo
             txtProductName.setText(item.getProduct_name());
             txtBrandName.setText(item.getProduct_brand());
             txtDisc.setText(persen);
+
+            if (item.getProduct_discpercent().equals("0"))
+            {
+                txtDisc.setVisibility(View.GONE);
+            }
+            else
+            {
+                txtDisc.setVisibility(View.VISIBLE);
+                txtDisc.setText(persen);
+            }
 
             if (TAG.contains("main"))
             {

@@ -82,16 +82,17 @@ public class Adapter_item_orderdetail extends RecyclerView.Adapter<Adapter_item_
         holder.txtKodeItem.setText(data.getItem_code());
         holder.txtDeskripsi.setText(data.getDeskripsi());
         holder.txtJumlah.setText(String.valueOf(data.getJumlah()));
-        holder.txtDiskon.setText(disc);
         holder.txtTinting.setText(tintPrice);
 
         if (data.getCategory() == 3)
         {
             holder.txtTotal.setText("Unavailable");
+            holder.txtDiskon.setText("Unavailable");
         }
         else
         {
             holder.txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(data.getTotalAll())));
+            holder.txtDiskon.setText(disc);
         }
     }
 

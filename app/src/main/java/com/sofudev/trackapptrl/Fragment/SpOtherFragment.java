@@ -47,6 +47,7 @@ import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
 import com.sofudev.trackapptrl.Data.Data_item_sp;
 import com.sofudev.trackapptrl.Data.Data_sp_header;
 import com.sofudev.trackapptrl.Data.Data_spframe_filter;
+import com.sofudev.trackapptrl.Form.FormPDFViewerActivity;
 import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.Info.InfoOrderHistoryActivity;
 import com.sofudev.trackapptrl.R;
@@ -72,7 +73,7 @@ public class SpOtherFragment extends Fragment {
     String URL_GETINV      = config.Ip_address + config.ordersp_get_inv;
     String URL_GETSTATUSSP = config.Ip_address + config.ordersp_get_statusSp;
 
-    RippleView btnSearch, ripple_btnDetail, ripple_btndownload;
+    RippleView btnSearch, ripple_btnDetail, ripple_btnview, ripple_btndownload;
     BootstrapButton btnPrev, btnNext;
     MaterialEditText edSearch;
     UniversalFontTextView txtCounter;
@@ -602,6 +603,7 @@ public class SpOtherFragment extends Fragment {
 
         btn_detail      = dialog.findViewById(R.id.form_dialogtracksp_btnDetail);
         ripple_btnDetail= dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDetail);
+        ripple_btnview = dialog.findViewById(R.id.form_dialogtracksp_rippleBtnView);
         ripple_btndownload = dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDownload);
         btnDownload     = dialog.findViewById(R.id.form_dialogtracksp_btnDownload);
         final String noSp = list.get(pos).getNoSp();
@@ -633,6 +635,19 @@ public class SpOtherFragment extends Fragment {
                 Intent intent = new Intent(requireContext(), InfoOrderHistoryActivity.class);
                 intent.putExtra("order_number", noSp);
                 intent.putExtra("is_sp", 1);
+                intent.putExtra("flag", "");
+                intent.putExtra("level", "");
+                startActivity(intent);
+            }
+        });
+
+        ripple_btnview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), FormPDFViewerActivity.class);
+                intent.putExtra("data", config.Ip_address + "index.php/PrintReceipt/spFrame/" + noSp);
+                intent.putExtra("title", noSp);
+                intent.putExtra("source", "url");
                 startActivity(intent);
             }
         });

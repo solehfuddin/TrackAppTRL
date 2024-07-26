@@ -28,7 +28,7 @@
             android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:maxLength="15"
+            android:maxLength="20"
             app:customFont="UbuntuRegular.ttf" />
 
         <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView

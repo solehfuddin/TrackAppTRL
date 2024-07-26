@@ -510,6 +510,7 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, SHOWALLHISTORY, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
                 try {
                     customLoading.dismissLoadingDialog();
                     JSONArray jsonArray = new JSONArray(response);
@@ -520,14 +521,14 @@ public class FormOrderHistoryPartaiActivity extends AppCompatActivity {
 
                         if (object.names().get(0).equals("Error"))
                         {
-                            progressBar.setVisibility(View.GONE);
+//                            progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
 //                            loader.dismiss();
                         }
                         else
                         {
-                            progressBar.setVisibility(View.GONE);
+//                            progressBar.setVisibility(View.GONE);
                             imgError.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
 //                            loader.dismiss();

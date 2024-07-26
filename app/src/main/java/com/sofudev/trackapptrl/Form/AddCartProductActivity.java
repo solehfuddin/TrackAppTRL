@@ -627,7 +627,7 @@ public class AddCartProductActivity extends AppCompatActivity {
             int qty   = itemCart.get(j).getProductQty();
 //                                int sisa  = stock - qty;
 
-            potongStock(item_id, String.valueOf(qty));
+//            potongStock(item_id, String.valueOf(qty));
         }
 
         linearLayout.setVisibility(View.VISIBLE);

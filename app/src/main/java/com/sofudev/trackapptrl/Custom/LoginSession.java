@@ -12,6 +12,7 @@ public class LoginSession {
     public static final String UsernameKey = "UsernameKey";
     public static final String IdPartyKey = "IdPartyKey";
     public static final String LevelKey = "LevelKey";
+    public static final String TokenKey = "TokenKey";
 
     Context _context;
     SharedPreferences.Editor editor;
@@ -30,6 +31,13 @@ public class LoginSession {
         editor.apply();
     }
 
+    public void UpdateTokenSession(String token)
+    {
+        editor = sharedpreferences.edit();
+        editor.putString(TokenKey, token);
+        editor.apply();
+    }
+
     public HashMap<String, String> getLoginSession(){
         HashMap<String, String> user = new HashMap<>();
         // username
@@ -42,6 +50,13 @@ public class LoginSession {
 
         // return user
         return user;
+    }
+
+    public HashMap<String, String> getTokenSession(){
+        HashMap<String, String> token = new HashMap<>();
+        token.put(TokenKey, sharedpreferences.getString(TokenKey, null));
+
+        return token;
     }
 
     public void RemoveLoginSession()

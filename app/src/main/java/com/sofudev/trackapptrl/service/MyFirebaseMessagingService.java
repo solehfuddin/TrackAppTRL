@@ -32,41 +32,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.d(TAG, "Message img payload: " + remoteMessage.getData().get("image"));
             Map<String, String> data = remoteMessage.getData();
-            handleData(data);
 
+            handleData(data);
         }
         // Check if message contains a notification payload.
         else if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             handleNotification(remoteMessage.getNotification());
         }
-
-//        Map<String, String> data = remoteMessage.getData();
-////        String dataPayload = data.get("data");
-//
-//        if (remoteMessage.getData().size() > 0) {
-//            Log.e("TAG", "Message data payload: " + remoteMessage.getData());
-//            handleData(data);
-//        }
-//
-//        if (remoteMessage.getNotification() != null) {
-//            Log.e("TAG", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-//            handleNotification(remoteMessage.getNotification());
-//        }
     }
-
-//    @Override
-//    public void onNewToken(String token) {
-//        Log.d("TAG", "Refreshed token: " + token);
-//    }
 
     private void handleNotification(RemoteMessage.Notification RemoteMsgNotification) {
         String message = RemoteMsgNotification.getBody();
         String title = RemoteMsgNotification.getTitle();
+        String image = RemoteMsgNotification.getIcon();
         NotificationVO notificationVO = new NotificationVO();
         notificationVO.setTitle(title);
         notificationVO.setMessage(message);
+        notificationVO.setIconUrl(image);
 
         Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
         NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());

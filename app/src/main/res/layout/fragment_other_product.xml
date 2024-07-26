@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:customFont="RobotoMedium.ttf"/>
 
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+           <!-- <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/fragment_otherproduct_txtMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:customFont="RobotoMedium.ttf"/>
+                app:customFont="RobotoMedium.ttf"/> -->
 
             <LinearLayout
                 android:id="@+id/fragment_otherproduct_linear1"

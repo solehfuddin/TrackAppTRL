@@ -1,7 +1,15 @@
 package com.sofudev.trackapptrl.Data;
 
 public class Data_master_onhand {
-    private String itemId, itemCode, itemCategory, itemName, itemDesc, qty, totalItem;
+    private String itemId, itemCode, itemCategory, itemName, itemDesc, qty, totalItem, itemImg;
+
+    public String getItemImg() {
+        return itemImg;
+    }
+
+    public void setItemImg(String itemImg) {
+        this.itemImg = itemImg;
+    }
 
     public String getItemId() {
         return itemId;

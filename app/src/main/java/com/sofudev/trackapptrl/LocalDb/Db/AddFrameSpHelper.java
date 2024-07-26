@@ -27,6 +27,7 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUC
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_PRICE;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_QTY;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_STOCK;
+import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_STOCK_TMP;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.PRODUCT_WEIGHT;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.TABLE_FRAMESP;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract._ID;
@@ -96,6 +97,7 @@ public class AddFrameSpHelper {
                 addFrameSp.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWPRICE)));
                 addFrameSp.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_NEWDISCPRICE)));
                 addFrameSp.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)));
+                addFrameSp.setProductTempStock(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK_TMP)));
                 addFrameSp.setProductWeight(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_WEIGHT)));
                 addFrameSp.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMG)));
                 addFrameSp.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_FLAG)));
@@ -131,6 +133,7 @@ public class AddFrameSpHelper {
                 item.setNewProductPrice(cursor.getInt(cursor.getColumnIndexOrThrow("product_newprice")));
                 item.setNewProductDiscPrice(cursor.getInt(cursor.getColumnIndexOrThrow("product_newdiscprice")));
                 item.setProductStock(cursor.getInt(cursor.getColumnIndexOrThrow("product_stock")));
+                item.setProductTempStock(cursor.getInt(cursor.getColumnIndexOrThrow("product_stock_tmp")));
                 item.setProductWeight(cursor.getInt(cursor.getColumnIndex("product_weight")));
                 item.setProductImage(cursor.getString(cursor.getColumnIndexOrThrow("product_image")));
                 item.setProductFlag(cursor.getString(cursor.getColumnIndexOrThrow("product_flag")));
@@ -172,6 +175,7 @@ public class AddFrameSpHelper {
         args.put(PRODUCT_NEWPRICE, addFrameSp.getNewProductPrice());
         args.put(PRODUCT_NEWDISCPRICE, addFrameSp.getNewProductDiscPrice());
         args.put(PRODUCT_STOCK, addFrameSp.getProductStock());
+        args.put(PRODUCT_STOCK_TMP, addFrameSp.getProductTempStock());
         args.put(PRODUCT_WEIGHT, addFrameSp.getProductWeight());
         args.put(PRODUCT_IMG, addFrameSp.getProductImage());
         args.put(PRODUCT_FLAG, addFrameSp.getProductFlag());
@@ -225,6 +229,18 @@ public class AddFrameSpHelper {
         args.put(PRODUCT_QTY, modelFrameSp.getProductQty());
         args.put(PRODUCT_NEWPRICE, modelFrameSp.getNewProductPrice());
         args.put(PRODUCT_NEWDISCPRICE, modelFrameSp.getNewProductDiscPrice());
+        return database.update(DATABASE_TABLE, args, PRODUCT_ID + "= '" + modelFrameSp.getProductId() + "'", null);
+    }
+
+    public int updateFrameStock(ModelFrameSp modelFrameSp, int newStock){
+        ContentValues args = new ContentValues();
+        args.put(PRODUCT_STOCK, newStock);
+        return database.update(DATABASE_TABLE, args, PRODUCT_ID + "= '" + modelFrameSp.getProductId() + "'", null);
+    }
+
+    public int updateFrameStockTmp(ModelFrameSp modelFrameSp, int newStock){
+        ContentValues args = new ContentValues();
+        args.put(PRODUCT_STOCK_TMP, newStock);
         return database.update(DATABASE_TABLE, args, PRODUCT_ID + "= '" + modelFrameSp.getProductId() + "'", null);
     }
 

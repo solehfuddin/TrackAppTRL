@@ -3,7 +3,10 @@ package com.sofudev.trackapptrl;
 import android.content.Intent;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +25,7 @@ import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Fragment.DetailFrameFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
+import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
 import com.sofudev.trackapptrl.LocalDb.Db.AddCartHelper;
 import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.LocalDb.Model.ModelWishlist;
@@ -40,9 +44,9 @@ import java.util.Map;
 import es.dmoral.toasty.Toasty;
 
 public class DetailProductActivity extends AppCompatActivity implements OnBadgeCounter {
-
     Config config = new Config();
     String URLDETAILPRODUCT = config.Ip_address + config.frame_showdetail_product;
+    private String FRAMEPRICEURL = config.Ip_address + config.frame_price_mode;
 
     int id, counter1, counter2, frameId;
     int click = 0;
@@ -54,7 +58,7 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
     WishlistHelper wishlistHelper;
 
     String frameName, frameSku, frameImage, framePrice, frameDisc, frameDiscPrice, frameAvailibilty,
-            frameBrand, frameColor;
+            frameBrand, frameColor, ACTIVITY_TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +71,7 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
         btnWishlist = findViewById(R.id.fragment_detailproduct_btnWishlist);
 
         getData();
-
-        DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("from", "1");
-        bundle.putString("product_id", String.valueOf(id));
-        detailFrameFragment.setArguments(bundle);
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.detailproduct_fragment_container, detailFrameFragment, "detail");
-        fragmentTransaction.commit();
+        getFrameMode();
 
         addCartHelper = AddCartHelper.getINSTANCE(getApplicationContext());
         wishlistHelper = WishlistHelper.getInstance(getApplicationContext());
@@ -180,6 +175,10 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
                         Toasty.info(getApplicationContext(), "Item has been removed from wishlist", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+//                Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
+//                finish();
+//                startActivity(i);
             }
         });
     }
@@ -200,6 +199,52 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
 //            Log.d("DETAIL CartList : ", String.valueOf(counter2));
 //        }
 //    }
+
+    private void getFrameMode() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, FRAMEPRICEURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean output = jsonObject.getBoolean("show_price_frame");
+
+                    Log.d("Frame Mode : ", String.valueOf(output));
+
+                    if (output)
+                    {
+                        ACTIVITY_TAG = "dashboard";
+                    }
+                    else
+                    {
+                        ACTIVITY_TAG = "main";
+                    }
+
+                    Log.d(NewFrameFragment.class.getSimpleName(), "activity : " + ACTIVITY_TAG);
+
+                    DetailFrameFragment detailFrameFragment = new DetailFrameFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("from", "1");
+                    bundle.putString("product_id", String.valueOf(id));
+                    bundle.putString("activity", ACTIVITY_TAG);
+                    detailFrameFragment.setArguments(bundle);
+
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.detailproduct_fragment_container, detailFrameFragment, "detail");
+                    fragmentTransaction.commit();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.warning(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
 
     private void showProductDetail(final String id)
     {
@@ -281,6 +326,7 @@ public class DetailProductActivity extends AppCompatActivity implements OnBadgeC
     private void getData()
     {
         Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
         id = bundle.getInt("id");
     }
 

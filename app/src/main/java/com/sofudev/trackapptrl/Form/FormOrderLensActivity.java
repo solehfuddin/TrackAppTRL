@@ -55,6 +55,7 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.jkb.vcedittext.VerificationAction;
 import com.jkb.vcedittext.VerificationCodeEditText;
 import com.kyleduo.switchbutton.SwitchButton;
+import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.sofudev.trackapptrl.Adapter.Adapter_coating;
@@ -194,6 +195,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UniversalFontComponents.init(this);
         setContentView(R.layout.activity_form_order_lens);
 
         Thread.setDefaultUncaughtExceptionHandler(new ForceCloseHandler(this));
@@ -1174,9 +1176,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                        dialog.setPositiveButtonColorRes(R.color.colorPrimary);
+                                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                         dialog.setCancelable(false);
 
                                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -1247,9 +1249,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                        dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                         dialog.setCancelable(false);
 
                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -1454,9 +1456,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                     dialog.setMessage("Are you sure all data is correct ?");
                                                                                                     dialog.setTopTitle("Confirmation Order");
                                                                                                     dialog.setTopTitleColor(Color.WHITE);
-                                                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                    dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                    dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                    dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                     dialog.setCancelable(false);
 
                                                                                                     dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -1526,9 +1528,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                     dialog.setMessage("Are you sure all data is correct ?");
                                                                                     dialog.setTopTitle("Confirmation Order");
                                                                                     dialog.setTopTitleColor(Color.WHITE);
-                                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                    dialog.setTopColorRes(R.color.colorHeader);
+                                                                                    dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                    dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                     dialog.setCancelable(false);
 
                                                                                     dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -1772,9 +1774,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                                                        dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                                                         dialog.setCancelable(false);
 
                                                                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -1844,9 +1846,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                                        dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                                         dialog.setCancelable(false);
 
                                                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -2059,9 +2061,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                                     dialog.setMessage("Are you sure all data is correct ?");
                                                                                                                                                     dialog.setTopTitle("Confirmation Order");
                                                                                                                                                     dialog.setTopTitleColor(Color.WHITE);
-                                                                                                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                                                    dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                                                                    dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                                                                    dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                                                                     dialog.setCancelable(false);
 
                                                                                                                                                     dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -2139,9 +2141,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                                        dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                                         dialog.setCancelable(false);
 
                                                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -2683,9 +2685,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                                                     dialog.setMessage("Are you sure all data is correct ?");
                                                                                                                                     dialog.setTopTitle("Confirmation Order");
                                                                                                                                     dialog.setTopTitleColor(Color.WHITE);
-                                                                                                                                    dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                                                    dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                                                    dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                                                    dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                                                    dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                                                    dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                                                     dialog.setCancelable(false);
 
                                                                                                                                     dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -2762,9 +2764,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                         dialog.setMessage("Are you sure all data is correct ?");
                                                                                                         dialog.setTopTitle("Confirmation Order");
                                                                                                         dialog.setTopTitleColor(Color.WHITE);
-                                                                                                        dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                        dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                        dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                        dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                         dialog.setCancelable(false);
 
                                                                                                         dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -2941,9 +2943,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                                 dialog.setMessage("Are you sure all data is correct ?");
                                                                                                 dialog.setTopTitle("Confirmation Order");
                                                                                                 dialog.setTopTitleColor(Color.WHITE);
-                                                                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                                dialog.setTopColorRes(R.color.colorHeader);
+                                                                                                dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                                dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                                 dialog.setCancelable(false);
 
                                                                                                 dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -3014,9 +3016,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                 dialog.setMessage("Are you sure all data is correct ?");
                                                                                 dialog.setTopTitle("Confirmation Order");
                                                                                 dialog.setTopTitleColor(Color.WHITE);
-                                                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                dialog.setTopColorRes(R.color.colorHeader);
+                                                                                dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                 dialog.setCancelable(false);
 
                                                                                 dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -3220,9 +3222,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                                             dialog.setMessage("Are you sure all data is correct ?");
                                                                                             dialog.setTopTitle("Confirmation Order");
                                                                                             dialog.setTopTitleColor(Color.WHITE);
-                                                                                            dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                                            dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                                            dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                                            dialog.setTopColorRes(R.color.colorHeader);
+                                                                                            dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                                            dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                                             dialog.setCancelable(false);
 
                                                                                             dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -3293,9 +3295,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                                             dialog.setMessage("Are you sure all data is correct ?");
                                                                             dialog.setTopTitle("Confirmation Order");
                                                                             dialog.setTopTitleColor(Color.WHITE);
-                                                                            dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                                            dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                                            dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                                            dialog.setTopColorRes(R.color.colorHeader);
+                                                                            dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                                            dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                                             dialog.setCancelable(false);
 
                                                                             dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -3473,9 +3475,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                 dialog.setMessage("Are you sure all data is correct ?");
                                                 dialog.setTopTitle("Confirmation Order");
                                                 dialog.setTopTitleColor(Color.WHITE);
-                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                dialog.setTopColorRes(R.color.colorHeader);
+                                                dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                 dialog.setCancelable(false);
 
                                                 dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -3560,9 +3562,9 @@ public class FormOrderLensActivity extends AppCompatActivity {
                                                 dialog.setMessage("Are you sure all data is correct ?");
                                                 dialog.setTopTitle("Confirmation Order");
                                                 dialog.setTopTitleColor(Color.WHITE);
-                                                dialog.setTopColorRes(R.color.bootstrap_brand_info);
-                                                dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_success);
-                                                dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+                                                dialog.setTopColorRes(R.color.colorHeader);
+                                                dialog.setPositiveButtonColorRes(R.color.colorToolbar);
+                                                dialog.setNegativeButtonColorRes(R.color.colorTeks);
                                                 dialog.setCancelable(false);
 
                                                 dialog.setPositiveButton("Yes", new View.OnClickListener() {
@@ -8064,6 +8066,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("wrap", txt_wrap.getText().toString());
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetTrl", isfacet);
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
                             intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
@@ -8214,6 +8217,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("sales", salesName);
                             intent.putExtra("level", opticLevel);
                             intent.putExtra("opticname", opticName);
+                            intent.putExtra("isHasInsert", false);
                             Log.d("FORM ORDER : ", categoryLens);
 
                              /* Input SP Header */
@@ -8255,6 +8259,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("wrap", txt_wrap.getText().toString());
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetTrl", isfacet);
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
                             intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
@@ -8370,7 +8375,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                         LayoutInflater layoutInflater = getLayoutInflater();
                         View view = layoutInflater.inflate(R.layout.form_profile_address, null);
                         lovelyCustomDialog.setView(view);
-                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                         lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                         lovelyCustomDialog.setTopTitle("Update information address");
 
@@ -8596,6 +8601,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("wrap", txt_wrap.getText().toString());
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetTrl", isfacet);
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
                             intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());
@@ -8788,6 +8794,7 @@ public class FormOrderLensActivity extends AppCompatActivity {
                             intent.putExtra("wrap", txt_wrap.getText().toString());
                             intent.putExtra("panto", txt_phantose.getText().toString());
                             intent.putExtra("vd", txt_vertex.getText().toString());
+                            intent.putExtra("facetTrl", isfacet);
                             intent.putExtra("facetInfo", txt_infofacet.getText().toString());
                             intent.putExtra("frameModel", spin_framemodel.getText().toString().equals("-- Model --") ? "" : spin_framemodel.getText().toString());
                             intent.putExtra("dbl", txt_dbl.getText().toString());

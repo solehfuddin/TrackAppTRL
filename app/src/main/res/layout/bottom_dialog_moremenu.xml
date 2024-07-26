@@ -1021,6 +1021,47 @@
                     app:customFont="RobotoMedium.ttf"
                     tools:ignore="SmallSp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_custom_featureassignbin"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                tools:ignore="UseCompoundDrawables">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/layout_custom_rpfeatureassignbin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:rv_rippleDuration="150"
+                    app:rv_type="rectangle">
+
+                    <ImageView
+                        android:id="@+id/layout_custom_icfeatureassignbin"
+                        android:layout_width="55dp"
+                        android:layout_height="54dp"
+                        android:layout_gravity="center_horizontal"
+                        android:contentDescription="@string/app_name"
+                        app:srcCompat="@drawable/assignbin_round" />
+
+                </com.andexert.library.RippleView>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/layout_custom_txtfeatureassignbin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assign_bin"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorContent"
+                    app:customFont="RobotoMedium.ttf"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
         </LinearLayout>
 
         <View

@@ -84,7 +84,7 @@
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="15"
                     app:scale_left="10"
-                    app:scale_width="180"
+                    app:scale_width="270"
                     app:scale_textsize="16"
                     app:scale_height="22"/>
 
@@ -115,6 +115,28 @@
                     app:scale_width="28"
                     app:scale_height="28"/>
 
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/item_cartframesp_edQty"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:layout_marginLeft="5dp"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:text="10"
+                    android:textSize="12sp"
+                    android:visibility="visible"
+                    android:inputType="number|numberSigned"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:scale_top="20"
+                    app:scale_left="-105"
+                    app:scale_width="65"
+                    app:scale_height="30"
+                    app:scale_textsize="18"/>
+
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                     android:id="@+id/item_cartframesp_txtQty"
                     android:layout_width="50dp"
@@ -126,11 +148,12 @@
                     android:maxLines="1"
                     android:text="10"
                     android:textSize="13sp"
+                    android:visibility="invisible"
                     app:customFont="UbuntuMedium.ttf"
                     app:scale_top="20"
                     app:scale_left="-105"
-                    app:scale_width="60"
-                    app:scale_height="20"
+                    app:scale_width="65"
+                    app:scale_height="30"
                     app:scale_textsize="20"/>
 
                 <ImageView

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
+    xmlns:wheel="http://schemas.android.com/tools"
     tools:context="com.sofudev.trackapptrl.OnHandActivity">
 
     <FrameLayout
@@ -60,9 +61,68 @@
         </RelativeLayout>
     </FrameLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_onhand_txtBin"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textSize="14sp"
+                android:focusable="true"
+                android:text="STORE"
+                android:gravity="center|end"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorContent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <Switch
+                android:id="@+id/form_onhand_swBin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end"
+                android:layout_toEndOf="@+id/form_onhand_txtBin"
+                android:gravity="end"
+                android:checked="true"/>
+
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/form_onhand_txtflag"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textSize="14sp"
+                android:focusable="true"
+                android:text="LENSA"
+                android:gravity="center|end"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorContent"
+                android:layout_toStartOf="@+id/form_onhand_swflag"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="5dp"
+                app:customFont="UbuntuMedium.ttf" />
+
+            <Switch
+                android:id="@+id/form_onhand_swflag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="end"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:checked="true"/>
+        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/form_tracksp_cards"
@@ -77,18 +137,18 @@
                 android:layout_height="wrap_content">
 
                 <!--<Spinner-->
-                    <!--android:id="@+id/form_onhand_spinname"-->
-                    <!--android:layout_width="100dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@android:color/white"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:paddingTop="3dp"-->
-                    <!--android:layout_marginLeft="5dp"-->
-                    <!--android:layout_marginRight="5dp"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:paddingBottom="3dp"-->
-                    <!--android:background="@color/colorToolbar"/>-->
+                <!--android:id="@+id/form_onhand_spinname"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="14sp"-->
+                <!--android:paddingTop="3dp"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:paddingBottom="3dp"-->
+                <!--android:background="@color/colorToolbar"/>-->
 
                 <com.andexert.library.RippleView
                     android:id="@+id/form_onhand_rpfilter"
@@ -111,24 +171,24 @@
                 </com.andexert.library.RippleView>
 
                 <!--<com.rengwuxian.materialedittext.MaterialEditText-->
-                    <!--android:id="@+id/form_onhand_txtSearch"-->
-                    <!--android:layout_width="260dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@color/neutral"-->
-                    <!--android:hint="Search item ..."-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:layout_marginBottom="5dp"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:layout_toRightOf="@+id/form_onhand_rpfilter"-->
-                    <!--android:layout_centerHorizontal="true"-->
-                    <!--app:met_hideUnderline="true"/>-->
+                <!--android:id="@+id/form_onhand_txtSearch"-->
+                <!--android:layout_width="260dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/neutral"-->
+                <!--android:hint="Search item ..."-->
+                <!--android:inputType="textPersonName"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_toRightOf="@+id/form_onhand_rpfilter"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--app:met_hideUnderline="true"/>-->
 
-                <AutoCompleteTextView
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/form_onhand_txtSearch"
-                    android:layout_width="260dp"
-                    android:layout_height="38dp"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/neutral"
                     android:hint=" Search item ..."
                     android:textSize="16sp"
@@ -142,7 +202,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_toRightOf="@+id/form_onhand_rpfilter"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    app:met_hideUnderline="true"/>
 
                 <com.andexert.library.RippleView
                     android:id="@+id/form_onhand_rpsorting"
@@ -200,12 +261,54 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:id="@+id/form_onhand_linearcounter"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:background="@color/colorFirst"
+                android:layout_below="@id/form_tracksp_rl_tool">
+
+                <TextView
+                    android:id="@+id/form_onhand_txtcounterbrand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="3dp"
+                    android:text="counter"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:id="@+id/form_onhand_txtcountertotal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingEnd="3dp"
+                    android:text="counter"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="textEnd"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    wheel:ignore="RtlCompat" />
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/form_onhand_recycleview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/form_tracksp_rl_tool"/>
+                android:layout_below="@+id/form_onhand_linearcounter"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/form_onhand_recycleviewframe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/form_onhand_linearcounter"/>
 
             <ImageView
                 android:id="@+id/form_onhand_imgnotfound"
@@ -228,5 +331,5 @@
                 app:mlpb_enable_circle_background="true"
                 app:mlpb_progress_color="@color/colorToolbar"/>
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -18,33 +18,79 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="q">
-        <activity android:name=".ZoomImageActivity"></activity>
-        <activity android:name=".Form.ProductCompareActivity" />
-        <activity android:name=".Form.FilterNewsActivity" />
-        <activity android:name=".Form.DetailNewsActivity" />
-        <activity android:name=".Form.SpApprovalActivity" />
-        <activity android:name=".Form.FormCourierTrackingActivity" />
-        <activity android:name=".Form.CourierHistoryActivity" />
-        <activity android:name=".Form.CourierDpodkActivity" />
-        <activity android:name=".Form.CourierTaskActivity" />
+        <activity android:name=".Form.ShippingInfoActivity"></activity>
+        <activity android:name=".Form.ReturnBinActivity" />
+        <activity
+            android:name=".Form.AssignApprovalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".NotificationCenterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ZoomImageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.ProductCompareActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.FilterNewsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.DetailNewsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.SpApprovalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.FormCourierTrackingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.CourierHistoryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.CourierDpodkActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Form.CourierTaskActivity"
+            android:exported="true" />
         <activity
             android:name=".Form.DetailEinvoiceActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.EinvoiceActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormLensaPartaiActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".FrameProductActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.DetailDeliveryTrackingActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormDeliveryTrackingActivity"
-            android:exported="false" /> <!-- <provider -->
+            android:exported="true" />
+        <activity
+            android:name=".IntroActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:theme="@style/AppTheme"
+            android:turnScreenOn="true"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- <provider -->
         <!-- android:name="android.support.v4.content.FileProvider" -->
         <!-- android:authorities="com.sofudev.trackapptrl.fileprovider" -->
         <!-- android:exported="false" -->
@@ -62,30 +108,14 @@
         <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
         <activity
-            android:name=".IntroActivity"
-            android:exported="false"
+            android:name=".FanpageActivity"
+            android:exported="true"
             android:screenOrientation="portrait" /> <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".FanpageActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".DashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -100,148 +130,150 @@
         </activity>
         <activity
             android:name=".Form.FormUACActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Form.FormProfileActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Form.FormTrackOrderActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Form.FormFilterOpticnameActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Info.InfoOrderHistoryActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Form.FormOrderLensActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Form.FormOrderDashboardActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPDFViewerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormLensSummaryActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderHistoryActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderDetailActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentVA"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentQR"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentCC"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentKreditpro"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.AddCartProductActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.WishlistProductActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderHistoryFrameActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderDetailFrameActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentLoanActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentLoanSaldo"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentLoanOtp"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentLoanSuccess"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.EwarrantyActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.CheckBalanceActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.DetailBalanceActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormBatchOrderActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderHistoryPartaiActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderDetailPartaiActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.SearchProductActivity"
-            android:exported="false" /> <!-- <service android:name=".service.GenerateIdFire"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
+            android:exported="true" />
         <activity
             android:name=".DetailProductActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ReportSalesActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormOrderSpActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormSpFrameActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Form.FormTrackingSpActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".LoggerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".OnHandActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.DetailDepositActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FilterDepositActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.FormPaymentDeposit"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".TestCamActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Form.EstatementActivity"
-            android:exported="false" />
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logotrl" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
         <provider
             android:name="com.nj.imagepicker.provider.ImageProvider"
             android:authorities="${applicationId}.com.nj.imagepicker.fileprovider"
-            android:exported="false"
             tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
@@ -250,15 +282,22 @@
 
         <receiver
             android:name=".Custom.SmsReceiver"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <service
+            android:name=".service.GenerateIdFire"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
             android:name=".service.MyFirebaseMessagingService"
-            android:exported="false"
+            android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -267,13 +306,21 @@
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:exported="false"
+            android:exported="true"
             android:required="false" />
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>

@@ -430,6 +430,8 @@ public class SpApprovalFragment extends Fragment {
                 Intent intent = new Intent(requireContext(), InfoOrderHistoryActivity.class);
                 intent.putExtra("order_number", noSp);
                 intent.putExtra("is_sp", 1);
+                intent.putExtra("flag", "");
+                intent.putExtra("level", "");
                 startActivity(intent);
             }
         });
@@ -514,8 +516,19 @@ public class SpApprovalFragment extends Fragment {
         int numBulan = (getNumberOfMonth(list.get(pos).getStartInstallment()) + Integer.parseInt(list.get(pos).getInstallment())) - 1;
         String strBulan = numBulan > 12 ? getMonOfNumber(numBulan - 12) : getMonOfNumber(numBulan);
 
-        String defYear = list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4);
-        int untilYear  = numBulan > 12 ? Integer.parseInt(defYear + 1) : Integer.parseInt(defYear);
+//        String defYear = list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4);
+        int calcStYear;
+        if (getNumberOfMonth(list.get(pos).getStartInstallment()) - Integer.parseInt(list.get(pos).getNoSp().substring(6, 8)) < 0)
+        {
+            calcStYear = Integer.parseInt(list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4)) + 1;
+        }
+        else
+        {
+            calcStYear = Integer.parseInt(list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4));
+        }
+
+        String defYear = String.valueOf(calcStYear);
+        int untilYear  = numBulan > 12 ? Integer.parseInt(defYear) + 1 : Integer.parseInt(defYear);
 
         int cicilanBulanan = (list.get(pos).getGrandTotal() - Integer.parseInt(list.get(pos).getDownPayment())) / Integer.parseInt(list.get(pos).getInstallment());
         String cicilan = "Sebanyak (" + list.get(pos).getInstallment() + ") Kali, Sejumlah Rp. " + CurencyFormat(String.valueOf(cicilanBulanan).replace(",", ".")) + " / bulan <br/>"

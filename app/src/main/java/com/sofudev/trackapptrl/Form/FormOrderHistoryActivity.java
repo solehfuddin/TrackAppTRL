@@ -99,7 +99,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     RecyclerView.LayoutManager recyclerViewManager;
     Adapter_orderhistory_optic adapteOrderHistory;
     List<Data_orderhistory_optic> itemOrderHistory = new ArrayList<>();
-    String username, start_date, end_date, status, idparty, paymentInfo, level, sales;
+    String username, start_date, end_date, status, idparty, paymentInfo, level, sales, orderNumber;
     Integer day, month, year;
     long lastClick = 0;
 
@@ -137,7 +137,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
 
         getUserInfo();
 //        showDataByDate();
-//        historyLensByDate();
+        historyLensByDate();
         searchHistoryByName();
         searchByRangeDate();
     }
@@ -145,7 +145,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
     @Override
     protected void onResume() {
         super.onResume();
-        historyLensByDate();
+//        historyLensByDate();
     }
 
     @Override
@@ -310,6 +310,7 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
         if (bundle != null)
         {
             level    = bundle.getString("level");
+            orderNumber = bundle.getString("ordernumber");
 
             assert level != null;
             if (level.equals("0") || level.equals("3"))
@@ -323,6 +324,13 @@ public class FormOrderHistoryActivity extends AppCompatActivity implements Custo
                 sales   = bundle.getString("sales");
                 idparty = "";
                 username = "";
+            }
+
+            if (orderNumber != null) {
+                customLoading.showLoadingDialog();
+                txt_search.setText(orderNumber);
+//                showDataByOrderNumber(txt_search.getText().toString());
+                historyLensByPatient(txt_search.getText().toString());
             }
         }
     }

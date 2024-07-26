@@ -53,6 +53,10 @@ public class Adapter_order_history extends RecyclerView.Adapter<Adapter_order_hi
             holder.imageView.setImageResource(R.drawable.history_print);
             //holder.timelineView.setEndLine(Color.parseColor("#ff9100"), position);
         }
+        else if (status.equals("PREP"))
+        {
+            holder.imageView.setImageResource(R.drawable.history_print);
+        }
         else if (status.equals("WARE"))
         {
             holder.imageView.setImageResource(R.drawable.history_warehouse);

@@ -68,7 +68,7 @@ public class Adapter_promo_frame extends RecyclerView.Adapter<Adapter_promo_fram
 
         void setData(Data_fragment_bestproduct item)
         {
-            Picasso.with(context).load(item.getProduct_image()).fit().into(imgProduct);
+            Picasso.with(context).load(item.getProduct_image()).centerCrop().fit().into(imgProduct);
             String persen = "- " + item.getProduct_discpercent() + " %";
 
             if (item.getProduct_discpercent().equals("0"))
@@ -85,6 +85,9 @@ public class Adapter_promo_frame extends RecyclerView.Adapter<Adapter_promo_fram
             txtPrice.setText(item.getProduct_realprice());
             txtProductName.setText(item.getProduct_name());
             txtBrandName.setText(item.getProduct_brand());
+            txtBrandName.bringToFront();
+            txtBrandName.invalidate();
+            txtBrandName.setVisibility(View.INVISIBLE);
 
             if (TAG.contains("main"))
             {

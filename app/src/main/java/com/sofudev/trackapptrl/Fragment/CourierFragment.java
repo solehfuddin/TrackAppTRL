@@ -25,6 +25,7 @@ public class CourierFragment extends Fragment {
     RippleView rippleCourierTask, rippleCourierHistory;
     Context myContext;
     String ACTIVITY_TAG, PARTYSITEID, USERNAME, CUSTNAME, STATUS, LEVEL, ADDRESS, CITY, PROVINCE, EMAIL, MOBNUMBER, MEMBERFLAG;
+    boolean isAdmin = false;
 
     public CourierFragment() {
         // Required empty public constructor
@@ -53,44 +54,6 @@ public class CourierFragment extends Fragment {
 
         getData();
 
-        linearCourierTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(myContext, CourierTaskActivity.class);
-                intent.putExtra("idparty", PARTYSITEID);
-                intent.putExtra("username", USERNAME);
-                startActivity(intent);
-            }
-        });
-        rippleCourierTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(myContext, CourierTaskActivity.class);
-                intent.putExtra("idparty", PARTYSITEID);
-                intent.putExtra("username", USERNAME);
-                startActivity(intent);
-            }
-        });
-
-        linearCourierHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
-                intent.putExtra("idparty", PARTYSITEID);
-                intent.putExtra("username", USERNAME);
-                startActivity(intent);
-            }
-        });
-        rippleCourierHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
-                intent.putExtra("idparty", PARTYSITEID);
-                intent.putExtra("username", USERNAME);
-                startActivity(intent);
-            }
-        });
-
         return view;
     }
 
@@ -107,13 +70,58 @@ public class CourierFragment extends Fragment {
             {
                 PARTYSITEID = bundle.getString("partySiteId");
                 CUSTNAME = bundle.getString("username");
+                LEVEL = bundle.getString("level");
 
                 Log.d(CourierFragment.class.getSimpleName(), "custname : " + CUSTNAME);
                 Log.d(CourierFragment.class.getSimpleName(), "partyId : " + PARTYSITEID);
+                Log.d(CourierFragment.class.getSimpleName(), "level : " + LEVEL);
+
 //                getUserByCustname(CUSTNAME);
 //                countData(CUSTNAME);
 //                getParentInfo(PARTYSITEID);
             }
         }
+
+        linearCourierTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext, CourierTaskActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", isAdmin);
+                startActivity(intent);
+            }
+        });
+        rippleCourierTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext, CourierTaskActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", isAdmin);
+                startActivity(intent);
+            }
+        });
+
+        linearCourierHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", isAdmin);
+                startActivity(intent);
+            }
+        });
+        rippleCourierHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext, CourierHistoryActivity.class);
+                intent.putExtra("idparty", PARTYSITEID);
+                intent.putExtra("username", USERNAME);
+                intent.putExtra("isadmin", isAdmin);
+                startActivity(intent);
+            }
+        });
     }
 }

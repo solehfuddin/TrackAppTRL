@@ -152,6 +152,8 @@ public class CourierHistoryActivity extends AppCompatActivity {
             username = bundle.getString("username");
             isAdmin = bundle.getBoolean("isadmin");
 
+            Log.d(CourierHistoryActivity.class.getSimpleName(), "Isadmin : " + isAdmin);
+
             if (isAdmin)
             {
                 start_date = todayDate;
@@ -650,6 +652,10 @@ public class CourierHistoryActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         customLoading.showLoadingDialog();
 
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Url : " + GETHISTORYBYDATERANGE + "/" + limit + "/" + offset);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param1 : " + stDate);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param2 : " + edDate);
+
         StringRequest request = new StringRequest(Request.Method.POST, GETHISTORYBYDATERANGE + "/" + limit + "/" + offset, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -756,6 +762,10 @@ public class CourierHistoryActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         customLoading.showLoadingDialog();
 
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Url : " + GETPROCESSBYDATERANGE + "/" + limit + "/" + offset);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param1 : " + stDate);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param2 : " + edDate);
+
         StringRequest request = new StringRequest(Request.Method.POST, GETPROCESSBYDATERANGE + "/" + limit + "/" + offset, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -861,6 +871,10 @@ public class CourierHistoryActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         customLoading.showLoadingDialog();
 
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Url : " + FINDHISTORYBYNOTRX);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param1 : " + idCourier);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param2 : " + keyword);
+
         StringRequest request = new StringRequest(Request.Method.POST, FINDHISTORYBYNOTRX + "/" + limit + "/" + offset, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -965,6 +979,10 @@ public class CourierHistoryActivity extends AppCompatActivity {
         listData.clear();
         progressBar.setVisibility(View.VISIBLE);
         customLoading.showLoadingDialog();
+
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Url : " + FINDPROCESSBYKEYWORD);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param1 : " + dateSt);
+        Log.d(CourierHistoryActivity.class.getSimpleName(), "Param2 : " + keyword);
 
         StringRequest request = new StringRequest(Request.Method.POST, FINDPROCESSBYKEYWORD + "/" + limit + "/" + offset, new Response.Listener<String>() {
             @Override

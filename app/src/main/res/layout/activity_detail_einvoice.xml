@@ -545,21 +545,48 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <com.andexert.library.RippleView
-            android:id="@+id/form_detaileinv_ripplebtndownload"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            app:rv_type="rectangle"
-            app:rv_rippleDuration="100">
-            <Button
-                android:id="@+id/form_detaileinv_btndownload"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/colorEinvButton"
-                android:textColor="@color/neutral"
-                android:text="Download"
-                android:textSize="14sp" />
-        </com.andexert.library.RippleView>
+            android:orientation="horizontal"
+            android:background="@color/neutral"
+            android:weightSum="2">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_detaileinv_ripplebtnview"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <Button
+                    android:id="@+id/form_detaileinv_btnview"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/colorEnd"
+                    android:textColor="@color/neutral"
+                    android:text="View Pdf"
+                    android:textSize="14sp" />
+            </com.andexert.library.RippleView>
+
+            <com.andexert.library.RippleView
+                android:id="@+id/form_detaileinv_ripplebtndownload"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                app:rv_type="rectangle"
+                app:rv_rippleDuration="100">
+                <Button
+                    android:id="@+id/form_detaileinv_btndownload"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/colorEinvButton"
+                    android:textColor="@color/neutral"
+                    android:text="Download"
+                    android:textSize="14sp" />
+            </com.andexert.library.RippleView>
+        </LinearLayout>
+
     </RelativeLayout>
 </LinearLayout>

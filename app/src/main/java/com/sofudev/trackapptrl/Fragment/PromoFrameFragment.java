@@ -50,7 +50,7 @@ public class PromoFrameFragment extends Fragment {
     Config config = new Config();
     String URLPOPULARFRAME = config.Ip_address + config.dashboard_popular_frame;
 
-    UniversalFontTextView txtMore;
+    UniversalFontTextView txtMore, txtTitle, txtIdTag;
     RecyclerView recyclerView;
     ShimmerRecyclerView shimmerRecyclerView;
     CardView cardBanner;
@@ -85,6 +85,8 @@ public class PromoFrameFragment extends Fragment {
         recyclerView = view.findViewById(R.id.fragment_promoframe_recyclerview);
         cardBanner = view.findViewById(R.id.fragment_promoframe_banner1);
         txtMore = view.findViewById(R.id.fragment_promoframe_txtMore);
+        txtTitle = view.findViewById(R.id.fragment_promoframe_txtTitle);
+        txtIdTag = view.findViewById(R.id.fragment_promoframe_txtIdTag);
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +98,9 @@ public class PromoFrameFragment extends Fragment {
                 else
                 {
                     Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                    intent.putExtra("activity", ACTIVITY_TAG);
+                    intent.putExtra("tag_name", txtTitle.getText());
+                    intent.putExtra("tag_id", txtIdTag.getText());
                     startActivity(intent);
                 }
             }
@@ -112,6 +117,9 @@ public class PromoFrameFragment extends Fragment {
                 else
                 {
                     Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                    intent.putExtra("activity", ACTIVITY_TAG);
+                    intent.putExtra("tag_name", "ALL FRAME");
+                    intent.putExtra("tag_id", "");
                     startActivity(intent);
                 }
             }
@@ -137,6 +145,9 @@ public class PromoFrameFragment extends Fragment {
                     {
 //                        Toasty.info(myContext, "Buka menu frame", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                        intent.putExtra("activity", ACTIVITY_TAG);
+                        intent.putExtra("tag_name", "ALL FRAME");
+                        intent.putExtra("tag_id", "");
                         startActivity(intent);
                     }
                     else
@@ -210,6 +221,12 @@ public class PromoFrameFragment extends Fragment {
                         item.setProduct_weight(frameWeight);
 
                         itemProduct.add(item);
+
+                        txtTitle.setText(jsonObject.getString("frame_tag").toUpperCase());
+                        txtIdTag.setText(jsonObject.getString("frame_tagid"));
+
+//                        txtTitle.setVisibility(View.INVISIBLE);
+//                        txtIdTag.setVisibility(View.VISIBLE);
                     }
 
                     shimmerRecyclerView.setVisibility(View.GONE);

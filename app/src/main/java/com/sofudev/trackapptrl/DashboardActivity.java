@@ -1,7 +1,6 @@
 package com.sofudev.trackapptrl;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -18,23 +17,22 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.ContactsContract;
 
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 
@@ -47,7 +45,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +52,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -82,7 +78,6 @@ import com.jkb.vcedittext.VerificationCodeEditText;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.raizlabs.universalfontcomponents.UniversalFontComponents;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Adapter.Adapter_banner_custom;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.CustomLoading;
@@ -91,7 +86,6 @@ import com.sofudev.trackapptrl.Custom.LoginSession;
 import com.sofudev.trackapptrl.Custom.OnBadgeCounter;
 import com.sofudev.trackapptrl.Custom.OnFragmentInteractionListener;
 import com.sofudev.trackapptrl.Custom.SmsReceiver;
-import com.sofudev.trackapptrl.Decoration.MyBanner;
 import com.sofudev.trackapptrl.Form.AddCartProductActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
 import com.sofudev.trackapptrl.Form.DetailDepositActivity;
@@ -118,7 +112,6 @@ import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
 import com.sofudev.trackapptrl.Fragment.CategoryFragment;
 import com.sofudev.trackapptrl.Fragment.CourierFragment;
-import com.sofudev.trackapptrl.Fragment.CustomHomeFragment;
 import com.sofudev.trackapptrl.Fragment.HomeFragment;
 import com.sofudev.trackapptrl.Fragment.MoreFrameFragment;
 import com.sofudev.trackapptrl.Fragment.NewFrameFragment;
@@ -132,7 +125,6 @@ import com.sofudev.trackapptrl.LocalDb.Db.WishlistHelper;
 import com.sofudev.trackapptrl.Security.MCrypt;
 import com.sofudev.trackapptrl.Util.CustomTypefaceSpan;
 import com.squareup.picasso.Picasso;
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -157,8 +149,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
-import in.aabhasjindal.otptextview.OTPListener;
-import in.aabhasjindal.otptextview.OtpTextView;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
@@ -185,15 +175,16 @@ public class DashboardActivity extends AppCompatActivity
     private String URLVERIFYSICCODE = config.Ip_address + config.verify_siccode;
     private String URLSTATUSUSER  = config.Ip_address + config.status_user;
     private String URLPARENTINFO  = config.Ip_address + config.getparent_info;
+    private String URLCOUNTNOTIFICATION = config.Ip_address + config.notification_countUnread;
     //    private String URLTOKEN       = config.Ip_address + config.payment_update_token;
     String URL_CHECKCITY = config.Ip_address + config.spinner_shipment_getProvinceOptic;
     String URL_GETALLPROVINCE= config.Ip_address + config.spinner_shipment_getAllProvince;
     String URL_GETCITYBYPROV = config.Ip_address + config.spinner_shipment_getCity;
     String URL_UPDATECITY    = config.Ip_address + config.spinner_shipment_updateCity;
 
-    ImageView imgWishlist, imgCart;
+    ImageView imgWishlist, imgCart, imgNotification, imgSearch;
     ImageView imgAction;
-    TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo, txt_titlesaldo;
+    TextView txt_title, txt_countwishlist, txt_countCart, txt_saldo, txt_titlesaldo, txt_notification;
     //UniversalFontTextView btn_orderframe, btn_orderbulk;
     BottomDialog bottomDialogInput;
     private DrawerLayout drawer;
@@ -218,7 +209,7 @@ public class DashboardActivity extends AppCompatActivity
     FrameLayout frameSaldo, frameCategory, frameCourier;
 
     CardView cardTop;
-    ImageView imgTop;
+    ImageView imgTop, imgSettingNotif;
     NestedScrollView scrollView;
     BootstrapButton btn_call, btn_wa, btn_mail, btn_web;
     Button btn_profile, btn_topup;
@@ -269,11 +260,14 @@ public class DashboardActivity extends AppCompatActivity
         linearSaldo = findViewById(R.id.navdash_linearSaldo);
         imgWishlist = findViewById(R.id.appbardashboard_btn_wishlist);
         imgCart = findViewById(R.id.appbardashboard_btn_addcart);
+        imgNotification = findViewById(R.id.appbardashboard_btn_notification);
+        imgSearch = findViewById(R.id.appbardashboard_btn_search);
         frameSaldo = findViewById(R.id.appbardashboard_balance);
         frameCategory = findViewById(R.id.appbardashboard_category);
         txt_title = (TextView) findViewById(R.id.appbardashboard_txt_titleheader);
         txt_countwishlist = findViewById(R.id.appbardashboard_badge_wishlist);
         txt_countCart = findViewById(R.id.appbardashboard_badge_cart);
+        txt_notification = findViewById(R.id.appbardashboard_badge_notification);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         searchViews = (MaterialSearchView) findViewById(R.id.dashboard_search);
         cardTop = findViewById(R.id.appbardashboard_cartTop);
@@ -348,6 +342,7 @@ public class DashboardActivity extends AppCompatActivity
         txt_saldo = header.findViewById(R.id.navdash_txtSisaSaldo);
         txt_titlesaldo = header.findViewById(R.id.navdash_txtTitleSaldo);
         btn_topup = header.findViewById(R.id.navdash_btntopup);
+        imgSettingNotif = header.findViewById(R.id.navdash_notifsettings);
         btn_profile = (Button) header.findViewById(R.id.navdash_btnprofile);
         img_profile = (BootstrapCircleThumbnail) header.findViewById(R.id.navdash_imageProfile);
         //btn_orderframe = (UniversalFontTextView) MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.nav_orderframe));
@@ -375,6 +370,16 @@ public class DashboardActivity extends AppCompatActivity
                 intent.putExtra("user_info", data1);
                 intent.putExtra("username", username);
                 startActivity(intent);
+            }
+        });
+
+        imgSettingNotif.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
+                finish();
+                startActivity(i);
             }
         });
 
@@ -441,6 +446,8 @@ public class DashboardActivity extends AppCompatActivity
         if (data1.length() == 3){
            imgWishlist.setVisibility(View.GONE);
            imgCart.setVisibility(View.GONE);
+           imgNotification.setVisibility(View.GONE);
+           imgSearch.setVisibility(View.GONE);
            frameSaldo.setVisibility(View.GONE);
 
 //           txt_titlesaldo.setVisibility(View.GONE);
@@ -464,6 +471,26 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
+        imgNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, NotificationCenterActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("custname", data);
+                intent.putExtra("idparty", data1);
+                intent.putExtra("level", level_user);
+                startActivity(intent);
+            }
+        });
+
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, SearchProductActivity.class);
+                startActivity(intent);
+            }
+        });
+
         wishlistHelper = WishlistHelper.getInstance(getApplicationContext());
         wishlistHelper.open();
 
@@ -471,10 +498,27 @@ public class DashboardActivity extends AppCompatActivity
         addCartHelper.open();
 
         int counter = wishlistHelper.countWishlist();
-        txt_countwishlist.setText(" " + counter + " ");
+        if (counter > 0)
+        {
+            txt_countwishlist.setText(" " + counter + " ");
+            txt_countwishlist.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            txt_countwishlist.setVisibility(View.GONE);
+        }
 
         int countCart = addCartHelper.countAddCart();
-        txt_countCart.setText(" " + countCart + " ");
+        if (countCart > 0)
+        {
+            txt_countCart.setText(" " + countCart + " ");
+            txt_countCart.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            txt_countCart.setVisibility(View.GONE);
+        }
+
 
 //        String token = FirebaseInstanceId.getInstance().getToken();
         //Toasty.info(getApplicationContext(), token, Toast.LENGTH_LONG).show();
@@ -501,12 +545,29 @@ public class DashboardActivity extends AppCompatActivity
         super.onResume();
 
         int counter = wishlistHelper.countWishlist();
-        txt_countwishlist.setText(" " + counter + " ");
+        if (counter > 0)
+        {
+            txt_countwishlist.setText(" " + counter + " ");
+            txt_countwishlist.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            txt_countwishlist.setVisibility(View.GONE);
+        }
 
         int countCart = addCartHelper.countAddCart();
-        txt_countCart.setText(" " + countCart + " ");
+        if (countCart > 0)
+        {
+            txt_countCart.setText(" " + countCart + " ");
+            txt_countCart.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            txt_countCart.setVisibility(View.GONE);
+        }
 
         getSaldoDepo(username);
+        countUnreadNotification(username);
     }
 
     private void getFrameMode() {
@@ -529,7 +590,7 @@ public class DashboardActivity extends AppCompatActivity
                     }
 
                     //DISABLE BEFORE UPLOAD
-//                    showNews();
+                    showNews();
                     //DISABLE BEFORE UPLOAD
 
                     showPromoFrame();
@@ -556,6 +617,52 @@ public class DashboardActivity extends AppCompatActivity
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void countUnreadNotification(final String username){
+        StringRequest request = new StringRequest(Request.Method.POST, URLCOUNTNOTIFICATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("error"))
+                    {
+                        txt_notification.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        int count = jsonObject.getInt("unread_count");
+                        if (count > 0)
+                        {
+                            txt_notification.setText(String.valueOf(count));
+                            txt_notification.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            txt_notification.setVisibility(View.GONE);
+                        }
+                    }
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("username", username);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void countData(final String username)
@@ -640,12 +747,28 @@ public class DashboardActivity extends AppCompatActivity
         if (requestCode == 1)
         {
             int counter = data.getIntExtra("counter", 0);
-            txt_countwishlist.setText(" " + counter + " ");
+            if (counter > 0)
+            {
+                txt_countwishlist.setText(" " + counter + " ");
+                txt_countwishlist.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                txt_countwishlist.setVisibility(View.GONE);
+            }
         }
         else if (requestCode == 2)
         {
             int counter = data.getIntExtra("counter", 0);
-            txt_countCart.setText(" " + counter + " ");
+            if (counter > 0)
+            {
+                txt_countCart.setText(" " + counter + " ");
+                txt_countCart.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                txt_countCart.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -666,9 +789,9 @@ public class DashboardActivity extends AppCompatActivity
         dialog.setMessage("Are you sure want to close this app ?");
         dialog.setTopTitle("Message Dialog");
         dialog.setTopTitleColor(Color.WHITE);
-        dialog.setTopColorRes(R.color.bootstrap_brand_success);
-        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_primary);
-        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+        dialog.setTopColorRes(R.color.colorToolbar);
+        dialog.setPositiveButtonColorRes(R.color.colorPrimary);
+        dialog.setNegativeButtonColorRes(R.color.colorTeks);
 
         dialog.setPositiveButton("OK", new View.OnClickListener() {
             @Override
@@ -692,7 +815,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
+        /*getMenuInflater().inflate(R.menu.dashboard, menu);
 
         MenuItem item = menu.findItem(R.id.action_searchs);
 
@@ -711,7 +834,7 @@ public class DashboardActivity extends AppCompatActivity
 
                 return false;
             }
-        });
+        });*/
 
         return true;
     }
@@ -788,33 +911,43 @@ public class DashboardActivity extends AppCompatActivity
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                        intent.putExtra("sales", username);
                         intent.putExtra("level", "1");
+                        intent.putExtra("ordernumber", "");
+                        intent.putExtra("sales", username);
+                        intent.putExtra("idparty", "");
+                        intent.putExtra("user_info", "");
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                        intent.putExtra("level", level_user);
+                        intent.putExtra("ordernumber", "");
+                        intent.putExtra("sales", "");
                         intent.putExtra("idparty", navdash_id.getText().toString());
                         intent.putExtra("user_info", username);
-                        intent.putExtra("level", level_user);
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
-                    intent.putExtra("sales", username);
                     intent.putExtra("level", level_user);
+                    intent.putExtra("ordernumber", "");
+                    intent.putExtra("sales", username);
+                    intent.putExtra("idparty", "");
+                    intent.putExtra("user_info", "");
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(getApplicationContext(), FormOrderHistoryActivity.class);
+                intent.putExtra("level", level_user);
+                intent.putExtra("ordernumber", "");
+                intent.putExtra("sales", "");
                 intent.putExtra("idparty", navdash_id.getText().toString());
                 intent.putExtra("user_info", username);
-                intent.putExtra("level", level_user);
                 startActivity(intent);
             }
         }
@@ -827,33 +960,39 @@ public class DashboardActivity extends AppCompatActivity
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
-                        intent.putExtra("sales", username);
                         intent.putExtra("level", "1");
+                        intent.putExtra("sales", username);
+                        intent.putExtra("user_info", "");
+                        intent.putExtra("username", "");
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                        intent.putExtra("level", level_user);
+                        intent.putExtra("sales", "");
                         intent.putExtra("user_info", navdash_id.getText().toString());
                         intent.putExtra("username", username);
-                        intent.putExtra("level", level_user);
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
-                    intent.putExtra("sales", username);
                     intent.putExtra("level", level_user);
+                    intent.putExtra("sales", username);
+                    intent.putExtra("user_info", "");
+                    intent.putExtra("username", "");
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(getApplicationContext(), FormOrderHistoryFrameActivity.class);
+                intent.putExtra("level", level_user);
+                intent.putExtra("sales", "");
                 intent.putExtra("user_info", navdash_id.getText().toString());
                 intent.putExtra("username", username);
-                intent.putExtra("level", level_user);
                 startActivity(intent);
             }
         }
@@ -884,12 +1023,15 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("sales", username);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", level_user);
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
                         intent.putExtra("idparty", navdash_id.getText().toString());
+                        intent.putExtra("leveluser", level_user);
                         startActivity(intent);
                     }
                 }
@@ -901,6 +1043,8 @@ public class DashboardActivity extends AppCompatActivity
                     intent.putExtra("sales", username);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", level_user);
                     startActivity(intent);
                 }
             }
@@ -908,6 +1052,7 @@ public class DashboardActivity extends AppCompatActivity
             {
                 Intent intent = new Intent(getApplicationContext(), FormTrackOrderActivity.class);
                 intent.putExtra("idparty", navdash_id.getText().toString());
+                intent.putExtra("leveluser", level_user);
                 startActivity(intent);
             }
 
@@ -927,6 +1072,8 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("sales", username);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", level_user);
                         startActivity(intent);
                     }
                     else
@@ -947,6 +1094,8 @@ public class DashboardActivity extends AppCompatActivity
                     intent.putExtra("sales", username);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", level_user);
                     startActivity(intent);
                 }
             }
@@ -971,6 +1120,9 @@ public class DashboardActivity extends AppCompatActivity
         else if (id == R.id.nav_orderOnHand)
         {
             Intent intent = new Intent(getApplicationContext(), OnHandActivity.class);
+            intent.putExtra("idparty", navdash_id.getText().toString());
+//            intent.putExtra("username", username);
+//            intent.putExtra("level", level_user);
             startActivity(intent);
         }
 
@@ -980,9 +1132,6 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("idparty", navdash_id.getText().toString());
             intent.putExtra("username", username);
             startActivity(intent);
-
-//                Intent intent = new Intent(getApplicationContext(), FormSpFrameActivity.class);
-//                startActivity(intent);
         }
 
         else if (id == R.id.nav_trackingSp)
@@ -992,6 +1141,7 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
                     intent.putExtra("username", username);
                     intent.putExtra("level", 1);
+                    intent.putExtra("spnumber", "");
 
                     startActivity(intent);
                 }
@@ -1000,6 +1150,7 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(getApplicationContext(), FormTrackingSpActivity.class);
                     intent.putExtra("username", navdash_username.getText().toString());
                     intent.putExtra("level", 0);
+                    intent.putExtra("spnumber", "");
 
                     startActivity(intent);
                 }
@@ -1020,33 +1171,39 @@ public class DashboardActivity extends AppCompatActivity
                     if (isHavingChild)
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                        intent.putExtra("sales", username);
                         intent.putExtra("level", "1");
+                        intent.putExtra("user_info", "");
+                        intent.putExtra("username", "");
+                        intent.putExtra("sales", username);
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                        intent.putExtra("level", level_user);
                         intent.putExtra("user_info", navdash_id.getText().toString());
                         intent.putExtra("username", username);
-                        intent.putExtra("level", level_user);
+                        intent.putExtra("sales", "");
                         startActivity(intent);
                     }
                 }
                 else
                 {
                     Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
-                    intent.putExtra("sales", username);
                     intent.putExtra("level", level_user);
+                    intent.putExtra("user_info", "");
+                    intent.putExtra("username", "");
+                    intent.putExtra("sales", username);
                     startActivity(intent);
                 }
             }
             else
             {
                 Intent intent = new Intent(getApplicationContext(), FormOrderHistoryPartaiActivity.class);
+                intent.putExtra("level", level_user);
                 intent.putExtra("user_info", navdash_id.getText().toString());
                 intent.putExtra("username", username);
-                intent.putExtra("level", level_user);
+                intent.putExtra("sales", "");
                 startActivity(intent);
             }
         }
@@ -1090,6 +1247,7 @@ public class DashboardActivity extends AppCompatActivity
                 Boolean b = !menu.findItem(R.id.nav_price1).isVisible();
                 menu.findItem(R.id.nav_price1).setVisible(b);
                 menu.findItem(R.id.nav_price2).setVisible(b);
+                menu.findItem(R.id.nav_price4).setVisible(b);
 //                menu.findItem(R.id.nav_price3).setVisible(b);
             }
             catch (Exception e)
@@ -1100,13 +1258,16 @@ public class DashboardActivity extends AppCompatActivity
             return true;
         }
         else if (id == R.id.nav_price1){
-            viewPdfFilter("link_leinz", "Price List Leinz");
+            viewPdfFilter("link_leinz", "Price List Leinz", "local");
         }
         else if (id == R.id.nav_price2){
-            viewPdfFilter("link_oriental", "Price List Oriental");
+            viewPdfFilter("link_oriental", "Price List Oriental", "local");
         }
         else if (id == R.id.nav_price3){
-            viewPdfFilter("link_nikon", "Price List Nikon");
+            viewPdfFilter("link_nikon", "Price List Nikon", "local");
+        }
+        else if (id == R.id.nav_price4){
+            viewPdfFilter("link_frame", "Price List Frame", "url");
         }
         else if (id == R.id.nav_lenses) {
             /*
@@ -1201,6 +1362,8 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("sales", username);
                         intent.putExtra("havingChild", isHavingChild);
                         intent.putExtra("customerId", customerId);
+                        intent.putExtra("ispaid", false);
+                        intent.putExtra("leveluser", level_user);
                         startActivity(intent);
                     }
                     else
@@ -1226,6 +1389,8 @@ public class DashboardActivity extends AppCompatActivity
                     intent.putExtra("sales", username);
                     intent.putExtra("havingChild", isHavingChild);
                     intent.putExtra("customerId", customerId);
+                    intent.putExtra("ispaid", false);
+                    intent.putExtra("leveluser", level_user);
                     startActivity(intent);
                 }
             }
@@ -1241,10 +1406,6 @@ public class DashboardActivity extends AppCompatActivity
                 else
                 {
                     getSicCode(username);
-//                    Intent intent = new Intent(getApplicationContext(), EstatementActivity.class);
-//                    intent.putExtra("username", username);
-//                    intent.putExtra("opticname", navdash_username.getText().toString());
-//                    startActivity(intent);
                 }
             }
 
@@ -1348,7 +1509,7 @@ public class DashboardActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.nav_guide1)
         {
-            viewPdfFilter("link_guide", "User Guide");
+            viewPdfFilter("link_guide", "User Guide", "local");
         }
 
         drawer.closeDrawers();
@@ -1439,8 +1600,8 @@ public class DashboardActivity extends AppCompatActivity
         dialog.setTopTitle("Message Dialog");
         dialog.setTopTitleColor(Color.WHITE);
         dialog.setTopColorRes(R.color.colorPrimary);
-        dialog.setPositiveButtonColorRes(R.color.bootstrap_brand_primary);
-        dialog.setNegativeButtonColorRes(R.color.bootstrap_brand_danger);
+        dialog.setPositiveButtonColorRes(R.color.colorPrimary);
+        dialog.setNegativeButtonColorRes(R.color.colorTeks);
 
         dialog.setPositiveButton("OK", new View.OnClickListener() {
             @Override
@@ -1472,7 +1633,7 @@ public class DashboardActivity extends AppCompatActivity
             data1   = bundle.getString("idparty");
             data2   = bundle.getString("level");
 
-            showBalance();
+//            showBalance();
 
             Log.d(DashboardActivity.class.getSimpleName(), "Username : " + data);
 
@@ -1486,7 +1647,7 @@ public class DashboardActivity extends AppCompatActivity
 
                 showCourier();
             }
-            else if (data2.equals("3"))
+            else if (data2.equals("3") || data2.equals("4"))
             {
                 ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) frameCategory.getLayoutParams();
                 lp.topMargin = -30;
@@ -1640,12 +1801,13 @@ public class DashboardActivity extends AppCompatActivity
                         member_flag = new String(mCrypt.decrypt(jsonObject.getString(memberFlag)));
 
                         getSaldoDepo(username);
+                        countUnreadNotification(username);
 
                         if (Integer.parseInt(level_user) == 0) {
                             hideMenu();
                             countData(navdash_username.getText().toString());
                         }
-                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3){
+                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3 || Integer.parseInt(level_user) == 4){
                             hideMenuKurir();
                         }
 
@@ -1716,7 +1878,7 @@ public class DashboardActivity extends AppCompatActivity
                             hideMenu();
                             countData(navdash_username.getText().toString());
                         }
-                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3){
+                        else if (Integer.parseInt(level_user) == 2 || Integer.parseInt(level_user) == 3 || Integer.parseInt(level_user) == 4){
                             hideMenuKurir();
                         }
 
@@ -2726,6 +2888,8 @@ public class DashboardActivity extends AppCompatActivity
                                                 intent.putExtra("sales", username);
                                                 intent.putExtra("havingChild", isHavingChild);
                                                 intent.putExtra("customerId", customerId);
+                                                intent.putExtra("ispaid", false);
+                                                intent.putExtra("leveluser", level_user);
                                                 startActivity(intent);
                                             }
                                             else
@@ -2741,6 +2905,26 @@ public class DashboardActivity extends AppCompatActivity
                                                 intent.putExtra("idSp", "0");
                                                 intent.putExtra("isSp", "0");
                                                 intent.putExtra("noHp", "0");
+                                                intent.putExtra("sales", username);
+
+                                                //Area Sp
+                                                intent.putExtra("header_nosp", "");
+                                                intent.putExtra("header_tipesp", "");
+                                                intent.putExtra("header_sales", "");
+                                                intent.putExtra("header_shipnumber", "");
+                                                intent.putExtra("header_custname", "");
+                                                intent.putExtra("header_address", "");
+                                                intent.putExtra("header_city", "");
+                                                intent.putExtra("header_ordervia", "");
+                                                intent.putExtra("header_dp", 0);
+                                                intent.putExtra("header_disc", "");
+                                                intent.putExtra("header_condition", "");
+                                                intent.putExtra("header_installment", "");
+                                                intent.putExtra("header_startinstallment", "");
+                                                intent.putExtra("header_shippingaddress", "");
+                                                intent.putExtra("header_status", "");
+                                                intent.putExtra("header_image", "");
+                                                intent.putExtra("header_signedpath", "");
                                                 startActivity(intent);
                                             }
                                         } else {
@@ -2749,6 +2933,9 @@ public class DashboardActivity extends AppCompatActivity
                                             intent.putExtra("sales", username);
                                             intent.putExtra("havingChild", isHavingChild);
                                             intent.putExtra("customerId", customerId);
+                                            intent.putExtra("ispaid", false);
+                                            intent.putExtra("leveluser", level_user);
+
                                             startActivity(intent);
 
                                             Log.d("Sales Name Dashboard : ", username);
@@ -2767,6 +2954,26 @@ public class DashboardActivity extends AppCompatActivity
                                         intent.putExtra("idSp", "0");
                                         intent.putExtra("isSp", "0");
                                         intent.putExtra("noHp", "0");
+                                        intent.putExtra("sales", username);
+
+                                        //Area Sp
+                                        intent.putExtra("header_nosp", "");
+                                        intent.putExtra("header_tipesp", "");
+                                        intent.putExtra("header_sales", "");
+                                        intent.putExtra("header_shipnumber", "");
+                                        intent.putExtra("header_custname", "");
+                                        intent.putExtra("header_address", "");
+                                        intent.putExtra("header_city", "");
+                                        intent.putExtra("header_ordervia", "");
+                                        intent.putExtra("header_dp", 0);
+                                        intent.putExtra("header_disc", "");
+                                        intent.putExtra("header_condition", "");
+                                        intent.putExtra("header_installment", "");
+                                        intent.putExtra("header_startinstallment", "");
+                                        intent.putExtra("header_shippingaddress", "");
+                                        intent.putExtra("header_status", "");
+                                        intent.putExtra("header_image", "");
+                                        intent.putExtra("header_signedpath", "");
                                         startActivity(intent);
                                     }
                                 }
@@ -3335,6 +3542,7 @@ public class DashboardActivity extends AppCompatActivity
         bundle.putString("activity", "dashboard");
         bundle.putString("partySiteId", data1);
         bundle.putString("username", data);
+        bundle.putString("level", level_user);
         courierFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_category, courierFragment);
@@ -3426,8 +3634,11 @@ public class DashboardActivity extends AppCompatActivity
         bundle.putString("activity", TAG);
         bundle.putString("access", "dashboard");
         newFrameFragment.setArguments(bundle);
+
+        Log.d(NewFrameFragment.class.getSimpleName(), "TAG Dashboard : " + TAG);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_fragment_container, newFrameFragment, "newframe");
+//        fragmentTransaction.replace(R.id.appbardashboard_fragment_container, newFrameFragment);
         fragmentTransaction.commit();
     }
 
@@ -3486,7 +3697,7 @@ public class DashboardActivity extends AppCompatActivity
         });
     } */
 
-    private void viewPdfFilter(final String title, final String header)
+    private void viewPdfFilter(final String title, final String header, final String source)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, view_pdf_filter, new Response.Listener<String>() {
             @Override
@@ -3499,6 +3710,7 @@ public class DashboardActivity extends AppCompatActivity
                     Intent intent = new Intent(DashboardActivity.this, FormPDFViewerActivity.class);
                     intent.putExtra("data", urlPdf);
                     intent.putExtra("title", header);
+                    intent.putExtra("source", source);
                     startActivity(intent);
 
                     //Toasty.info(getApplicationContext(), urlPdf, Toast.LENGTH_SHORT).show();
@@ -3668,11 +3880,31 @@ public class DashboardActivity extends AppCompatActivity
                         intent.putExtra("opticname", data);
                         intent.putExtra("province", province_user);
                         intent.putExtra("usernameInfo", username);
-                        intent.putExtra("province_address", province_address);
                         intent.putExtra("city", city);
+                        intent.putExtra("flag", member_flag);
+                        intent.putExtra("province_address", province_address);
+                        intent.putExtra("level", level_user);
                         intent.putExtra("idSp", "0");
                         intent.putExtra("isSp", 0);
-                        intent.putExtra("flag", member_flag);
+
+                        intent.putExtra("header_nosp", "");
+                        intent.putExtra("header_tipesp", "");
+                        intent.putExtra("header_sales", "");
+                        intent.putExtra("header_shipnumber", "");
+                        intent.putExtra("header_custname", "");
+                        intent.putExtra("header_address", "");
+                        intent.putExtra("header_city", "");
+                        intent.putExtra("header_ordervia", "");
+                        intent.putExtra("header_dp", 0);
+                        intent.putExtra("header_disc", "");
+                        intent.putExtra("header_condition", "");
+                        intent.putExtra("header_installment", "");
+                        intent.putExtra("header_startinstallment", "");
+                        intent.putExtra("header_shippingaddress", "");
+                        intent.putExtra("header_status", "");
+                        intent.putExtra("header_image", "");
+                        intent.putExtra("header_signedpath", "");
+
                         startActivity(intent);
                     }
                     else if (object.names().get(0).equals("error"))
@@ -3727,7 +3959,7 @@ public class DashboardActivity extends AppCompatActivity
                         LayoutInflater layoutInflater = getLayoutInflater();
                         View view = layoutInflater.inflate(R.layout.form_profile_address, null);
                         lovelyCustomDialog.setView(view);
-                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                         lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                         lovelyCustomDialog.setTopTitle("Update information address");
 
@@ -3829,6 +4061,8 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("sales", username);
                                 intent.putExtra("havingChild", isHavingChild);
                                 intent.putExtra("customerId", customerId);
+                                intent.putExtra("ispaid", false);
+                                intent.putExtra("leveluser", level_user);
                                 startActivity(intent);
                             }
                             else
@@ -3839,9 +4073,9 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("province", province_user);
                                 intent.putExtra("province_address", province_address);
                                 intent.putExtra("usernameInfo", username);
-                                intent.putExtra("level", level_user);
                                 intent.putExtra("city", city);
                                 intent.putExtra("flag", member_flag);
+                                intent.putExtra("level", level_user);
                                 startActivityForResult(intent, 2);
                             }
                         }
@@ -3852,6 +4086,8 @@ public class DashboardActivity extends AppCompatActivity
                             intent.putExtra("sales", username);
                             intent.putExtra("havingChild", isHavingChild);
                             intent.putExtra("customerId", customerId);
+                            intent.putExtra("ispaid", false);
+                            intent.putExtra("leveluser", level_user);
                             startActivity(intent);
                         }
                     }
@@ -3899,7 +4135,7 @@ public class DashboardActivity extends AppCompatActivity
                         LayoutInflater layoutInflater = getLayoutInflater();
                         View view = layoutInflater.inflate(R.layout.form_profile_address, null);
                         lovelyCustomDialog.setView(view);
-                        lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                        lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                         lovelyCustomDialog.setTopTitleColor(Color.WHITE);
                         lovelyCustomDialog.setTopTitle("Update information address");
 
@@ -4000,6 +4236,8 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("sales", username);
                                 intent.putExtra("havingChild", isHavingChild);
                                 intent.putExtra("customerId", customerId);
+                                intent.putExtra("ispaid", false);
+                                intent.putExtra("leveluser", level_user);
                                 startActivity(intent);
                             }
                             else
@@ -4010,12 +4248,30 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("opticname", data);
                                 intent.putExtra("province", province_user);
                                 intent.putExtra("usernameInfo", username);
+                                intent.putExtra("city", city);
+                                intent.putExtra("flag", member_flag);
                                 intent.putExtra("province_address", province_address);
                                 intent.putExtra("level", level_user);
-                                intent.putExtra("city", city);
                                 intent.putExtra("idSp", "0");
                                 intent.putExtra("isSp", 0);
-                                intent.putExtra("flag", member_flag);
+
+                                intent.putExtra("header_nosp", "");
+                                intent.putExtra("header_tipesp", "");
+                                intent.putExtra("header_sales", "");
+                                intent.putExtra("header_shipnumber", "");
+                                intent.putExtra("header_custname", "");
+                                intent.putExtra("header_address", "");
+                                intent.putExtra("header_city", "");
+                                intent.putExtra("header_ordervia", "");
+                                intent.putExtra("header_dp", 0);
+                                intent.putExtra("header_disc", "");
+                                intent.putExtra("header_condition", "");
+                                intent.putExtra("header_installment", "");
+                                intent.putExtra("header_startinstallment", "");
+                                intent.putExtra("header_shippingaddress", "");
+                                intent.putExtra("header_status", "");
+                                intent.putExtra("header_image", "");
+                                intent.putExtra("header_signedpath", "");
                                 startActivity(intent);
                             }
                         }
@@ -4026,6 +4282,8 @@ public class DashboardActivity extends AppCompatActivity
                             intent.putExtra("sales", username);
                             intent.putExtra("havingChild", isHavingChild);
                             intent.putExtra("customerId", customerId);
+                            intent.putExtra("ispaid", false);
+                            intent.putExtra("leveluser", level_user);
                             startActivity(intent);
                         }
                     }

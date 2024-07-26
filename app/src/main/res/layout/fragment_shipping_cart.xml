@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    tools:context=".Fragment.CartShippingFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_shippingcart_nestedscroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/fragment_shippingcart_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="@color/colorPrimary">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/fragment_shippingcart_btnMyAddress"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/background_button"
+                    android:text="Address List"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+                <View
+                    android:id="@+id/fragment_shippingcart_lineHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/background_horizontal_off"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_btnMyAddress" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/fragment_shippingcart_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputexpedition"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Select expedition"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_lineHeader"
+                    tools:ignore="HardcodedText">
+
+                    <jrizani.jrspinner.JRSpinner
+                        android:id="@+id/fragment_shippingcart_spinexpedition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:jrs_icon_tint="@color/colorPrimary"
+                        app:jrs_multiple="false"
+                        app:jrs_title="Choose"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:hint="Fullname"
+                    app:layout_constraintEnd_toStartOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputexpedition"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_shippingcart_txtname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputphone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Phone Number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputexpedition"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_shippingcart_txtphone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputprovince"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:hint="Select Province"
+                    app:layout_constraintEnd_toStartOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputphone"
+                    tools:ignore="HardcodedText">
+
+                    <jrizani.jrspinner.JRSpinner
+                        android:id="@+id/fragment_shippingcart_spinprovince"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:jrs_icon_tint="@color/colorPrimary"
+                        app:jrs_multiple="false"
+                        app:jrs_title="Choose"
+                        tools:ignore="HardcodedText" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputcity"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Select Regency"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputphone"
+                    tools:ignore="HardcodedText">
+
+                    <jrizani.jrspinner.JRSpinner
+                        android:id="@+id/fragment_shippingcart_spincity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:jrs_icon_tint="@color/colorPrimary"
+                        app:jrs_multiple="false"
+                        app:jrs_title="Choose"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputdistrict"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:hint="Select District"
+                    app:layout_constraintEnd_toStartOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputprovince"
+                    tools:ignore="HardcodedText">
+
+                    <jrizani.jrspinner.JRSpinner
+                        android:id="@+id/fragment_shippingcart_spindistrict1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:jrs_icon_tint="@color/colorPrimary"
+                        app:jrs_multiple="false"
+                        app:jrs_title="Choose"
+                        tools:ignore="HardcodedText" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputvillage1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Select Village"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/fragment_shippingcart_guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputprovince"
+                    tools:ignore="HardcodedText">
+
+                    <jrizani.jrspinner.JRSpinner
+                        android:id="@+id/fragment_shippingcart_spinvillage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:jrs_icon_tint="@color/colorPrimary"
+                        app:jrs_multiple="false"
+                        app:jrs_title="Choose"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_shippingcart_inputaddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="15dp"
+                    android:hint="Address"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_shippingcart_inputdistrict"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_shippingcart_txtaddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:inputType="textMultiLine" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Shipping Information"
+                    android:textColor="@color/colorContent"
+                    android:textSize="18sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_shippingcart_btnMyAddress"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_shippingcart_btnMyAddress"
+                    tools:ignore="HardcodedText" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.andexert.library.RippleView
+        android:id="@+id/fragment_shippingcart_rippleNext"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:background="@drawable/round_statement"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rv_rippleDuration="300"
+        app:rv_type="rectangle">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/fragment_shippingcart_txtNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Next"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+
+        </RelativeLayout>
+
+    </com.andexert.library.RippleView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,19 +10,28 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.SystemClock;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -34,14 +43,17 @@ import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.google.gson.JsonArray;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.sofudev.trackapptrl.Adapter.Adapter_detail_lensstock;
 import com.sofudev.trackapptrl.Adapter.Adapter_track_orderview;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
+import com.sofudev.trackapptrl.Data.Data_item_lensstock;
 import com.sofudev.trackapptrl.Data.Data_track_order;
 import com.sofudev.trackapptrl.Info.InfoOrderHistoryActivity;
 import com.sofudev.trackapptrl.R;
@@ -66,16 +78,21 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     Config config = new Config();
 
     private String CHECK_ORDER      = config.Ip_address + config.track_order_optic;
+    private String CHECK_ORDER_ST   = config.Ip_address + config.track_order_stock_optic;
     private String CHECK_CUSTNAME   = config.Ip_address + config.track_order_custname;
     private String CHECK_REFERENCE  = config.Ip_address + config.track_order_reference;
+    private String SEARCH_ORDER_ST  = config.Ip_address + config.track_order_stock_search;
     private String CHECK_BYDATE     = config.Ip_address + config.track_order_daterange;
+    private String CHECK_BYDATE_ST  = config.Ip_address + config.track_order_stock_daterange;
     private String GET_FRAME_BRAND  = config.Ip_address + config.track_order_getFrame;
     private String GET_FRAME_TYPE   = config.Ip_address + config.track_order_getType;
+    private String DETAIL_ITEM_ST   = config.Ip_address + config.track_order_itemstock;
 
     Button btn_filterdate;
     ImageButton btn_back, btn_search, btn_filter;
     BootstrapButton btn_prev, btn_next;
-    UniversalFontTextView txt_counter;
+    UniversalFontTextView txt_counter, txt_flag, txtTotalQty;
+    Switch sw_flag;
     MaterialEditText txt_customer, txt_startdate, txt_enddate;
     RippleView rp_search, rp_filterdate;
     CircleProgressBar progress;
@@ -86,19 +103,21 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     AdvancedTextView txt_frameBrand;
 
     RecyclerView recyclerView;
-    RecyclerView.LayoutManager recyclerLayoutManager;
+    RecyclerView.LayoutManager recyclerLayoutManager, recyclerLayoutManagerItem;
     RelativeLayout rl_track;
     ImageView img_track;
     //Adapter_track_order adapter_track_order;
     Adapter_track_orderview adapter_track_orderview;
+    Adapter_detail_lensstock adapter_detail_lensstock;
     List<Data_track_order> list = new ArrayList<>();
+    List<Data_item_lensstock> listLensstocks = new ArrayList<>();
 
     long lastClick = 0;
     Integer req_start = 0, total_row, total_item, total_filter, day, month, year;
-    String id_data, customer_name, start_date, end_date, frame_brand_dt, frame_type_dt;
+    String id_data, customer_name, start_date, end_date, frame_brand_dt, frame_type_dt, level_user;
 
     String order_number, order_lensname, order_sphr, order_cylr, order_addr, order_sphl, order_cyll, order_addl,
-            order_reference, order_tinting, order_facettrl, order_status, order_statusdate;
+            order_reference, order_tinting, order_facettrl, order_status, order_statusdate, flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +136,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         btn_prev        = (BootstrapButton) findViewById(R.id.form_trackorder_btnprev);
         btn_next        = (BootstrapButton) findViewById(R.id.form_trackorder_btnnext);
         txt_counter     = (UniversalFontTextView) findViewById(R.id.form_trackorder_txtCounter);
+        txt_flag        = (UniversalFontTextView) findViewById(R.id.form_trackorder_txtflag);
+        sw_flag         = (Switch) findViewById(R.id.form_trackorder_swflag);
 
         recyclerView = (RecyclerView) findViewById(R.id.form_trackorder_recycleview);
         recyclerView.setHasFixedSize(true);
@@ -185,13 +206,34 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         progress.setVisibility(View.GONE);
 
         searchTrack();
+        flag = "LENSA RX";
         showTrackOrder(id_data, req_start);
+//        showTrackOrderST(id_data, level_user, req_start);
         //scrollRecycler();
 
         btn_next.setEnabled(false);
         btn_prev.setEnabled(false);
         show_next();
         show_prev();
+
+        sw_flag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                {
+                    txt_flag.setText("LENSA RX");
+                    flag = "LENSA RX";
+                    showTrackOrder(id_data, req_start);
+                }
+                else
+                {
+                    txt_flag.setText("LENSA STOK");
+                    flag = "LENSA STOK";
+                    showTrackOrderST(id_data, level_user, req_start);
+                }
+            }
+        });
     }
 
     @Override
@@ -215,12 +257,31 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         final AdvancedTextView txt_lensName, txt_reference, txt_tinting, txt_orderStatus, txt_dateStatus;
         final BootstrapLabel btn_lblfacet;
         final RippleView ripple_btnDetail;
+        final LinearLayout linearPower, linearTint;
+        final RecyclerView rvItemStock;
+        final ConstraintLayout constraintItemStock;
 
         final Dialog dialog = new Dialog(FormTrackOrderActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.form_dialog_trackorder);
+        dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height= dm.heightPixels;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWidth = (int) (width * 0.98f);
+        int dialogHeight= (int) (flag.equals("LENSA RX") ? height * 0.85f : height * 0.8f);
+        layoutParams.width = dialogWidth;
+        layoutParams.height= dialogHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        recyclerLayoutManagerItem = new LinearLayoutManager(this);
+        adapter_detail_lensstock = new Adapter_detail_lensstock(this, listLensstocks);
 
         txt_jobNumber   = (UniversalFontTextView) dialog.findViewById(R.id.form_dialogtrack_txtjobnumber);
         txt_lensName    = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtlensname);
@@ -237,11 +298,20 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         txt_dateStatus  = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtdatestatus);
         txt_frameBrand  = (AdvancedTextView) dialog.findViewById(R.id.form_dialogtrack_txtframebrand);
         linear_frameBrand = (LinearLayout) dialog.findViewById(R.id.form_dialogtrack_linearframebrand);
+        linearPower     = (LinearLayout) dialog.findViewById(R.id.form_dialogtrack_linpower);
+        linearTint      = (LinearLayout) dialog.findViewById(R.id.form_dialogtrack_lintinting);
+        constraintItemStock = dialog.findViewById(R.id.form_dialogtrack_layoutitem);
+        rvItemStock     = dialog.findViewById(R.id.form_dialogtrack_rvItem);
+        txtTotalQty     = dialog.findViewById(R.id.form_dialogtrack_txtqtytotal);
+
+        rvItemStock.setHasFixedSize(true);
+        rvItemStock.setAdapter(adapter_detail_lensstock);
+        rvItemStock.setLayoutManager(recyclerLayoutManagerItem);
 
         ripple_btnDetail= (RippleView) dialog.findViewById(R.id.form_dialogtrack_rippleBtnDetail);
         Button btn_Detail      = (Button) dialog.findViewById(R.id.form_dialogtrack_btnDetail);
 
-        txt_jobNumber.setText("Job Number #" + order_number);
+        txt_jobNumber.setText(flag.equals("LENSA RX") ? "Job Number #" + order_number : "Invoice Number #" + order_number);
         txt_lensName.setText(order_lensname);
         txt_sphR.setText(order_sphr);
         txt_cylR.setText(order_cylr);
@@ -253,8 +323,22 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         linear_frameBrand.setVisibility(View.GONE);
 //        getFrameBrand(order_number);
 
-        txt_orderStatus.setText(order_status);
+        txt_orderStatus.setText(flag.equals("LENSA RX") ? order_status : convertStatus(order_status));
         txt_dateStatus.setText(order_statusdate);
+
+        if (flag.equals("LENSA RX"))
+        {
+            linearPower.setVisibility(View.VISIBLE);
+            linearTint.setVisibility(View.VISIBLE);
+            constraintItemStock.setVisibility(View.GONE);
+        }
+        else {
+            linearPower.setVisibility(View.GONE);
+            linearTint.setVisibility(View.GONE);
+            constraintItemStock.setVisibility(View.VISIBLE);
+
+            getItemLensStock(order_number);
+        }
 
         if (order_tinting != null | !order_tinting.isEmpty())
         {
@@ -298,6 +382,8 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 Intent intent = new Intent(FormTrackOrderActivity.this, InfoOrderHistoryActivity.class);
                 intent.putExtra("order_number", order_number);
                 intent.putExtra("is_sp", 0);
+                intent.putExtra("flag", flag);
+                intent.putExtra("level", level_user);
                 startActivity(intent);
             }
         });
@@ -312,6 +398,29 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loading.dismiss();
+    }
+
+    private String convertStatus(String input)
+    {
+        String output = "";
+        if (input.contains("CS"))
+        {
+            output = "CS";
+        }
+        else if (input.contains("WH"))
+        {
+            output = "WARE";
+        }
+        else if (input.contains("OPD"))
+        {
+            output = "SHIP";
+        }
+        else
+        {
+            output = "ADMIN";
+        }
+
+        return output;
     }
 
     private void getFrameBrand(final String jobNumber)
@@ -506,7 +615,15 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                             //Toast.makeText(getApplicationContext(), "Click", Toast.LENGTH_SHORT).show();
                             req_start = 0;
                             list.clear();
-                            showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+
+                            if (flag.equals("LENSA RX"))
+                            {
+                                showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                            }
+                            else
+                            {
+                                showTrackOrderSTByRange(req_start, id_data, level_user, start_date, end_date);
+                            }
                         }
                     }
                 });
@@ -554,7 +671,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTrackOrder(id_data, req_start);
+                if (flag.equals("LENSA RX"))
+                {
+                    showTrackOrder(id_data, req_start);
+                }
+                else
+                {
+                    showTrackOrderST(id_data, level_user, req_start);
+                }
 
                 dialog.dismiss();
             }
@@ -563,7 +687,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void informationTrackOrderByCustomer(String info, String message, int resource, final DefaultBootstrapBrand defaultcolorbtn)
+    private void informationTrackOrderByCustomer(String info, String message, final int resource, final DefaultBootstrapBrand defaultcolorbtn)
     {
         ImageView img_status;
         UniversalFontTextView txt_information, txt_message;
@@ -590,7 +714,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTrackOrderyByCustomer(id_data, req_start, txt_customer.getText().toString());
+                if (flag.equals("LENSA RX"))
+                {
+                    showTrackOrderyByCustomer(id_data, req_start, txt_customer.getText().toString());
+                }
+                else
+                {
+                    searchTrackOrderST(id_data, level_user, resource, txt_customer.getText().toString());
+                }
 
                 dialog.dismiss();
             }
@@ -626,7 +757,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                if (flag.equals("LENSA RX"))
+                {
+                    showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                }
+                else
+                {
+                    showTrackOrderSTByRange(req_start, id_data, level_user, start_date, end_date);
+                }
 
                 dialog.dismiss();
             }
@@ -793,6 +931,9 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         if (bundle != null)
         {
             id_data = bundle.getString("idparty");
+            level_user = bundle.getString("leveluser");
+
+            Log.d(FormTrackOrderActivity.class.getSimpleName(), "Level user : " + level_user);
         }
     }
 
@@ -819,13 +960,29 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 {
                     list.clear();
                     req_start = 0;
-                    showTrackOrder(id_data, req_start);
+
+                    if (flag.equals("LENSA RX"))
+                    {
+                        showTrackOrder(id_data, req_start);
+                    }
+                    else
+                    {
+                        showTrackOrderST(id_data, level_user, req_start);
+                    }
                 }
                 else
                 {
                     list.clear();
                     req_start = 0;
-                    showTrackOrderyByCustomer(id_data, req_start, customer_name);
+
+                    if (flag.equals("LENSA RX"))
+                    {
+                        showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                    }
+                    else
+                    {
+                        searchTrackOrderST(id_data, level_user, req_start, customer_name);
+                    }
                     //showTrackOrderyByReference(id_data, req_start, txt_customer.getText().toString());
                 }
             }
@@ -844,13 +1001,29 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                     {
                         list.clear();
                         req_start = 0;
-                        showTrackOrder(id_data, req_start);
+
+                        if (flag.equals("LENSA RX"))
+                        {
+                            showTrackOrder(id_data, req_start);
+                        }
+                        else
+                        {
+                            showTrackOrderST(id_data, level_user, req_start);
+                        }
                     }
                     else
                     {
                         list.clear();
                         req_start = 0;
-                        showTrackOrderyByCustomer(id_data, req_start, customer_name);
+
+                        if (flag.equals("LENSA RX"))
+                        {
+                            showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                        }
+                        else
+                        {
+                            searchTrackOrderST(id_data, level_user, req_start, customer_name);
+                        }
                         //showTrackOrderyByReference(id_data, req_start, txt_customer.getText().toString());
                     }
                 }
@@ -898,7 +1071,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                             btn_prev.setEnabled(false);
                         }
 
-                        showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                        if (flag.equals("LENSA RX"))
+                        {
+                            showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                        }
+                        else
+                        {
+                            showTrackOrderSTByRange(req_start, id_data, level_user, start_date, end_date);
+                        }
                     }
                     else
                     {
@@ -911,7 +1091,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                             btn_prev.setEnabled(false);
                         }
 
-                        showTrackOrder(id_data, req_start);
+                        if (flag.equals("LENSA RX"))
+                        {
+                            showTrackOrder(id_data, req_start);
+                        }
+                        else
+                        {
+                            showTrackOrderST(id_data, level_user, req_start);
+                        }
                     }
                 }
                 else
@@ -920,7 +1107,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
 
                     req_start = req_start - 8;
 
-                    showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                    if (flag.equals("LENSA RX"))
+                    {
+                        showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                    }
+                    else
+                    {
+                        searchTrackOrderST(id_data, level_user, req_start, customer_name);
+                    }
                     //showTrackOrderyByReference(id_data, req_start, txt_customer.getText().toString());
                 }
             }
@@ -949,7 +1143,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
 
                         if (req_start <= total_filter)
                         {
-                            showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                            if (flag.equals("LENSA RX"))
+                            {
+                                showTrackOrderyByDaterange(req_start, id_data, start_date, end_date);
+                            }
+                            else
+                            {
+                                showTrackOrderSTByRange(req_start, id_data, level_user, start_date, end_date);
+                            }
                         }
                         //Toast.makeText(getApplicationContext(), "Start date = " + start_date , Toast.LENGTH_SHORT).show();
                     }
@@ -961,7 +1162,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
 
                         if (req_start <= total_item)
                         {
-                            showTrackOrder(id_data, req_start);
+                            if(flag.equals("LENSA RX"))
+                            {
+                                showTrackOrder(id_data, req_start);
+                            }
+                            else
+                            {
+                                showTrackOrderST(id_data, level_user, req_start);
+                            }
                         }
                     }
                 }
@@ -971,7 +1179,14 @@ public class FormTrackOrderActivity extends AppCompatActivity {
 
                     req_start = req_start + 8;
 
-                    showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                    if (flag.equals("LENSA RX"))
+                    {
+                        showTrackOrderyByCustomer(id_data, req_start, customer_name);
+                    }
+                    else
+                    {
+                        searchTrackOrderST(id_data, level_user, req_start, customer_name);
+                    }
                     //showTrackOrderyByReference(id_data, req_start, txt_customer.getText().toString());
                 }
 
@@ -1045,6 +1260,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     {
         progress.setVisibility(View.VISIBLE);
         showLoading();
+        list.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_ORDER + String.valueOf(record), new Response.Listener<String>() {
             @Override
@@ -1224,10 +1440,196 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void showTrackOrderST(final String key, final String level, int record)
+    {
+        progress.setVisibility(View.VISIBLE);
+        showLoading();
+        list.clear();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_ORDER_ST + String.valueOf(record), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                loading.dismiss();
+                progress.setVisibility(View.GONE);
+                rl_track.removeView(img_track);
+                btn_next.setEnabled(true);
+                String data1 = "order_number";
+                String data2 = "order_entrydate";
+                String data3 = "order_custname";
+                String data4 = "order_reference";
+                String data5 = "order_tinting_descr";
+                String data6 = "order_status";
+                String data7 = "order_statusdt";
+                String data8 = "order_statustm";
+                String data9 = "order_lensname";
+                String data10= "total_row";
+                String data11= "invalid";
+
+                String data12= "order_sphr";
+                String data13= "order_cylr";
+                String data14= "order_addr";
+                String data15= "order_sphl";
+                String data16= "order_cyll";
+                String data17= "order_addl";
+
+                String data18= "order_facet";
+
+                int start, until;
+
+                try {
+                    String detail_data1 = MCrypt.bytesToHex(mCrypt.encrypt(data1));
+                    String detail_data2 = MCrypt.bytesToHex(mCrypt.encrypt(data2));
+                    String detail_data3 = MCrypt.bytesToHex(mCrypt.encrypt(data3));
+                    String detail_data4 = MCrypt.bytesToHex(mCrypt.encrypt(data4));
+                    String detail_data5 = MCrypt.bytesToHex(mCrypt.encrypt(data5));
+                    String detail_data6 = MCrypt.bytesToHex(mCrypt.encrypt(data6));
+                    String detail_data7 = MCrypt.bytesToHex(mCrypt.encrypt(data7));
+                    String detail_data8 = MCrypt.bytesToHex(mCrypt.encrypt(data8));
+                    String detail_data9 = MCrypt.bytesToHex(mCrypt.encrypt(data9));
+                    String detail_data10= MCrypt.bytesToHex(mCrypt.encrypt(data10));
+                    String detail_data11= MCrypt.bytesToHex(mCrypt.encrypt(data11));
+
+                    String detail_data12= MCrypt.bytesToHex(mCrypt.encrypt(data12));
+                    String detail_data13= MCrypt.bytesToHex(mCrypt.encrypt(data13));
+                    String detail_data14= MCrypt.bytesToHex(mCrypt.encrypt(data14));
+                    String detail_data15= MCrypt.bytesToHex(mCrypt.encrypt(data15));
+                    String detail_data16= MCrypt.bytesToHex(mCrypt.encrypt(data16));
+                    String detail_data17= MCrypt.bytesToHex(mCrypt.encrypt(data17));
+
+                    String detail_data18= MCrypt.bytesToHex(mCrypt.encrypt(data18));
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            if (jsonObject.names().get(0).equals(detail_data11))
+                            {
+                                showErrorImage();
+                                btn_next.setEnabled(false);
+                                btn_prev.setEnabled(false);
+                                String error = "0 record";
+                                txt_counter.setText(error);
+                                Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                            }
+                            else
+                            {
+                                String dt_jobnumber = new String(mCrypt.decrypt(jsonObject.getString(detail_data1)));
+                                String dt_entrydate = new String(mCrypt.decrypt(jsonObject.getString(detail_data2)));
+                                String dt_custname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data3)));
+                                String dt_reference = new String(mCrypt.decrypt(jsonObject.getString(detail_data4)));
+                                String dt_tinting   = new String(mCrypt.decrypt(jsonObject.getString(detail_data5)));
+                                String dt_status    = new String(mCrypt.decrypt(jsonObject.getString(detail_data6)));
+                                String dt_datestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data7)));
+                                String dt_timestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data8)));
+                                String dt_lensname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data9)));
+                                String dt_totalrow  = new String(mCrypt.decrypt(jsonObject.getString(detail_data10)));
+
+                                String dt_sphr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data12)));
+                                String dt_cylr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data13)));
+                                String dt_addr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data14)));
+                                String dt_sphl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data15)));
+                                String dt_cyll      = new String(mCrypt.decrypt(jsonObject.getString(detail_data16)));
+                                String dt_addl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data17)));
+
+                                String dt_facet     = new String(mCrypt.decrypt(jsonObject.getString(detail_data18)));
+
+                                total_item = Integer.parseInt(dt_totalrow);
+
+                                Data_track_order item = new Data_track_order();
+                                item.setOrder_number(dt_jobnumber);
+                                item.setOrder_entrydate(dt_entrydate);
+                                item.setOrder_custname(dt_custname);
+                                item.setOrder_reference(dt_reference);
+                                item.setOrder_tint_descr(dt_tinting);
+                                item.setOrder_status(dt_status);
+                                item.setOrder_statusdate(dt_datestatus);
+                                item.setOrder_statustime(dt_timestatus);
+                                item.setOrder_lenscode(dt_lensname);
+
+                                item.setOrder_sphr(dt_sphr);
+                                item.setOrder_cylr(dt_cylr);
+                                item.setOrder_addr(dt_addr);
+                                item.setOrder_sphl(dt_sphl);
+                                item.setOrder_cyll(dt_cyll);
+                                item.setOrder_addl(dt_addl);
+
+                                item.setOrder_facet(dt_facet);
+
+                                list.add(item);
+
+                                start = req_start + 1;
+                                until = jsonArray.length() + req_start;
+
+                                String counter = "show " + start + " - " + until + " from " + total_item + " orders";
+                                txt_counter.setText(counter);
+
+                                if (total_item.equals(until))
+                                {
+                                    btn_next.setEnabled(false);
+                                }
+                                else if (total_item == null)
+                                {
+                                    String error = "No record found";
+                                    txt_counter.setText(error);
+                                }
+
+                                if (start == 1)
+                                {
+                                    btn_prev.setEnabled(false);
+                                }
+                                else
+                                {
+                                    btn_prev.setEnabled(true);
+                                }
+
+                            }
+                        }
+
+                        //adapter_track_order.notifyDataSetChanged();
+                        adapter_track_orderview.notifyDataSetChanged();
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+
+                        Toasty.warning(getApplicationContext(), "No more data available", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
+//                informationTrackOrder("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
+                String notfound = "0 record";
+                txt_counter.setText(notfound);
+                progress.setVisibility(View.GONE);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_customer", key);
+                hashMap.put("level", level);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
     private void showTrackOrderyByCustomer(final String key, final int record, final String customer)
     {
         progress.setVisibility(View.VISIBLE);
         showLoading();
+        list.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_CUSTNAME + String.valueOf(record), new Response.Listener<String>() {
             @Override
@@ -1407,10 +1809,195 @@ public class FormTrackOrderActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
+    private void searchTrackOrderST(final String key, final String level, final int record, final String customer)
+    {
+        progress.setVisibility(View.VISIBLE);
+        showLoading();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEARCH_ORDER_ST + String.valueOf(record), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progress.setVisibility(View.GONE);
+                rl_track.removeView(img_track);
+                btn_next.setEnabled(true);
+                loading.dismiss();
+
+                String data1 = "order_number";
+                String data2 = "order_entrydate";
+                String data3 = "order_custname";
+                String data4 = "order_reference";
+                String data5 = "order_tinting_descr";
+                String data6 = "order_status";
+                String data7 = "order_statusdt";
+                String data8 = "order_statustm";
+                String data9 = "order_lensname";
+                String data10= "total_row";
+                String data11= "invalid";
+
+                String data12= "order_sphr";
+                String data13= "order_cylr";
+                String data14= "order_addr";
+                String data15= "order_sphl";
+                String data16= "order_cyll";
+                String data17= "order_addl";
+
+                String data18= "order_facet";
+
+                int start, until;
+
+                try {
+                    String detail_data1 = MCrypt.bytesToHex(mCrypt.encrypt(data1));
+                    String detail_data2 = MCrypt.bytesToHex(mCrypt.encrypt(data2));
+                    String detail_data3 = MCrypt.bytesToHex(mCrypt.encrypt(data3));
+                    String detail_data4 = MCrypt.bytesToHex(mCrypt.encrypt(data4));
+                    String detail_data5 = MCrypt.bytesToHex(mCrypt.encrypt(data5));
+                    String detail_data6 = MCrypt.bytesToHex(mCrypt.encrypt(data6));
+                    String detail_data7 = MCrypt.bytesToHex(mCrypt.encrypt(data7));
+                    String detail_data8 = MCrypt.bytesToHex(mCrypt.encrypt(data8));
+                    String detail_data9 = MCrypt.bytesToHex(mCrypt.encrypt(data9));
+                    String detail_data10= MCrypt.bytesToHex(mCrypt.encrypt(data10));
+                    String detail_data11= MCrypt.bytesToHex(mCrypt.encrypt(data11));
+
+                    String detail_data12= MCrypt.bytesToHex(mCrypt.encrypt(data12));
+                    String detail_data13= MCrypt.bytesToHex(mCrypt.encrypt(data13));
+                    String detail_data14= MCrypt.bytesToHex(mCrypt.encrypt(data14));
+                    String detail_data15= MCrypt.bytesToHex(mCrypt.encrypt(data15));
+                    String detail_data16= MCrypt.bytesToHex(mCrypt.encrypt(data16));
+                    String detail_data17= MCrypt.bytesToHex(mCrypt.encrypt(data17));
+
+                    String detail_data18= MCrypt.bytesToHex(mCrypt.encrypt(data18));
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            if (jsonObject.names().get(0).equals(detail_data11))
+                            {
+                                /*showErrorImage();
+                                btn_next.setEnabled(false);
+                                btn_prev.setEnabled(false);
+                                String error = "0 record";
+                                txt_counter.setText(error);
+                                Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();*/
+
+                                showTrackOrderyByReference(id_data, req_start, txt_customer.getText().toString());
+                            }
+                            else
+                            {
+                                String dt_jobnumber = new String(mCrypt.decrypt(jsonObject.getString(detail_data1)));
+                                String dt_entrydate = new String(mCrypt.decrypt(jsonObject.getString(detail_data2)));
+                                String dt_custname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data3)));
+                                String dt_reference = new String(mCrypt.decrypt(jsonObject.getString(detail_data4)));
+                                String dt_tinting   = new String(mCrypt.decrypt(jsonObject.getString(detail_data5)));
+                                String dt_status    = new String(mCrypt.decrypt(jsonObject.getString(detail_data6)));
+                                String dt_datestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data7)));
+                                String dt_timestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data8)));
+                                String dt_lensname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data9)));
+                                String dt_totalrow  = new String(mCrypt.decrypt(jsonObject.getString(detail_data10)));
+
+                                String dt_sphr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data12)));
+                                String dt_cylr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data13)));
+                                String dt_addr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data14)));
+                                String dt_sphl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data15)));
+                                String dt_cyll      = new String(mCrypt.decrypt(jsonObject.getString(detail_data16)));
+                                String dt_addl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data17)));
+
+                                String dt_facet     = new String(mCrypt.decrypt(jsonObject.getString(detail_data18)));
+
+                                total_row = Integer.parseInt(dt_totalrow);
+
+                                Data_track_order item = new Data_track_order();
+                                item.setOrder_number(dt_jobnumber);
+                                item.setOrder_entrydate(dt_entrydate);
+                                item.setOrder_custname(dt_custname);
+                                item.setOrder_reference(dt_reference);
+                                item.setOrder_tint_descr(dt_tinting);
+                                item.setOrder_status(dt_status);
+                                item.setOrder_statusdate(dt_datestatus);
+                                item.setOrder_statustime(dt_timestatus);
+                                item.setOrder_lenscode(dt_lensname);
+
+                                item.setOrder_sphr(dt_sphr);
+                                item.setOrder_cylr(dt_cylr);
+                                item.setOrder_addr(dt_addr);
+                                item.setOrder_sphl(dt_sphl);
+                                item.setOrder_cyll(dt_cyll);
+                                item.setOrder_addl(dt_addl);
+                                item.setOrder_facet(dt_facet);
+
+                                //Toasty.info(getApplicationContext(), dt_tinting, Toast.LENGTH_SHORT, true).show();
+
+                                list.add(item);
+
+                                start = req_start + 1;
+                                until = jsonArray.length() + req_start;
+
+                                String counter = "show " + start + " - " + until + " from " + total_row + " orders";
+                                txt_counter.setText(counter);
+
+                                if (total_row.equals(until))
+                                {
+                                    btn_next.setEnabled(false);
+                                }
+
+                                if (start == 1)
+                                {
+                                    btn_prev.setEnabled(false);
+                                }
+                                else
+                                {
+                                    btn_prev.setEnabled(true);
+                                }
+                            }
+                        }
+
+                        //adapter_track_order.notifyDataSetChanged();
+                        adapter_track_orderview.notifyDataSetChanged();
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+
+                        Toasty.warning(getApplicationContext(), "No more data available", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
+                //loading.hide();
+//                informationTrackOrderByCustomer("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
+
+                String notfound = "0 record";
+                txt_counter.setText(notfound);
+                progress.setVisibility(View.GONE);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_customer", key);
+                hashMap.put("key", customer);
+                hashMap.put("level", level);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
     private void showTrackOrderyByReference(final String key, int record, final String customer)
     {
         progress.setVisibility(View.VISIBLE);
         showLoading();
+        list.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_REFERENCE + String.valueOf(record), new Response.Listener<String>() {
             @Override
@@ -1592,6 +2179,7 @@ public class FormTrackOrderActivity extends AppCompatActivity {
     {
         progress.setVisibility(View.VISIBLE);
         showLoading();
+        list.clear();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_BYDATE + String.valueOf(record), new Response.Listener<String>() {
             @Override
@@ -1762,6 +2350,246 @@ public class FormTrackOrderActivity extends AppCompatActivity {
                 hashMap.put("id_customer", key);
                 hashMap.put("start_date", start_date);
                 hashMap.put("end_date", end_date);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showTrackOrderSTByRange(int record, final String key, final String level, final String start_date, final String end_date)
+    {
+        progress.setVisibility(View.VISIBLE);
+        showLoading();
+        list.clear();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, CHECK_BYDATE_ST + String.valueOf(record), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progress.setVisibility(View.GONE);
+                rl_track.removeView(img_track);
+                btn_next.setEnabled(true);
+                loading.dismiss();
+
+                String data1 = "order_number";
+                String data2 = "order_entrydate";
+                String data3 = "order_custname";
+                String data4 = "order_reference";
+                String data5 = "order_tinting_descr";
+                String data6 = "order_status";
+                String data7 = "order_statusdt";
+                String data8 = "order_statustm";
+                String data9 = "order_lensname";
+                String data10= "total_row";
+                String data11= "invalid";
+
+                String data12= "order_sphr";
+                String data13= "order_cylr";
+                String data14= "order_addr";
+                String data15= "order_sphl";
+                String data16= "order_cyll";
+                String data17= "order_addl";
+
+                String data18= "order_facet";
+
+                int start, until;
+
+                try {
+                    String detail_data1 = MCrypt.bytesToHex(mCrypt.encrypt(data1));
+                    String detail_data2 = MCrypt.bytesToHex(mCrypt.encrypt(data2));
+                    String detail_data3 = MCrypt.bytesToHex(mCrypt.encrypt(data3));
+                    String detail_data4 = MCrypt.bytesToHex(mCrypt.encrypt(data4));
+                    String detail_data5 = MCrypt.bytesToHex(mCrypt.encrypt(data5));
+                    String detail_data6 = MCrypt.bytesToHex(mCrypt.encrypt(data6));
+                    String detail_data7 = MCrypt.bytesToHex(mCrypt.encrypt(data7));
+                    String detail_data8 = MCrypt.bytesToHex(mCrypt.encrypt(data8));
+                    String detail_data9 = MCrypt.bytesToHex(mCrypt.encrypt(data9));
+                    String detail_data10= MCrypt.bytesToHex(mCrypt.encrypt(data10));
+                    String detail_data11= MCrypt.bytesToHex(mCrypt.encrypt(data11));
+
+                    String detail_data12= MCrypt.bytesToHex(mCrypt.encrypt(data12));
+                    String detail_data13= MCrypt.bytesToHex(mCrypt.encrypt(data13));
+                    String detail_data14= MCrypt.bytesToHex(mCrypt.encrypt(data14));
+                    String detail_data15= MCrypt.bytesToHex(mCrypt.encrypt(data15));
+                    String detail_data16= MCrypt.bytesToHex(mCrypt.encrypt(data16));
+                    String detail_data17= MCrypt.bytesToHex(mCrypt.encrypt(data17));
+
+                    String detail_data18= MCrypt.bytesToHex(mCrypt.encrypt(data18));
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            if (jsonObject.names().get(0).equals(detail_data11))
+                            {
+                                showErrorImage();
+                                btn_next.setEnabled(false);
+                                btn_prev.setEnabled(false);
+                                String error = "0 record";
+                                txt_counter.setText(error);
+                                Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                            }
+                            else
+                            {
+                                String dt_jobnumber = new String(mCrypt.decrypt(jsonObject.getString(detail_data1)));
+                                String dt_entrydate = new String(mCrypt.decrypt(jsonObject.getString(detail_data2)));
+                                String dt_custname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data3)));
+                                String dt_reference = new String(mCrypt.decrypt(jsonObject.getString(detail_data4)));
+                                String dt_tinting   = new String(mCrypt.decrypt(jsonObject.getString(detail_data5)));
+                                String dt_status    = new String(mCrypt.decrypt(jsonObject.getString(detail_data6)));
+                                String dt_datestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data7)));
+                                String dt_timestatus= new String(mCrypt.decrypt(jsonObject.getString(detail_data8)));
+                                String dt_lensname  = new String(mCrypt.decrypt(jsonObject.getString(detail_data9)));
+                                String dt_totalrow  = new String(mCrypt.decrypt(jsonObject.getString(detail_data10)));
+
+                                String dt_sphr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data12)));
+                                String dt_cylr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data13)));
+                                String dt_addr      = new String(mCrypt.decrypt(jsonObject.getString(detail_data14)));
+                                String dt_sphl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data15)));
+                                String dt_cyll      = new String(mCrypt.decrypt(jsonObject.getString(detail_data16)));
+                                String dt_addl      = new String(mCrypt.decrypt(jsonObject.getString(detail_data17)));
+
+                                String dt_facet     = new String(mCrypt.decrypt(jsonObject.getString(detail_data18)));
+
+                                total_filter = Integer.parseInt(dt_totalrow);
+
+                                Data_track_order item = new Data_track_order();
+                                item.setOrder_number(dt_jobnumber);
+                                item.setOrder_entrydate(dt_entrydate);
+                                item.setOrder_custname(dt_custname);
+                                item.setOrder_reference(dt_reference);
+                                item.setOrder_tint_descr(dt_tinting);
+                                item.setOrder_status(dt_status);
+                                item.setOrder_statusdate(dt_datestatus);
+                                item.setOrder_statustime(dt_timestatus);
+                                item.setOrder_lenscode(dt_lensname);
+
+                                item.setOrder_sphr(dt_sphr);
+                                item.setOrder_cylr(dt_cylr);
+                                item.setOrder_addr(dt_addr);
+                                item.setOrder_sphl(dt_sphl);
+                                item.setOrder_cyll(dt_cyll);
+                                item.setOrder_addl(dt_addl);
+
+                                item.setOrder_facet(dt_facet);
+
+                                list.add(item);
+
+                                start = req_start + 1;
+                                until = jsonArray.length() + req_start;
+
+                                String counter = "show " + start + " - " + until + " from " + total_filter + " orders";
+                                txt_counter.setText(counter);
+
+                                if (total_filter.equals(until))
+                                {
+                                    btn_next.setEnabled(false);
+                                }
+
+                                if (start == 1)
+                                {
+                                    btn_prev.setEnabled(false);
+                                }
+                                else
+                                {
+                                    btn_prev.setEnabled(true);
+                                }
+                            }
+                        }
+
+                        //adapter_track_order.notifyDataSetChanged();
+                        adapter_track_orderview.notifyDataSetChanged();
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+
+                        btn_next.setEnabled(false);
+                        Toasty.warning(getApplicationContext(), "No more data available", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_LONG, true).show();
+                //loading.hide();
+//                informationTrackOrderByDate("Error connection", "Can't connect to server, press ok to reconnect ",
+//                        R.drawable.failed_outline, DefaultBootstrapBrand.WARNING);
+                error.printStackTrace();
+                loading.dismiss();
+                String notfound = "0 record";
+                txt_counter.setText(notfound);
+                progress.setVisibility(View.GONE);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_customer", key);
+                hashMap.put("level", level);
+                hashMap.put("start_date", start_date);
+                hashMap.put("end_date", end_date);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+
+    private void getItemLensStock(final String invnumber)
+    {
+        listLensstocks.clear();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DETAIL_ITEM_ST, new Response.Listener<String>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(String response) {
+//                progress.setVisibility(View.GONE);
+//                rl_track.removeView(img_track);
+//                btn_next.setEnabled(true);
+//                loading.dismiss();
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        Data_item_lensstock item_lensstock = new Data_item_lensstock();
+                        item_lensstock.setLenscode(object.getString("order_itemcode"));
+                        item_lensstock.setLensname(object.getString("order_lensname"));
+                        item_lensstock.setLensuom(object.getString("order_itemuom"));
+                        item_lensstock.setQty(object.getInt("order_itemqty"));
+
+                        listLensstocks.add(item_lensstock);
+                        txtTotalQty.setText(object.getString("total_qty") + " " + object.getString("order_itemuom"));
+                    }
+
+                    adapter_detail_lensstock.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+//                loading.dismiss();
+//                String notfound = "0 record";
+//                txt_counter.setText(notfound);
+//                progress.setVisibility(View.GONE);
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_tracking", invnumber);
                 return hashMap;
             }
         };

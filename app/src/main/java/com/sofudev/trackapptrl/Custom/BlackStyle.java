@@ -26,7 +26,7 @@ public class BlackStyle implements BootstrapBrand {
         activeTextColor = context.getResources().getColor(android.R.color.black);
         disabledFill = context.getResources().getColor(R.color.custom_disabled_fill);
         disabledEdge = context.getResources().getColor(R.color.custom_disabled_edge);
-        disabledTextColor = context.getResources().getColor(R.color.bootstrap_gray);
+        disabledTextColor = context.getResources().getColor(R.color.gray);
     }
 
     @Override

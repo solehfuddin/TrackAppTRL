@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.DateFormat;
 import com.sofudev.trackapptrl.Custom.ForceCloseHandler;
 import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
+import com.sofudev.trackapptrl.DashboardActivity;
 import com.sofudev.trackapptrl.Data.Data_detail_sp;
 import com.sofudev.trackapptrl.Data.Data_track_order;
 import com.sofudev.trackapptrl.Info.InfoOrderHistoryActivity;
@@ -77,7 +79,7 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
     Calendar calendar;
 
     Button btn_filterdate, btn_detail, btnDownload;
-    RippleView btnBack, btnFilter, btnSearch, rp_filterdate, ripple_btnDetail, ripple_btndownload;
+    RippleView btnBack, btnFilter, btnSearch, rp_filterdate, ripple_btnDetail, ripple_btnview, ripple_btndownload;
     BootstrapButton btnPrev, btnNext;
     UniversalFontTextView txtCounter, lbl_duration;
     AdvancedTextView  txt_status, txt_statusnull, txt_datestatus, txt_duration, txt_invoice;
@@ -97,7 +99,7 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
 
     long lastClick = 0;
     int counter = 0, totalData, total_item, total_range, day, month, year, flagCon, level;
-    String sales, start_date, end_date, status, date_in, totalDurr;
+    String sales, start_date, end_date, status, date_in, totalDurr, spNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,17 +147,51 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         {
             sales  = bundle.getString("username");
             level  = bundle.getInt("level", 0);
+            spNumber = bundle.getString("spnumber");
 
             Log.d("NAMA SALES", sales);
 
             showLoading();
-            if (level == 1)
+
+            if (spNumber != null)
             {
-                getListSp(sales, "0");
+                txtSearch.setText(spNumber);
+                String key = String.valueOf(txtSearch.getText());
+//                showLoading();
+
+                if (key.length() > 0)
+                {
+                    if (level == 1)
+                    {
+                        getSearchSp(sales, key, String.valueOf(counter));
+                    }
+                    else
+                    {
+                        getSearchByOptic(sales, key, String.valueOf(counter));
+                    }
+                }
+                else
+                {
+                    if (level == 1)
+                    {
+                        getListSp(sales, String.valueOf(counter));
+                    }
+                    else
+                    {
+                        getListSpByOptic(sales, String.valueOf(counter));
+                    }
+                }
             }
             else
             {
-                getListSpByOptic(sales, "0");
+                if (level == 1)
+                {
+                    getListSp(sales, "0");
+                }
+                else
+                {
+                    getListSpByOptic(sales, "0");
+                }
             }
         }
     }
@@ -386,6 +422,7 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         btn_detail      = dialog.findViewById(R.id.form_dialogtracksp_btnDetail);
         ripple_btnDetail= dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDetail);
         ripple_btndownload = dialog.findViewById(R.id.form_dialogtracksp_rippleBtnDownload);
+        ripple_btnview = dialog.findViewById(R.id.form_dialogtracksp_rippleBtnView);
         btnDownload     = dialog.findViewById(R.id.form_dialogtracksp_btnDownload);
         final String noSp = listSp.get(pos).getNoSp();
         final String tipe = listSp.get(pos).getTipeSp();
@@ -405,9 +442,14 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
         txt_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/PrintReceipt/invdetail/"
-                        + txt_invoice.getText().toString()));
-                startActivity(openBrowser);
+//                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://180.250.96.154/trl-webs/index.php/PrintReceipt/einvoice/"
+//                        + txt_invoice.getText().toString()));
+//                startActivity(openBrowser);
+                Intent intent = new Intent(getApplicationContext(), FormPDFViewerActivity.class);
+                intent.putExtra("data", config.Ip_address + "index.php/PrintReceipt/einvoice/" + txt_invoice.getText().toString());
+                intent.putExtra("title", txt_invoice.getText().toString());
+                intent.putExtra("source", "url");
+                startActivity(intent);
             }
         });
 
@@ -419,9 +461,22 @@ public class FormTrackingSpActivity extends AppCompatActivity implements View.On
                 Intent intent = new Intent(FormTrackingSpActivity.this, InfoOrderHistoryActivity.class);
                 intent.putExtra("order_number", noSp);
                 intent.putExtra("is_sp", 1);
+                intent.putExtra("flag", "");
+                intent.putExtra("level", level);
                 startActivity(intent);
 
 //                dialog.dismiss();
+            }
+        });
+
+        ripple_btnview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FormPDFViewerActivity.class);
+                intent.putExtra("data", config.Ip_address + "index.php/PrintReceipt/spFrame/" + noSp);
+                intent.putExtra("title", noSp);
+                intent.putExtra("source", "url");
+                startActivity(intent);
             }
         });
 

@@ -33,10 +33,14 @@ public class Config {
     public String version_apps = "index.php/android_appsetting/getVersion";
     public String maintenance_mode = "index.php/android_appsetting/getMaintenanceMode";
     public String frame_price_mode = "index.php/android_appsetting/getPriceFrameMode";
+    public String frame_stock_mode = "index.php/Android_appsetting/getStockFrameMode";
+    public String shipping_mode    = "index.php/Android_appsetting/getShippingMode";
 
     /* Area Login */
     public String login_apps = "index.php/android_main/loginApps";
     public String login_update_isOnline = "index.php/android_main/updateInfoLogin";
+    public String login_update_fcmtoken = "index.php/android_main/updateToken";
+    public String login_update_fcmtokenbyCust = "index.php/android_main/updateTokenByCustname";
     public String get_sic_code = "index.php/android_main/getSicCode";
     public String set_sic_code = "index.php/android_main/setSicCode";
     public String verify_siccode = "index.php/android_main/verifySicCode";
@@ -87,11 +91,15 @@ public class Config {
 
     /* Area TrackOrder */
     public String track_order_optic     = "index.php/Android_checkorder/getOrderByOpticname/8/";
+    public String track_order_stock_optic       = "index.php/Android_checkorder/getOrderStockByOpticname/8/";
     public String track_order_custname  = "index.php/Android_checkorder/getOrderByCustname/8/";
     public String track_order_reference = "index.php/Android_checkorder/getOrderByReference/8/";
+    public String track_order_stock_search      = "index.php/Android_checkorder/searchOrderStockByOpticname/8/";
     public String track_order_daterange = "index.php/Android_checkorder/getOrderByRange/8/";
+    public String track_order_stock_daterange   = "index.php/Android_checkorder/getOrderStockByRange/8/";
     public String track_order_getFrame  = "index.php/Android_checkorder/getFrameBrand";
     public String track_order_getType   = "index.php/Android_checkorder/getFrameType";
+    public String track_order_itemstock = "index.php/Android_checkorder/getItemLensStock";
 
     /* Area Filter Optic Name*/
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
@@ -106,6 +114,7 @@ public class Config {
     public String info_order_history    = "index.php/Android_checkorder/getOrderHistoryByStatus";
     public String info_order_historypos = "index.php/Android_checkorder/getOrderHistoryByPos";
     public String info_order_historyjob = "index.php/Android_checkorder/getOrderHistoryByJob";
+    public String info_order_historyStock = "index.php/Android_checkorder/getOrderStockHistoryByInv";
 
     /* Area Order Lens*/
     /*public String orderlens_show_lenstypebyid     = "trl-webs/index.php/Android_lensorder/showlenstypeById";
@@ -155,8 +164,8 @@ public class Config {
     /* Area Frame */
     public String frame_bestproduct_showAllData   = "index.php/Android_frameproduct/apiFrameWithLimit";
     public String frame_filterby_group            = "index.php/Android_frameproduct/apiFrameWithGroup";
-    public String frame_filterby_category         = "index.php/Android_frameproduct/apiFrameWithCategory";
-    public String frame_filterby_keyword          = "index.php/Android_frameproduct/apiFrameWithSearch";
+//    public String frame_filterby_category         = "index.php/Android_frameproduct/apiFrameWithCategory";
+//    public String frame_filterby_keyword          = "index.php/Android_frameproduct/apiFrameWithSearch";
     public String frame_filterby_price            = "index.php/Android_frameproduct/apiFrameWithPrice";
     public String frame_filterwith_sort           = "index.php/Android_frameproduct/apiFrameWithFilter";
     public String frame_showcolor_filter          = "index.php/android_frameproduct/showColorList";
@@ -253,9 +262,9 @@ public class Config {
     public String payment_show_expiredDurationLOAN= "index.php/Android_payment/showPaymentSessionLOAN";
     public String payment_show_expiredDurationDeposit = "index.php/Android_payment/showPaymentSessionDeposit";
 //    public String payment_method_postBilling      = "http://timurrayalab.com/devapi/callPACPayment.php";
-    public String payment_method_postBilling      = "http://www.timurrayalab.com/webapi/callPACPayment.php";
+    public String payment_method_postBilling      = "https://www.timurrayalab.com/webapi/callPACPayment.php";
 //    public String payment_method_creditCard       = "http://ortu.izikita.net/soleh/testingccnew.php";
-    public String payment_method_creditCard       = "http://www.timurrayalab.com/webapi/testingccnew.php";
+    public String payment_method_creditCard       = "https://www.timurrayalab.com/webapi/testingccnew.php";
     public String payment_method_deposit          = "index.php/Android_payment/payWithDeposit";
     public String payment_method_autoMoveOrder    = "index.php/Android_payment/moveSuccessOrder1";
     public String payment_method_updateStatus     = "index.php/Android_payment/moveSuccessOrder1";
@@ -265,11 +274,11 @@ public class Config {
 //    public String payment_method_loanSaldo        = "http://ortu.izikita.net/soleh/loanSoleh1.php";
 //    public String payment_method_loanKonfirmasi   = "http://ortu.izikita.net/soleh/loanSoleh2.php";
 //    public String payment_method_loanOtp          = "http://ortu.izikita.net/soleh/loanSoleh3.php";
-    public String payment_method_loanSaldo        = "http://www.timurrayalab.com/webapi/loanSoleh1.php";
-    public String payment_method_loanKonfirmasi   = "http://www.timurrayalab.com/webapi/loanSoleh2.php";
-    public String payment_method_loanOtp          = "http://www.timurrayalab.com/webapi/loanSoleh3.php";
+    public String payment_method_loanSaldo        = "https://www.timurrayalab.com/webapi/loanSoleh1.php";
+    public String payment_method_loanKonfirmasi   = "https://www.timurrayalab.com/webapi/loanSoleh2.php";
+    public String payment_method_loanOtp          = "https://www.timurrayalab.com/webapi/loanSoleh3.php";
 //    public String payment_check_status            = "http://ortu.izikita.net/soleh/cek_inquiry.php";
-    public String payment_check_status            = "http://www.timurrayalab.com/webapi/cek_inquiry.php";
+    public String payment_check_status            = "https://www.timurrayalab.com/webapi/cek_inquiry.php";
     public String payment_update_loanbprks        = "index.php/Android_payment/updateSaldoLoan";
 //    public String payment_update_token            = "index.php/Android_payment/updateToken";
 
@@ -387,11 +396,16 @@ public class Config {
 
     /* AREA ON HAND */
     public String masteronhand_getitemname        = "index.php/Android_masteronhand/getItemname";
+    public String masteronhand_getitemframe       = "index.php/Android_masteronhand/getBrandFrame";
     public String masteronhand_getbyorgid         = "index.php/Android_masteronhand/getOnHandByOrgid";
     public String masteronhand_getbysorting       = "index.php/Android_masteronhand/getOnHandBySorting";
+    public String masteronhand_getbyframesorting  = "index.php/Android_masteronhand/getOnHandFrameBySorting";
+    public String masteronhand_getbyframebinsorting = "index.php/Android_masteronhand/getOnHandFrameBinBySorting";
     public String masteronhand_getbyqty           = "index.php/Android_masteronhand/getOnHandByQty";
     public String masteronhand_getsuggestion      = "index.php/Android_masteronhand/searchSuggestion";
     public String masteronhand_search             = "index.php/Android_masteronhand/searchOnHand";
+    public String masteronhand_searchFrame        = "index.php/Android_masteronhand/searchOnHandFrame";
+    public String masteronhand_searchFrameBin     = "index.php/Android_masteronhand/searchOnHandFrameBin";
     public String masteronhand_gettranslation     = "index.php/Android_masteronhand/getCategoryTranslasi";
     public String masteronhand_getbytranslation   = "index.php/Android_masteronhand/getOnHandByTranslasi";
 
@@ -406,6 +420,7 @@ public class Config {
     public String spframe_get_searchbarcodeflag   = "index.php/Android_apispframe/getFrameByBarcodeBin";
     public String spframe_get_byitemid            = "index.php/Android_apispframe/getFrameByItemId";
     public String spframe_get_byitemidflag        = "index.php/Android_apispframe/getFrameByItemIdBin";
+    public String spframe_get_qtybyitemflag       = "index.php/Android_apispframe/getQtyFrameByItem";
 
     /* AREA DEPOSIT */
     public String depo_getsaldo                   = "index.php/Android_deposit/getSaldo";
@@ -483,4 +498,21 @@ public class Config {
     /* AREA PRODUCT COMPARE */
     public String compare_getbyId                 = "index.php/Android_Compare/getCompareById";
     public String compare_getcategory             = "index.php/Android_Compare/getTitles";
+
+    /* AREA NOTIFICATION */
+    public String notification_getdata            = "index.php/Notification/showNotification";
+    public String notification_updateIsRead       = "index.php/Notification/updateNotifIsRead";
+    public String notification_countUnread        = "index.php/Notification/counterNotifUnseen";
+
+    /* AREA ASSIGN BIN */
+    public String assignbin_getheader             = "index.php/Android_assignbin/getDataHeader/5/";
+    public String assignbin_getline               = "index.php/Android_assignbin/getDataLine";
+    public String assignbin_updateline            = "index.php/Android_assignbin/updateDataLine";
+    public String assignbin_insertretur           = "index.php/Android_assignbin/insertReturBin";
+    public String assignbin_getdataretur          = "index.php/Android_assignbin/getDataRetur/5/";
+    public String assignbin_getlineretur          = "index.php/Android_assignbin/getLineRetur";
+
+    /* AREA SHIPPING */
+    public String shipping_getType                = "index.php/Android_shipping/getShippingType";
+    public String shipping_getProvince_tiki       = "index.php/Android_shipping/getProvinceTiki";
 }

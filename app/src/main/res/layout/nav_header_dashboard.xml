@@ -111,16 +111,31 @@
                     android:textSize="13sp"/>
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/navdash_btntopup"
-                android:layout_width="65dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Topup"
-                android:textAllCaps="false"
-                android:textSize="11sp"
-                android:background="@color/colorFirst" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/navdash_btntopup"
+                    android:layout_width="65dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Topup"
+                    android:textAllCaps="false"
+                    android:textSize="11sp"
+                    android:background="@color/colorFirst" />
+
+                <ImageView
+                    android:id="@+id/navdash_notifsettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_settings_grey"/>
+            </RelativeLayout>
         </LinearLayout>
 
         <View

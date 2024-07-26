@@ -35,6 +35,9 @@ public class DetailNewsActivity extends AppCompatActivity {
         fabPrev = findViewById(R.id.detail_news_fabPrev);
 
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowContentAccess(true);
+        webView.getSettings().setAllowFileAccess(true);
         webView.setWebViewClient(new WebViewClient());
 
         fabPrev.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +61,7 @@ public class DetailNewsActivity extends AppCompatActivity {
 
             txtTitle.setText(title);
             txtSubtitle.setText(subtitle);
-            webView.loadData(description, "text/html", "UTF-8");
+            webView.loadData(description, "text/html; charset=utf-8", "UTF-8");
 
             Picasso.with(getApplicationContext()).load(image).fit().into(imageView);
         }

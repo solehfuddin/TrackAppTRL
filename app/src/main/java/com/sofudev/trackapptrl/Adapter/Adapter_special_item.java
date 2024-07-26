@@ -113,6 +113,16 @@ public class Adapter_special_item extends RecyclerView.Adapter<RecyclerView.View
             txtBrandName.setText(item.getProduct_brand());
             txtDisc.setText(persen);
 
+            if (item.getProduct_discpercent().equals("0"))
+            {
+                txtDisc.setVisibility(View.GONE);
+            }
+            else
+            {
+                txtDisc.setVisibility(View.VISIBLE);
+                txtDisc.setText(persen);
+            }
+
             if (TAG.contains("main"))
             {
                 txtPrice.setVisibility(View.GONE);

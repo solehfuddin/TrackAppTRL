@@ -1,7 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 //apply plugin: 'org.fabiomsr.drawableoptimizer'
 
+//plugins {
+//    id("com.android.application")
+//}
+
 android {
+    namespace "com.sofudev.trackapptrl"
+
     packagingOptions {
         pickFirst 'META-INF/*'
         pickFirst 'META-INF/license.txt'
@@ -10,22 +17,30 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/MANIFEST.MF'
+//        exclude 'META-INF/MANIFEST.MF'
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
 //    compileSdkVersion 30
-    compileSdkVersion 31
-    buildToolsVersion "28.0.3"
+//    compileSdkVersion 31
+    compileSdkVersion = 34
+//    buildToolsVersion "28.0.3"
+    buildToolsVersion = "33.0.1"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
     defaultConfig {
         applicationId "com.sofudev.trackapptrl"
-//        minSdkVersion 21
-        minSdkVersion 17
-//        targetSdkVersion 30
-        targetSdkVersion 31
-//        versionCode 74
-//        versionName "2.2.1"
-        versionCode 75
-        versionName "2.2.2"
+//        minSdkVersion 17
+        minSdkVersion 21
+//        targetSdkVersion 33
+        targetSdkVersion 34
+//        versionCode 88
+//        versionName "2.3.5"
+        versionCode 89
+        versionName "2.3.6"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
@@ -83,10 +98,11 @@ android {
 
 dependencies {
 //    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.guava:guava:28.2-android'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+//    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
     //Design custom
     //compile 'com.android.support:appcompat-v7:25.4.0'
 
@@ -134,7 +150,11 @@ dependencies {
     // Pin edittext
 
     // Phone number edittext
-    compile('com.lamudi.phonefield:phone-field:0.1.3@aar') {
+//    compile('com.lamudi.phonefield:phone-field:0.1.3@aar') {
+//        transitive = true
+//    }
+
+    implementation('com.lamudi.phonefield:phone-field:0.1.3@aar') {
         transitive = true
     }
 
@@ -157,76 +177,133 @@ dependencies {
     //    compile 'com.google.firebase:firebase-core:9.2.0'
     //    compile 'com.google.firebase:firebase-messaging:11.4.0'
     def lottieVersion = "3.4.0"
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation 'com.github.wangchenyan:html-text:1.0'
 //    implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
-    compile 'com.github.angads25:filepicker:1.1.1'
-    compile 'com.hanks:passcodeview:0.1.2'
+//    compile 'com.github.angads25:filepicker:1.1.1'
+//    compile 'com.hanks:passcodeview:0.1.2'
+    implementation 'com.github.angads25:filepicker:1.1.1'
+    implementation 'com.hanks:passcodeview:0.1.2'
     annotationProcessor  'com.jakewharton:butterknife:7.0.1'
-    compile 'androidx.appcompat:appcompat:1.0.0'
-    compile 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-    compile 'androidx.legacy:legacy-support-v13:1.0.0'
-    compile 'androidx.constraintlayout:constraintlayout:1.1.3'
-    compile 'com.google.android.material:material:1.0.0'
-    compile 'androidx.cardview:cardview:1.0.0'
-    compile 'androidx.palette:palette:1.0.0'
-    compile 'androidx.recyclerview:recyclerview:1.0.0'
-    compile 'androidx.legacy:legacy-support-v4:1.0.0'
-    compile 'com.afollestad.material-dialogs:core:0.9.4.3'
+//    compile 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+//    compile 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+//    compile 'androidx.legacy:legacy-support-v13:1.0.0'
+//    compile 'androidx.constraintlayout:constraintlayout:1.1.3'
+//    compile 'com.google.android.material:material:1.0.0'
+//    compile 'androidx.cardview:cardview:1.0.0'
+//    compile 'androidx.palette:palette:1.0.0'
+//    compile 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+//    compile 'com.afollestad.material-dialogs:core:0.9.4.3'
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.3'
     //compile 'com.yarolegovich:lovely-dialog:1.0.7'
-    compile 'com.yarolegovich:lovely-dialog:1.1.1'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
-    compile 'com.beardedhen:androidbootstrap:2.3.2'
-    compile 'com.github.medyo:fancybuttons:1.8.4'
-    compile 'com.miguelcatalan:materialsearchview:1.4.0'
-    compile 'com.github.premnirmal:TextCounter:1.1.0'
-    compile 'com.raizlabs:UniversalFontComponents:1.0.1.1'
-    compile 'ayar.oktay.library:advancedtextview:0.5.0'
-    compile 'io.github.yavski:fab-speed-dial:1.0.6'
-    compile 'dev.dworks.libs:volleyplus:0.1.4'
-    compile 'cc.cloudist.acplibrary:library:1.2.1'
-    compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
-    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
-    compile 'com.github.GrenderG:Toasty:1.2.5'
-    compile 'com.kyleduo.switchbutton:library:1.4.6'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.2'
-    compile 'com.github.Mariovc:ImagePicker:1.2.2'
-    compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'com.patrickpissurno:ripple-effect:1.3.1'
-    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
-    compile 'me.omidh:liquidradiobutton:1.0.01'
+//    compile 'com.yarolegovich:lovely-dialog:1.1.1'
+//    compile 'com.nineoldandroids:library:2.4.0'
+//    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+//    compile 'com.beardedhen:androidbootstrap:2.3.2'
+//    compile 'com.github.medyo:fancybuttons:1.8.4'
+//    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+//    compile 'com.github.premnirmal:TextCounter:1.1.0'
+//    compile 'com.raizlabs:UniversalFontComponents:1.0.1.1'
+//    compile 'ayar.oktay.library:advancedtextview:0.5.0'
+//    compile 'io.github.yavski:fab-speed-dial:1.0.6'
+//    compile 'dev.dworks.libs:volleyplus:0.1.4'
+//    compile 'cc.cloudist.acplibrary:library:1.2.1'
+//    compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+//    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
+//    compile 'com.github.GrenderG:Toasty:1.2.5'
+//    compile 'com.kyleduo.switchbutton:library:1.4.6'
+//    compile 'com.squareup.picasso:picasso:2.5.2'
+//    compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.2'
+//    compile 'com.github.Mariovc:ImagePicker:1.2.2'
+//    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+//    compile 'com.patrickpissurno:ripple-effect:1.3.1'
+//    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+//    compile 'me.omidh:liquidradiobutton:1.0.01'
+    implementation 'com.yarolegovich:lovely-dialog:1.1.1'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+    implementation 'com.beardedhen:androidbootstrap:2.3.2'
+    implementation 'com.github.medyo:fancybuttons:1.8.4'
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    implementation 'com.github.premnirmal:TextCounter:1.1.0'
+    implementation 'com.raizlabs:UniversalFontComponents:1.0.1.1'
+    implementation 'ayar.oktay.library:advancedtextview:0.5.0'
+    implementation 'io.github.yavski:fab-speed-dial:1.0.6'
+    implementation 'dev.dworks.libs:volleyplus:0.1.4'
+    implementation 'cc.cloudist.acplibrary:library:1.2.1'
+    implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+    implementation 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
+    implementation 'com.github.GrenderG:Toasty:1.2.5'
+    implementation 'com.kyleduo.switchbutton:library:1.4.6'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.egistli.droid-image-picker:droid-image-picker:0.0.2'
+    implementation 'com.github.Mariovc:ImagePicker:1.2.2'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    implementation 'com.patrickpissurno:ripple-effect:1.3.1'
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation 'me.omidh:liquidradiobutton:1.0.01'
 //    compile 'com.github.vipulasri:timelineview:1.0.5'
     implementation 'com.github.vipulasri:timelineview:1.1.5'
-    compile 'com.weiwangcn.betterspinner:library:1.1.0'
-    compile 'com.ss.bannerslider:bannerslider:1.8.0'
-    compile 'com.jaredrummler:android-device-names:1.1.6'
-    compile 'com.zfdang.devicemodeltomarketingname:device-model-to-marketing-name:1.0.1'
-    compile 'com.github.GoodieBag:Pinview:v1.3'
-    compile 'com.justkiddingbaby:vercodeedittext:1.0.5'
-    compile 'org.jsoup:jsoup:1.8.3'
-    compile 'com.nshmura:recyclertablayout:1.0.0'
-    compile 'es.voghdev.pdfviewpager:library:1.0.2'
-    compile 'com.ssomai:android.scalablelayout:2.1.6'
-    compile 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
-    compile 'com.midtrans:corekit:1.18.0'
+//    compile 'com.weiwangcn.betterspinner:library:1.1.0'
+//    compile 'com.ss.bannerslider:bannerslider:1.8.0'
+//    compile 'com.jaredrummler:android-device-names:1.1.6'
+//    compile 'com.zfdang.devicemodeltomarketingname:device-model-to-marketing-name:1.0.1'
+//    compile 'com.github.GoodieBag:Pinview:v1.3'
+//    compile 'com.justkiddingbaby:vercodeedittext:1.0.5'
+//    compile 'org.jsoup:jsoup:1.8.3'
+//    compile 'com.nshmura:recyclertablayout:1.0.0'
+//    compile 'es.voghdev.pdfviewpager:library:1.0.2'
+//    compile 'com.ssomai:android.scalablelayout:2.1.6'
+//    compile 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+//    compile 'com.midtrans:corekit:1.18.0'
+    implementation 'com.weiwangcn.betterspinner:library:1.1.0'
+    implementation 'com.ss.bannerslider:bannerslider:1.8.0'
+    implementation 'com.jaredrummler:android-device-names:1.1.6'
+    implementation 'com.zfdang.devicemodeltomarketingname:device-model-to-marketing-name:1.0.1'
+    implementation 'com.github.GoodieBag:Pinview:v1.3'
+    implementation 'com.justkiddingbaby:vercodeedittext:1.0.5'
+    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'com.nshmura:recyclertablayout:1.0.0'
+    implementation 'es.voghdev.pdfviewpager:library:1.0.2'
+    implementation 'com.ssomai:android.scalablelayout:2.1.6'
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+    implementation 'com.midtrans:corekit:1.18.0'
     //compile 'com.midtrans:corekit:1.3.1'
-    compile 'com.liferay.portal:portal-kernel:5.2.3'
+    implementation 'com.liferay.portal:portal-kernel:5.2.3'
 //    compile 'androidx.multidex:multidex:2.0.0'
-    compile 'androidx.multidex:multidex:1.0.3'
-    compile 'com.github.varunest:sparkbutton:1.0.6'
-    compile 'com.pnikosis:materialish-progress:1.7'
-    compile 'com.github.viethoa:snackbar:1.0.0'
-    compile 'net.igenius:customcheckbox:1.3'
+//    compile 'androidx.multidex:multidex:1.0.3'
+//    compile 'com.github.varunest:sparkbutton:1.0.6'
+//    compile 'com.pnikosis:materialish-progress:1.7'
+//    compile 'com.github.viethoa:snackbar:1.0.0'
+//    compile 'net.igenius:customcheckbox:1.3'
+    implementation 'com.github.varunest:sparkbutton:1.0.6'
+    implementation 'com.pnikosis:materialish-progress:1.7'
+    implementation 'com.github.viethoa:snackbar:1.0.0'
+    implementation 'net.igenius:customcheckbox:1.3'
 //    compile 'com.google.android.gms:play-services-analytics:12.0.1'
 //    implementation 'com.google.firebase:firebase-core:17.0.0'
 //    implementation 'com.google.firebase:firebase-messaging:19.0.1'
     //noinspection GradleCompatible
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
-    compile 'com.google.firebase:firebase-core:11.8.0'
+//    compile 'com.google.firebase:firebase-messaging:11.8.0'
+//    compile 'com.google.firebase:firebase-core:11.8.0'
+//    compile 'com.google.firebase:firebase-core:16.0.0'
+//    compile 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+//    compile 'com.google.firebase:firebase-messaging:23.2.1'
+//    compile 'com.google.firebase:firebase-core:21.1.1'
 //    implementation 'com.google.android.gms:play-services-location:11.8.0'
 //    compile 'com.google.firebase:firebase-crash:12.0.1'
 //    compile 'com.google.firebase:firebase-auth:12.0.1'
@@ -236,24 +313,47 @@ dependencies {
 //    compile 'com.google.firebase:firebase-crash:9.2.0'
 //    compile 'com.google.firebase:firebase-auth:9.2.0'
 //    compile 'com.google.android.gms:play-services-auth:9.2.0'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    compile 'com.github.hsmnzaydn:imagezoom:1.2.1'
-    compile 'com.github.chrisbanes:PhotoView:2.0.0'
-    compile 'com.github.sadra:AwesomeSpinner:1.5.1'
-    compile 'com.github.iwgang:countdownview:2.1.6'
-    compile 'com.github.NileshJarad:ImagePicker:v1.0.10'
-    compile 'com.google.zxing:core:3.0.3'
-    compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
-    compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
-    compile 'com.github.psinetron:slycalendarview:0.0.9'
-    compile 'com.github.dueeeke:dk-tablayout:1.0.2'
-    compile 'com.github.sharish:ShimmerRecyclerView:v1.3'
-    compile 'com.github.gcacace:signature-pad:1.2.1'
-    compile 'com.github.javiersantos:BottomDialogs:1.2.1'
-    compile 'com.github.captain-miao:optroundcardview:1.0.0'
+//    compile 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+//    compile 'com.github.hsmnzaydn:imagezoom:1.2.1'
+    implementation 'com.github.hsmnzaydn:imagezoom:1.4.0'
+    implementation 'com.github.jrizani:JRSpinner:1.1.2'
+//    compile 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+//    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+//    compile 'com.github.sadra:AwesomeSpinner:1.5.1'
+//    compile 'com.github.iwgang:countdownview:2.1.6'
+//    compile 'com.github.NileshJarad:ImagePicker:v1.0.10'
+//    compile 'com.google.zxing:core:3.0.3'
+//    compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
+//    compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
+//    compile 'com.github.psinetron:slycalendarview:0.0.9'
+//    compile 'com.github.dueeeke:dk-tablayout:1.0.2'
+//    compile 'com.github.sharish:ShimmerRecyclerView:v1.3'
+//    compile 'com.github.gcacace:signature-pad:1.2.1'
+//    compile 'com.github.javiersantos:BottomDialogs:1.2.1'
+//    compile 'com.github.captain-miao:optroundcardview:1.0.0'
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.sadra:AwesomeSpinner:1.5.1'
+    implementation 'com.github.iwgang:countdownview:2.1.6'
+    implementation 'com.github.NileshJarad:ImagePicker:v1.0.10'
+    implementation 'com.google.zxing:core:3.0.3'
+    implementation 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
+    implementation 'com.journeyapps:zxing-android-integration:2.0.1@aar'
+    implementation 'com.github.psinetron:slycalendarview:0.0.9'
+    implementation 'com.github.dueeeke:dk-tablayout:1.0.2'
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
+    implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
+    implementation 'com.github.captain-miao:optroundcardview:1.0.0'
     implementation 'com.vipulasri:ticketview:1.1.2'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
-    testCompile 'junit:junit:4.12'
+//    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
- apply plugin: 'com.google.gms.google-services'
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+    }
+}

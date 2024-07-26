@@ -11,9 +11,9 @@
         <!--android:scaleType="centerCrop"/>-->
     <ozaydin.serkan.com.image_zoom_view.ImageViewZoom
         android:id="@+id/list_sliderproduct_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:adjustViewBounds="true"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitXY"
+        android:layout_gravity="center"/>
 </FrameLayout>

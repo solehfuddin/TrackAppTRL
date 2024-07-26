@@ -53,7 +53,7 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
     RelativeLayout rlInvNumber, rlPriceTotal, rlPurchaseOrder, rlInvDate, rlShipAmount, rlTotalAmount;
     UniversalFontTextView txtInvNumber, txtInvDate, txtTotalPrice, txtTotalAmount, txtPurchaseOrder,
             txtShipAmount, txtPaid, txtKeterangan, txtTitle;
-    RippleView rpBack, rpDownload;
+    RippleView rpBack, rpDownload, rpViewPdf;
     ShimmerRecyclerView shimmer;
     RecyclerView recyclerView;
 
@@ -81,6 +81,7 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
         txtPaid = findViewById(R.id.form_detaileinv_txtpaid);
         txtKeterangan = findViewById(R.id.form_detaileinv_txtketerangan);
         rpBack = findViewById(R.id.form_detaileinv_ripplebtnback);
+        rpViewPdf = findViewById(R.id.form_detaileinv_ripplebtnview);
         rpDownload = findViewById(R.id.form_detaileinv_ripplebtndownload);
         rlInvNumber = findViewById(R.id.form_detaileinv_progressinv);
         rlPriceTotal = findViewById(R.id.form_detaileinv_progresspricetotal);
@@ -130,6 +131,31 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        rpViewPdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String link;
+                String title;
+
+                if (isPaid){
+                    link = "index.php/PrintReceipt/einvoicelunas/" + invNumber;
+                    title = "Invoice Lunas #" + invNumber;
+                }
+                else
+                {
+                    link = "index.php/PrintReceipt/einvoice/" + invNumber;
+                    title = "Invoice #" + invNumber;
+                }
+
+                Intent intent = new Intent(getApplicationContext(), FormPDFViewerActivity.class);
+                intent.putExtra("data", config.Ip_address + link);
+                intent.putExtra("title", title);
+                intent.putExtra("source", "url");
+                startActivity(intent);
+            }
+        });
+
         rpDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,7 +179,7 @@ public class DetailEinvoiceActivity extends AppCompatActivity {
             invNumber = bundle.getString("INVNUMBER");
             isPaid = bundle.getBoolean("ispaid", false);
             Log.d(TAG, "USERNAME : " + invNumber);
-            Log.d(TAG, "USERNAME : " + invNumber);
+            Log.d(TAG, "ISPAID : " + isPaid);
 
             getDetailInv(invNumber);
         }

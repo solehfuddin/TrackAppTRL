@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract;
 import com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract;
 import com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract;
+import com.sofudev.trackapptrl.LocalDb.Contract.ReturFrameContract;
 import com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract;
 
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.PRODUCT_STOCK;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddCartContract.TABLE_ADDCART;
 import static com.sofudev.trackapptrl.LocalDb.Contract.AddFrameSpContract.TABLE_FRAMESP;
+import static com.sofudev.trackapptrl.LocalDb.Contract.ReturFrameContract.TABLE_RETURFRAME;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensPartaiContract.TABLE_LENSPARTAI;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.PRODUCT_ID;
 import static com.sofudev.trackapptrl.LocalDb.Contract.LensSatuanContract.PRODUCT_NAME;
@@ -29,8 +31,8 @@ import static com.sofudev.trackapptrl.LocalDb.Contract.WishlistContract.TABLE_WI
 public class DbTrlHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "dbtrl";
-    // Last DB Version = 6 (19-04-2023)
-    private static final int DATABASE_VERSION = 7;
+    // Last DB Version = 8 (19-12-2023)
+    private static final int DATABASE_VERSION = 8;
 
     private static final String CREATE_TBL_WISHLIST = String.format("CREATE TABLE %s"
                     + " (%s INTEGER PRIMARY KEY," +
@@ -133,6 +135,7 @@ public class DbTrlHelper extends SQLiteOpenHelper {
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
                     " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
                     " %s TEXT," +
                     " %s VARCHAR (50)," +
                     " %s VARCHAR (100))",
@@ -148,10 +151,47 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             AddFrameSpContract.PRODUCT_NEWPRICE,
             AddFrameSpContract.PRODUCT_NEWDISCPRICE,
             AddFrameSpContract.PRODUCT_STOCK,
+            AddFrameSpContract.PRODUCT_STOCK_TMP,
             AddFrameSpContract.PRODUCT_WEIGHT,
             AddFrameSpContract.PRODUCT_IMG,
             AddFrameSpContract.PRODUCT_FLAG,
             AddFrameSpContract.PRODUCT_COLLECT
+    );
+
+    private static final String CREATE_TBL_RETURFRAME = String.format("CREATE TABLE %s"
+                    + " (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    " %s INTEGER," +
+                    " %s VARCHAR (200)," +
+                    " %s VARCHAR (150)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s INTEGER (11)," +
+                    " %s TEXT," +
+                    " %s VARCHAR (50)," +
+                    " %s VARCHAR (100))",
+            TABLE_RETURFRAME,
+            ReturFrameContract._ID,
+            ReturFrameContract.PRODUCT_ID,
+            ReturFrameContract.PRODUCT_NAME,
+            ReturFrameContract.PRODUCT_CODE,
+            ReturFrameContract.PRODUCT_QTY,
+            ReturFrameContract.PRODUCT_PRICE,
+            ReturFrameContract.PRODUCT_DISCPRICE,
+            ReturFrameContract.PRODUCT_DISCOUNT,
+            ReturFrameContract.PRODUCT_NEWPRICE,
+            ReturFrameContract.PRODUCT_NEWDISCPRICE,
+            ReturFrameContract.PRODUCT_STOCK,
+            ReturFrameContract.PRODUCT_STOCK_TMP,
+            ReturFrameContract.PRODUCT_WEIGHT,
+            ReturFrameContract.PRODUCT_IMG,
+            ReturFrameContract.PRODUCT_FLAG,
+            ReturFrameContract.PRODUCT_COLLECT
     );
 
     private static final String CREATE_TBL_LENSSATUAN = String.format("CREATE TABLE %s"
@@ -191,6 +231,7 @@ public class DbTrlHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TBL_WISHLIST);
         sqLiteDatabase.execSQL(CREATE_TBL_ADDCART);
         sqLiteDatabase.execSQL(CREATE_TBL_FRAMESP);
+        sqLiteDatabase.execSQL(CREATE_TBL_RETURFRAME);
         sqLiteDatabase.execSQL(CREATE_TBL_LENSPARTAI);
         sqLiteDatabase.execSQL(CREATE_TBL_LENSSATUAN);
         sqLiteDatabase.execSQL(CREATE_TBL_RECENTSEARCH);
@@ -199,12 +240,13 @@ public class DbTrlHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        if (i < 4)
+        if (i < 9)
         {
             //Update sql version fix
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WISHLIST);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDCART);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FRAMESP);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RETURFRAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSPARTAI);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSSATUAN);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_SEARCH);
@@ -216,6 +258,7 @@ public class DbTrlHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_WISHLIST);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDCART);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FRAMESP);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RETURFRAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSPARTAI);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LENSSATUAN);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_SEARCH);

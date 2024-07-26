@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Form.ShippingInfoActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/shipping_info_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:contentInsetLeft="10dp"
+        app:contentInsetRight="10dp"
+        app:contentInsetStart="10dp">
+
+        <ImageView
+            android:id="@+id/shipping_info_btnback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:visibility="invisible"
+            android:padding="5dp">
+
+            <com.varunest.sparkbutton.SparkButton
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="right"
+                android:padding="0.5dp"
+                app:sparkbutton_activeImage="@drawable/ic_favorite_white"
+                app:sparkbutton_animationSpeed="1.5"
+                app:sparkbutton_iconSize="25dp"
+                app:sparkbutton_inActiveImage="@drawable/ic_favorite_border_white"
+                app:sparkbutton_primaryColor="@color/colorEnd"
+                app:sparkbutton_secondaryColor="@color/white" />
+        </FrameLayout>
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingTop="-1dp"
+            android:paddingBottom="1dp"
+            android:paddingRight="10dp"
+            android:text="SHOPPING CART"
+            android:gravity="center"
+            android:textColor="@color/neutral"
+            android:textSize="19sp"
+            app:customFont="MavenPro-Regular.ttf"
+            tools:ignore="HardcodedText" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--stepper layout start-->
+    <RelativeLayout
+        android:id="@+id/shipping_info_rlStepper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shipping_info_toolbar">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_container_step_1"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/background_circle_container">
+
+            <View
+                android:id="@+id/view_circle_current_step_1"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/background_circle_current" />
+
+            <View
+                android:id="@+id/view_circle_finish_step_1"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:alpha="0"
+                android:background="@drawable/background_circle_finish" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:id="@+id/view_horizontal_on_1"
+            android:background="@drawable/background_horizontal_on"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@+id/relative_layout_container_step_1"
+            android:layout_toEndOf="@+id/relative_layout_container_step_1"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_2"
+            android:layout_toStartOf="@+id/relative_layout_container_step_2" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:id="@+id/view_horizontal_off_1"
+            android:background="@drawable/background_horizontal_off"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@+id/relative_layout_container_step_1"
+            android:layout_toEndOf="@id/relative_layout_container_step_1"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_2"
+            android:layout_toStartOf="@+id/relative_layout_container_step_2"
+            />
+
+        <View
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="28dp"
+            android:background="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_2"
+            android:layout_toStartOf="@+id/relative_layout_container_step_2"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:background="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/view_horizontal_off_1"
+            android:layout_toEndOf="@+id/view_horizontal_off_1"
+            />
+
+        <RelativeLayout
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/relative_layout_container_step_2"
+            android:background="@drawable/background_circle_container"
+            android:layout_centerHorizontal="true">
+
+            <View
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:id="@+id/view_circle_current_step_2"
+                android:background="@drawable/background_circle_current"
+                android:layout_margin="10dp"
+                android:alpha="0"
+                />
+
+            <View
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:id="@+id/view_circle_finish_step_2"
+                android:background="@drawable/background_circle_finish"
+                android:alpha="0"
+                />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:id="@+id/view_horizontal_on_2"
+            android:background="@drawable/background_horizontal_on"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@+id/relative_layout_container_step_2"
+            android:layout_toEndOf="@+id/relative_layout_container_step_2"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_3"
+            android:layout_toStartOf="@+id/relative_layout_container_step_3"
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:id="@+id/view_horizontal_off_2"
+            android:background="@drawable/background_horizontal_off"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@id/relative_layout_container_step_2"
+            android:layout_toEndOf="@+id/relative_layout_container_step_2"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_3"
+            android:layout_toStartOf="@+id/relative_layout_container_step_3"
+            />
+
+        <View
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="28dp"
+            android:background="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/relative_layout_container_step_2"
+            android:layout_toEndOf="@+id/relative_layout_container_step_2"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:background="@android:color/white"
+            android:layout_toRightOf="@+id/view_horizontal_off_2"
+            android:layout_toEndOf="@+id/view_horizontal_off_2"
+            />
+
+        <RelativeLayout
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/relative_layout_container_step_3"
+            android:background="@drawable/background_circle_container"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            >
+
+            <View
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:id="@+id/view_circle_current_step_3"
+                android:background="@drawable/background_circle_current"
+                android:layout_margin="10dp"
+                android:alpha="0"
+                />
+
+            <View
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:id="@+id/view_circle_finish_step_3"
+                android:background="@drawable/background_circle_finish"
+                android:alpha="0"
+                />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="28dp"
+            android:background="@android:color/white"
+            android:layout_toLeftOf="@+id/relative_layout_container_step_3"
+            android:layout_toStartOf="@+id/relative_layout_container_step_3"
+            />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_view_stepper_layout"
+            android:text="Shipping"
+            app:customFont="MavenPro-Regular.ttf"
+            android:layout_below="@+id/relative_layout_container_step_1"
+            android:layout_marginTop="5dp" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Overview"
+            android:layout_centerHorizontal="true"
+            app:customFont="MavenPro-Regular.ttf"
+            android:layout_below="@+id/relative_layout_container_step_2"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            app:customFont="MavenPro-Regular.ttf"
+            android:layout_below="@+id/relative_layout_container_step_3"
+            android:layout_marginTop="5dp"
+            tools:ignore="MissingPrefix" />
+        <!--stepper layout end-->
+    </RelativeLayout>
+
+    <!--fragment-->
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shipping_info_rlStepper" />
+</androidx.constraintlayout.widget.ConstraintLayout>

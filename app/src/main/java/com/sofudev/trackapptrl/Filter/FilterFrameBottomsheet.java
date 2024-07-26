@@ -274,17 +274,17 @@ public class FilterFrameBottomsheet extends BottomSheetDialog implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.dialog_filter_btnApply:
-//                valueMin = removeRupiah(txtRangeMin.getText().toString());
-                valueMax = removeRupiah(txtRangeMax.getText().toString());
-
-                Object[] allBrand = listBrand.toArray();
-                Object[] allColor = listColor.toArray();
-
-
-                hide();
-                break;
-        }
+//        switch (v.getId()){
+//            case R.id.dialog_filter_btnApply:
+////                valueMin = removeRupiah(txtRangeMin.getText().toString());
+//                valueMax = removeRupiah(txtRangeMax.getText().toString());
+//
+//                Object[] allBrand = listBrand.toArray();
+//                Object[] allColor = listColor.toArray();
+//
+//
+//                hide();
+//                break;
+//        }
     }
 }

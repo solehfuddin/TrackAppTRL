@@ -48,7 +48,8 @@
                             android:id="@+id/main_btn_wishlist"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:layout_margin="10.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:layout_marginEnd="10.5dp"
                             android:src="@drawable/ic_favorite_white"/>
                     </RelativeLayout>
 
@@ -57,11 +58,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@id/relative_layout_item_count"
-                        android:background="@android:drawable/ic_notification_overlay"
+                        android:src="@android:drawable/ic_notification_overlay"
                         android:text=" 0 "
                         android:textColor="#FFF"
                         android:textSize="12sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -77,7 +79,8 @@
                             android:id="@+id/main_btn_addcart"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:layout_margin="10.5dp"
+                            android:layout_marginTop="10.5dp"
+                            android:layout_marginEnd="10.5dp"
                             android:src="@drawable/ic_cart_white"/>
                     </RelativeLayout>
 
@@ -86,11 +89,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@id/relative_layout_item_count1"
-                        android:background="@android:drawable/ic_notification_overlay"
+                        android:src="@android:drawable/ic_notification_overlay"
                         android:text=" 0 "
                         android:textColor="#FFF"
                         android:textSize="12sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/relative_layout_item_count2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/main_btn_search"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginTop="10.5dp"
+                            android:layout_marginEnd="10.5dp"
+                            android:src="@drawable/ic_search"/>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/main_badge_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/relative_layout_item_count2"
+                        android:src="@android:drawable/ic_notification_overlay"
+                        android:text=" 0 "
+                        android:textColor="#FFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </RelativeLayout>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -98,7 +133,9 @@
         <com.miguelcatalan.materialsearchview.MaterialSearchView
             android:id="@+id/main_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingRight="40dp"
+            android:visibility="gone"/>
 
     </FrameLayout>
 
@@ -194,6 +231,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbarmain_promo_frame" />
 
+
+            <FrameLayout
+                android:id="@+id/appbarmain_other_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appbarmain_special_product" />
+
             <FrameLayout
                 android:id="@+id/appbarmain_another_product"
                 android:layout_width="match_parent"
@@ -202,7 +250,7 @@
                 android:layout_marginBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbarmain_special_product" />
+                app:layout_constraintTop_toBottomOf="@+id/appbarmain_other_frame" />
 
             <include
                 android:id="@+id/appbarmain_iklan2"
@@ -215,16 +263,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appbarmain_another_product"/>
 
-            <FrameLayout
-                android:id="@+id/appbarmain_other_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbarmain_iklan2" />
-
             <include
                 android:id="@+id/appbarmain_see_more"
                 android:layout_width="match_parent"
@@ -232,7 +270,7 @@
                 layout="@layout/see_more_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbarmain_other_frame"/>
+                app:layout_constraintTop_toBottomOf="@+id/appbarmain_iklan2"/>
 
             <FrameLayout
                 android:id="@+id/appbarmain_promo_banner"

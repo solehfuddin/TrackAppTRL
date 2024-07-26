@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.sofudev.trackapptrl.Adapter.Adapter_more_frame;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
@@ -47,6 +49,8 @@ public class MoreFrameFragment extends Fragment {
     Config config  = new Config();
     String MOREFRAME_URL = config.Ip_address + config.dashboard_more_frame;
 
+    UniversalFontTextView txtTitle, txtTagId, txtMore;
+    ImageView imgNotFound;
     RecyclerView recyclerView;
     ShimmerRecyclerView shimmerRecyclerView;
 
@@ -81,13 +85,35 @@ public class MoreFrameFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_more_frame, container, false);
 
+        txtTitle = view.findViewById(R.id.fragment_moreframe_txtTitle);
+        txtTagId = view.findViewById(R.id.fragment_moreframe_txtIdTag);
+        txtMore  = view.findViewById(R.id.fragment_moreframe_txtMore);
         shimmerRecyclerView = view.findViewById(R.id.fragment_moreframe_shimmer);
         recyclerView = view.findViewById(R.id.fragment_moreframe_recyclerview);
+        imgNotFound  = view.findViewById(R.id.fragment_moreframe_imgnotfound);
 
         shimmerRecyclerView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        txtMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ACCESS_FROM.equals("main"))
+                {
+                    Toasty.warning(myContext, "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                    intent.putExtra("activity", ACTIVITY_TAG);
+                    intent.putExtra("tag_name", txtTitle.getText());
+                    intent.putExtra("tag_id", txtTagId.getText());
+                    startActivity(intent);
+                }
+            }
+        });
 
         adapter_more_frame = new Adapter_more_frame(getContext(), itemProduct, new RecyclerViewOnClickListener() {
             @Override
@@ -104,6 +130,9 @@ public class MoreFrameFragment extends Fragment {
                     {
 //                        Toasty.info(myContext, "Buka menu frame", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), FrameProductActivity.class);
+                        intent.putExtra("activity", ACTIVITY_TAG);
+                        intent.putExtra("tag_name", "ALL FRAME");
+                        intent.putExtra("tag_id", "");
                         startActivity(intent);
                     }
                     else
@@ -167,30 +196,42 @@ public class MoreFrameFragment extends Fragment {
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                        String frameId      = jsonObject.getString("frame_id");
-                        String frameName    = jsonObject.getString("frame_name");
-                        String frameImage   = jsonObject.getString("frame_image");
-                        String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
-                        String frameDisc    = jsonObject.getString("frame_disc");
-                        String frameBrand   = jsonObject.getString("frame_brand");
-                        String frameQty     = jsonObject.getString("frame_qty");
-                        String frameWeight  = jsonObject.getString("frame_weight");
+                        if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            imgNotFound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            shimmerRecyclerView.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            String frameId      = jsonObject.getString("frame_id");
+                            String frameName    = jsonObject.getString("frame_name");
+                            String frameImage   = jsonObject.getString("frame_image");
+                            String framePrice   = CurencyFormat(jsonObject.getString("frame_price"));
+                            String frameDisc    = jsonObject.getString("frame_disc");
+                            String frameBrand   = jsonObject.getString("frame_brand");
+                            String frameQty     = jsonObject.getString("frame_qty");
+                            String frameWeight  = jsonObject.getString("frame_weight");
 
-                        Data_fragment_bestproduct item = new Data_fragment_bestproduct();
-                        item.setProduct_id(frameId);
-                        item.setProduct_name(frameName);
-                        item.setProduct_image(frameImage);
-                        item.setProduct_realprice("Rp " + framePrice);
-                        item.setProduct_discpercent(frameDisc);
-                        item.setProduct_brand(frameBrand);
-                        item.setProduct_qty(frameQty);
-                        item.setProduct_weight(frameWeight);
+                            Data_fragment_bestproduct item = new Data_fragment_bestproduct();
+                            item.setProduct_id(frameId);
+                            item.setProduct_name(frameName);
+                            item.setProduct_image(frameImage);
+                            item.setProduct_realprice("Rp " + framePrice);
+                            item.setProduct_discpercent(frameDisc);
+                            item.setProduct_brand(frameBrand);
+                            item.setProduct_qty(frameQty);
+                            item.setProduct_weight(frameWeight);
 
-                        itemProduct.add(item);
+                            itemProduct.add(item);
+
+                            txtTitle.setText(jsonObject.getString("frame_tag").toUpperCase());
+                            txtTagId.setText(jsonObject.getString("frame_tagid"));
+                            imgNotFound.setVisibility(View.GONE);
+                            shimmerRecyclerView.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     }
-
-                    shimmerRecyclerView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
                     adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

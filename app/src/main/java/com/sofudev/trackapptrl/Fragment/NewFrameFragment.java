@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,6 +47,7 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import com.sofudev.trackapptrl.Adapter.Adapter_brandfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_colorfilter;
 import com.sofudev.trackapptrl.Adapter.Adapter_framefragment_bestproduct;
+import com.sofudev.trackapptrl.Adapter.Adapter_more_frame;
 import com.sofudev.trackapptrl.Adapter.Adapter_sortbyframe;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.BlackStyle;
@@ -78,7 +81,6 @@ import es.dmoral.toasty.Toasty;
 import viethoa.com.snackbar.BottomSnackBarMessage;
 
 public class NewFrameFragment extends Fragment implements View.OnClickListener {
-
     Config config = new Config();
     Context myContext;
 
@@ -89,6 +91,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     String showColorUrl = config.Ip_address + config.frame_showcolor_filter;
     String showBrandUrl = config.Ip_address + config.frame_showbrand_filter;
     String GETACTIVESALE_URL = config.Ip_address + config.flashsale_getActiveSale;
+    private String FRAMEPRICEURL = config.Ip_address + config.frame_price_mode;
 
     RecyclerView recyclerView,recyclerColor, recyclerBrand;
     private EditText txtRangeMax;
@@ -103,6 +106,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     ImageView imgTop;
 
     View view;
+    Adapter_more_frame adapter_more_frame;
     Adapter_framefragment_bestproduct adapter_framefragment_bestproduct;
     Adapter_colorfilter adapter_colorfilter;
     Adapter_brandfilter adapter_brandfilter;
@@ -116,11 +120,17 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
 
     int pos = 0;
     int posSw = 0;
-    String ACTIVITY_TAG, ACCESS_FROM;
+    String ACTIVITY_TAG, ACCESS_FROM, TAG_ID, TAG_NAME;
 
     List<String> listSortBy = new ArrayList<>();
     List<String> listBrand = new ArrayList<>();
     List<String> listColor = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getData();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -145,6 +155,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         cardTop = view.findViewById(R.id.fragment_newframe_cartTop);
         imgTop  = view.findViewById(R.id.fragment_newframe_buttonTop);
 
+//        getFrameMode();
+
         btnFilter.setBootstrapBrand(new BlackStyle(myContext));
         btnSort.setBootstrapBrand(new BlackStyle(myContext));
 
@@ -157,13 +169,31 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         progress = view.findViewById(R.id.fragment_newframe_progressBar);
-        getData();
 
-        adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
+//        adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
+//                new RecyclerViewOnClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int pos, String id) {
+////                        if (ACTIVITY_TAG.equals("main"))
+//                        if (ACCESS_FROM.equals("main"))
+//                        {
+//                            Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+//                            Intent intent = new Intent(getContext(), DetailProductActivity.class);
+//                            intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
+//                            startActivity(intent);
+//                        }
+//                    }
+//                }, ACTIVITY_TAG);
+
+//        recyclerView.setAdapter(adapter_framefragment_bestproduct);
+
+        adapter_more_frame = new Adapter_more_frame(getContext(), itemBestProduct,
                 new RecyclerViewOnClickListener() {
                     @Override
                     public void onItemClick(View view, int pos, String id) {
-//                        if (ACTIVITY_TAG.equals("main"))
                         if (ACCESS_FROM.equals("main"))
                         {
                             Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
@@ -177,7 +207,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                     }
                 }, ACTIVITY_TAG);
 
-        recyclerView.setAdapter(adapter_framefragment_bestproduct);
+        recyclerView.setAdapter(adapter_more_frame);
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         itemBestProduct.clear();
@@ -203,6 +233,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 if (dy > 0)
                 {
                     cardTop.setVisibility(View.VISIBLE);
+                    Log.d(NewFrameFragment.class.getSimpleName(), "Pos case : " + pos);
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN))
                     {
                         switch (pos){
@@ -266,6 +297,44 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         {
             ACTIVITY_TAG = bundle.getString("activity");
             ACCESS_FROM  = bundle.getString("access");
+            TAG_ID       = bundle.getString("tag_id");
+            TAG_NAME     = bundle.getString("tag_name");
+
+            Log.d(NewFrameFragment.class.getSimpleName(), "TAG New Fragment : " + ACTIVITY_TAG);
+
+//            adapter_framefragment_bestproduct = new Adapter_framefragment_bestproduct(getContext(), itemBestProduct,
+//                    new RecyclerViewOnClickListener() {
+//                        @Override
+//                        public void onItemClick(View view, int pos, String id) {
+////                        if (ACTIVITY_TAG.equals("main"))
+//                            if (ACCESS_FROM.equals("main"))
+//                            {
+//                                Toasty.warning(view.getContext(), "Silahkan login terlebih dahulu", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else
+//                            {
+//                                Intent intent = new Intent(getContext(), DetailProductActivity.class);
+//                                intent.putExtra("id", Integer.valueOf(itemBestProduct.get(pos).getProduct_id()));
+//                                startActivity(intent);
+//                            }
+//                        }
+//                    }, ACTIVITY_TAG);
+
+//            if (ACCESS_FROM.equals("dashboard"))
+//            {
+//                if (ACTIVITY_TAG.equals("dashboard"))
+//                {
+//                    ACTIVITY_TAG = "main";
+//                }
+//                else
+//                {
+//                    ACTIVITY_TAG = "dashboard";
+//                }
+//            }
+//            else
+//            {
+//                ACTIVITY_TAG = "main";
+//            }
         }
     }
 
@@ -609,38 +678,50 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         progress.setVisibility(View.GONE);
 
-                        String id       = jsonObject.getString("frame_id");
-                        String title    = jsonObject.getString("frame_name");
-                        String image    = jsonObject.getString("frame_image");
-                        String price    = jsonObject.getString("frame_price");
-                        String discperc = jsonObject.getString("frame_disc");
-                        String brandName= jsonObject.getString("frame_brand");
-                        String frameQty     = jsonObject.getString("frame_qty");
-                        String frameWeight  = jsonObject.getString("frame_weight");
-                        String tempPrice = CurencyFormat(price);
-                        totalData= jsonObject.getString("total_output");
+                        /*if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            imgNotfound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                        else
+                        {*/
+                            String id       = jsonObject.getString("frame_id");
+                            String title    = jsonObject.getString("frame_name");
+                            String image    = jsonObject.getString("frame_image");
+                            String price    = jsonObject.getString("frame_price");
+                            String discperc = jsonObject.getString("frame_disc");
+                            String brandName= jsonObject.getString("frame_brand");
+                            String frameQty     = jsonObject.getString("frame_qty");
+                            String frameWeight  = jsonObject.getString("frame_weight");
+                            String tempPrice = CurencyFormat(price);
+                            totalData= jsonObject.getString("total_output");
 
-                        Data_fragment_bestproduct data = new Data_fragment_bestproduct();
-                        data.setProduct_id(id);
-                        data.setProduct_name(title);
-                        data.setProduct_image(image);
-                        data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc);
-                        data.setProduct_brand(brandName);
-                        data.setProduct_qty(frameQty);
-                        data.setProduct_weight(frameWeight);
+                            Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                            data.setProduct_id(id);
+                            data.setProduct_name(title);
+                            data.setProduct_image(image);
+                            data.setProduct_realprice("Rp " + tempPrice);
+                            data.setProduct_discpercent(discperc);
+                            data.setProduct_brand(brandName);
+                            data.setProduct_qty(frameQty);
+                            data.setProduct_weight(frameWeight);
 
-                        itemBestProduct.add(data);
+                            itemBestProduct.add(data);
+
+                            imgNotfound.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        //}
                     }
 
 //                    txtCounter.setText(totalData + " data found");
-                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+//                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress.setVisibility(View.GONE);
 
-                    BottomSnackBarMessage snackBarMessage = new BottomSnackBarMessage(getActivity());
-                    snackBarMessage.showErrorMessage("No more data found");
+                    Snackbar snackbar = Snackbar.make(view, "No more data found", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -655,6 +736,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("start", start);
                 hashMap.put("limit", until);
+                hashMap.put("tagid", TAG_ID);
                 return hashMap;
             }
         };
@@ -677,30 +759,42 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         progress.setVisibility(View.GONE);
 
-                        String id       = jsonObject.getString("frame_id");
-                        String title    = jsonObject.getString("frame_name");
-                        String image    = jsonObject.getString("frame_image");
-                        String price    = jsonObject.getString("frame_price");
-                        String discperc = jsonObject.getString("frame_disc");
-                        String brandName= jsonObject.getString("frame_brand");
-                        String frameQty     = jsonObject.getString("frame_qty");
-                        String frameWeight  = jsonObject.getString("frame_weight");
-                        String tempPrice = CurencyFormat(price);
+                        if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            imgNotfound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            String id       = jsonObject.getString("frame_id");
+                            String title    = jsonObject.getString("frame_name");
+                            String image    = jsonObject.getString("frame_image");
+                            String price    = jsonObject.getString("frame_price");
+                            String discperc = jsonObject.getString("frame_disc");
+                            String brandName= jsonObject.getString("frame_brand");
+                            String frameQty     = jsonObject.getString("frame_qty");
+                            String frameWeight  = jsonObject.getString("frame_weight");
+                            String tempPrice = CurencyFormat(price);
 
-                        Data_fragment_bestproduct data = new Data_fragment_bestproduct();
-                        data.setProduct_id(id);
-                        data.setProduct_name(title);
-                        data.setProduct_image(image);
-                        data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc);
-                        data.setProduct_brand(brandName);
-                        data.setProduct_qty(frameQty);
-                        data.setProduct_weight(frameWeight);
+                            Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                            data.setProduct_id(id);
+                            data.setProduct_name(title);
+                            data.setProduct_image(image);
+                            data.setProduct_realprice("Rp " + tempPrice);
+                            data.setProduct_discpercent(discperc);
+                            data.setProduct_brand(brandName);
+                            data.setProduct_qty(frameQty);
+                            data.setProduct_weight(frameWeight);
 
-                        itemBestProduct.add(data);
+                            itemBestProduct.add(data);
+
+                            imgNotfound.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     }
 
-                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+//                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress.setVisibility(View.GONE);
@@ -722,6 +816,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 hashMap.put("start", start);
                 hashMap.put("limit", until);
                 hashMap.put("condition", condition);
+                hashMap.put("tagid", TAG_ID);
                 return hashMap;
             }
         };
@@ -733,62 +828,65 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
     private void showDataByFilter(final String sortby, final String condition, final String start, final String limit)
     {
         progress.setVisibility(View.VISIBLE);
+
+        Log.d(NewFrameFragment.class.getSimpleName(), "Sort By : " + sortby);
+        Log.d(NewFrameFragment.class.getSimpleName(), "Condition : " + condition);
+        Log.d(NewFrameFragment.class.getSimpleName(), "Start : " + start);
+        Log.d(NewFrameFragment.class.getSimpleName(), "Limit : " + limit);
+
         StringRequest request = new StringRequest(Request.Method.POST, sortFilterUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d(NewFrameFragment.class.getSimpleName(), "Response : " + response);
 //                    Toasty.info(getContext(), String.valueOf(response.length()), Toast.LENGTH_SHORT).show();
-
-                    if (response.length() <= 28)
-                    {
-                        JSONObject object = new JSONObject(response);
-
-                        imgNotfound.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                        progress.setVisibility(View.GONE);
-                    }
-                    else
-                    {
                         JSONArray jsonArray = new JSONArray(response);
-//
-                        recyclerView.setVisibility(View.VISIBLE);
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            progress.setVisibility(View.GONE);
 
-                            String id = jsonObject.getString("frame_id");
-                            String title = jsonObject.getString("frame_name");
-                            String image = jsonObject.getString("frame_image");
-                            String price = jsonObject.getString("frame_price");
-                            String discperc = jsonObject.getString("frame_disc");
-                            String tempPrice = CurencyFormat(price);
-                            String brandName = jsonObject.getString("frame_brand");
-                            String frameQty     = jsonObject.getString("frame_qty");
-                            String frameWeight  = jsonObject.getString("frame_weight");
-                            totalData = jsonObject.getString("total_output");
+                            if (jsonObject.names().get(0).equals("invalid"))
+                            {
+                                imgNotfound.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                                progress.setVisibility(View.GONE);
+                            }
+                            else
+                            {
+                                progress.setVisibility(View.GONE);
 
-                            Data_fragment_bestproduct data = new Data_fragment_bestproduct();
-                            data.setProduct_id(id);
-                            data.setProduct_name(title);
-                            data.setProduct_image(image);
-                            data.setProduct_realprice("Rp " + tempPrice);
-                            data.setProduct_discpercent(discperc);
-                            data.setProduct_brand(brandName);
-                            data.setProduct_qty(frameQty);
-                            data.setProduct_weight(frameWeight);
+                                String id = jsonObject.getString("frame_id");
+                                String title = jsonObject.getString("frame_name");
+                                String image = jsonObject.getString("frame_image");
+                                String price = jsonObject.getString("frame_price");
+                                String discperc = jsonObject.getString("frame_disc");
+                                String tempPrice = CurencyFormat(price);
+                                String brandName = jsonObject.getString("frame_brand");
+                                String frameQty     = jsonObject.getString("frame_qty");
+                                String frameWeight  = jsonObject.getString("frame_weight");
+                                totalData = jsonObject.getString("total_output");
 
-                            itemBestProduct.add(data);
+                                Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                                data.setProduct_id(id);
+                                data.setProduct_name(title);
+                                data.setProduct_image(image);
+                                data.setProduct_realprice("Rp " + tempPrice);
+                                data.setProduct_discpercent(discperc);
+                                data.setProduct_brand(brandName);
+                                data.setProduct_qty(frameQty);
+                                data.setProduct_weight(frameWeight);
 
+                                itemBestProduct.add(data);
 
-                            imgNotfound.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-//                    txtCounter.setText(totalData + " data found");
-                            adapter_framefragment_bestproduct.notifyDataSetChanged();
-
+                                imgNotfound.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                            }
                         }
 
-                    }
+//                    txtCounter.setText(totalData + " data found");
+//                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress.setVisibility(View.GONE);
@@ -813,6 +911,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 hashMap.put("limit", limit);
                 hashMap.put("condition", condition);
                 hashMap.put("sortby", sortby);
+                hashMap.put("tagid", TAG_ID);
                 return hashMap;
             }
         };
@@ -835,30 +934,42 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         progress.setVisibility(View.GONE);
 
-                        String id       = jsonObject.getString("frame_id");
-                        String title    = jsonObject.getString("frame_name");
-                        String image    = jsonObject.getString("frame_image");
-                        String price    = jsonObject.getString("frame_price");
-                        String discperc = jsonObject.getString("frame_disc");
-                        String brandName= jsonObject.getString("frame_brand");
-                        String frameQty     = jsonObject.getString("frame_qty");
-                        String frameWeight  = jsonObject.getString("frame_weight");
-                        String tempPrice = CurencyFormat(price);
+                        if (jsonObject.names().get(0).equals("invalid"))
+                        {
+                            imgNotfound.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            String id       = jsonObject.getString("frame_id");
+                            String title    = jsonObject.getString("frame_name");
+                            String image    = jsonObject.getString("frame_image");
+                            String price    = jsonObject.getString("frame_price");
+                            String discperc = jsonObject.getString("frame_disc");
+                            String brandName= jsonObject.getString("frame_brand");
+                            String frameQty     = jsonObject.getString("frame_qty");
+                            String frameWeight  = jsonObject.getString("frame_weight");
+                            String tempPrice = CurencyFormat(price);
 
-                        Data_fragment_bestproduct data = new Data_fragment_bestproduct();
-                        data.setProduct_id(id);
-                        data.setProduct_name(title);
-                        data.setProduct_image(image);
-                        data.setProduct_realprice("Rp " + tempPrice);
-                        data.setProduct_discpercent(discperc);
-                        data.setProduct_brand(brandName);
-                        data.setProduct_qty(frameQty);
-                        data.setProduct_weight(frameWeight);
+                            Data_fragment_bestproduct data = new Data_fragment_bestproduct();
+                            data.setProduct_id(id);
+                            data.setProduct_name(title);
+                            data.setProduct_image(image);
+                            data.setProduct_realprice("Rp " + tempPrice);
+                            data.setProduct_discpercent(discperc);
+                            data.setProduct_brand(brandName);
+                            data.setProduct_qty(frameQty);
+                            data.setProduct_weight(frameWeight);
 
-                        itemBestProduct.add(data);
+                            itemBestProduct.add(data);
+
+                            imgNotfound.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     }
 
-                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+//                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress.setVisibility(View.GONE);
@@ -880,6 +991,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 hashMap.put("start", start);
                 hashMap.put("limit", until);
                 hashMap.put("condition", condition);
+                hashMap.put("tagid", TAG_ID);
                 return hashMap;
             }
         };
@@ -1020,7 +1132,8 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                     }
 
 //                    txtCounter.setText(totalData + " data found");
-                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+//                    adapter_framefragment_bestproduct.notifyDataSetChanged();
+                    adapter_more_frame.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progress.setVisibility(View.GONE);
@@ -1047,6 +1160,7 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
                 hashMap.put("limit", limit);
                 hashMap.put("condition", condition);
                 hashMap.put("sortby", sortby);
+                hashMap.put("tagid", TAG_ID);
                 return hashMap;
             }
         };
@@ -1054,6 +1168,41 @@ public class NewFrameFragment extends Fragment implements View.OnClickListener {
         AppController.getInstance().addToRequestQueue(request);
 //        Volley.newRequestQueue(getContext()).add(request);
     }
+
+//    private void getFrameMode() {
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, FRAMEPRICEURL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean output = jsonObject.getBoolean("show_price_frame");
+//
+//                    Log.d("Frame Mode : ", String.valueOf(output));
+//
+//                    if (output)
+//                    {
+//                        ACTIVITY_TAG = "main";
+//                    }
+//                    else
+//                    {
+//                        ACTIVITY_TAG = "dashboard";
+//                    }
+//
+//                    Log.d(NewFrameFragment.class.getSimpleName(), "activity : " + ACTIVITY_TAG);
+//                }
+//                catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toasty.warning(getContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+//            }
+//        });
+//
+//        AppController.getInstance().addToRequestQueue(stringRequest);
+//    }
 
     private void getDurationSale()
     {

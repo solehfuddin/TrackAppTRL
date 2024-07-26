@@ -104,7 +104,7 @@ public class Adapter_framesp_multi extends RecyclerView.Adapter<Adapter_framesp_
 
             Log.d("Issame date : ", String.valueOf(isSameDate));
             viewHolder.txtItemCollection.setText(dt.getProduct_collect());
-            viewHolder.txtItemSubqty.setText(dt.getProduct_qtysubtotal() + " Pcs");
+            viewHolder.txtItemSubqty.setText(dt.getProduct_brandqty() + " Pcs");
             viewHolder.txtItemCollection.setVisibility(isSameDate ? View.VISIBLE : View.GONE);
             viewHolder.txtItemSubqty.setVisibility(isSameDate ? View.VISIBLE : View.GONE);
         }
@@ -114,7 +114,7 @@ public class Adapter_framesp_multi extends RecyclerView.Adapter<Adapter_framesp_
             viewHolder.txtItemSubqty.setVisibility(View.GONE);
         }
 
-        int count = Integer.parseInt(dt.getProduct_qty());
+        int count = Integer.parseInt(dt.getProduct_qty() != null ? dt.getProduct_qty() : "0");
         if (count > 0)
         {
             viewHolder.txtCounter.setBackgroundColor(Color.parseColor("#45ac2d"));
@@ -146,9 +146,7 @@ public class Adapter_framesp_multi extends RecyclerView.Adapter<Adapter_framesp_
             Picasso.with(context)
                     .load(item.get(i).getProduct_image())
                     .fit()
-//                    .networkPolicy(NetworkPolicy.NO_CACHE)
-//                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .placeholder(R.drawable.pic_holder)
+                    .placeholder(R.drawable.progress_zoom)
                     .error(R.drawable.pic_holder)
                     .into(viewHolder.imgChooser);
         }
@@ -165,6 +163,7 @@ public class Adapter_framesp_multi extends RecyclerView.Adapter<Adapter_framesp_
                     Intent intent = new Intent(context, ZoomImageActivity.class);
                     intent.putExtra("image_url", dt.getProduct_image());
                     intent.putExtra("frame_description", dt.getProduct_name());
+                    intent.putExtra("frame_id", dt.getProduct_id());
                     context.startActivity(intent);
                 }
                 else
@@ -276,7 +275,7 @@ public class Adapter_framesp_multi extends RecyclerView.Adapter<Adapter_framesp_
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Integer.parseInt(item.getProduct_qty()) > 0)
+                    if (Integer.parseInt(item.getProduct_qty() != null ? item.getProduct_qty() : "0") > 0)
                     {
                         item.setChecked(!item.isChecked());
                         imgSelect.setVisibility(item.isChecked() ? View.VISIBLE : View.INVISIBLE);

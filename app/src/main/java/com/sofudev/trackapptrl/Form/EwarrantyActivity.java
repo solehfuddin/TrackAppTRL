@@ -78,16 +78,16 @@ public class EwarrantyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String nama = txtNama.getText().toString();
-                String nohp = txtNohp.getText().toString();
+//                String nohp = txtNohp.getText().toString();
 
                 if (nama.isEmpty())
                 {
                     txtNama.setError("Name must fill");
                 }
-                else if (nohp.isEmpty())
-                {
-                    txtNohp.setError("Phone Number must fill");
-                }
+//                else if (nohp.isEmpty())
+//                {
+//                    txtNohp.setError("Phone Number must fill");
+//                }
                 else
                 {
 //                    search(nama, nohp);

@@ -40,6 +40,21 @@
                 app:customFont="RobotoMedium.ttf"/>
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:id="@+id/fragment_promoframe_txtIdTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/popular_product"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                android:textColor="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:customFont="RobotoMedium.ttf"/>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                 android:id="@+id/fragment_promoframe_txtMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +69,7 @@
             <LinearLayout
                 android:id="@+id/fragment_promoframe_linear1"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="245dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"

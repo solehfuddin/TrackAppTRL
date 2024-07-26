@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+        android:id="@+id/bottomdialog_returbin_txttitlenote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/keterangan"
+        android:textColor="@color/colorContent"
+        android:textSize="14sp"
+        app:customFont="UbuntuMedium.ttf"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/bottomdialog_returbin_edtNote"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textMultiLine"
+        android:textColor="@color/colorHint"
+        app:bootstrapBrand="info"
+        app:bootstrapSize="md"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomdialog_returbin_txttitlenote" />
+
+    <com.andexert.library.RippleView
+        android:id="@+id/bottomdialog_returbin_btnsave"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomdialog_returbin_edtNote"
+        app:rv_color="@color/colorHint"
+        app:rv_rippleDuration="600"
+        app:rv_type="rectangle">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/border_custom"
+            android:text="@string/simpan_data"
+            android:textColor="@color/colorHint" />
+    </com.andexert.library.RippleView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

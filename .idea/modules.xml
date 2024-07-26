@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TrackAppTRL.iml" filepath="$PROJECT_DIR$/.idea/modules/TrackAppTRL.iml" group="TrackAppTRL" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="TrackAppTRL/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TrackAppTRL.iml" filepath="$PROJECT_DIR$/.idea/modules/TrackAppTRL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TrackAppTRL.app.unitTest.iml" />
     </modules>
   </component>
 </project>

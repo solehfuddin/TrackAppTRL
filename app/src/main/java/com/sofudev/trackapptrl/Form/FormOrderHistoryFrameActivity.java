@@ -182,6 +182,7 @@ public class FormOrderHistoryFrameActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, URLGETALLFRAME, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
                 try {
                     JSONArray jsonArray = new JSONArray(response);
 

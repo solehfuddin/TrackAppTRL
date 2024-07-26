@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class NewsFragment extends Fragment {
     Config config = new Config();
     String URLNEWS = config.Ip_address + config.news_getdatawithlimit;
 
+    ConstraintLayout layout;
     ShimmerRecyclerView shimmerRecyclerView;
     RecyclerView recyclerView;
     UniversalFontTextView txtMore, txtTitle;
@@ -73,6 +75,7 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_news, container, false);
+        layout = view.findViewById(R.id.fragment_news_constraint);
         shimmerRecyclerView = view.findViewById(R.id.fragment_news_shimmer);
         recyclerView = view.findViewById(R.id.fragment_news_recyclerview);
         txtMore = view.findViewById(R.id.fragment_news_txtMore);
@@ -145,18 +148,25 @@ public class NewsFragment extends Fragment {
                     {
                         JSONObject object = jsonArray.getJSONObject(i);
 
-                        Data_news item = new Data_news();
-                        item.setId(object.getString("id"));
-                        item.setTitle(object.getString("title"));
-                        item.setSlug(object.getString("slug"));
-                        item.setDescription(object.getString("description"));
-                        item.setImages(object.getString("images"));
-                        item.setType(object.getString("type"));
-                        item.setCategory(object.getString("category"));
-                        item.setCreate_by_user(object.getString("create_by_user"));
-                        item.setCreate_date(object.getString("create_date"));
+                        if (object.names().get(0).equals("invalid"))
+                        {
+                            layout.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            Data_news item = new Data_news();
+                            item.setId(object.getString("id"));
+                            item.setTitle(object.getString("title"));
+                            item.setSlug(object.getString("slug"));
+                            item.setDescription(object.getString("description"));
+                            item.setImages(object.getString("images"));
+                            item.setType(object.getString("type"));
+                            item.setCategory(object.getString("category"));
+                            item.setCreate_by_user(object.getString("create_by_user"));
+                            item.setCreate_date(object.getString("create_date"));
 
-                        listNews.add(item);
+                            listNews.add(item);
+                        }
                     }
 
                     shimmerRecyclerView.setVisibility(View.INVISIBLE);

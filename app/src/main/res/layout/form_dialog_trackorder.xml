@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,81 +9,86 @@
     app:cardCornerRadius="4dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-            android:id="@+id/form_dialogtrack_txtjobnumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="# Job Number"
-            android:background="@color/colorFirst"
-            android:textColor="#fff"
-            android:textSize="16sp"
-            android:padding="5dp"
-            android:textAlignment="center"
-            app:customFont="UbuntuMedium.ttf" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:weightSum="10">
+            android:orientation="vertical">
 
             <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/form_dialogtrack_lbllensname"
-                android:layout_width="0dp"
+                android:id="@+id/form_dialogtrack_txtjobnumber"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4.2"
-                android:text="Lens Name"
-                android:textSize="14sp"
-                android:textColor="@color/colorBlack"
-                app:customFont="TitilliumSemiBold.ttf"/>
-
-            <ayar.oktay.advancedtextview.AdvancedTextView
-                android:id="@+id/form_dialogtrack_txtlensname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5.8"
-                android:text="Content lensname"
-                android:textColor="@color/colorContent"
-                android:textSize="14sp"
-                android:maxLines="2"
-                android:lines="2"
-                app:justifyText="true"
-                app:customFont="TitilliumSemiBold.ttf"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+                android:text="# Job Number"
+                android:background="@color/colorFirst"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:padding="5dp"
+                android:textAlignment="center"
+                app:customFont="UbuntuMedium.ttf" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:weightSum="10">
 
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_lbllensname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.2"
-                    android:background="@drawable/custom_border"
-                    android:padding="5dp"
-                    android:text="SIDE"
+                    android:layout_weight="4.2"
+                    android:text="Lens Name"
+                    android:textSize="14sp"
                     android:textColor="@color/colorBlack"
-                    android:textSize="13sp"
-                    app:customFont="TitilliumSemiBold.ttf" />
+                    app:customFont="TitilliumSemiBold.ttf"/>
+
+                <ayar.oktay.advancedtextview.AdvancedTextView
+                    android:id="@+id/form_dialogtrack_txtlensname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.8"
+                    android:text="Content lensname"
+                    android:textColor="@color/colorContent"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:lines="2"
+                    app:justifyText="true"
+                    app:customFont="TitilliumSemiBold.ttf"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_dialogtrack_linpower"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.2"
+                        android:background="@drawable/custom_border"
+                        android:padding="5dp"
+                        android:text="SIDE"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:layout_width="0dp"
@@ -119,24 +125,24 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="13sp"
                         app:customFont="TitilliumSemiBold.ttf" />
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.2"
-                    android:text="RIGHT"
-                    android:padding="5dp"
-                    android:textSize="13sp"
-                    android:background="@drawable/custom_border"
-                    android:textColor="@color/colorBlack"
-                    app:customFont="TitilliumSemiBold.ttf"/>
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.2"
+                        android:text="RIGHT"
+                        android:padding="5dp"
+                        android:textSize="13sp"
+                        android:background="@drawable/custom_border"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="TitilliumSemiBold.ttf"/>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/form_dialogtrack_txtsphr"
@@ -176,24 +182,24 @@
                         android:textColor="@color/colorContent"
                         android:textSize="13sp"
                         app:customFont="TitilliumSemiBold.ttf" />
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.2"
-                    android:text="LEFT"
-                    android:padding="5dp"
-                    android:textSize="13sp"
-                    android:background="@drawable/custom_border"
-                    android:textColor="@color/colorBlack"
-                    app:customFont="TitilliumSemiBold.ttf"/>
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.2"
+                        android:text="LEFT"
+                        android:padding="5dp"
+                        android:textSize="13sp"
+                        android:background="@drawable/custom_border"
+                        android:textColor="@color/colorBlack"
+                        app:customFont="TitilliumSemiBold.ttf"/>
 
                     <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
                         android:id="@+id/form_dialogtrack_txtsphl"
@@ -233,213 +239,306 @@
                         android:textColor="@color/colorContent"
                         android:textSize="13sp"
                         app:customFont="TitilliumSemiBold.ttf" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:weightSum="10"
-            android:orientation="horizontal">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/form_dialogtrack_lblreference"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.2"
-                android:text="Reference Id"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf" />
-
-            <ayar.oktay.advancedtextview.AdvancedTextView
-                android:id="@+id/form_dialogtrack_txtreference"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5.8"
-                android:text="Content reference"
-                android:textColor="@color/colorContent"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf"
-                app:justifyText="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:weightSum="10">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/form_dialogtrack_lbloptname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.2"
-                android:text="Tinting Info"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf" />
-
-            <ayar.oktay.advancedtextview.AdvancedTextView
-                android:id="@+id/form_dialogtrack_txttinting"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5.8"
-                android:text="Content tinting"
-                android:textColor="@color/colorContent"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf"
-                app:justifyText="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:weightSum="10">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/form_dialogtrack_lblfacettrl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.2"
-                android:text="Facet TRL"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf" />
-
-            <com.beardedhen.androidbootstrap.BootstrapLabel
-                android:id="@+id/form_dialogtrack_btnfacet"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5.8"
-                android:text="Content Facet TRL"
-                app:bootstrapBrand="success"
-                app:bootstrapHeading="h6"
-                app:roundedCorners="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/form_dialogtrack_linearframebrand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:weightSum="10">
-
-            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                android:id="@+id/form_dialogtrack_lblframebrand"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.2"
-                android:text="Frame Info"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf" />
-
-            <ayar.oktay.advancedtextview.AdvancedTextView
-                android:id="@+id/form_dialogtrack_txtframebrand"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5.8"
-                android:text="Content frame"
-                android:textColor="@color/colorContent"
-                android:textSize="14sp"
-                app:customFont="TitilliumSemiBold.ttf"
-                app:justifyText="true" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp">
-
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@android:color/darker_gray" />
+                android:weightSum="10"
+                android:orientation="horizontal">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_lblreference"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4.2"
+                    android:text="Reference Id"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    app:customFont="TitilliumSemiBold.ttf" />
+
+                <ayar.oktay.advancedtextview.AdvancedTextView
+                    android:id="@+id/form_dialogtrack_txtreference"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.8"
+                    android:text="Content reference"
+                    android:textColor="@color/colorContent"
+                    android:textSize="14sp"
+                    app:customFont="TitilliumSemiBold.ttf"
+                    app:justifyText="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_dialogtrack_lintinting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:weightSum="10">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_lbloptname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4.2"
+                    android:text="Tinting Info"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    app:customFont="TitilliumSemiBold.ttf" />
+
+                <ayar.oktay.advancedtextview.AdvancedTextView
+                    android:id="@+id/form_dialogtrack_txttinting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.8"
+                    android:text="Content tinting"
+                    android:textColor="@color/colorContent"
+                    android:textSize="14sp"
+                    app:customFont="TitilliumSemiBold.ttf"
+                    app:justifyText="true" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="15dp"
-                android:weightSum="10"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:weightSum="10">
 
                 <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
-                    android:id="@+id/form_dialogtrack_lbllaststatus"
+                    android:id="@+id/form_dialogtrack_lblfacettrl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4.2"
-                    android:text="Last status"
+                    android:text="Facet TRL"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    app:customFont="TitilliumSemiBold.ttf" />
+
+                <com.beardedhen.androidbootstrap.BootstrapLabel
+                    android:id="@+id/form_dialogtrack_btnfacet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.8"
+                    android:text="Content Facet TRL"
+                    app:bootstrapBrand="success"
+                    app:bootstrapHeading="h6"
+                    app:roundedCorners="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_dialogtrack_linearframebrand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:weightSum="10">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_lblframebrand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4.2"
+                    android:text="Frame Info"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp"
                     app:customFont="TitilliumSemiBold.ttf" />
 
                 <ayar.oktay.advancedtextview.AdvancedTextView
-                    android:id="@+id/form_dialogtrack_txtorderstatus"
+                    android:id="@+id/form_dialogtrack_txtframebrand"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.4"
-                    android:text="Status"
+                    android:layout_weight="5.8"
+                    android:text="Content frame"
                     android:textColor="@color/colorContent"
                     android:textSize="14sp"
                     app:customFont="TitilliumSemiBold.ttf"
                     app:justifyText="true" />
+            </LinearLayout>
 
-                <ayar.oktay.advancedtextview.AdvancedTextView
-                    android:id="@+id/form_dialogtrack_txtdatestatus"
-                    android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_dialogtrack_layoutitem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <View
+                    android:id="@+id/view10"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/grayLight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_txttitleItem"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3.4"
-                    android:maxLength="10"
-                    android:text="Date status"
-                    android:textColor="@color/colorContent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/detail_item"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"
                     app:customFont="TitilliumSemiBold.ttf"
-                    app:justifyText="false" />
-            </LinearLayout>
-        </RelativeLayout>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+                <View
+                    android:id="@+id/view9"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grayLight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_dialogtrack_txttitleItem" />
 
-            <com.andexert.library.RippleView
-                android:id="@+id/form_dialogtrack_rippleBtnDetail"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/form_dialogtrack_rvItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view9" />
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorContent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/form_dialogtrack_rvItem" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_txttitleqtytotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/total_qty"
+                    android:textColor="@color/colorContent"
+                    android:textSize="14sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_dialogtrack_txtqtytotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/_0_pcs"
+                    android:textColor="@color/colorContent"
+                    android:textSize="14sp"
+                    app:customFont="UbuntuMedium.ttf"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                app:rv_type="rectangle"
-                app:rv_rippleDuration="250">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp">
 
-                <Button
-                    android:id="@+id/form_dialogtrack_btnDetail"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:weightSum="10"
+                    android:orientation="horizontal">
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/form_dialogtrack_lbllaststatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4.2"
+                        android:text="Last status"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:customFont="TitilliumSemiBold.ttf" />
+
+                    <ayar.oktay.advancedtextview.AdvancedTextView
+                        android:id="@+id/form_dialogtrack_txtorderstatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.4"
+                        android:text="Status"
+                        android:textColor="@color/colorContent"
+                        android:textSize="14sp"
+                        app:customFont="TitilliumSemiBold.ttf"
+                        app:justifyText="true" />
+
+                    <ayar.oktay.advancedtextview.AdvancedTextView
+                        android:id="@+id/form_dialogtrack_txtdatestatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.4"
+                        android:maxLength="10"
+                        android:text="Date status"
+                        android:textColor="@color/colorContent"
+                        android:textSize="14sp"
+                        app:customFont="TitilliumSemiBold.ttf"
+                        app:justifyText="false" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/form_dialogtrack_rippleBtnDetail"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:background="@android:color/holo_blue_light"
-                    android:text="Show Detail Track"
-                    android:textColor="@color/neutral"
-                    android:textSize="14sp" />
-            </com.andexert.library.RippleView>
+                    app:rv_type="rectangle"
+                    app:rv_rippleDuration="250">
+
+                    <Button
+                        android:id="@+id/form_dialogtrack_btnDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@android:color/holo_blue_light"
+                        android:text="Show Detail Track"
+                        android:textColor="@color/neutral"
+                        android:textSize="14sp" />
+                </com.andexert.library.RippleView>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.cardview.widget.CardView>

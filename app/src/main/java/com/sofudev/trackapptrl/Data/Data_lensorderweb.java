@@ -3,9 +3,17 @@ package com.sofudev.trackapptrl.Data;
 public class Data_lensorderweb {
     private String orderNumber, opticName, opticAddress, opticCity, patientName, phoneNumber, note, prodDivType, idLensa,
         description, sphR, sphL, cylR, cylL, axsR, axsL, addR, addL, prisR, prisL, coatCode, coatDesc, tintCode, tintDesc,
-        corridor, mpdL, mpdR, pv, wrap, panto, vd, facetInfo, frameModel, dbl, hor, ver, frameCode, shippingCourier, shippingCity,
+        corridor, mpdL, mpdR, pv, wrap, panto, vd, facetTrl, facetInfo, frameModel, dbl, hor, ver, frameCode, shippingCourier, shippingCity,
         shippingProvince, shippingService, cash_carry, flash_note, grandTotal, orderSp;
     private int customerId, shippingId, shippingPrice, facetPrice;
+
+    public String getFacetTrl() {
+        return facetTrl;
+    }
+
+    public void setFacetTrl(String facetTrl) {
+        this.facetTrl = facetTrl;
+    }
 
     public String getOrderSp() {
         return orderSp;

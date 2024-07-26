@@ -468,7 +468,7 @@ public class FormUACActivity extends AppCompatActivity {
                             lovelyCustomDialog = new LovelyCustomDialog(FormUACActivity.this);
                             layoutInflater  = getLayoutInflater();
                             view = layoutInflater.inflate(R.layout.form_uac, null);
-                            lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                            lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                             lovelyCustomDialog.setTopTitle("Account Settings");
                             lovelyCustomDialog.setIcon(R.drawable.ic_settings);
                             lovelyCustomDialog.setTopTitleColor(Color.WHITE);
@@ -752,7 +752,7 @@ public class FormUACActivity extends AppCompatActivity {
                 lovelyCustomDialog = new LovelyCustomDialog(FormUACActivity.this);
                 layoutInflater  = getLayoutInflater();
                 view = layoutInflater.inflate(R.layout.form_uac, null);
-                lovelyCustomDialog.setTopColorRes(R.color.bootstrap_brand_danger);
+                lovelyCustomDialog.setTopColorRes(R.color.colorTeks);
                 lovelyCustomDialog.setTopTitle("Account Settings");
                 lovelyCustomDialog.setIcon(R.drawable.ic_settings);
                 lovelyCustomDialog.setTopTitleColor(Color.WHITE);

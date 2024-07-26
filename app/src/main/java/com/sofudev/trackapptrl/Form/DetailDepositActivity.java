@@ -106,9 +106,10 @@ public class DetailDepositActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DetailDepositActivity.this, FilterDepositActivity.class);
                 intent.putExtra("filter_type", "DEPO");
+                intent.putExtra("username", username);
                 intent.putExtra("nominal", saldo);
                 intent.putExtra("user_info", idparty);
-                intent.putExtra("username", username);
+
                 startActivity(intent);
             }
         });
@@ -118,9 +119,10 @@ public class DetailDepositActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DetailDepositActivity.this, FilterDepositActivity.class);
                 intent.putExtra("filter_type", "PENDING");
+                intent.putExtra("username", username);
                 intent.putExtra("nominal", saldo);
                 intent.putExtra("user_info", idparty);
-                intent.putExtra("username", username);
+
                 startActivity(intent);
             }
         });

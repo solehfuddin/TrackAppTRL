@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Form.ReturnBinActivity">
+
+    <LinearLayout
+        android:id="@+id/form_returbin_layoutheader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/form_returbin_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:contentInsetLeft="10dp"
+            android:contentInsetRight="10dp"
+            android:contentInsetStart="10dp"
+            app:contentInsetLeft="10dp"
+            app:contentInsetRight="10dp"
+            app:contentInsetStart="10dp">
+
+            <ImageView
+                android:id="@+id/form_returbin_btnback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:visibility="invisible"
+                android:padding="5dp">
+
+                <com.varunest.sparkbutton.SparkButton
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="right"
+                    android:padding="0.5dp"
+                    app:sparkbutton_activeImage="@drawable/ic_favorite_white"
+                    app:sparkbutton_animationSpeed="1.5"
+                    app:sparkbutton_iconSize="25dp"
+                    app:sparkbutton_inActiveImage="@drawable/ic_favorite_border_white"
+                    app:sparkbutton_primaryColor="@color/colorEnd"
+                    app:sparkbutton_secondaryColor="@color/white" />
+            </FrameLayout>
+
+            <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingTop="-1dp"
+                android:paddingBottom="1dp"
+                android:paddingRight="10dp"
+                android:text="Kembalikan Stok"
+                android:gravity="center"
+                android:textColor="@color/neutral"
+                android:textSize="19sp"
+                app:customFont="MavenPro-Regular.ttf" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/form_returbin_txtflag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:textSize="14sp"
+                    android:focusable="true"
+                    android:text="@string/flag"
+                    android:gravity="center|end"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorContent"
+                    android:layout_toStartOf="@+id/form_returbin_swflag"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="5dp"
+                    app:customFont="UbuntuMedium.ttf" />
+
+                <Switch
+                    android:id="@+id/form_returbin_swflag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="end"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:checked="true"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1.0"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <RelativeLayout
+                    android:layout_weight="1.0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <TextView
+                            android:id="@+id/form_returbin_txtTitleframe"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.98"
+                            android:layout_height="30dp"
+                            android:textSize="14sp"
+                            android:focusable="true"
+                            android:hint="Silahkan pilih frame"
+                            android:gravity="center|start"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="5dp"/>
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/form_returbin_btnframe"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            app:rv_type="simpleRipple"
+                            app:rv_rippleDuration="100">
+
+                            <ImageView
+                                android:id="@+id/form_returbin_imgframe"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:background="@color/bootstrap_brand_info"/>
+                        </com.andexert.library.RippleView>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/form_returbin_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_returbin_layoutheader"
+        app:layout_constraintBottom_toTopOf="@+id/form_returbin_cardview"/>
+
+    <LinearLayout
+        android:id="@+id/form_returbin_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:text="Your box is empty now !!!"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            app:customFont="UbuntuMedium.ttf" />
+
+       <!-- <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Add some item to your box before they"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" />
+
+        <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="are out of stock !"
+            android:textSize="14sp"
+            app:customFont="MavenPro-Regular.ttf" /> -->
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/box" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/form_returbin_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        app:cardElevation="4dp">
+
+        <TextView
+            android:id="@+id/form_returbin_txttmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="temp"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/form_sreturbin_btncontinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/holo_orange_dark"
+            android:text="Submit"
+            android:textColor="@android:color/white" />
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

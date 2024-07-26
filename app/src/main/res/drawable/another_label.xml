@@ -13,8 +13,8 @@
                 android:topLeftRadius="5dp"/>
             <gradient
                 android:angle="270"
-                android:startColor="#CC159957"
-                android:endColor="#CC1D976C" />
+                android:startColor="#FF159957"
+                android:endColor="#FF1D976C" />
             <!-- <solid android:color="@color/colorPrimary"/> -->
         </shape>
     </item>
