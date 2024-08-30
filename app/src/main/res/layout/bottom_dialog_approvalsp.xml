@@ -773,11 +773,147 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            android:id="@+id/bottomdialog_approvalsp_layoutrelease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_layoutbiaya">
+
+            <com.andexert.library.RippleView
+                android:id="@+id/bottomdialog_approvalsp_rippleBtnRelease"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="end"
+                app:rv_color="@color/colorStm"
+                app:rv_rippleDuration="600"
+                app:rv_type="rectangle">
+
+                <Button
+                    android:id="@+id/bottomdialog_approvalsp_btnRelease"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/border_estatement"
+                    android:text="Release"
+                    android:textColor="@color/dot_dark_screen2"
+                    android:textSize="14sp" />
+            </com.andexert.library.RippleView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomdialog_approvalsp_layoutaraction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_layoutbiaya">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/bottomdialog_approvalsp_txttitlePersetujuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
+                    android:text="Action"
+                    android:textColor="@color/colorContent"
+                    android:textSize="16sp"
+                    app:customFont="UbuntuRegular.ttf"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+                <Spinner
+                    android:id="@+id/bottomdialog_approvalsp_spinpersetujuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:paddingRight="30dp"
+                    android:paddingEnd="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical">
+
+                <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                    android:id="@+id/bottomdialog_approvalsp_txttitleReason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
+                    android:text="Reason"
+                    android:textColor="@color/colorContent"
+                    android:textSize="16sp"
+                    app:customFont="UbuntuRegular.ttf"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view10" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/bottomdialog_approvalsp_txtreason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorHint"
+                    android:textSize="14sp"
+                    android:hint="Type reason"
+                    app:bootstrapBrand="info"
+                    app:bootstrapSize="md" />
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/bottomdialog_approvalsp_rippleBtnSubmit"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="end"
+                    app:rv_color="@color/colorHint"
+                    app:rv_rippleDuration="600"
+                    app:rv_type="rectangle">
+
+                    <Button
+                        android:id="@+id/bottomdialog_approvalsp_btnSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/border_custom"
+                        android:text="Submit"
+                        android:textColor="@color/colorHint"
+                        android:textSize="14sp" />
+                </com.andexert.library.RippleView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/bottomdialog_approvalsp_layoutaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bottomdialog_approvalsp_layoutbiaya">

@@ -107,6 +107,7 @@ import com.sofudev.trackapptrl.Form.FormTrackingSpActivity;
 import com.sofudev.trackapptrl.Form.FormUACActivity;
 import com.sofudev.trackapptrl.Form.SearchProductActivity;
 import com.sofudev.trackapptrl.Form.WishlistProductActivity;
+import com.sofudev.trackapptrl.Fragment.ArFragment;
 import com.sofudev.trackapptrl.Fragment.AssitsFragment;
 import com.sofudev.trackapptrl.Fragment.BalanceFragment;
 import com.sofudev.trackapptrl.Fragment.BannerFragment;
@@ -158,7 +159,7 @@ public class DashboardActivity extends AppCompatActivity
     Config config = new Config();
     private String FRAMEPRICEURL = config.Ip_address + config.frame_price_mode;
     private String URLDELIVERYCOUNTER = config.Ip_address + config.deliverytrack_counter;
-
+    private String URLGETUSERBYCUSTNAME = config.Ip_address + config.get_user_bycustname;
     private String userDetail_URL = config.Ip_address + config.dashboard_user_detail;
     private String userDetailByUsername = config.Ip_address + config.dashboard_user_detailByUsername;
     private String logout_URL     = config.Ip_address + config.dashboard_update_offline;
@@ -192,7 +193,7 @@ public class DashboardActivity extends AppCompatActivity
     private LovelyStandardDialog dialog;
     private MCrypt mCrypt;
     private String data, data1, data2, level_user, image_user, email_address, mobile_number, verify_code, phone_number,
-            phone_pincode, province_user, province_address, username, city, member_flag, urlPdf, sts;
+            phone_pincode, province_user, province_address, username, city, member_flag, urlPdf, sts, ISMANAGER;
     private NavigationView navigationView;
     ActionBarDrawerToggle toggle;
     private Menu menu;
@@ -619,6 +620,44 @@ public class DashboardActivity extends AppCompatActivity
         requestQueue.add(stringRequest);
     }
 
+    private void getUserByCustname(final String custname)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, URLGETUSERBYCUSTNAME, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("error"))
+                    {
+                        Log.d("Error : ", "Data tidak ditemukan");
+                    }
+                    else
+                    {
+                        ISMANAGER  = jsonObject.getString("ismanager");
+//                        countData(CUSTNAME);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("custname", custname);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void countUnreadNotification(final String username){
         StringRequest request = new StringRequest(Request.Method.POST, URLCOUNTNOTIFICATION, new Response.Listener<String>() {
             @Override
@@ -885,7 +924,8 @@ public class DashboardActivity extends AppCompatActivity
                     if (Integer.parseInt(level_user) == 1)
                     {
                         menu.findItem(R.id.nav_orderOnHand).setVisible(b);
-                        menu.findItem(R.id.nav_orderSp).setVisible(b);
+//                        menu.findItem(R.id.nav_orderSp).setVisible(b);
+                        menu.findItem(R.id.nav_orderSp).setVisible(false);
                         menu.findItem(R.id.nav_trackingSp).setVisible(b);
                     }
                     else
@@ -1131,6 +1171,7 @@ public class DashboardActivity extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), FormOrderSpActivity.class);
             intent.putExtra("idparty", navdash_id.getText().toString());
             intent.putExtra("username", username);
+            intent.putExtra("ismanager", ISMANAGER);
             startActivity(intent);
         }
 
@@ -1656,6 +1697,10 @@ public class DashboardActivity extends AppCompatActivity
                 frameCategory.setLayoutParams(lp);
 
                 showAssits();
+            }
+            else if (data2.equals("5"))
+            {
+                showAr();
             }
             else
             {
@@ -3546,6 +3591,18 @@ public class DashboardActivity extends AppCompatActivity
         courierFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.appbardashboard_category, courierFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showAr() {
+        ArFragment arFragment = new ArFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("activity", "dashboard");
+        bundle.putString("partySiteId", data1);
+        bundle.putString("username", data);
+        arFragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.appbardashboard_category, arFragment);
         fragmentTransaction.commit();
     }
 

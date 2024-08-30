@@ -54,7 +54,7 @@
         <item>November</item>
         <item>Desember</item>
     </array>
-    <string name="app_version">App Version 2.3.6</string>
+    <string name="app_version">App Version 2.3.9</string>
     <string name="default_notification_channel_id">channel_oreo</string>
     <string name="code">Serial number: \n <font size='10'> 32000354</font></string>
     <string name="price1">Price: \n <font size='10'> 3,254,544</font></string>

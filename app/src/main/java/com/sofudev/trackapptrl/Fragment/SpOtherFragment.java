@@ -1,5 +1,6 @@
 package com.sofudev.trackapptrl.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,10 +24,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andexert.library.RippleView;
@@ -35,6 +41,9 @@ import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -56,9 +65,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ayar.oktay.advancedtextview.AdvancedTextView;
@@ -69,14 +81,17 @@ public class SpOtherFragment extends Fragment {
     DateFormat tglFormat = new DateFormat();
     String URLHOLD = config.Ip_address + config.ordersp_hold_frame;
     String URLREJECT = config.Ip_address + config.ordersp_reject_frame;
+    String URLRELEASE = config.Ip_address + config.ordersp_update_arrelease;
     String URLLASTSTATUS = config.Ip_address + config.ordersp_laststatus_frame;
     String URL_GETINV      = config.Ip_address + config.ordersp_get_inv;
     String URL_GETSTATUSSP = config.Ip_address + config.ordersp_get_statusSp;
+    String URLITEMSP  = config.Ip_address + config.ordersp_item_detailsp;
 
     RippleView btnSearch, ripple_btnDetail, ripple_btnview, ripple_btndownload;
     BootstrapButton btnPrev, btnNext;
     MaterialEditText edSearch;
     UniversalFontTextView txtCounter;
+    UniversalFontTextView txtTotalQty, lbl_flagbsd, lbl_flag;
     RecyclerView recyclerView;
     CircleProgressBar progressBar;
     RelativeLayout rl_track;
@@ -94,8 +109,10 @@ public class SpOtherFragment extends Fragment {
     List<Data_sp_header> list = new ArrayList<>();
     List<Data_item_sp> itemSp = new ArrayList<>();
     String sales, salesarea, title, startDate, endDate, status, date_in, totalDurr;
-    int condition, counter = 0, totalData, total_item, flagCon;
+    int condition, counter = 0, totalData, exec = 0, flagCon, level, totalQty = 0;
+    boolean isStore = true;
     Context myContext;
+    private static final String[] actionPersetujuan = new String[] {"APPROVE", "REJECT", "HOLD"};
 
     public SpOtherFragment() {
         // Required empty public constructor
@@ -109,6 +126,7 @@ public class SpOtherFragment extends Fragment {
         bundle.putInt("condition", item.getCondition());
         bundle.putString("startdate", item.getStDate());
         bundle.putString("enddate", item.getEdDate());
+        bundle.putInt("level", item.getLevel());
 
         SpOtherFragment fragment = new SpOtherFragment();
         fragment.setArguments(bundle);
@@ -155,14 +173,14 @@ public class SpOtherFragment extends Fragment {
         adapter_approval_sp = new Adapter_approval_sp(getContext(), list, new RecyclerViewOnClickListener() {
             @Override
             public void onItemClick(View view, int pos, String id) {
-//                if (condition == 0)
-//                {
-//                    showBottomDetail(pos);
-//                }
-//                else
-//                {
+                if (level == 5 && condition == 11)
+                {
+                    showBottomDetail(pos);
+                }
+                else
+                {
                     showDialogTrack(pos);
-//                }
+                }
             }
         });
 
@@ -171,74 +189,44 @@ public class SpOtherFragment extends Fragment {
         edSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER))
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER)
                 {
                     String key = String.valueOf(edSearch.getText());
 
                     if (key.length() > 0)
                     {
+                        exec = exec + 1;
                         switch (condition) {
-                            case 11:
-                                getDataHold(salesarea,"0", key);
-                                break;
+                            case 11 -> {
+//                                Toasty.info(myContext, "Entered search", Toast.LENGTH_SHORT).show();
 
-                            case 12:
-                                getDataReject(salesarea, "0", key);
-                                break;
-
-                            case 13:
-                                getDataLastStatus(salesarea, "AM", "0", key);
-                                break;
-
-                            case 14:
-                                getDataLastStatus(salesarea, "AR", "0", key);
-                                break;
-
-                            case 15:
-                                getDataLastStatus(salesarea, "Warehouse", "0", key);
-                                break;
-
-                            case 16:
-                                getDataLastStatus(salesarea, "CS", "0", key);
-                                break;
-
-                            case 17:
-                                getDataLastStatus(salesarea, "Shipping", "0", key);
-                                break;
+                                if (exec > 0)
+                                {
+                                    getDataHold(salesarea, "0", key);
+                                }
+                            }
+                            case 12 -> getDataReject(salesarea, "0", key);
+                            case 13 -> getDataLastStatus(salesarea, "AM", "0", key);
+                            case 14 -> getDataLastStatus(salesarea, "AR", "0", key);
+                            case 15 -> getDataLastStatus(salesarea, "Warehouse", "0", key);
+                            case 16 -> getDataLastStatus(salesarea, "CS", "0", key);
+                            case 17 -> getDataLastStatus(salesarea, "Shipping", "0", key);
                         }
                     }
                     else
                     {
                         switch (condition) {
-                            case 11:
-                                getDataHold(salesarea,"0", "");
-                                break;
-
-                            case 12:
-                                getDataReject(salesarea, "0", "");
-                                break;
-
-                            case 13:
-                                getDataLastStatus(salesarea, "AM", "0", "");
-                                break;
-
-                            case 14:
-                                getDataLastStatus(salesarea, "AR", "0", "");
-                                break;
-
-                            case 15:
-                                getDataLastStatus(salesarea, "Warehouse", "0", "");
-                                break;
-
-                            case 16:
-                                getDataLastStatus(salesarea, "CS", "0", "");
-                                break;
-
-                            case 17:
-                                getDataLastStatus(salesarea, "Shipping", "0", "");
-                                break;
+                            case 11 -> getDataHold(salesarea, "0", "");
+                            case 12 -> getDataReject(salesarea, "0", "");
+                            case 13 -> getDataLastStatus(salesarea, "AM", "0", "");
+                            case 14 -> getDataLastStatus(salesarea, "AR", "0", "");
+                            case 15 -> getDataLastStatus(salesarea, "Warehouse", "0", "");
+                            case 16 -> getDataLastStatus(salesarea, "CS", "0", "");
+                            case 17 -> getDataLastStatus(salesarea, "Shipping", "0", "");
                         }
                     }
+
+//                    return true;
                 }
                 return true;
             }
@@ -509,6 +497,91 @@ public class SpOtherFragment extends Fragment {
         Log.d(SpApprovalFragment.class.getSimpleName(), "Kondisi : " + condition + " di pause");
     }
 
+    private String CurencyFormat(String Rp){
+        if (Rp.contentEquals("0") | Rp.equals("0"))
+        {
+            return "0";
+        }
+
+        Double money = Double.valueOf(Rp);
+        String strFormat ="#,###.##";
+        DecimalFormat df = new DecimalFormat(strFormat,new DecimalFormatSymbols(Locale.GERMAN));
+        return df.format(money);
+    }
+
+    private int getNumberOfMonth(String month){
+        switch (month) {
+            case "Januari":
+                return 1;
+            case "Februari":
+                return 2;
+            case "Maret":
+                return 3;
+            case "April":
+                return 4;
+            case "Mei":
+                return 5;
+            case "Juni":
+                return 6;
+            case "Juli":
+                return 7;
+            case "Agustus":
+                return 8;
+            case "September":
+                return 9;
+            case "Oktober":
+                return 10;
+            case "November":
+                return 11;
+            default:
+                return 12;
+        }
+    }
+
+    private String getMonOfNumber(int mon){
+        switch (mon) {
+            case 1:
+                return "Januari";
+            case 2:
+                return "Februari";
+            case 3:
+                return "Maret";
+            case 4:
+                return "April";
+            case 5:
+                return "Mei";
+            case 6:
+                return "Juni";
+            case 7:
+                return "Juli";
+            case 8:
+                return "Agustus";
+            case 9:
+                return "September";
+            case 10:
+                return "Oktober";
+            case 11:
+                return "November";
+            default:
+                return "Desember";
+        }
+    }
+
+    private String getPemesanSp(String shipNumber){
+        switch (shipNumber.substring(0,1)) {
+            case "C" :
+                return "PERUSAHAAN";
+            case "D" :
+                return "DOKTER";
+            case "R" :
+                return "RUMAH SAKIT";
+            case "Y" :
+                return "YAYASAN";
+            default:
+                return "OPTIK";
+        }
+    }
+
     private void setData()
     {
         Bundle data = this.getArguments();
@@ -519,6 +592,7 @@ public class SpOtherFragment extends Fragment {
             condition = data.getInt("condition", 0);
             startDate = data.getString("startdate");
             endDate   = data.getString("enddate");
+            level     = data.getInt("level", 0);
 
             Log.d(CourierTrackingFragment.class.getSimpleName(), "Salesarea : " + salesarea);
 
@@ -676,12 +750,302 @@ public class SpOtherFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void showBottomDetail(final int pos) {
+        custom = LayoutInflater.from(getContext()).inflate(R.layout.bottom_dialog_approvalsp, null);
+        final BottomDialog bottomDialog = new BottomDialog.Builder(requireContext())
+                .setTitle("No SP : " + list.get(pos).getNoSp())
+                .setCustomView(custom)
+                .build();
+
+        RecyclerView.LayoutManager recyclerLayoutManager;
+
+        UniversalFontTextView txtTipesp = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtsptipe);
+        UniversalFontTextView txtNamasales = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txttitletgl);
+        UniversalFontTextView txtTglsp  = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txttgl);
+        UniversalFontTextView txtPemesan = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtpemesan);
+        UniversalFontTextView txtNoakun = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtaccno);
+        UniversalFontTextView txtNamaoptik = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtoptik);
+        UniversalFontTextView txtAlamat = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtalamat);
+        UniversalFontTextView txtOrdervia = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtvia);
+        UniversalFontTextView txtDisc   = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtdisc);
+        UniversalFontTextView txtSyarat = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtsyarat);
+        UniversalFontTextView txtDp     = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtdp);
+        UniversalFontTextView txtTitledp= (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txttitledp);
+        UniversalFontTextView txtTitlecicil = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txttitlecicilan);
+        UniversalFontTextView txtSubtotal = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayaitem);
+        UniversalFontTextView txtDiskon   = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayadiskon);
+        txtTotalQty = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtqtytotal);
+        UniversalFontTextView txtTotal    = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbiayatotal);
+        TextView txtCicil = (TextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcicilan);
+        UniversalFontTextView txtAlamatKirim = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtalamatkirim);
+        UniversalFontTextView txtNamaKustomer = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcustomer);
+        UniversalFontTextView txtCatatan = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtcatatan);
+        lbl_flagbsd = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtbsd);
+        lbl_flag = (UniversalFontTextView) custom.findViewById(R.id.bottomdialog_approvalsp_txtlabelflag);
+        RecyclerView rvItem = (RecyclerView) custom.findViewById(R.id.bottomdialog_approvalsp_rvItem);
+        Spinner spinnerPersetujuan = custom.findViewById(R.id.bottomdialog_approvalsp_spinpersetujuan);
+        BootstrapEditText txtReason = custom.findViewById(R.id.bottomdialog_approvalsp_txtreason);
+        RippleView btnRelease = custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnRelease);
+
+        LinearLayout linearApprovalSm = custom.findViewById(R.id.bottomdialog_approvalsp_layoutaction);
+        LinearLayout linearApprovalAr = custom.findViewById(R.id.bottomdialog_approvalsp_layoutaraction);
+        LinearLayout linearReleaseAr  = custom.findViewById(R.id.bottomdialog_approvalsp_layoutrelease);
+
+        spinnerPersetujuan.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spin_framemodel_item, actionPersetujuan));
+
+        if (level == 5)
+        {
+            linearApprovalAr.setVisibility(View.GONE);
+            linearApprovalSm.setVisibility(View.GONE);
+            linearReleaseAr.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            linearApprovalAr.setVisibility(View.GONE);
+            linearApprovalSm.setVisibility(View.GONE);
+            linearReleaseAr.setVisibility(View.VISIBLE);
+        }
+
+        rvItem.setHasFixedSize(true);
+        recyclerLayoutManager = new LinearLayoutManager(getContext());
+        rvItem.setLayoutManager(recyclerLayoutManager);
+
+        getItemSp(list.get(pos).getNoSp());
+
+        adapter_detail_sp = new Adapter_detail_sp(getContext(), itemSp);
+        rvItem.setAdapter(adapter_detail_sp);
+
+        String disc = "";
+        double discVal = 0;
+        String note = "";
+        String namaKustomer = "";
+        String alamatKirim = "";
+        String kondisi = "";
+        final String[] selectedAction = {""};
+
+        int numBulan = (getNumberOfMonth(list.get(pos).getStartInstallment()) + Integer.parseInt(list.get(pos).getInstallment())) - 1;
+        String strBulan = numBulan > 12 ? getMonOfNumber(numBulan - 12) : getMonOfNumber(numBulan);
+
+//        String defYear = list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4);
+        int calcStYear;
+        if (getNumberOfMonth(list.get(pos).getStartInstallment()) - Integer.parseInt(list.get(pos).getNoSp().substring(6, 8)) < 0)
+        {
+            calcStYear = Integer.parseInt(list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4)) + 1;
+        }
+        else
+        {
+            calcStYear = Integer.parseInt(list.get(pos).getDate().substring(list.get(pos).getDate().length() - 4));
+        }
+
+        String defYear = String.valueOf(calcStYear);
+        int untilYear  = numBulan > 12 ? Integer.parseInt(defYear) + 1 : Integer.parseInt(defYear);
+
+        int cicilanBulanan = (list.get(pos).getGrandTotal() - Integer.parseInt(list.get(pos).getDownPayment())) / Integer.parseInt(list.get(pos).getInstallment());
+        String cicilan = "Sebanyak (" + list.get(pos).getInstallment() + ") Kali, Sejumlah Rp. " + CurencyFormat(String.valueOf(cicilanBulanan).replace(",", ".")) + " / bulan <br/>"
+                + "Dimulai Sejak Bulan <b>" + list.get(pos).getStartInstallment() + " " + defYear + "</b> Sampai dengan Bulan <b>" + strBulan + " " + untilYear + "</b>";
+        if (Double.parseDouble(list.get(pos).getDiscount()) > 0)
+        {
+            disc = list.get(pos).getDiscount() + " (%)";
+            discVal = Double.parseDouble(list.get(pos).getDiscount()) / 100 * list.get(pos).getSubTotal();
+
+        }
+        else
+        {
+            disc = "Rp. " + CurencyFormat(list.get(pos).getDiscountValue().replace(",", "."));
+            discVal = Double.parseDouble(list.get(pos).getDiscountValue());
+        }
+
+        if (list.get(pos).getConditions().contains("Cicilan"))
+        {
+            txtDp.setVisibility(View.VISIBLE);
+            txtTitledp.setVisibility(View.VISIBLE);
+
+            txtCicil.setVisibility(View.VISIBLE);
+            txtTitlecicil.setVisibility(View.VISIBLE);
+
+            kondisi = list.get(pos).getConditions();
+        }
+        else
+        {
+            txtDp.setVisibility(View.GONE);
+            txtTitledp.setVisibility(View.GONE);
+
+            txtCicil.setVisibility(View.GONE);
+            txtTitlecicil.setVisibility(View.GONE);
+
+            kondisi = list.get(pos).getConditions() + " / Rp. " + CurencyFormat(list.get(pos).getDownPayment().replace(",", "."));
+        }
+
+        if (list.get(pos).getCatatan().isEmpty())
+        {
+            note = "-";
+        }
+        else
+        {
+            note = list.get(pos).getCatatan();
+        }
+
+        if (list.get(pos).getNamaUser().isEmpty())
+        {
+            namaKustomer = "-";
+        }
+        else
+        {
+            namaKustomer = list.get(pos).getNamaUser();
+        }
+
+        if (list.get(pos).getShippingAddress().isEmpty())
+        {
+            alamatKirim = list.get(pos).getAddress();
+        }
+        else
+        {
+            alamatKirim = list.get(pos).getShippingAddress();
+        }
+
+        txtTipesp.setText(list.get(pos).getTipeSp());
+        txtNamasales.setText(list.get(pos).getSales());
+        txtTglsp.setText(list.get(pos).getDate());
+        txtPemesan.setText(getPemesanSp(list.get(pos).getShipNumber()));
+        txtNoakun.setText(list.get(pos).getShipNumber());
+        txtNamaoptik.setText(list.get(pos).getCustomerName());
+        txtAlamat.setText(list.get(pos).getAddress() + " - " + list.get(pos).getCity());
+        txtOrdervia.setText(list.get(pos).getOrderVia());
+        txtDisc.setText(disc);
+        txtSyarat.setText(kondisi);
+        txtDp.setText("Rp. " + CurencyFormat(list.get(pos).getDownPayment().replace(",", ".")));
+        txtSubtotal.setText("Rp. " + CurencyFormat(String.valueOf(list.get(pos).getSubTotal())).replace(",", "."));
+        txtDiskon.setText("Rp. - " + CurencyFormat(String.valueOf(discVal)).replace(",", "."));
+        txtDiskon.setTextColor(Color.parseColor("#f90606"));
+//        txtTotalQty.setText(totalQty + " Pcs");
+        txtTotal.setText("Rp. " + CurencyFormat(String.valueOf(list.get(pos).getGrandTotal())).replace(",", "."));
+        txtAlamatKirim.setText(alamatKirim);
+        txtCicil.setText(Html.fromHtml(cicilan));
+        txtCatatan.setText(note);
+        txtNamaKustomer.setText(namaKustomer);
+
+        spinnerPersetujuan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedAction[0] = parent.getItemAtPosition(position).toString();
+
+                if (selectedAction[0] == "APPROVE")
+                {
+                    txtReason.setEnabled(false);
+                    txtReason.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                    txtReason.clearFocus();
+                }
+                else
+                {
+                    txtReason.setEnabled(true);
+                    txtReason.setBootstrapBrand(DefaultBootstrapBrand.PRIMARY);
+                    txtReason.requestFocus();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        btnRelease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateReleaseSp(list.get(pos));
+                bottomDialog.dismiss();
+            }
+        });
+
+        bottomDialog.show();
+    }
+
+    private void getItemSp(final String idsp) {
+        itemSp.clear();
+        totalQty = 0;
+        StringRequest request = new StringRequest(Request.Method.POST, URLITEMSP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        if (object.names().get(0).equals("invalid"))
+                        {
+                            showErrorImage();
+                        }
+                        else
+                        {
+                            Data_item_sp data = new Data_item_sp();
+                            data.setLineItem(object.getInt("line_number"));
+                            data.setAmount(object.getInt("amount"));
+                            data.setQty(object.getInt("qty"));
+                            data.setDefaulPrice(object.getInt("unit_standard_price"));
+                            data.setDiscount(object.getDouble("discount"));
+                            data.setDescription(object.getString("description"));
+                            data.setItemCode(object.getString("item_code"));
+                            data.setItemId(object.getString("item_id"));
+                            data.setUmoCode(object.getString("umo_code"));
+
+                            itemSp.add(data);
+
+                            totalQty += data.getQty();
+                            Log.d("Total Qty : ", String.valueOf(totalQty));
+
+                            if (object.getString("flag").contains("BIN"))
+                            {
+                                isStore = false;
+                                lbl_flagbsd.setVisibility(View.VISIBLE);
+
+                                lbl_flag.setBackgroundColor(Color.parseColor("#ff9100"));
+                                lbl_flag.setText(object.getString("flag"));
+                            }
+                            else
+                            {
+                                isStore = true;
+                                lbl_flagbsd.setVisibility(View.GONE);
+
+                                lbl_flag.setBackgroundColor(Color.parseColor("#45ac2d"));
+                                lbl_flag.setText(object.getString("flag"));
+                            }
+                        }
+                    }
+
+                    txtTotalQty.setText(totalQty + " Pcs");
+                    adapter_detail_sp.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id_sp", idsp);
+                return hashMap;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
     private void getDataHold(final String salesarea, final String start, final String key) {
         progressBar.setVisibility(View.VISIBLE);
         list.clear();
+        exec = 0;
         StringRequest request = new StringRequest(Request.Method.POST, URLHOLD + start, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+//                Log.d(SpOtherFragment.class.getSimpleName(), response);
                 progressBar.setVisibility(View.GONE);
                 int start, until;
                 rl_track.removeView(img_track);
@@ -791,13 +1155,13 @@ public class SpOtherFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toasty.error(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toasty.error(myContext, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("salesarea", salesarea);
+                hashMap.put("salesarea", level == 5 ? "" : salesarea);
                 hashMap.put("key", key);
                 return hashMap;
             }
@@ -824,6 +1188,8 @@ public class SpOtherFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
                         JSONObject object = jsonArray.getJSONObject(i);
+
+                        Log.d(SpOtherFragment.class.getSimpleName(), object.toString());
 
                         if (object.names().get(0).equals("invalid"))
                         {
@@ -927,7 +1293,7 @@ public class SpOtherFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("salesarea", salesarea);
+                hashMap.put("salesarea", level == 5 ? "" : salesarea);
                 hashMap.put("key", key);
                 return hashMap;
             }
@@ -1057,7 +1423,7 @@ public class SpOtherFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("salesarea", salesarea);
+                hashMap.put("salesarea", level == 5 ? "" : salesarea);
                 hashMap.put("key", key);
                 hashMap.put("laststatus", laststatus);
                 return hashMap;
@@ -1195,5 +1561,58 @@ public class SpOtherFragment extends Fragment {
         };
 
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void updateReleaseSp(Data_sp_header spHeader){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLRELEASE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Toasty.success(getContext(), "Sp sudah disetujui", Toast.LENGTH_SHORT).show();
+
+                        getDataHold(salesarea,"0", "");
+                    }
+                    else
+                    {
+                        Toasty.warning(getContext(), "Gagal menyimpan data, harap coba kembali !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toasty.error(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type_sp", spHeader.getTipeSp());
+                map.put("sales", spHeader.getSales());
+                map.put("no_sp", spHeader.getNoSp());
+                map.put("customer_name", spHeader.getCustomerName());
+                map.put("address", spHeader.getAddress());
+                map.put("city", spHeader.getCity());
+                map.put("order_via", spHeader.getOrderVia());
+                map.put("down_payment", spHeader.getDownPayment());
+                map.put("discount", Double.parseDouble(spHeader.getDiscount()) > 0 ? spHeader.getDiscount() : spHeader.getDiscountValue());
+                map.put("conditions", spHeader.getConditions());
+                map.put("installment", spHeader.getInstallment());
+                map.put("start_installment", spHeader.getStartInstallment());
+                map.put("shipping_address", spHeader.getShippingAddress());
+                map.put("photo", spHeader.getPhoto());
+                map.put("excel_path", spHeader.getPath().equals("null") ? "" : spHeader.getPath());
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 }

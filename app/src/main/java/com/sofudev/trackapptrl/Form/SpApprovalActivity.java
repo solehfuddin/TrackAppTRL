@@ -30,7 +30,7 @@ public class SpApprovalActivity extends AppCompatActivity {
     private ViewPagerAdapter pagerAdapter;
     View decorView;
 
-    String sales, areacode;
+    String sales, areacode, level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class SpApprovalActivity extends AppCompatActivity {
         {
             sales     = bundle.getString("username");
             areacode  = bundle.getString("salesarea");
+            level     = bundle.getString("level");
 
             Log.d("NAMA SALES", sales);
 
@@ -71,15 +72,15 @@ public class SpApprovalActivity extends AppCompatActivity {
 
     private void setupPager(){
         pagerAdapter.removeAllFragment();
-        pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"On process", areacode, "2022-12-01", "2023-01-02", 0));
+        pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"On process", areacode, "2022-12-01", "2023-01-02", 0, Integer.parseInt(level)));
 //        pagerAdapter.addFragment(new SpApprovalFragment(), new Data_spframe_filter(sales,"Tracking SP", areacode, "2022-12-01", "2023-01-02",1));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Hold", areacode, "2022-12-01", "2023-01-02",11));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Rejected", areacode, "2022-12-01", "2023-01-02",12));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AM", areacode, "2022-12-01", "2023-01-02",13));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AR", areacode, "2022-12-01", "2023-01-02",14));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Warehouse", areacode, "2022-12-01", "2023-01-02",15));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "CS", areacode, "2022-12-01", "2023-01-02",16));
-        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Shipping", areacode, "2022-12-01", "2023-01-02",17));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Hold", areacode, "2022-12-01", "2023-01-02",11, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Rejected", areacode, "2022-12-01", "2023-01-02",12, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AM", areacode, "2022-12-01", "2023-01-02",13, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "AR", areacode, "2022-12-01", "2023-01-02",14, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Warehouse", areacode, "2022-12-01", "2023-01-02",15, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "CS", areacode, "2022-12-01", "2023-01-02",16, Integer.parseInt(level)));
+        pagerAdapter.addFragment(new SpOtherFragment(), new Data_spframe_filter(sales, "Shipping", areacode, "2022-12-01", "2023-01-02",17, Integer.parseInt(level)));
 
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setViewPager(viewPager);

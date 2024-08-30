@@ -112,17 +112,17 @@ public class Adapter_sp_history extends RecyclerView.Adapter<Adapter_sp_history.
 
                 if (list.get(i).getApprove().equals("APPROVE"))
                 {
-                    statusAr = "PENGAJUAN DISETUJUI AR";
+                    statusAr = list.get(i).getReject().isEmpty() ? "PENGAJUAN DISETUJUI AR" : "PENGAJUAN DISETUJUI AR (" + list.get(i).getReject().toUpperCase() + ")";
                     viewHolder.txtApprove.setTextColor(Color.parseColor("#45ac2d"));
                 }
                 else if (list.get(i).getApprove().equals("HOLD"))
                 {
-                    statusAr = "PENGAJUAN DITANGGUHKAN AR" + " (" + list.get(i).getReject() + ")";
+                    statusAr = "PENGAJUAN DITANGGUHKAN AR" + " (" + list.get(i).getReject().toUpperCase() + ")";
                     viewHolder.txtApprove.setTextColor(Color.parseColor("#ff9100"));
                 }
                 else if (list.get(i).getApprove().equals("REJECT"))
                 {
-                    statusAr = "PENGAJUAN DITOLAK AR" + " (" + list.get(i).getReject() + ")";
+                    statusAr = "PENGAJUAN DITOLAK AR" + " (" + list.get(i).getReject().toUpperCase() + ")";
                     viewHolder.txtApprove.setTextColor(Color.parseColor("#de002b"));
                 }
 

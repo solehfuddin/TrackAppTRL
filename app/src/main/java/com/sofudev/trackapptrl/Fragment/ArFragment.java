@@ -9,9 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -32,17 +28,11 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
-import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
-import com.sofudev.trackapptrl.Adapter.Adapter_compare_product;
-import com.sofudev.trackapptrl.Adapter.Adapter_search_product;
 import com.sofudev.trackapptrl.App.AppController;
 import com.sofudev.trackapptrl.Custom.Config;
 import com.sofudev.trackapptrl.Custom.DateFormat;
-import com.sofudev.trackapptrl.Custom.MultiSelectLensProduct;
-import com.sofudev.trackapptrl.Custom.RecyclerViewOnClickListener;
-import com.sofudev.trackapptrl.Data.Data_compare_category;
 import com.sofudev.trackapptrl.FanpageActivity;
 import com.sofudev.trackapptrl.Form.AssignApprovalActivity;
 import com.sofudev.trackapptrl.Form.CheckBalanceActivity;
@@ -67,21 +57,19 @@ import com.sofudev.trackapptrl.Form.SpApprovalActivity;
 import com.sofudev.trackapptrl.OnHandActivity;
 import com.sofudev.trackapptrl.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
 
-public class CategoryFragment extends Fragment {
+public class ArFragment extends Fragment {
+
     private Config config = new Config();
     private String URLGETUSERBYID  = config.Ip_address + config.get_user_byid;
     private String URLGETUSERBYCUSTNAME = config.Ip_address + config.get_user_bycustname;
@@ -93,8 +81,8 @@ public class CategoryFragment extends Fragment {
 
     View custom;
     LinearLayout linearLensorder, linearStockorder, linearSporder, linearOnhand, linearOrdertrack, linearDeliverytrack,
-            linearSptrack, linearMore;
-    RippleView rpLensorder, rpStockorder, rpSpOrder, rpOnHand, rpOrderTrack, rpDeliveryTrack, rpSpTrack, rpMore;
+            linearSpApproval, linearMore;
+    RippleView rpLensorder, rpStockorder, rpSpOrder, rpOnHand, rpOrderTrack, rpDeliveryTrack, rpSpApproval, rpMore;
     Context myContext;
 
     BottomDialog bottomDialogInput;
@@ -113,7 +101,7 @@ public class CategoryFragment extends Fragment {
     Boolean isHide = true;
     Boolean isHavingChild = false;
 
-    public CategoryFragment() {
+    public ArFragment() {
         // Required empty public constructor
     }
 
@@ -128,11 +116,12 @@ public class CategoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_ar, container, false);
         TypefaceProvider.registerDefaultIconSets();
         linearLensorder = view.findViewById(R.id.layout_custom_lensorder);
         rpLensorder     = view.findViewById(R.id.layout_custom_rplensorder);
@@ -146,8 +135,8 @@ public class CategoryFragment extends Fragment {
         rpOrderTrack    = view.findViewById(R.id.layout_custom_rpordertrack);
         linearDeliverytrack = view.findViewById(R.id.layout_custom_deliverytracking);
         rpDeliveryTrack     = view.findViewById(R.id.layout_custom_rpdeliverytracking);
-        linearSptrack   = view.findViewById(R.id.layout_custom_sptracking);
-        rpSpTrack       = view.findViewById(R.id.layout_custom_rpsptracking);
+        linearSpApproval   = view.findViewById(R.id.layout_custom_spapproval);
+        rpSpApproval       = view.findViewById(R.id.layout_custom_rpspapproval);
         linearMore      = view.findViewById(R.id.layout_custom_more);
         rpMore          = view.findViewById(R.id.layout_custom_rpmore);
 
@@ -231,16 +220,16 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-        linearSptrack.setOnClickListener(new View.OnClickListener() {
+        linearSpApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handlerSptrack();
+                handlerSpApproval();
             }
         });
-        rpSpTrack.setOnClickListener(new View.OnClickListener() {
+        rpSpApproval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handlerSptrack();
+                handlerSpApproval();
             }
         });
 
@@ -273,6 +262,7 @@ public class CategoryFragment extends Fragment {
             {
                 PARTYSITEID = bundle.getString("partySiteId");
                 CUSTNAME = bundle.getString("username");
+                LEVEL = bundle.getString("level");
 
                 Log.d(CategoryFragment.class.getSimpleName(), "custname : " + CUSTNAME);
 //                getUserById(PARTYSITEID);
@@ -516,7 +506,7 @@ public class CategoryFragment extends Fragment {
         }
         else
         {
-            if (Integer.parseInt(ISMANAGER) == 1)
+            if (Integer.parseInt(ISMANAGER) == 1 || Integer.parseInt(LEVEL) == 5)
             {
                 Intent intent = new Intent(myContext, SpApprovalActivity.class);
                 intent.putExtra("username", USERNAME);

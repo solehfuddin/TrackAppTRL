@@ -127,7 +127,7 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
     Data_spheader dataHeader;
     String username, status, province, idOptic, opticUsername, idpartySales, mobilenumber, filename, imgpath, fname, filesigned,
-    signedpath;
+    signedpath, ISMANAGER;
     String cicilanVal;
     boolean isDigitalSigned, isMulaiBayar, isPilihOptik, isImage;
     MCrypt mCrypt;
@@ -555,6 +555,10 @@ public class FormOrderSpActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         username = data.getString("username");
         idpartySales = data.getString("idparty");
+        ISMANAGER = data.getString("ismanager");
+
+        Log.d(FormOrderSpActivity.class.getSimpleName(), "Username : " + username);
+        Log.d(FormOrderSpActivity.class.getSimpleName(), "Is Manager : " + ISMANAGER);
 
         if (idpartySales != null)
         {
@@ -938,6 +942,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
         btnChooseSales.setOnClickListener(new View.OnClickListener() {
             Config config = new Config();
             String URLSHOWALLSALES      = config.Ip_address + config.filter_sales_showall;
+
+            String URLSHOWALLOPTICCUSTOM = config.Ip_address + config.filter_optic_showallcustom;
             String URLSHOWSALESBYNAME   = config.Ip_address + config.filter_sales_showbyname;
             String URLOPTICINFO         = config.Ip_address + config.ordersp_get_opticInfo;
 
@@ -997,7 +1003,12 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
                 req_start = 0;
                 data_opticnames.clear();
-                showAllOptic(req_start);
+
+                if (ISMANAGER.equals("2")) {
+                    showAllOpticCustom(req_start);
+                } else {
+                    showAllOptic(req_start);
+                }
 
                 btnSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1087,7 +1098,15 @@ public class FormOrderSpActivity extends AppCompatActivity {
                                 enablePrev();
                                 disableSelect();
                                 listview.addHeaderView(progress);
-                                showAllOptic(req_start);
+
+                                if (ISMANAGER.equals("2"))
+                                {
+                                    showAllOpticCustom(req_start);
+                                }
+                                else
+                                {
+                                    showAllOptic(req_start);
+                                }
                             }
                             else
                             {
@@ -1135,7 +1154,15 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
                                 disableSelect();
                                 listview.addHeaderView(progress);
-                                showAllOptic(req_start);
+
+                                if (ISMANAGER.equals("2"))
+                                {
+                                    showAllOpticCustom(req_start);
+                                }
+                                else
+                                {
+                                    showAllOptic(req_start);
+                                }
                             }
                             else
                             {
@@ -1221,6 +1248,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
             private void showAllOptic(int record) {
                 data_opticnames.clear();
 
+                Log.d(FormOrderSpActivity.class.getSimpleName(), "Eksekusi all");
+
                 StringRequest stringRequest = new StringRequest(URLSHOWALLSALES + String.valueOf(record), new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -1291,6 +1320,93 @@ public class FormOrderSpActivity extends AppCompatActivity {
                         Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                stringRequest.setShouldCache(false);
+                AppController.getInstance().addToRequestQueue(stringRequest);
+            }
+
+            private void showAllOpticCustom(int record) {
+                data_opticnames.clear();
+
+                Log.d(FormOrderSpActivity.class.getSimpleName(), "Eksekusi custom 1");
+
+                StringRequest stringRequest = new StringRequest(URLSHOWALLOPTICCUSTOM + String.valueOf(record), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listview.removeHeaderView(progress);
+                        String info1 = "username";
+                        String info2 = "custname";
+                        String info3 = "status";
+                        String info4 = "total_row";
+                        int start, until;
+
+                        try {
+                            String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                            String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                            String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                            String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+
+                            try {
+                                JSONArray jsonArray = new JSONArray(response);
+
+                                for (int i=0; i < jsonArray.length(); i++)
+                                {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                                    String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                                    String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                                    String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+
+                                    totalrow = Integer.parseInt(total);
+
+                                    start    = req_start + 1;
+                                    until    = jsonArray.length() + req_start;
+
+                                    String counter = "Show " + start + " - " + until + " from "+ totalrow + " records";
+                                    txtCounter.setText(counter);
+
+                                    data = new Data_opticname();
+                                    data.setUsername(username);
+                                    data.setCustname(custname);
+                                    data.setStatus(status);
+
+                                    data_opticnames.add(data);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (totalrow > 8)
+                            {
+                                enableNext();
+                            }
+                            else
+                            {
+                                disableNext();
+                                disablePrev();
+                            }
+
+                            adapter_filter_optic.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.error(getApplicationContext(), "Failed to encrypt message", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("key", username);
+                        return map;
+                    }
+                };
 
                 stringRequest.setShouldCache(false);
                 AppController.getInstance().addToRequestQueue(stringRequest);
@@ -1459,7 +1575,9 @@ public class FormOrderSpActivity extends AppCompatActivity {
         btnChooseOptik.setOnClickListener(new View.OnClickListener() {
             Config config = new Config();
             String URLSHOWALLOPTIC      = config.Ip_address + config.filter_optic_showall;
+            String URLSHOWALLOPTICCUSTOM  = config.Ip_address + config.filter_optic_showallcustom;
             String URLSHOWOPTICBYNAME   = config.Ip_address + config.filter_optic_showbyname;
+            String URLSHOWOPTICBYNAMECUSTOM = config.Ip_address + config.filter_optic_showbynamecustom;
             String URLOPTICINFO         = config.Ip_address + config.ordersp_get_opticInfo;
 
             List<Data_opticname> data_opticnames = new ArrayList<>();
@@ -1518,7 +1636,14 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
                 req_start = 0;
                 data_opticnames.clear();
-                showAllOptic(req_start);
+                if (ISMANAGER.equals("2"))
+                {
+                    showAllOpticCustom(req_start);
+                }
+                else
+                {
+                    showAllOptic(req_start);
+                }
 
                 btnSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1608,7 +1733,15 @@ public class FormOrderSpActivity extends AppCompatActivity {
                                 enablePrev();
                                 disableSelect();
                                 listview.addHeaderView(progress);
-                                showAllOptic(req_start);
+
+                                if (ISMANAGER.equals("2"))
+                                {
+                                    showAllOpticCustom(req_start);
+                                }
+                                else
+                                {
+                                    showAllOptic(req_start);
+                                }
                             }
                             else
                             {
@@ -1656,7 +1789,14 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
                                 disableSelect();
                                 listview.addHeaderView(progress);
-                                showAllOptic(req_start);
+                                if (ISMANAGER.equals("2"))
+                                {
+                                    showAllOpticCustom(req_start);
+                                }
+                                else
+                                {
+                                    showAllOptic(req_start);
+                                }
                             }
                             else
                             {
@@ -1707,7 +1847,15 @@ public class FormOrderSpActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                showOpticByName(check, req_start);
+                                if (ISMANAGER.equals("2"))
+                                {
+                                    showOpticByNameCustom(check, req_start);
+                                }
+                                else
+                                {
+                                    showOpticByName(check, req_start);
+                                }
+
                                 disablePrev();
                             }
                         }
@@ -1741,6 +1889,8 @@ public class FormOrderSpActivity extends AppCompatActivity {
 
             private void showAllOptic(int record) {
                 data_opticnames.clear();
+
+                Log.d(FormOrderSpActivity.class.getSimpleName(), "Eksekusi all");
 
                 StringRequest stringRequest = new StringRequest(URLSHOWALLOPTIC + String.valueOf(record), new Response.Listener<String>() {
                     @Override
@@ -1817,10 +1967,205 @@ public class FormOrderSpActivity extends AppCompatActivity {
                 AppController.getInstance().addToRequestQueue(stringRequest);
             }
 
+            private void showAllOpticCustom(int record) {
+                data_opticnames.clear();
+
+                Log.d(FormOrderSpActivity.class.getSimpleName(), "Eksekusi custom");
+                Log.d(FormOrderSpActivity.class.getSimpleName(), "URL  : " +  URLSHOWALLOPTICCUSTOM);
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST,URLSHOWALLOPTICCUSTOM + String.valueOf(record), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listview.removeHeaderView(progress);
+                        String info1 = "username";
+                        String info2 = "custname";
+                        String info3 = "status";
+                        String info4 = "total_row";
+                        int start, until;
+
+                        try {
+                            String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                            String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                            String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                            String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+
+                            try {
+                                JSONArray jsonArray = new JSONArray(response);
+
+                                for (int i=0; i < jsonArray.length(); i++)
+                                {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                                    String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                                    String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                                    String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+
+                                    totalrow = Integer.parseInt(total);
+
+                                    start    = req_start + 1;
+                                    until    = jsonArray.length() + req_start;
+
+                                    String counter = "Show " + start + " - " + until + " from "+ totalrow + " records";
+                                    txtCounter.setText(counter);
+
+                                    data = new Data_opticname();
+                                    data.setUsername(username);
+                                    data.setCustname(custname);
+                                    data.setStatus(status);
+
+                                    data_opticnames.add(data);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (totalrow > 8)
+                            {
+                                enableNext();
+                            }
+                            else
+                            {
+                                disableNext();
+                                disablePrev();
+                            }
+
+                            adapter_filter_optic.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.error(getApplicationContext(), "Failed to encrypt message", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toasty.error(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("key", username);
+                        return map;
+                    }
+                };
+
+//                stringRequest.setShouldCache(false);
+                AppController.getInstance().addToRequestQueue(stringRequest);
+            }
+
             private void showOpticByName(final String key, int record) {
                 data_opticnames.clear();
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWOPTICBYNAME + String.valueOf(record), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        listview.removeHeaderView(progress);
+                        rl_optic.removeView(imgView_opticname);
+                        String info1 = "username";
+                        String info2 = "custname";
+                        String info3 = "status";
+                        String info4 = "total_row";
+                        String info5 = "invalid";
+                        int start, until;
+
+                        try {
+                            String encrypt_info1 = MCrypt.bytesToHex(mCrypt.encrypt(info1));
+                            String encrypt_info2 = MCrypt.bytesToHex(mCrypt.encrypt(info2));
+                            String encrypt_info3 = MCrypt.bytesToHex(mCrypt.encrypt(info3));
+                            String encrypt_info4 = MCrypt.bytesToHex(mCrypt.encrypt(info4));
+                            String encrypt_info5 = MCrypt.bytesToHex(mCrypt.encrypt(info5));
+
+                            try {
+                                JSONArray jsonArray = new JSONArray(response);
+                                for (int i = 0; i < jsonArray.length(); i++)
+                                {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    if (jsonObject.names().get(0).equals(encrypt_info5))
+                                    {
+                                        showErrorImage();
+                                        String info = "No record found";
+                                        txtCounter.setText(info);
+                                        disableNext();
+                                        disablePrev();
+                                        Toasty.error(getApplicationContext(), "Data not found", Toast.LENGTH_LONG, true).show();
+                                    }
+                                    else
+                                    {
+                                        String username = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info1)));
+                                        String custname = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info2)));
+                                        String status   = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info3)));
+                                        String total    = new String(mCrypt.decrypt(jsonObject.getString(encrypt_info4)));
+
+                                        data            = new Data_opticname();
+                                        data.setUsername(username);
+                                        data.setCustname(custname);
+                                        data.setStatus(status);
+
+                                        totalrow        = Integer.parseInt(total);
+
+                                        start           = req_start + 1;
+                                        until           = jsonArray.length() + req_start;
+
+                                        String counter  = "Show " + start + " - " + until + " from " + totalrow + " records";
+
+                                        txtCounter.setText(counter);
+
+                                        if (totalrow > 8)
+                                        {
+                                            enableNext();
+                                        }
+                                        else
+                                        {
+                                            disableNext();
+                                            disablePrev();
+                                        }
+
+                                        if (totalrow.equals(until))
+                                        {
+                                            disableNext();
+                                        }
+
+                                        data_opticnames.add(data);
+                                    }
+                                }
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            adapter_filter_optic.notifyDataSetChanged();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.warning(getApplicationContext(), "Failed to encrypt data", Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toasty.error(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT, true).show();
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("custname", key);
+
+                        return hashMap;
+                    }
+                };
+
+                stringRequest.setShouldCache(false);
+                AppController.getInstance().addToRequestQueue(stringRequest);
+            }
+
+            private void showOpticByNameCustom(final String key, int record) {
+                data_opticnames.clear();
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLSHOWOPTICBYNAMECUSTOM + String.valueOf(record), new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         listview.removeHeaderView(progress);

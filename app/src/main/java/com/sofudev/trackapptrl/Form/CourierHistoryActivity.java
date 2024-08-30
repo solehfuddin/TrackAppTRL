@@ -748,7 +748,7 @@ public class CourierHistoryActivity extends AppCompatActivity {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("dateSt", stDate);
                 map.put("dateEd", edDate);
-                map.put("id_kurir", idCourier);
+                map.put("id_kurir", isAdmin ? "" :  idCourier);
                 return map;
             }
         };

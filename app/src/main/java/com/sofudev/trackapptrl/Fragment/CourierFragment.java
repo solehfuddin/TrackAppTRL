@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import com.andexert.library.RippleView;
 import com.sofudev.trackapptrl.Form.CourierHistoryActivity;
 import com.sofudev.trackapptrl.Form.CourierTaskActivity;
-import com.sofudev.trackapptrl.Form.FormOrderSpActivity;
 import com.sofudev.trackapptrl.R;
 
 public class CourierFragment extends Fragment {

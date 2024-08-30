@@ -3,15 +3,24 @@ package com.sofudev.trackapptrl.Data;
 public class Data_spframe_filter {
     String username, title, salesarea;
     String stDate, edDate;
-    int condition;
+    int condition, level;
 
-    public Data_spframe_filter(String username, String title, String salesarea, String stDate, String edDate, int condition) {
+    public Data_spframe_filter(String username, String title, String salesarea, String stDate, String edDate, int condition, int level) {
         this.username = username;
         this.title = title;
         this.salesarea = salesarea;
         this.stDate = stDate;
         this.edDate = edDate;
         this.condition = condition;
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getUsername() {

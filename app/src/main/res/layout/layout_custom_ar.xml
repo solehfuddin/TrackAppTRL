@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="215dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bggray">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:weightSum="4"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DisableBaselineAlignment">
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_lensorder"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rplensorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_iclensorder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/lensorder_round"
+                            android:scaleType="fitXY"/>
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtlensorder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lens_order"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        android:textSize="12sp"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_stockorder"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toEndOf="@+id/layout_custom_lensorder"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpstockorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icstockorder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/stockorder_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtstockorder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="@string/stock_order"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_sporder"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/layout_custom_stockorder"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpsporder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icsporder"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/sporder_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtsporder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sp_order"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_onhand"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rponhand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_iconhand"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/onhand_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtonhand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/master_onhand"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="4"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="DisableBaselineAlignment">
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_ordertrack"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpordertrack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icordertrack"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/ordertrack_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtordertrack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/order_track"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_deliverytracking"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpdeliverytracking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icdeliverytracking"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/deliverytrack_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtdeliverytracking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ship_track"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_spapproval"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpspapproval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icspapproval"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/spapproval_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtspapproval"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sp_approval"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_custom_more"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/layout_custom_rpmore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:rv_rippleDuration="150"
+                        app:rv_type="rectangle">
+
+                        <ImageView
+                            android:id="@+id/layout_custom_icmore"
+                            android:layout_width="55dp"
+                            android:layout_height="54dp"
+                            android:layout_gravity="center_horizontal"
+                            android:contentDescription="@string/app_name"
+                            app:srcCompat="@drawable/more_round" />
+                    </com.andexert.library.RippleView>
+
+                    <com.raizlabs.universalfontcomponents.widget.UniversalFontTextView
+                        android:id="@+id/layout_custom_txtmore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/more"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorContent"
+                        app:customFont="RobotoMedium.ttf" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

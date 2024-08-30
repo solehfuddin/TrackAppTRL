@@ -103,7 +103,9 @@ public class Config {
 
     /* Area Filter Optic Name*/
     public String filter_optic_showall      = "index.php/Android_filteroptic/showAlloptic/8/";
+    public String filter_optic_showallcustom  = "index.php/Android_filteroptic/showAllopticCustom/8/";
     public String filter_optic_showbyname   = "index.php/Android_filteroptic/showOpticByFilter/8/";
+    public String filter_optic_showbynamecustom = "index.php/Android_filteroptic/showOpticCustomByFilter/8/";
     public String filter_optic_getbyshipnumber = "index.php/Android_filteroptic/showOpticByShipname";
 
     /* Area Filter Sales Name */
@@ -370,7 +372,12 @@ public class Config {
     public String ordersp_get_approvalsp          = "index.php/Android_apisp/getApprovalSp/8/";
     public String ordersp_search_approvalsp       = "index.php/Android_apisp/getSpApprovalSearch/1/";
     public String ordersp_update_approvalsp       = "index.php/Android_apisp/approvalByAreaManager";
+
     public String ordersp_update_approvalsphold   = "index.php/Android_apisp/approvalHoldByAreaManager";
+    public String ordersp_insert_arapprove        = "index.php/Android_apisp/approveByAR";
+    public String ordersp_insert_arhold           = "index.php/Android_apisp/holdByAR";
+    public String ordersp_update_arrelease        = "index.php/Android_apisp/releaseByAR";
+    public String ordersp_insert_arreject         = "index.php/Android_apisp/rejectByAR";
     public String ordersp_update_rejectsp         = "index.php/Android_apisp/rejectByAreaManager";
     public String ordersp_update_rejectsphold     = "index.php/Android_apisp/rejectHoldByAreaManager";
     public String ordersp_item_detailsp           = "index.php/Android_apisp/getItemSpFrame";

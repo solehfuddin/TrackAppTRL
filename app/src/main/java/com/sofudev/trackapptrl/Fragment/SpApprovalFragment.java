@@ -24,10 +24,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,8 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.StringRequest;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.raizlabs.universalfontcomponents.widget.UniversalFontTextView;
@@ -84,6 +89,9 @@ public class SpApprovalFragment extends Fragment {
     String URLITEMSP  = config.Ip_address + config.ordersp_item_detailsp;
     String URLAPPROVESP = config.Ip_address + config.ordersp_update_approvalsp;
     String URLHOLDAPPROVESP = config.Ip_address + config.ordersp_update_approvalsphold;
+    String URLARAPPROVE = config.Ip_address + config.ordersp_insert_arapprove;
+    String URLARHOLD = config.Ip_address + config.ordersp_insert_arhold;
+    String URLARREJECT = config.Ip_address + config.ordersp_insert_arreject;
     String URLREJECTSP = config.Ip_address + config.ordersp_update_rejectsp;
     String URLHOLDREJECTSP  = config.Ip_address + config.ordersp_update_rejectsphold;
     String URL_GETINV      = config.Ip_address + config.ordersp_get_inv;
@@ -111,9 +119,11 @@ public class SpApprovalFragment extends Fragment {
     List<Data_sp_header> list = new ArrayList<>();
     List<Data_item_sp> itemSp = new ArrayList<>();
     String sales, salesarea, startDate, endDate, status, date_in, totalDurr;
-    int condition, counter = 0, totalData, total_item, flagCon, totalQty = 0;
+    int condition, counter = 0, totalData, total_item, flagCon, totalQty = 0, level = 0;
     boolean isStore = true;
     Context myContext;
+
+    private static final String[] actionPersetujuan = new String[] {"APPROVE", "REJECT", "HOLD"};
 
     public SpApprovalFragment() {
         // Required empty public constructor
@@ -126,6 +136,7 @@ public class SpApprovalFragment extends Fragment {
         bundle.putInt("condition", item.getCondition());
         bundle.putString("startdate", item.getStDate());
         bundle.putString("enddate", item.getEdDate());
+        bundle.putInt("level", item.getLevel());
 
         SpApprovalFragment fragment = new SpApprovalFragment();
         fragment.setArguments(bundle);
@@ -344,6 +355,7 @@ public class SpApprovalFragment extends Fragment {
             sales     = data.getString("username");
             salesarea = data.getString("salesarea");
             condition = data.getInt("condition", 0);
+            level     = data.getInt("level", 0);
             startDate = data.getString("startdate");
             endDate   = data.getString("enddate");
 
@@ -496,6 +508,25 @@ public class SpApprovalFragment extends Fragment {
         RecyclerView rvItem = (RecyclerView) custom.findViewById(R.id.bottomdialog_approvalsp_rvItem);
         RippleView btnApprove = (RippleView) custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnApprove);
         RippleView btnReject  = (RippleView) custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnReject);
+        Spinner spinnerPersetujuan = custom.findViewById(R.id.bottomdialog_approvalsp_spinpersetujuan);
+        BootstrapEditText txtReason = custom.findViewById(R.id.bottomdialog_approvalsp_txtreason);
+        RippleView btnSubmit = custom.findViewById(R.id.bottomdialog_approvalsp_rippleBtnSubmit);
+
+        LinearLayout linearApprovalSm = custom.findViewById(R.id.bottomdialog_approvalsp_layoutaction);
+        LinearLayout linearApprovalAr = custom.findViewById(R.id.bottomdialog_approvalsp_layoutaraction);
+
+        spinnerPersetujuan.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spin_framemodel_item, actionPersetujuan));
+
+        if (level == 5)
+        {
+            linearApprovalAr.setVisibility(View.VISIBLE);
+            linearApprovalSm.setVisibility(View.GONE);
+        }
+        else
+        {
+            linearApprovalAr.setVisibility(View.GONE);
+            linearApprovalSm.setVisibility(View.VISIBLE);
+        }
 
         rvItem.setHasFixedSize(true);
         recyclerLayoutManager = new LinearLayoutManager(getContext());
@@ -512,6 +543,7 @@ public class SpApprovalFragment extends Fragment {
         String namaKustomer = "";
         String alamatKirim = "";
         String kondisi = "";
+        final String[] selectedAction = {""};
 
         int numBulan = (getNumberOfMonth(list.get(pos).getStartInstallment()) + Integer.parseInt(list.get(pos).getInstallment())) - 1;
         String strBulan = numBulan > 12 ? getMonOfNumber(numBulan - 12) : getMonOfNumber(numBulan);
@@ -614,6 +646,44 @@ public class SpApprovalFragment extends Fragment {
         txtCatatan.setText(note);
         txtNamaKustomer.setText(namaKustomer);
 
+        spinnerPersetujuan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedAction[0] = parent.getItemAtPosition(position).toString();
+
+                if (selectedAction[0] == "APPROVE")
+                {
+                    txtReason.setEnabled(false);
+                    txtReason.setBootstrapBrand(DefaultBootstrapBrand.SECONDARY);
+                    txtReason.clearFocus();
+                }
+                else
+                {
+                    txtReason.setEnabled(true);
+                    txtReason.setBootstrapBrand(DefaultBootstrapBrand.PRIMARY);
+                    txtReason.requestFocus();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (selectedAction[0]) {
+                    case "HOLD" -> arHoldSp(list.get(pos), txtReason.getText().toString(), isStore);
+                    case "REJECT" -> arRejectSp(list.get(pos), txtReason.getText().toString(), isStore);
+                    default -> arApproveSp(list.get(pos), txtReason.getText().toString(), isStore);
+                }
+
+                bottomDialog.dismiss();
+            }
+        });
+
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -694,6 +764,195 @@ public class SpApprovalFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void arApproveSp(Data_sp_header spHeader, String reason, boolean isStore) {
+        StringRequest request = new StringRequest(Request.Method.POST, URLARAPPROVE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Toasty.success(myContext, "Sp sudah disetujui AR", Toast.LENGTH_SHORT).show();
+
+                        if (condition == 0)
+                        {
+//                            getDataUnprocess(salesarea, "0");
+                            getDataHoldUnprocess(salesarea, "0");
+                        }
+                        else
+                        {
+                            getDataProcess(salesarea, "0");
+                        }
+                    }
+                    else
+                    {
+                        Toasty.warning(myContext, "Gagal menyimpan data, harap coba kembali !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toasty.error(myContext, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type_sp", spHeader.getTipeSp());
+                map.put("sales", spHeader.getSales());
+                map.put("no_sp", spHeader.getNoSp());
+                map.put("customer_name", spHeader.getCustomerName());
+                map.put("address", spHeader.getAddress());
+                map.put("city", spHeader.getCity());
+                map.put("order_via", spHeader.getOrderVia());
+                map.put("down_payment", spHeader.getDownPayment());
+                map.put("discount", Double.parseDouble(spHeader.getDiscount()) > 0 ? spHeader.getDiscount() : spHeader.getDiscountValue());
+                map.put("conditions", spHeader.getConditions());
+                map.put("installment", spHeader.getInstallment());
+                map.put("start_installment", spHeader.getStartInstallment());
+                map.put("shipping_address", spHeader.getShippingAddress());
+                map.put("photo", spHeader.getPhoto());
+                map.put("reason", "By " + sales.toLowerCase());
+                map.put("excel_path", spHeader.getPath().equals("null") ? "" : spHeader.getPath());
+                map.put("store_bin", isStore ? "STORE" : "BIN");
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void arRejectSp(Data_sp_header spHeader, String reason, boolean isStore) {
+        StringRequest request = new StringRequest(Request.Method.POST, URLARREJECT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Toasty.success(myContext, "Sp ditolak AR", Toast.LENGTH_SHORT).show();
+
+                        if (condition == 0)
+                        {
+//                            getDataUnprocess(salesarea, "0");
+                            getDataHoldUnprocess(salesarea, "0");
+                        }
+                        else
+                        {
+                            getDataProcess(salesarea, "0");
+                        }
+                    }
+                    else
+                    {
+                        Toasty.warning(myContext, "Gagal menyimpan data, harap coba kembali !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toasty.error(myContext, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type_sp", spHeader.getTipeSp());
+                map.put("sales", spHeader.getSales());
+                map.put("no_sp", spHeader.getNoSp());
+                map.put("customer_name", spHeader.getCustomerName());
+                map.put("address", spHeader.getAddress());
+                map.put("city", spHeader.getCity());
+                map.put("order_via", spHeader.getOrderVia());
+                map.put("down_payment", spHeader.getDownPayment());
+                map.put("discount", Double.parseDouble(spHeader.getDiscount()) > 0 ? spHeader.getDiscount() : spHeader.getDiscountValue());
+                map.put("conditions", spHeader.getConditions());
+                map.put("installment", spHeader.getInstallment());
+                map.put("start_installment", spHeader.getStartInstallment());
+                map.put("shipping_address", spHeader.getShippingAddress());
+                map.put("photo", spHeader.getPhoto());
+                map.put("reason", reason + " By " + sales.toLowerCase());
+                map.put("excel_path", spHeader.getPath().equals("null") ? "" : spHeader.getPath());
+                map.put("store_bin", isStore ? "STORE" : "BIN");
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private void arHoldSp(Data_sp_header spHeader, String reason, boolean isStore) {
+        StringRequest request = new StringRequest(Request.Method.POST, URLARHOLD, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.names().get(0).equals("success"))
+                    {
+                        Toasty.success(myContext, "Sp dihold AR", Toast.LENGTH_SHORT).show();
+
+                        if (condition == 0)
+                        {
+//                            getDataUnprocess(salesarea, "0");
+                            getDataHoldUnprocess(salesarea, "0");
+                        }
+                        else
+                        {
+                            getDataProcess(salesarea, "0");
+                        }
+                    }
+                    else
+                    {
+                        Toasty.warning(myContext, "Gagal menyimpan data, harap coba kembali !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toasty.error(myContext, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type_sp", spHeader.getTipeSp());
+                map.put("sales", spHeader.getSales());
+                map.put("no_sp", spHeader.getNoSp());
+                map.put("customer_name", spHeader.getCustomerName());
+                map.put("address", spHeader.getAddress());
+                map.put("city", spHeader.getCity());
+                map.put("order_via", spHeader.getOrderVia());
+                map.put("down_payment", spHeader.getDownPayment());
+                map.put("discount", Double.parseDouble(spHeader.getDiscount()) > 0 ? spHeader.getDiscount() : spHeader.getDiscountValue());
+                map.put("conditions", spHeader.getConditions());
+                map.put("installment", spHeader.getInstallment());
+                map.put("start_installment", spHeader.getStartInstallment());
+                map.put("shipping_address", spHeader.getShippingAddress());
+                map.put("photo", spHeader.getPhoto());
+                map.put("reason", reason + " By " + sales.toLowerCase());
+                map.put("excel_path", spHeader.getPath().equals("null") ? "" : spHeader.getPath());
+                map.put("store_bin", isStore ? "STORE" : "BIN");
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void updateApprovalSp(final String noSp, final String salesname){
@@ -1107,7 +1366,7 @@ public class SpApprovalFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("salesarea", salesarea);
+                hashMap.put("salesarea", level == 5 ? "" : salesarea);
                 return hashMap;
             }
         };
@@ -1237,7 +1496,7 @@ public class SpApprovalFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("salesarea", salesarea);
+                hashMap.put("salesarea", level == 5 ? "" : salesarea);
                 hashMap.put("key", key);
                 return hashMap;
             }
